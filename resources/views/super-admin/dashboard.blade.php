@@ -127,5 +127,5 @@
     </div>
     <!-- end row-->
     {{-- @include('super-admin.addUserModal') --}}
-    @endpush
+
 </x-app-layout>
