@@ -210,20 +210,7 @@
                 <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
               </div>
             </div>
-
-            <div class="tab-pane fade" id="pills-helpdesk">
-              <div class="list-group list-group-flush">
-                <div class="list-group-item">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-0">HELP Doc</h5>
-                  </div>
-                </div>
-                <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Tickets</a>
-                <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Resolved Issues</a>
-                <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
-              </div>
-            </div>
-
+            
           </div>
         </div>
      </aside>
