@@ -12,7 +12,7 @@
     <!--plugins-->
     <link href="{{ asset('autolab-assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
-    <link href="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
+      {{-- <link href="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" /> --}}
    
     <!-- Bootstrap CSS -->
     <link href="{{ asset('autolab-assets/css/bootstrap.min.css') }}" rel="stylesheet" />
@@ -35,7 +35,7 @@
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />
 
-
+    @livewireStyles
 </head>
 
 <body>
@@ -71,9 +71,9 @@
     <script src="{{ asset('autolab-assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('autolab-assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/pace.min.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
+    {{-- <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
     <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/apexcharts-bundle/js/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('autolab-assets/plugins/apexcharts-bundle/js/apexcharts.min.js') }}"></script> --}}
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/index.js') }}"></script>
@@ -93,10 +93,10 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
-    <script>
+    {{-- <script>
         new PerfectScrollbar(".best-product")
         new PerfectScrollbar(".top-sellers-list")
-    </script>
+    </script> --}}
 
     <script>
         $(document).ready(function() {
@@ -119,7 +119,7 @@
         });
     </script>
 
-
+@livewireScripts
 </body>
 
 </html>
