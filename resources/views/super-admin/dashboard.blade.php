@@ -127,58 +127,5 @@
     </div>
     <!-- end row-->
     {{-- @include('super-admin.addUserModal') --}}
-
-    @push('scripts')
-        {{-- <script type="text/javascript">
-            $(document).ready(function() {
-                $('#emp_id').change(function() {
-                    if ($('#emp_id').val().length = 9) {
-                        // $('#emp_id').prop('readonly',true);
-                        var emp_id = $(this).val();
-                        var url = "{{ route('employee.get', ':emp_id') }}";
-                        url = url.replace(':emp_id', emp_id);
-
-                        $.ajax({
-                            url: url,
-                            method: "GET",
-                            dataType: "json",
-                            success: function(response) {
-                                if (!jQuery.isEmptyObject(response)) {
-
-                                    let titleElement =
-                                        `<option value="${response.prefix}" selected>${response.prefix}</option>`
-                                    $('#title').empty();
-                                    $('#employee_id').val(response.id);
-                                    $('#title').append(titleElement);
-                                    $('#name').val(response.surname + ' ' + response.first_name);
-                                    $('#email').val(response.email);
-                                    $('#contact').val(response.contact);
-                                    $('#notFound').hide(1000);
-                                    $('#found').show(1000);
-                                    $('#submitBtn').prop('disabled', false);
-                                    // $('#notFound').prop('disabled',false);
-                                }
-                            },
-                            error: function(xhr, ajaxOptions, thrownError) {
-                                $('#title').empty();
-                                $('#employee_id').val("");
-                                $('#title').append("");
-                                $('#name').val("");
-                                $('#email').val("");
-                                $('#contact').val("");
-                                $('#found').hide(1000);
-                                $('#notFound').show(1000);
-                                $('#submitBtn').prop('disabled', true);
-                                // console.log(xhr.status);
-                                // console.log(thrownError);
-                            }
-                        })
-                    } else {
-                        alert('oops! Invalid Emp-No Length or Format');
-                    }
-                });
-
-            });
-        </script> --}}
     @endpush
 </x-app-layout>
