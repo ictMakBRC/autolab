@@ -14,6 +14,7 @@ class TestCategory extends Model
         'description',
         'user_id',        
     ];
+    protected $table = 'test_categories';
     public static function boot()
     {
         parent::boot();

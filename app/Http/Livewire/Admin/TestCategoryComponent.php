@@ -9,36 +9,38 @@ use Livewire\Component;
 
 class TestCategoryComponent extends Component
 {
-    public $category_name, $description, $TestCategory_edit_id,$TestCategory_delete_id;
+    public $category_name, $description, $edit_id,$delete_id;
 
     public function updated($fields)
     {
         $this->validateOnly($fields,[
-            'category_name'=>'required',
+            'category_name'=>'required|unique:test_categories',
             'description'=>'required',
 
         ]);
     }
+    
     public function storeData()
     {
         $this->validate([
-            'category_name'=>'required',
+            'category_name'=>'required|unique:test_categories',
             'description'=>'required',
         ]);
         $TestCategory = new TestCategory();
         $TestCategory->category_name = $this->category_name;
         $TestCategory->description = $this->description;
         $TestCategory->save();
-        session()->flash('success', 'TestCategory data created successfully.');
+        session()->flash('success', 'Test Category data created successfully.');
         $this->description="";
         $this->category_name="";
         $this->dispatchBrowserEvent('close-modal');
     }
-    public function editTestCategorys($id)
+    public function editdata($id)
     {  
         $TestCategory = TestCategory::where('id', $id)->first();
-        $TestCategory->category_name = $this->category_name;
-        $TestCategory->description = $this->description;
+         $this->edit_id = $TestCategory->id;
+         $this->category_name = $TestCategory->category_name;
+         $this->description = $TestCategory->description;
         $this->dispatchBrowserEvent('edit-modal');
     }
     public function resetInputs()
@@ -46,35 +48,48 @@ class TestCategoryComponent extends Component
         $this->description="";
         $this->category_name="";
     }
-    public function editTestCategoryData()
+    public function updateData()
     {
         $this->validate([
-            'category_name'=>'required',
+            'category_name'=>'required|unique:test_categories,category_name,'.$this->edit_id.'',
             'description'=>'required',
         ]);
-        $TestCategory = TestCategory::find($this->TestCategory_edit_id);
+        $TestCategory = TestCategory::find($this->edit_id);
         $TestCategory->category_name = $this->category_name;
         $TestCategory->description = $this->description;
         $TestCategory->update();
-        session()->flash('success', 'TestCategory data updated successfully.');
+        session()->flash('success', 'Test Category data updated successfully.');
         $this->description="";
         $this->category_name="";
         $this->dispatchBrowserEvent('close-modal');
     }
 
-    public function deleteConfirm($id)
+
+
+    public function deleteConfirmation($id)
     {
-        
-        $this->TestCategory_delete_id = $id;
+        $this->delete_id = $id; //student id
+
         $this->dispatchBrowserEvent('delete-modal');
     }
-    public function deleteTestCategoryData()
-    {
-        $TestCategory = TestCategory::find($this->TestCategory_delete_id);
-        $TestCategory->delete();
-        $this->dispatchBrowserEvent('close-modal');
-        session()->flash('success', 'TestCategory data deleted successfully.');
 
+  
+    public function deleteData()
+    {
+        $TestCategory = TestCategory::where('id', $this->delete_id)->first();
+        $TestCategory->delete();
+        $this->delete_id = '';
+        $this->dispatchBrowserEvent('close-modal');
+        session()->flash('success', 'Category data deleted successfully.');
+
+    }
+    public function cancel()
+    {
+        $this->delete_id = '';
+    }
+    public function close()
+    {
+        $this->resetInputs();
     }
     public function render()
     {

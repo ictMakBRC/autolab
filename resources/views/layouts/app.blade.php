@@ -33,8 +33,7 @@
     <link href="{{ asset('autolab-assets/css/dark-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/light-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
-    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />
-
+    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />    
     @livewireStyles
 </head>
 
@@ -119,7 +118,7 @@
             });
         });
     </script>
-
+@stack('scripts')
 @livewireScripts
 </body>
 
