@@ -34,7 +34,7 @@ class TestCategoryComponent extends Component
         $this->category_name="";
         $this->dispatchBrowserEvent('close-modal');
     }
-    public function editTestCategorys($id)
+    public function editdata($id)
     {  
         $TestCategory = TestCategory::where('id', $id)->first();
         $TestCategory->category_name = $this->category_name;
@@ -46,7 +46,7 @@ class TestCategoryComponent extends Component
         $this->description="";
         $this->category_name="";
     }
-    public function editTestCategoryData()
+    public function updateData()
     {
         $this->validate([
             'category_name'=>'required',

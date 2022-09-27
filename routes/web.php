@@ -22,7 +22,7 @@ Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatu
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
-
+Route::group(['middleware' => ['auth','role:superadministrator|administrator|user'], 'prefix' => 'Admin' ], function() {
 Route::get('categories', TestCategoryComponent::class)->name('categories');
-
+});
 require __DIR__.'/auth.php';
