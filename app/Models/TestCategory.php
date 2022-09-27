@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+class TestCategory extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'category_name',
+        'description',
+        'user_id',        
+    ];
+    public static function boot()
+    {
+        parent::boot();
+        if(Auth::check()){
+            self::creating(function ($model) 
+            {
+            $model->user_id = auth()->id();
+            });
+        }
+    }
+}

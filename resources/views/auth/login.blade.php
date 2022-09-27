@@ -1,10 +1,24 @@
 <x-guest-layout>
-    <x-slot:title>
+    <x-slot:title>        
         {{ __('Login | AutoLab') }}
-        </x-slot>
+    </x-slot>
+        <style>
+            @media(max-width: 768px){
+        
+            .logo{
+                width: 100%;
+            }
+            }
+            @media(max-width: 500px){
+            
+            .logo{
+                width: 120px;
+            }
+            }
+                </style>
         <div class="row g-0">
             <div class="col-lg-6 bg-logi d-flex align-items-center justify-content-center">
-                <img src="{{ asset('autolab-assets/images/brand-logo.png') }}" class="img-fluid" alt="">
+                <img src="{{ asset('autolab-assets/images/logo-min.png') }}" class="img-fluid logo" alt="">
             </div>
             <div class="col-lg-6">
                 <div class="card-body p-4 p-sm-5">

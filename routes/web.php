@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Admin\TestCategoryComponent;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,6 @@ Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatu
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
 
-
+Route::get('categories', TestCategoryComponent::class)->name('categories');
 
 require __DIR__.'/auth.php';

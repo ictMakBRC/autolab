@@ -11,12 +11,11 @@
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-patients" type="button"><i
-                               class="bi bi-person-workspace
-                "></i></button>
+                               class="bi bi-person-workspace"></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
-                               class="bi bi-prescription"></i></button>
+                               class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Referral">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-referrals"
@@ -25,6 +24,10 @@
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-storage" type="button"><i
                                class="bi bi-archive-fill"></i></button>
+                   </li>
+                   <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
+                        <i class='bx bxs-flask'></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-logistics"
@@ -158,6 +161,18 @@
                            <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
                        </div>
                    </div>
+                   <div class="tab-pane fade" id="pills-tests">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">TEST MGT</h5>
+                            </div>
+                        </div>
+                        <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test lists</a>
+                        <a href="{{route('categories')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Categories</a>
+                        <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Register New</a>
+                    </div>
+                </div>
 
 
 

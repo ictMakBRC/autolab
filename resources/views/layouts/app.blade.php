@@ -48,6 +48,7 @@
 
         <!--start content-->
         <main class="page-content">
+            <x-breadcrumb></x-breadcrumb>
             {{ $slot }}
             {{-- @include('layouts.user-table') --}}
         </main>
@@ -110,7 +111,7 @@
             $('#example1').DataTable({
                 "paging": true,
                 "lengthChange": false,
-                "searching": false,
+                "searching": true,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
