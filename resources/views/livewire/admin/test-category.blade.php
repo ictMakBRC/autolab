@@ -12,7 +12,7 @@
                                  </div>
                              </div>
                             <div class="table-responsive">
-                                <table class="table align-middle">
+                                <table class="table align-middle" id="datableButtons">
                                     <thead class="table-light">
                                         <tr>
                                         <td>Nema</td>
@@ -27,7 +27,7 @@
                                                 <td>{{$item->description}}</td>
                                                 <td>
                                                     <a href="javascript:;" class="text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" wire:click="editdata({{$item->id}})" data-target="#edit_modal"  title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                                    <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" wire:click="deleteConfirm({{$item->id}})"  title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                                    <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" wire:click="deleteConfirmation({{ $item->id }})"  title="Delete"><i class="bi bi-trash-fill"></i></a> 
                                                 </td>
                                             </tr>                                        
                                             @endforeach
@@ -67,7 +67,7 @@
                             </div>
                         <div class="modal-footer">
                         <x-button>{{__('Save')}}</x-button>
-                        <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{__('Close')}}</x-button>
+                        <x-button type="button" class="btn btn-danger" wire:click="close()" data-bs-dismiss="modal">{{__('Close')}}</x-button>
                         </div>
                     </form>
                     </div>
@@ -86,7 +86,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Edit category</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form wire:submit.prevent="editData">
+                    <form wire:submit.prevent="updateData">
                         <div class="modal-body">                      
                             <div class="form-group">
                                 <label for="name">Category name</label>
@@ -106,7 +106,7 @@
                         </div>
                     <div class="modal-footer">
                         <x-button>{{__('Save')}}</x-button>
-                        <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{__('Close')}}</x-button>
+                        <x-button type="button" class="btn btn-danger" wire:click="close()" data-bs-dismiss="modal">{{__('Close')}}</x-button>
                     </div>
                 </form>
                   </div>
@@ -117,26 +117,22 @@
             </div>
 
                         <!-- Modal -->
-            <div wire:ignore.self id="delete_modal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-            
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+            <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete category</h5>
+                            <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pt-4 pb-4">
+                            <h6>Are you sure? You want to delete this  data!</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
+                        </div>
                     </div>
-                    <form wire:submit.prevent="storeStudentData">
-                    <div class="modal-body">
-                        Are you sure you want to delete this Record?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger" wire:click="deleteStudentData()">Delete</button>
-                        <button type="button" class="btn btn-success" wire:model="cancel()">Close</button>
-                    </div>
-                    </form>
-                </div>
-            
                 </div>
             </div>
                     
@@ -146,18 +142,13 @@
     </div>
 
 @push('scripts')
-   <script>
-    $(document).ready(
-        function(){
-            $('#modalAdd').modal('show');
-        }
-    );
-   </script>
+  
 <script>
     window.addEventListener('close-modal', event =>{
         $('#modalAdd').modal('hide');
         $('#edit_modal').modal('hide');
         $('#delete_modal').modal('hide');
+        $('#show-delete-confirmation-modal').modal('hide');
     });
     window.addEventListener('edit-modal', event =>{
         $('#edit_modal').modal('show');
@@ -165,5 +156,6 @@
     window.addEventListener('delete-modal', event =>{
         $('#delete_modal').modal('show');
     });
+
 </script>
 @endpush
