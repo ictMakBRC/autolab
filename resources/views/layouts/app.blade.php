@@ -43,8 +43,8 @@
     <div class="wrapper">
 
         @include('layouts.header')
-        @include('layouts.navigation')
-
+        @include('layouts.navigation')        
+        @include('layouts.messages')
         <!--start content-->
         <main class="page-content">
             <x-breadcrumb></x-breadcrumb>

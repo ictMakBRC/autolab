@@ -1,0 +1,74 @@
+<x-app-layout>
+    <!-- start page title -->
+    @section('title', 'Test List')
+    @section('pagename', 'Test List')
+    @section('linkname', 'Test')
+    <!-- end page title -->
+  
+    <!-- end row-->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header pt-0">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <div class="text-sm-end mt-3">
+                                <h4 class="header-title mb-3  text-center">Tests</h4>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="text-sm-end mt-3">
+                                <a type="button" href="#" class="btn btn-success mb-2 me-1"
+                                    data-bs-toggle="modal" data-bs-target="#addUser">Add User</a>
+                            </div>
+                        </div><!-- end col-->
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table id="datableButtons" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Title</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($test as $key => $item)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->email }}</td>
+                                    <td>{{ $item->contact }}</td>
+                                    @if ($item->status == 1)
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    @else
+                                        <td><span class="badge bg-danger">Suspended</span></td>
+                                    @endif
+                                    <td class="table-action">
+                                       
+                                    </td>
+                                </tr>
+                                @empty
+                                    
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div> <!-- end preview-->
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    <!-- end row-->
+    {{-- @include('super-admin.addUserModal') --}}
+
+</x-app-layout>
