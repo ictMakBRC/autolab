@@ -2,20 +2,26 @@
 
 namespace App\Models;
 
-use App\Models\Admin\Test;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 
-class TestCategory extends Model
+class TestResults extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'category_name',
-        'description',
-        'user_id',        
+        'test_id',
+        'result_type',
+        'possible_result',
+        'uom',
+        'user_id',
     ];
-    protected $table = 'test_categories';
+
+    public function test_type(){
+        return $this->belongsTo(Tests::class);
+    }
+    
     public static function boot()
     {
         parent::boot();
@@ -25,9 +31,5 @@ class TestCategory extends Model
             $model->user_id = auth()->id();
             });
         }
-    }
-    public function tests()
-    {
-        return $this->hasMany(Test::class,'category_id','id');
     }
 }

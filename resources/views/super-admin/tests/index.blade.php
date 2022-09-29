@@ -18,8 +18,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-end mt-3">
-                                <a type="button" href="#" class="btn btn-success mb-2 me-1"
-                                    data-bs-toggle="modal" data-bs-target="#addUser">Add User</a>
+                                <a  href="{{route('tests.create')}}" class="btn btn-success mb-2 me-1">Add new</a>
                             </div>
                         </div><!-- end col-->
                     </div>
@@ -31,23 +30,21 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Title</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Contact</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
                                     <th>Status</th>
                                     <th>Action</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($test as $key => $item)
+                                @forelse ($tests as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $item->title }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->contact }}</td>
+                                    <td>{{ $item->category->category_name }}</td>
+                                    <td>{{ $item->price }}</td>
                                     @if ($item->status == 1)
                                         <td><span class="badge bg-success">Active</span></td>
                                     @else
@@ -69,6 +66,5 @@
         </div><!-- end col-->
     </div>
     <!-- end row-->
-    {{-- @include('super-admin.addUserModal') --}}
 
 </x-app-layout>

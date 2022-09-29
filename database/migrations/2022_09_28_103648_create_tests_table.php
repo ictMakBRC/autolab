@@ -24,7 +24,7 @@ return new class extends Migration
 			$table->text('reference_range_min')->nullable();
 			$table->text('reference_range_max')->nullable();
 			$table->double('price',8,2)->default(0);
-			$table->boolean('status')->default(0);
+			$table->boolean('status')->default(1);
 			$table->text('precautions')->nullable();
 			$table->text('extra_details')->nullable();
             $table->timestamps();

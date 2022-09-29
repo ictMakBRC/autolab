@@ -43,11 +43,11 @@
     <div class="wrapper">
 
         @include('layouts.header')
-        @include('layouts.navigation')        
-        @include('layouts.messages')
+        @include('layouts.navigation')  
         <!--start content-->
         <main class="page-content">
-            <x-breadcrumb></x-breadcrumb>
+            <x-breadcrumb></x-breadcrumb>                  
+             @include('layouts.messages')
             {{ $slot }}
             {{-- @include('layouts.user-table') --}}
         </main>

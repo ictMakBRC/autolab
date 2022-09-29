@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TestController;
 use App\Http\Livewire\Admin\TestCategoryComponent;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -24,5 +25,6 @@ Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatu
 // })->middleware(['auth'])->name('dashboard');
 Route::group(['middleware' => ['auth','role:superadministrator|administrator|user'], 'prefix' => 'Admin' ], function() {
 Route::get('categories', TestCategoryComponent::class)->name('categories');
+Route::resource('tests', TestController::class);
 });
 require __DIR__.'/auth.php';
