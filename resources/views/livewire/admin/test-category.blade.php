@@ -1,4 +1,8 @@
+@section('title', 'Test categories')
+@section('pagename', 'Test Categories')
+@section('linkname', 'Categories')
 <div>
+    @include('layouts.messages')
     <div class="container">
             <div class="row">
                 <div class="col-md-12">
