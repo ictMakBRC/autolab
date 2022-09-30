@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin\Test;
+use App\Models\SampleType;
 use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
@@ -32,7 +33,8 @@ class TestController extends Controller
     public function create()
     {
         $categories = TestCategory::all();
-        return view('super-admin.tests.create', compact('categories'));
+        $sampletypes = SampleType::where('status',1)->get();
+        return view('super-admin.tests.create', compact('categories','sampletypes'));
     }
 
     /**
@@ -90,7 +92,7 @@ class TestController extends Controller
                 $value->test_id = $test['id'];
                 $value->save();  
     }
-        return redirect()->route('test.index')->with('success', 'New test has been added successfully.');
+        return redirect()->route('tests.index')->with('success', 'New test has been added successfully.');
     }
 
     /**

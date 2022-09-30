@@ -2,7 +2,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="">{{__('Category')}}</label>
-            <select name="category_id" class="form-control" id="category" required>
+            <select name="category_id" class="select2 form-control custom-select" style="width: 100%; height:40px; id="category" required>
                 @if(isset($test))
                     <option value="{{$test['category_id']}}" selected>{{$test->category_name}}</option>
                 @else                
@@ -70,7 +70,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    <select name="type" onchange="reslutstype()" id="resultype" class="form-control" required>
+                    <select name="type" onchange="reslutstype()" id="resultype" class="form-select" style="width: 100%; height:36px;" required>
                         <option value="">Select</option>
                         <option value="text">Text</option>
                         <option value="file">File</option>
@@ -105,6 +105,32 @@
         </div>
     </div>
  </div>
+ <div class="row">
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h5 class="card-title">
+                    {{__('Result sample types')}}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12 table-responsive">
+                        <select class="select2 m-b-10 select2-multiple form-control" name="sample_type[]" style="width: 100%" multiple="multiple" data-placeholder="Choose sample types">
+                                @if(count($sampletypes)>0)
+                                    @foreach($sampletypes as $item)
+                                        <option value="{{ $item->sample_name}}">{{ $item->sample_name}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                    
+                    </div>
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-lg-12">
@@ -137,36 +163,7 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card card-primary">
-            <div class="card-header">
-                <h5 class="card-title">
-                    {{__('Result sample types')}}
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12 table-responsive">
-                       
-                        <table class="table table-bordered" id="dynamicSample">
-                            <tr>
-                                <th>Sample type</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td><input type="text" name="sample_type[]" placeholder="Enter sample type" class="form-control" />
-                                </td>
-                                <td><button type="button" name="add" id="addsampletype" class="btn btn-outline-primary">Add</button></td>
-                            </tr>
-                        </table>
-                    </div>
-             
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 @push('scripts')
 <script type="text/javascript">
     var i = 0;
@@ -179,17 +176,7 @@
         $(this).parents('tr').remove();
     });
 </script>
-<script type="text/javascript">
-    var k = 0;
-  $("#addsampletype").click(function () {
-      ++k;
-      $("#dynamicSample").append('<tr><td><input type="text" name="sample_type[]" placeholder="Enter sample type" class="form-control" /></td><td><button type="button" class="btn btn-outline-danger remove-input-sample">Delete</button></td></tr>'
-          );
-  });
-  $(document).on('click', '.remove-input-sample', function () {
-      $(this).parents('tr').remove();
-  });
-</script>
+
 <script type="text/javascript">
     var k = 0;
   $("#dynamic-results").click(function () {
