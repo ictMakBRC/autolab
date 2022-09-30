@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('sample_types', function (Blueprint $table) {
             $table->id();
+            $table->string('sample_name')->unique();
+            $table->boolean('status')->default(1);
+            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }
