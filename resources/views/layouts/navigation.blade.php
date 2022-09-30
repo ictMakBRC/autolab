@@ -168,9 +168,10 @@
                                 <h5 class="mb-0">TEST MGT</h5>
                             </div>
                         </div>
-                        <a href="{{route('tests.index')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test lists</a>
-                        <a href="{{route('categories')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Categories</a>
-                        <a href="{{route('tests.create')}}" class="list-group-item"><i class="bi bi-cast"></i>Register New</a>
+                        <a href="{{route('categories')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Categories</a>
+                        <a href="{{route('sampletypes')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Sample Types</a>
+                        <a href="{{route('tests.index')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Types</a>
+                        <a href="{{route('tests.create')}}" class="list-group-item"><i class="bi bi-cast"></i>New Test Type</a>
                     </div>
                 </div>
 

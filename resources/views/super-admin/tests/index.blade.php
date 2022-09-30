@@ -51,7 +51,7 @@
                                         <td><span class="badge bg-danger">Suspended</span></td>
                                     @endif
                                     <td class="table-action">
-                                       
+                                        
                                     </td>
                                 </tr>
                                 @empty
