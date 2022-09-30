@@ -75,13 +75,17 @@ class TestCategoryComponent extends Component
 
   
     public function deleteData()
-    {
+    { 
+        try{
         $TestCategory = TestCategory::where('id', $this->delete_id)->first();
         $TestCategory->delete();
         $this->delete_id = '';
         $this->dispatchBrowserEvent('close-modal');
         session()->flash('success', 'Category data deleted successfully.');
-
+        }
+        catch(\Exception $error){
+            session()->flash('erorr', 'Category data can not be deleted !!.');
+        }
     }
     public function cancel()
     {

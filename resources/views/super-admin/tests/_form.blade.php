@@ -43,13 +43,13 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="reference_range_min">Min-Reference range</label>
-            <input type="number" step="any" name="reference_range_min" class="form-control" id="reference_range_min">
+            <input type="number" step="any" name="reference_range_min" @if(isset($test)) value="{{$test->reference_range_min}}"@endif class="form-control" id="reference_range_min">
         </div>
     </div>
     <div class="col-lg-3">
         <div class="form-group">
             <label for="reference_range_max">Max-Reference range</label>
-            <input type="number" step="any" name="reference_range_max" class="form-control" id="reference_range_max">
+            <input type="number" step="any" name="reference_range_max" @if(isset($test)) value="{{$test->reference_range_max}}"@endif class="form-control" id="reference_range_max">
         </div>
     </div>
     <div class="col-lg-6">
