@@ -26,8 +26,8 @@
                                class="bi bi-archive-fill"></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
-                        <i class='bx bxs-flask'></i></button>
+                       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
+                           <i class='bx bxs-flask'></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-logistics"
@@ -47,10 +47,11 @@
                            type="button"><i class="bi bi-file-earmark-easel-fill"></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Help Desk">
-                       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk" type="button"><i
-                               class="bi bi-question-square-fill"></i></button>
+                       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk"
+                           type="button"><i class="bi bi-question-square-fill"></i></button>
                    </li>
-                   <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="General Management">
+                   <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
+                       title="General Management">
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management"
                            type="button"><i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
                    </li>
@@ -162,18 +163,22 @@
                        </div>
                    </div>
                    <div class="tab-pane fade" id="pills-tests">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-0">TEST MGT</h5>
-                            </div>
-                        </div>
-                        <a href="{{route('categories')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Categories</a>
-                        <a href="{{route('sampletypes')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Sample Types</a>
-                        <a href="{{route('tests.index')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Types</a>
-                        <a href="{{route('tests.create')}}" class="list-group-item"><i class="bi bi-cast"></i>New Test Type</a>
-                    </div>
-                </div>
+                       <div class="list-group list-group-flush">
+                           <div class="list-group-item">
+                               <div class="d-flex w-100 justify-content-between">
+                                   <h5 class="mb-0">TEST MGT</h5>
+                               </div>
+                           </div>
+                           <a href="{{ route('categories') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Test Categories</a>
+                           <a href="{{ route('sampletypes') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Sample Types</a>
+                           <a href="{{ route('tests.index') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Test Types</a>
+                           <a href="{{ route('tests.create') }}" class="list-group-item"><i
+                                   class="bi bi-cast"></i>New Test Type</a>
+                       </div>
+                   </div>
 
 
 
@@ -200,10 +205,22 @@
                                    <h5 class="mb-0">MANAGE</h5>
                                </div>
                            </div>
-                           <a href="{{route('laboratories')}}" class="list-group-item"><i
+                           <a href="{{ route('laboratories') }}" class="list-group-item"><i
                                    class="bi bi-house-door-fill"></i>Laboratories</a>
-                           <a href="{{route('designations')}}" class="list-group-item"><i
+                           <a href="{{ route('designations') }}" class="list-group-item"><i
                                    class="bi bi-house-door-fill"></i>Designations</a>
+                           <a href="{{ route('facilities') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Facilities</a>
+                           <a href="{{ route('studies') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Studies/Projects</a>
+                           <a href="{{ route('requesters') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Requesters</a>
+                           <a href="{{ route('collectors') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Sample Collectors</a>
+                           <a href="{{ route('kits') }}" class="list-group-item"><i
+                                   class="bi bi-house-door-fill"></i>Kits</a>
+                                   <a href="{{ route('platforms') }}" class="list-group-item"><i
+                                    class="bi bi-house-door-fill"></i>Platforms</a>
                        </div>
                    </div>
 
