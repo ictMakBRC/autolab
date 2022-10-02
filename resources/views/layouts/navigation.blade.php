@@ -202,7 +202,7 @@
                            </div>
                            <a href="#" class="list-group-item"><i
                                    class="bi bi-house-door-fill"></i>Laboratories</a>
-                           <a href="#" class="list-group-item"><i
+                           <a href="{{route('designations')}}" class="list-group-item"><i
                                    class="bi bi-house-door-fill"></i>Designations</a>
                        </div>
                    </div>

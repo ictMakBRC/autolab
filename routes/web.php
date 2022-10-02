@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\TestController;
 use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,12 @@ Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('gu
 Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatusUpdate'])->middleware('auth')->name('contractStatus.update');
 
 // Route::get('/dashboard', function () {
-//     return view('dashboard');
+//     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
-Route::group(['middleware' => ['auth','role:superadministrator|administrator|user'], 'prefix' => 'Admin' ], function() {
+Route::group(['middleware' => ['auth'], 'prefix' => 'Admin' ], function() {
 Route::get('categories', TestCategoryComponent::class)->name('categories');
 Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
 Route::resource('tests', TestController::class);
+Route::get('designations', DesignationComponent::class)->name('designations');
 });
 require __DIR__.'/auth.php';
