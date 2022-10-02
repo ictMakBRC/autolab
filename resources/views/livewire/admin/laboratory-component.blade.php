@@ -63,7 +63,7 @@
             </div> <!-- end card body-->
         </div> <!-- end card -->
     </div><!-- end col-->
-
+    
     {{-- ADD LABORATORY --}}
     <div wire:ignore.self class="modal fade" id="addLaboratory" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
