@@ -6,7 +6,7 @@ use Exception;
 use Livewire\Component;
 use App\Models\Facility;
 
-class FacilityComponent extends Component
+class PlatformComponent extends Component
 {
     public $name,$type,$parent_id, $description, $is_active,$delete_id;
 
@@ -47,7 +47,7 @@ class FacilityComponent extends Component
          $this->edit_id = $facility->id;
          $this->name = $facility->name;
          $this->type = $facility->type;
-         $this->parent_id = $facility->parent_id!=NULL? $facility->parent_id:'';
+         $this->parent_id = $facility->parent_id;
          $this->is_active = $facility->is_active;
         $this->dispatchBrowserEvent('edit-modal');
     }

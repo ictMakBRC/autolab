@@ -15,11 +15,10 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->string('facility_name')->nullable();
-            $table->string('facility_type')->nullable();
-            $table->string('requester_name')->nullable();
-            $table->string('requester_contact')->nullable();
-            $table->foreignId('parent_id')->nullable();
+            $table->string('name');
+            $table->string('type')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
         });
     }
