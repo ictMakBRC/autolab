@@ -62,7 +62,7 @@ class LaboratoryComponent extends Component
         ]);
         $laboratory = Laboratory::find($this->edit_id);
         $laboratory->laboratory_name = $this->laboratory_name;
-        $this->short_code = $laboratory->short_code;
+        $laboratory->short_code = $this->short_code;
         $laboratory->description = $this->description;
         $laboratory->is_active = $this->is_active;
         $laboratory->update();

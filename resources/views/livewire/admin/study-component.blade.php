@@ -100,7 +100,7 @@
                                 <div class="mb-3">
                                     <label for="parent" class="form-label">Parent</label>
                                     <select class="form-select" id="parent" wire:model="parent_id">
-                                        <option selected value="">None</option>
+                                        <option selected value="">Select</option>
                                         @forelse ($facilities as $facility)
                                             <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
                                         @empty
@@ -162,7 +162,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Facility</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
@@ -190,20 +190,11 @@
                                 <div class="mb-3">
                                     <label for="parent2" class="form-label">Parent</label>
                                     <select class="form-select" id="parent2" wire:model="parent_id">
-                                        @if ($parent_id == '')
-                                            <option selected value="">None</option>
-                                            @forelse ($facilities as $facility)
-                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                            @empty
-                                            @endforelse
-                                        @else
-                                            @forelse ($facilities as $facility)
-                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                            @empty
-                                                <option selected value="">None</option>
-                                            @endforelse
-                                        @endif
-
+                                        @forelse ($facilities as $facility)
+                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                        @empty
+                                            <option selected value="">Select</option>
+                                        @endforelse
                                     </select>
                                     @error('parent_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
