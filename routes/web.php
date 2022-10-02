@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\TestController;
+use App\Http\Livewire\Admin\LaboratoryComponent;
 use App\Http\Livewire\Admin\SampleTypeComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
@@ -30,5 +31,6 @@ Route::get('categories', TestCategoryComponent::class)->name('categories');
 Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
 Route::resource('tests', TestController::class);
 Route::get('designations', DesignationComponent::class)->name('designations');
+Route::get('laboratories', LaboratoryComponent::class)->name('laboratories');
 });
 require __DIR__.'/auth.php';
