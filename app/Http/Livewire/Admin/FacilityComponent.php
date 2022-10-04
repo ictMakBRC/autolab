@@ -35,10 +35,7 @@ class FacilityComponent extends Component
         $facility->save();
         session()->flash('success', 'Facility created successfully.');
         $this->reset(['name','type','parent_id','is_active']);
-        // $this->name="";
-        // $this->type="";
-        // $this->parent_id="";
-        // $this->is_active="";
+
         $this->dispatchBrowserEvent('close-modal');
     }
 
@@ -56,10 +53,6 @@ class FacilityComponent extends Component
     public function resetInputs()
     {
         $this->reset(['name','type','parent_id','is_active']);
-        // $this->name="";
-        // $this->type="";
-        // $this->parent_id="";
-        // $this->is_active="";
     }
 
     public function updateData()
@@ -75,10 +68,6 @@ class FacilityComponent extends Component
         $facility->update();
         session()->flash('success', 'Facility updated successfully.');
         $this->reset(['name','type','parent_id','is_active']);
-        // $this->name="";
-        // $this->type="";
-        // $this->parent_id="";
-        // $this->is_active="";
         $this->dispatchBrowserEvent('close-modal');
     }
 
