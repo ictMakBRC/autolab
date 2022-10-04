@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSwabbersTable extends Migration
+class CreateStudiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateSwabbersTable extends Migration
      */
     public function up()
     {
-        Schema::create('swabbers', function (Blueprint $table) {
+        Schema::create('studies', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('swabber_contact')->nullable();
-            $table->string('swabber_email')->nullable();
+            $table->string('name');
+            $table->longText('description')->nullable();
             $table->unsignedBigInteger('facility_id')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateSwabbersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('swabbers');
+        Schema::dropIfExists('studies');
     }
 }

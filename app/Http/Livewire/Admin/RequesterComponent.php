@@ -5,16 +5,19 @@ namespace App\Http\Livewire\Admin;
 use Exception;
 use Livewire\Component;
 use App\Models\Facility;
+use App\Models\Requester;
 
 class RequesterComponent extends Component
 {
-    public $name,$type,$parent_id, $description, $is_active,$delete_id;
+    public $name,$email,$facility_id,$contact, $is_active,$delete_id;
 
     public function updated($fields)
     {
         $this->validateOnly($fields,[
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
+            'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|email:filter',
+            'facility_id'=>'required',
             'is_active'=>'required',
 
         ]);
@@ -23,59 +26,59 @@ class RequesterComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
+            'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|unique:requesters|email:filter',
+            'facility_id'=>'required',
             'is_active'=>'required',
         ]);
         
-        $facility= new Facility();
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->save();
-        session()->flash('success', 'Facility created successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $requester= new Requester();
+        $requester->name = $this->name;
+        $requester->contact = $this->contact;
+        $requester->email = $this->email;
+        $requester->facility_id = $this->facility_id;
+        $requester->save();
+        session()->flash('success', 'Requester created successfully.');
+        $this->reset(['name','contact','facility_id','email','is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
     public function editdata($id)
     {  
-        $facility= Facility::where('id', $id)->first();
-         $this->edit_id = $facility->id;
-         $this->name = $facility->name;
-         $this->type = $facility->type;
-         $this->parent_id = $facility->parent_id;
-         $this->is_active = $facility->is_active;
+        $requester= Requester::where('id', $id)->first();
+         $this->edit_id = $requester->id;
+         $this->name = $requester->name;
+         $this->contact = $requester->contact;
+         $this->email = $requester->email;
+         $this->facility_id = $requester->facility_id;
+         $this->is_active = $requester->is_active;
         $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function resetInputs()
     {
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $this->reset(['name','contact','facility_id','email','is_active']);
     }
 
     public function updateData()
     {
         $this->validate([
             'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|email:filter',
+            'facility_id'=>'required',
+            'is_active'=>'required',
         ]);
-        $facility= Facility::find($this->edit_id);
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->is_active = $this->is_active;
-        $facility->update();
-        session()->flash('success', 'Facility updated successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $requester= Requester::find($this->edit_id);
+        $requester->name = $this->name;
+        $requester->contact = $this->contact;
+        $requester->email = $this->email;
+        $requester->facility_id = $this->facility_id;
+        $requester->is_active = $this->is_active;
+        $requester->update();
+        session()->flash('success', 'Requester updated successfully.');
+        $this->reset(['name','contact','facility_id','email','is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
@@ -92,14 +95,14 @@ class RequesterComponent extends Component
     public function deleteData()
     { 
         try{
-        $facility= Facility::where('id', $this->delete_id)->first();
-        $facility->delete();
+        $requester= Requester::where('id', $this->delete_id)->first();
+        $requester->delete();
         $this->delete_id = '';
         $this->dispatchBrowserEvent('close-modal');
-        session()->flash('success', 'Facility deleted successfully.');
+        session()->flash('success', 'Requester deleted successfully.');
         }
         catch(Exception $error){
-            session()->flash('erorr', 'Facility can not be deleted !!.');
+            session()->flash('erorr', 'Requester can not be deleted !!.');
         }
     }
     public function cancel()
@@ -112,8 +115,9 @@ class RequesterComponent extends Component
     }
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
-        return view('livewire.admin.facility-component',compact('facilities'))->layout('layouts.app');
+        $requesters = Requester::with('facility')->latest()->get();
+        $facilities = Facility::latest()->get();
+        return view('livewire.admin.requester-component',compact('requesters','facilities'))->layout('layouts.app');
        
         
     }

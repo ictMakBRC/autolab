@@ -5,13 +5,13 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Facilities</h4>
+                            <h4 class="header-title mb-3  text-center">Collectors</h4>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end mt-3">
                             <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addFacility">Add Facility</a>
+                                data-bs-target="#addCollector">Add Collector</a>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -23,34 +23,37 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>Collector</th>
+                                    <th>Contact</th>
+                                    <th>Email</th>
                                     <th>Facility</th>
-                                    <th>Type</th>
-                                    <th>Parent</th>
                                     <th>Status</th>
                                     <th>Date created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($facilities as $key => $facility)
+                                @foreach ($collectors as $key => $collector)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $facility->name }}</td>
-                                        <td>{{ $facility->type }}</td>
-                                        <td>{{ $facility->parent ? $facility->parent->name : 'N/A' }}</td>
-                                        @if ($facility->is_active == 0)
+                                        <td>{{ $collector->name }}</td>
+                                        <td>{{ $collector->contact ? $collector->contact : 'N/A' }}</td>
+                                        <td>{{ $collector->email ? $collector->email : 'N/A' }}</td>
+                                        <td>{{ $collector->facility ? $collector->facility->name : 'N/A' }}</td>
+                                        @if ($collector->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
                                             <td><span class="badge bg-success">Active</span></td>
                                         @endif
-                                        <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($collector->created_at)) }}</td>
                                         <td class="table-action">
                                             <a href="javascript: void(0);" class="action-ico"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $facility->id }})"
-                                                    data-bs-target="#editfacility"></i></a>
+                                                    wire:click="editdata({{ $collector->id }})"
+                                                    data-bs-target="#editcollector"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})" class="action-ico">
+                                                wire:click="deleteConfirmation({{ $collector->id }})"
+                                                class="action-ico">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -65,12 +68,12 @@
     </div><!-- end col-->
 
     {{-- ADD FACILITY --}}
-    <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div wire:ignore.self class="modal fade" id="addCollector" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Collector</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
@@ -79,34 +82,39 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName" class="form-control" name="name"
+                                    <label for="collectorName" class="form-label">Name</label>
+                                    <input type="text" id="collectorName" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="type" class="form-label">Type</label>
-                                    <select class="form-select" id="type" wire:model="type">
-                                        <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
-                                    </select>
-                                    @error('type')
+                                    <label for="collectorcontact" class="form-label">Contact</label>
+                                    <input type="text" id="collectorcontact" class="form-control" name="name"
+                                        wire:model="contact">
+                                    @error('contact')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="parent" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent" wire:model="parent_id">
+                                    <label for="collectorEmail" class="form-label">Email</label>
+                                    <input type="email" id="collectorEmail" class="form-control" name="email"
+                                        wire:model="email">
+                                    @error('email')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="facility" class="form-label">Facility</label>
+                                    <select class="form-select" id="facility" wire:model="facility_id">
                                         <option selected value="">Select</option>
                                         @forelse ($facilities as $facility)
                                             <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
                                         @empty
                                         @endforelse
                                     </select>
-                                    @error('parent_id')
+                                    @error('facility_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -139,7 +147,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Facility</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Collector</h5>
                     <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -155,13 +163,13 @@
         </div>
     </div>
 
-    <!-- EDIT facility Modal -->
-    <div wire:ignore.self class="modal fade" id="editfacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <!-- EDIT collector Modal -->
+    <div wire:ignore.self class="modal fade" id="editcollector" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Update Facility</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Collector</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
@@ -169,34 +177,47 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName2" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName2" class="form-control" name="name"
+                                    <label for="collectorName2" class="form-label">Name</label>
+                                    <input type="text" id="collectorName2" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="type2" class="form-label">Type</label>
-                                    <select class="form-select" id="type2" wire:model="type">
-                                        <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
-                                    </select>
-                                    @error('type')
+                                    <label for="collectorcontact2" class="form-label">Contact</label>
+                                    <input type="text" id="collectorcontact2" class="form-control" name="name"
+                                        wire:model="contact">
+                                    @error('contact')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="parent2" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent2" wire:model="parent_id">
+                                    <label for="collectorEmail2" class="form-label">Email</label>
+                                    <input type="email" id="collectorEmail2" class="form-control" name="email"
+                                        wire:model="email">
+                                    @error('email')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="facility2" class="form-label">Facility</label>
+                                    <select class="form-select" id="facility2" wire:model="facility_id">
+                                        @if ($facility_id == '')
+                                        <option selected value="">None</option>
                                         @forelse ($facilities as $facility)
                                             <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
                                         @empty
-                                            <option selected value="">Select</option>
                                         @endforelse
+                                    @else
+                                        @forelse ($facilities as $facility)
+                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                        @empty
+                                            <option selected value="">None</option>
+                                        @endforelse
+                                    @endif
                                     </select>
-                                    @error('parent_id')
+                                    @error('facility_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -229,14 +250,14 @@
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
-                $('#addFacility').modal('hide');
-                $('#editfacility').modal('hide');
+                $('#addCollector').modal('hide');
+                $('#editcollector').modal('hide');
                 $('#delete_modal').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 
             window.addEventListener('edit-modal', event => {
-                $('#editfacility').modal('show');
+                $('#editcollector').modal('show');
             });
             window.addEventListener('delete-modal', event => {
                 $('#delete_modal').modal('show');

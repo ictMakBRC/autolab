@@ -5,16 +5,19 @@ namespace App\Http\Livewire\Admin;
 use Exception;
 use Livewire\Component;
 use App\Models\Facility;
+use App\Models\Collector;
 
 class CollectorComponent extends Component
 {
-    public $name,$type,$parent_id, $description, $is_active,$delete_id;
+    public $name,$email,$facility_id,$contact, $is_active,$delete_id;
 
     public function updated($fields)
     {
         $this->validateOnly($fields,[
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
+            'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|email:filter',
+            'facility_id'=>'required',
             'is_active'=>'required',
 
         ]);
@@ -23,59 +26,59 @@ class CollectorComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
+            'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|unique:collectors|email:filter',
+            'facility_id'=>'required',
             'is_active'=>'required',
         ]);
         
-        $facility= new Facility();
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->save();
-        session()->flash('success', 'Facility created successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $collector= new Collector();
+        $collector->name = $this->name;
+        $collector->contact = $this->contact;
+        $collector->email = $this->email;
+        $collector->facility_id = $this->facility_id;
+        $collector->save();
+        session()->flash('success', 'Collector created successfully.');
+        $this->reset(['name','contact','facility_id','email','is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
     public function editdata($id)
     {  
-        $facility= Facility::where('id', $id)->first();
-         $this->edit_id = $facility->id;
-         $this->name = $facility->name;
-         $this->type = $facility->type;
-         $this->parent_id = $facility->parent_id;
-         $this->is_active = $facility->is_active;
+        $collector= Collector::where('id', $id)->first();
+         $this->edit_id = $collector->id;
+         $this->name = $collector->name;
+         $this->contact = $collector->contact;
+         $this->email = $collector->email;
+         $this->facility_id = $collector->facility_id;
+         $this->is_active = $collector->is_active;
         $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function resetInputs()
     {
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $this->reset(['name','contact','facility_id','email','is_active']);
     }
 
     public function updateData()
     {
         $this->validate([
             'name'=>'required',
+            'contact'=>'required',
+            'email'=>'required|email:filter',
+            'facility_id'=>'required',
+            'is_active'=>'required',
         ]);
-        $facility= Facility::find($this->edit_id);
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->is_active = $this->is_active;
-        $facility->update();
-        session()->flash('success', 'Facility updated successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $collector= Collector::find($this->edit_id);
+        $collector->name = $this->name;
+        $collector->contact = $this->contact;
+        $collector->email = $this->email;
+        $collector->facility_id = $this->facility_id;
+        $collector->is_active = $this->is_active;
+        $collector->update();
+        session()->flash('success', 'Collector updated successfully.');
+        $this->reset(['name','contact','facility_id','email','is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
@@ -92,14 +95,14 @@ class CollectorComponent extends Component
     public function deleteData()
     { 
         try{
-        $facility= Facility::where('id', $this->delete_id)->first();
-        $facility->delete();
+        $collector= Collector::where('id', $this->delete_id)->first();
+        $collector->delete();
         $this->delete_id = '';
         $this->dispatchBrowserEvent('close-modal');
-        session()->flash('success', 'Facility deleted successfully.');
+        session()->flash('success', 'Collector deleted successfully.');
         }
         catch(Exception $error){
-            session()->flash('erorr', 'Facility can not be deleted !!.');
+            session()->flash('erorr', 'Collector can not be deleted !!.');
         }
     }
     public function cancel()
@@ -112,8 +115,9 @@ class CollectorComponent extends Component
     }
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
-        return view('livewire.admin.facility-component',compact('facilities'))->layout('layouts.app');
+        $collectors = Collector::with('facility')->latest()->get();
+        $facilities = Facility::latest()->get();
+        return view('livewire.admin.collector-component',compact('collectors','facilities'))->layout('layouts.app');
        
         
     }

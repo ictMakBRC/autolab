@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFacilitiesTable extends Migration
+class CreateCollectorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateFacilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('facilities', function (Blueprint $table) {
+        Schema::create('collectors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('email')->nullable();
+            $table->unsignedBigInteger('facility_id')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateFacilitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facilities');
+        Schema::dropIfExists('collectors');
     }
 }

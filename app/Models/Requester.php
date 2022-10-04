@@ -1,18 +1,22 @@
 <?php
 
 namespace App\Models;
+
+use App\Models\Facility;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Facility extends Model
+class Requester extends Model
 {
     use HasFactory;
-    // protected $fillable = ['facility_name','facility_type','parent_id','requester_name','requester_contact','requester_email'];
-    protected $fillable = ['name','type','parent_id','is_active','created_by'];
     
-    public function parent(){
-        return $this->belongsTo(Facility::class,'parent_id','id');
+
+    protected $fillable = ['name','contact','facility_id','email','is_active','created_by',
+    ];
+
+    public function facility(){
+        return $this->belongsTo(Facility::class,'facility_id','id');
     }
 
     public static function boot()
@@ -24,5 +28,4 @@ class Facility extends Model
             });
         }
     }
-    
 }
