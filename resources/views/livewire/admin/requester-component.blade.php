@@ -204,18 +204,18 @@
                                     <label for="facility2" class="form-label">Facility</label>
                                     <select class="form-select" id="facility2" wire:model="facility_id">
                                         @if ($facility_id == '')
-                                        <option selected value="">None</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    @else
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
                                             <option selected value="">None</option>
-                                        @endforelse
-                                    @endif
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        @else
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                                <option selected value="">None</option>
+                                            @endforelse
+                                        @endif
                                     </select>
                                     @error('facility_id')
                                         <div class="text-danger text-small">{{ $message }}</div>

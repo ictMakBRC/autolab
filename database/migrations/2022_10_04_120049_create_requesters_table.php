@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('requesters', function (Blueprint $table) {
             $table->id();
-            $table->string('name',60);
-            $table->string('contact',20)->nullable();
-            $table->string('email',30)->nullable();
+            $table->string('name', 60);
+            $table->string('contact', 20)->nullable();
+            $table->string('email', 30)->nullable();
             $table->unsignedBigInteger('facility_id')->nullable();
+            $table->unsignedBigInteger('study_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('created_by');
             $table->timestamps();

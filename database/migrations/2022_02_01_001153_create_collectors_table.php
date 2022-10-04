@@ -19,6 +19,7 @@ class CreateCollectorsTable extends Migration
             $table->string('contact')->nullable();
             $table->string('email')->nullable();
             $table->unsignedBigInteger('facility_id')->nullable();
+            $table->unsignedBigInteger('study_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();

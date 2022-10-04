@@ -5,13 +5,13 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Facilities</h4>
+                            <h4 class="header-title mb-3  text-center">Kits</h4>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end mt-3">
                             <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addFacility">Add Facility</a>
+                                data-bs-target="#addKit">Add Kit</a>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -23,34 +23,32 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Facility</th>
-                                    <th>Type</th>
-                                    <th>Parent</th>
+                                    <th>Name</th>
+                                    <th>Platform</th>
                                     <th>Status</th>
                                     <th>Date created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($facilities as $key => $facility)
+                                @foreach ($kits as $key => $kit)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $facility->name }}</td>
-                                        <td>{{ $facility->type }}</td>
-                                        <td>{{ $facility->parent ? $facility->parent->name : 'N/A' }}</td>
-                                        @if ($facility->is_active == 0)
+                                        <td>{{ $kit->name }}</td>
+                                        <td>{{ $kit->platform ? $kit->platform->name : 'N/A' }}</td>
+                                        @if ($kit->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
                                             <td><span class="badge bg-success">Active</span></td>
                                         @endif
-                                        <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($kit->created_at)) }}</td>
                                         <td class="table-action">
                                             <a href="javascript: void(0);" class="action-ico"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $facility->id }})"
-                                                    data-bs-target="#editfacility"></i></a>
+                                                    wire:click="editdata({{ $kit->id }})"
+                                                    data-bs-target="#editkit"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})" class="action-ico">
+                                                wire:click="deleteConfirmation({{ $kit->id }})" class="action-ico">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -65,12 +63,12 @@
     </div><!-- end col-->
 
     {{-- ADD FACILITY --}}
-    <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div wire:ignore.self class="modal fade" id="addKit" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Kit</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
@@ -79,34 +77,24 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName" class="form-control" name="name"
+                                    <label for="kitName" class="form-label">Kit</label>
+                                    <input type="text" id="kitName" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="type" class="form-label">Type</label>
-                                    <select class="form-select" id="type" wire:model="type">
+                                    <label for="platform_id" class="form-label">Platform</label>
+                                    <select class="form-select" id="platform_id" wire:model="platform_id">
                                         <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
-                                    </select>
-                                    @error('type')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="parent" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent" wire:model="parent_id">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                        @forelse ($platforms as $platform)
+                                            <option value='{{ $platform->id }}'>{{ $platform->name }}</option>
                                         @empty
                                         @endforelse
                                     </select>
-                                    @error('parent_id')
+                                    @error('platform_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -139,7 +127,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Facility</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Kit</h5>
                     <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -155,55 +143,56 @@
         </div>
     </div>
 
-    <!-- EDIT facility Modal -->
-    <div wire:ignore.self class="modal fade" id="editfacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <!-- EDIT kit Modal -->
+    <div wire:ignore.self class="modal fade" id="editkit" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Update Facility</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Kit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName2" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName2" class="form-control" name="name"
+                                    <label for="kitName" class="form-label">Kit</label>
+                                    <input type="text" id="kitName" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="type2" class="form-label">Type</label>
-                                    <select class="form-select" id="type2" wire:model="type">
-                                        <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
+                                    <label for="platform2" class="form-label">Platform</label>
+                                    <select class="form-select" id="platform2" wire:model="platform_id">
+                                        @if ($platform_id == '')
+                                            <option selected value="">None</option>
+                                            @forelse ($platforms as $platform)
+                                                <option value='{{ $platform->id }}'>{{ $platform->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        @else
+                                            @forelse ($platforms as $platform)
+                                                <option value='{{ $platform->id }}'>{{ $platform->name }}</option>
+                                            @empty
+                                                <option selected value="">None</option>
+                                            @endforelse
+                                        @endif
                                     </select>
-                                    @error('type')
+                                    @error('platform_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label for="parent2" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent2" wire:model="parent_id">
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                            <option selected value="">Select</option>
-                                        @endforelse
-                                    </select>
-                                    @error('parent_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="isActive2" class="form-label">Status</label>
                                     <select class="form-select" id="isActive2" name="is_active"
                                         wire:model="is_active">
+                                        <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
                                     </select>
@@ -229,14 +218,14 @@
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
-                $('#addFacility').modal('hide');
-                $('#editfacility').modal('hide');
+                $('#addKit').modal('hide');
+                $('#editkit').modal('hide');
                 $('#delete_modal').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 
             window.addEventListener('edit-modal', event => {
-                $('#editfacility').modal('show');
+                $('#editkit').modal('show');
             });
             window.addEventListener('delete-modal', event => {
                 $('#delete_modal').modal('show');

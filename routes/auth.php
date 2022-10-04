@@ -74,6 +74,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
     Route::get('account', function () {
         $user = User::where('id', auth()->user()->id)->first();
+
         return view('super-admin.userAccount', compact('user'));
     })->name('user.account');
 
@@ -88,11 +89,10 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', function () {
-        
         $users = User::latest()->get();
-        return view('super-admin.dashboard',compact('users'));
-    })->name('super.dashboard');
 
+        return view('super-admin.dashboard', compact('users'));
+    })->name('super.dashboard');
 
     Route::get('/users/logs', function () {
         $logs = LogActivity::logActivityLists();
@@ -100,7 +100,6 @@ Route::group(['middleware' => ['auth']], function () {
         return view('super-admin.logActivity', compact('logs'));
     })->middleware(['auth'])->name('logs');
 
-   
     Route::resource('users', RegisteredUserController::class);
     Route::resource('user-roles', UserRolesController::class);
     Route::resource('user-permissions', UserPermissionsController::class);

@@ -10,6 +10,7 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 class TestResults extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'test_id',
         'result_type',
@@ -18,17 +19,17 @@ class TestResults extends Model
         'user_id',
     ];
 
-    public function test_type(){
+    public function test_type()
+    {
         return $this->belongsTo(Tests::class);
     }
-    
+
     public static function boot()
     {
         parent::boot();
-        if(Auth::check()){
-            self::creating(function ($model) 
-            {
-            $model->user_id = auth()->id();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->user_id = auth()->id();
             });
         }
     }

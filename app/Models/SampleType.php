@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\Auth;
 class SampleType extends Model
 {
     use HasFactory;
+
     protected $fillable = ['sample_name', 'stauts'];
+
     public static function boot()
     {
         parent::boot();
-        if(Auth::check()){
-            self::creating(function ($model) 
-            {
-            $model->created_by = auth()->id();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
             });
         }
     }
