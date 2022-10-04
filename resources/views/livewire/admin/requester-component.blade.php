@@ -27,6 +27,7 @@
                                     <th>Contact</th>
                                     <th>Email</th>
                                     <th>Facility</th>
+                                    <th>Study/Project</th>
                                     <th>Status</th>
                                     <th>Date created</th>
                                     <th>Action</th>
@@ -40,6 +41,7 @@
                                         <td>{{ $requester->contact ? $requester->contact : 'N/A' }}</td>
                                         <td>{{ $requester->email ? $requester->email : 'N/A' }}</td>
                                         <td>{{ $requester->facility ? $requester->facility->name : 'N/A' }}</td>
+                                        <td>{{ $requester->study ? $requester->study->name : 'N/A' }}</td>
                                         @if ($requester->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
@@ -70,7 +72,7 @@
     {{-- ADD FACILITY --}}
     <div wire:ignore.self class="modal fade" id="addRequester" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Add New Requester</h5>
@@ -80,56 +82,72 @@
                     <form wire:submit.prevent="storeData">
                         {{-- @csrf --}}
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="requesterName" class="form-label">Name</label>
-                                    <input type="text" id="requesterName" class="form-control" name="name"
-                                        wire:model="name">
-                                    @error('name')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="requestercontact" class="form-label">Contact</label>
-                                    <input type="text" id="requestercontact" class="form-control" name="name"
-                                        wire:model="contact">
-                                    @error('contact')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="requesterEmail" class="form-label">Email</label>
-                                    <input type="email" id="requesterEmail" class="form-control" name="email"
-                                        wire:model="email">
-                                    @error('email')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="facility" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility" wire:model="facility_id">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('facility_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
-                                        <option selected value="">Select</option>
-                                        <option value='1'>Active</option>
-                                        <option value='0'>Inactive</option>
-                                    </select>
-                                    @error('is_active')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> <!-- end col -->
+                            <div class="mb-3 col-md-4">
+                                <label for="requesterName" class="form-label">Name</label>
+                                <input type="text" id="requesterName" class="form-control" name="name"
+                                    wire:model="name">
+                                @error('name')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="requestercontact" class="form-label">Contact</label>
+                                <input type="text" id="requestercontact" class="form-control" wire:model="contact">
+                                @error('contact')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="requesterEmail" class="form-label">Email</label>
+                                <input type="email" id="requesterEmail" class="form-control" name="email"
+                                    wire:model="email">
+                                @error('email')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="facility" class="form-label">Facility</label>
+                                <select class="form-select" id="facility" wire:model="facility_id"
+                                    wire:change="getStudies">
+                                    <option selected value="">Select</option>
+                                    @forelse ($facilities as $facility)
+                                        <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                                @error('facility_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-5">
+                                <label for="study_id" class="form-label">Study/project</label>
+                                <select class="form-select" id="study_id" wire:model="study_id">
+                                    @if ($facility_id && !$studies->isEmpty())
+                                        <option selected value="">Select/None</option>
+                                        @foreach ($studies as $study)
+                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option selected value="">None</option>
+                                    @endif
+                                </select>
+                                @error('study_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-2">
+                                <label for="isActive" class="form-label">Status</label>
+                                <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
+                                    <option selected value="">Select</option>
+                                    <option value='1'>Active</option>
+                                    <option value='0'>Inactive</option>
+                                </select>
+                                @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <!-- end row-->
                         <div class="d-grid mb-0 text-center">
@@ -166,44 +184,44 @@
     <!-- EDIT requester Modal -->
     <div wire:ignore.self class="modal fade" id="editrequester" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Requester</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="requesterName2" class="form-label">Name</label>
-                                    <input type="text" id="requesterName2" class="form-control" name="name"
-                                        wire:model="name">
-                                    @error('name')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="requestercontact2" class="form-label">Contact</label>
-                                    <input type="text" id="requestercontact2" class="form-control" name="name"
-                                        wire:model="contact">
-                                    @error('contact')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="requesterEmail2" class="form-label">Email</label>
-                                    <input type="email" id="requesterEmail2" class="form-control" name="email"
-                                        wire:model="email">
-                                    @error('email')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="facility2" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility2" wire:model="facility_id">
-                                        @if ($facility_id == '')
+                            <div class="mb-3 col-md-4">
+                                <label for="requesterName2" class="form-label">Name</label>
+                                <input type="text" id="requesterName2" class="form-control" name="name"
+                                    wire:model="name">
+                                @error('name')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="requestercontact2" class="form-label">Contact</label>
+                                <input type="text" id="requestercontact2" class="form-control"
+                                    wire:model="contact">
+                                @error('contact')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="requesterEmail2" class="form-label">Email</label>
+                                <input type="email" id="requesterEmail2" class="form-control" name="email"
+                                    wire:model="email">
+                                @error('email')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="facility2" class="form-label">Facility</label>
+                                <select class="form-select" id="facility2" wire:model="facility_id"
+                                    wire:change="getStudies">
+                                    @if ($facility_id == '')
                                         <option selected value="">None</option>
                                         @forelse ($facilities as $facility)
                                             <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
@@ -216,23 +234,37 @@
                                             <option selected value="">None</option>
                                         @endforelse
                                     @endif
-                                    </select>
-                                    @error('facility_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" name="is_active"
-                                        wire:model="is_active">
-                                        <option value='1'>Active</option>
-                                        <option value='0'>Inactive</option>
-                                    </select>
-                                    @error('is_active')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> <!-- end col -->
+                                </select>
+                                @error('facility_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="study_id2" class="form-label">Study/project</label>
+                                <select class="form-select" id="study_id2" wire:model="study_id">
+                                    @if ($facility_id && !$studies->isEmpty())
+                                        <option value="">Select/None</option>
+                                        @foreach ($studies as $study)
+                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option selected value="">None</option>
+                                    @endif
+                                </select>
+                                @error('study_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label for="isActive2" class="form-label">Status</label>
+                                <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
+                                    <option value='1'>Active</option>
+                                    <option value='0'>Inactive</option>
+                                </select>
+                                @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <!-- end row-->
                         <div class="modal-footer">

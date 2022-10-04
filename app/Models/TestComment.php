@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 class TestComment extends Model
 {
     use HasFactory;
-    protected $fillable =['test_id','comment'];
+
+    protected $fillable = ['test_id', 'comment'];
+
     public function test()
     {
-        return $this->belongsTo(Test::class,'test_id','id');
+        return $this->belongsTo(Test::class, 'test_id', 'id');
     }
 }

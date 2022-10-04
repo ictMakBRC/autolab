@@ -5,7 +5,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Collectors</h4>
+                            <h4 class="header-title mb-3  text-center">Collectors/Swabbers</h4>
                         </div>
                     </div>
                     <div class="col-sm-8">
@@ -27,6 +27,7 @@
                                     <th>Contact</th>
                                     <th>Email</th>
                                     <th>Facility</th>
+                                    <th>Study/Project</th>
                                     <th>Status</th>
                                     <th>Date created</th>
                                     <th>Action</th>
@@ -40,6 +41,7 @@
                                         <td>{{ $collector->contact ? $collector->contact : 'N/A' }}</td>
                                         <td>{{ $collector->email ? $collector->email : 'N/A' }}</td>
                                         <td>{{ $collector->facility ? $collector->facility->name : 'N/A' }}</td>
+                                        <td>{{ $collector->study ? $collector->study->name : 'N/A' }}</td>
                                         @if ($collector->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
@@ -67,10 +69,10 @@
         </div> <!-- end card -->
     </div><!-- end col-->
 
-    {{-- ADD FACILITY --}}
+    {{-- ADD COLLECTOR --}}
     <div wire:ignore.self class="modal fade" id="addCollector" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Add New Collector</h5>
@@ -80,56 +82,71 @@
                     <form wire:submit.prevent="storeData">
                         {{-- @csrf --}}
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="collectorName" class="form-label">Name</label>
-                                    <input type="text" id="collectorName" class="form-control" name="name"
-                                        wire:model="name">
-                                    @error('name')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="collectorcontact" class="form-label">Contact</label>
-                                    <input type="text" id="collectorcontact" class="form-control" name="name"
-                                        wire:model="contact">
-                                    @error('contact')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="collectorEmail" class="form-label">Email</label>
-                                    <input type="email" id="collectorEmail" class="form-control" name="email"
-                                        wire:model="email">
-                                    @error('email')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="facility" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility" wire:model="facility_id">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('facility_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
-                                        <option selected value="">Select</option>
-                                        <option value='1'>Active</option>
-                                        <option value='0'>Inactive</option>
-                                    </select>
-                                    @error('is_active')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> <!-- end col -->
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorName" class="form-label">Name</label>
+                                <input type="text" id="collectorName" class="form-control" name="name"
+                                    wire:model="name">
+                                @error('name')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorcontact" class="form-label">Contact</label>
+                                <input type="text" id="collectorcontact" class="form-control" name="name"
+                                    wire:model="contact">
+                                @error('contact')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorEmail" class="form-label">Email</label>
+                                <input type="email" id="collectorEmail" class="form-control" name="email"
+                                    wire:model="email">
+                                @error('email')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="facility" class="form-label">Facility</label>
+                                <select class="form-select" id="facility" wire:model="facility_id"
+                                    wire:change="getStudies">
+                                    <option selected value="">Select</option>
+                                    @forelse ($facilities as $facility)
+                                        <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                                @error('facility_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="study_id" class="form-label">Study/project</label>
+                                <select class="form-select" id="study_id" wire:model="study_id">
+                                    @if ($facility_id && !$studies->isEmpty())
+                                        <option selected value="">Select/None</option>
+                                        @foreach ($studies as $study)
+                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option selected value="">None</option>
+                                    @endif
+                                </select>
+                                @error('study_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label for="isActive" class="form-label">Status</label>
+                                <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
+                                    <option selected value="">Select</option>
+                                    <option value='1'>Active</option>
+                                    <option value='0'>Inactive</option>
+                                </select>
+                                @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <!-- end row-->
                         <div class="d-grid mb-0 text-center">
@@ -166,48 +183,50 @@
     <!-- EDIT collector Modal -->
     <div wire:ignore.self class="modal fade" id="editcollector" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Collector</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label for="collectorName2" class="form-label">Name</label>
-                                    <input type="text" id="collectorName2" class="form-control" name="name"
-                                        wire:model="name">
-                                    @error('name')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="collectorcontact2" class="form-label">Contact</label>
-                                    <input type="text" id="collectorcontact2" class="form-control" name="name"
-                                        wire:model="contact">
-                                    @error('contact')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="collectorEmail2" class="form-label">Email</label>
-                                    <input type="email" id="collectorEmail2" class="form-control" name="email"
-                                        wire:model="email">
-                                    @error('email')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="facility2" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility2" wire:model="facility_id">
-                                        @if ($facility_id == '')
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorName2" class="form-label">Name</label>
+                                <input type="text" id="collectorName2" class="form-control" name="name"
+                                    wire:model="name">
+                                @error('name')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorcontact2" class="form-label">Contact</label>
+                                <input type="text" id="collectorcontact2" class="form-control" name="name"
+                                    wire:model="contact">
+                                @error('contact')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="collectorEmail2" class="form-label">Email</label>
+                                <input type="email" id="collectorEmail2" class="form-control" name="email"
+                                    wire:model="email">
+                                @error('email')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="facility2" class="form-label">Facility</label>
+                                <select class="form-select" id="facility2" wire:model="facility_id"
+                                    wire:change="getStudies">
+                                    @if ($facility_id == '')
                                         <option selected value="">None</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                        @forelse ($studies as $study)
+                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
                                         @empty
+                                            <option selected value="">None</option>
                                         @endforelse
                                     @else
                                         @forelse ($facilities as $facility)
@@ -216,23 +235,37 @@
                                             <option selected value="">None</option>
                                         @endforelse
                                     @endif
-                                    </select>
-                                    @error('facility_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" name="is_active"
-                                        wire:model="is_active">
-                                        <option value='1'>Active</option>
-                                        <option value='0'>Inactive</option>
-                                    </select>
-                                    @error('is_active')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> <!-- end col -->
+                                </select>
+                                @error('facility_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="study_id2" class="form-label">Study/project</label>
+                                <select class="form-select" id="study_id2" wire:model="study_id">
+                                    @if ($facility_id && !$studies->isEmpty())
+                                        <option value="">Select/None</option>
+                                        @foreach ($studies as $study)
+                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option selected value="">None</option>
+                                    @endif
+                                </select>
+                                @error('study_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label for="isActive2" class="form-label">Status</label>
+                                <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
+                                    <option value='1'>Active</option>
+                                    <option value='0'>Inactive</option>
+                                </select>
+                                @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                         <!-- end row-->
                         <div class="modal-footer">

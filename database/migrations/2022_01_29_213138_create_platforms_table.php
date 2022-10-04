@@ -15,8 +15,10 @@ class CreatePlatformsTable extends Migration
     {
         Schema::create('platforms', function (Blueprint $table) {
             $table->id();
-            $table->string('platform_name');
-            $table->string('platform_range');
+            $table->string('name');
+            $table->string('range');
+            $table->boolean('is_active')->default(1);
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });
     }

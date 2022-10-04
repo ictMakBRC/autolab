@@ -15,8 +15,10 @@ class CreateKitsTable extends Migration
     {
         Schema::create('kits', function (Blueprint $table) {
             $table->id();
-            $table->string('kit_name')->nullable();
-            $table->foreignId('platform_id')->nullable();
+            $table->string('name');
+            $table->unsignedBigInteger('platform_id')->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });
     }

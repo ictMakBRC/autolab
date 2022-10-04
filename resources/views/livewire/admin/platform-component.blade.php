@@ -5,13 +5,13 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Facilities</h4>
+                            <h4 class="header-title mb-3  text-center">Platforms</h4>
                         </div>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end mt-3">
                             <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addFacility">Add Facility</a>
+                                data-bs-target="#addPlatform">Add Platform</a>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -23,34 +23,32 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Facility</th>
-                                    <th>Type</th>
-                                    <th>Parent</th>
+                                    <th>Platform</th>
+                                    <th>Range</th>
                                     <th>Status</th>
                                     <th>Date created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($facilities as $key => $facility)
+                                @foreach ($platforms as $key => $platform)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $facility->name }}</td>
-                                        <td>{{ $facility->type }}</td>
-                                        <td>{{ $facility->parent ? $facility->parent->name : 'N/A' }}</td>
-                                        @if ($facility->is_active == 0)
+                                        <td>{{ $platform->name }}</td>
+                                        <td>{{ $platform->range }}</td>
+                                        @if ($platform->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
                                             <td><span class="badge bg-success">Active</span></td>
                                         @endif
-                                        <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($platform->created_at)) }}</td>
                                         <td class="table-action">
                                             <a href="javascript: void(0);" class="action-ico"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $facility->id }})"
-                                                    data-bs-target="#editfacility"></i></a>
+                                                    wire:click="editdata({{ $platform->id }})"
+                                                    data-bs-target="#editplatform"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})" class="action-ico">
+                                                wire:click="deleteConfirmation({{ $platform->id }})" class="action-ico">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -59,18 +57,17 @@
                         </table>
                     </div> <!-- end preview-->
                 </div> <!-- end tab-content-->
-
             </div> <!-- end card body-->
         </div> <!-- end card -->
     </div><!-- end col-->
 
     {{-- ADD FACILITY --}}
-    <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <div wire:ignore.self class="modal fade" id="addPlatform" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Platform</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
@@ -79,34 +76,18 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName" class="form-control" name="name"
+                                    <label for="platformName" class="form-label">Platform</label>
+                                    <input type="text" id="platformName" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="type" class="form-label">Type</label>
-                                    <select class="form-select" id="type" wire:model="type">
-                                        <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
-                                    </select>
-                                    @error('type')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
-                                    <label for="parent" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent" wire:model="parent_id">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('parent_id')
+                                    <label for="platformRange" class="form-label">Range</label>
+                                    <input type="text" id="platformRange" class="form-control"
+                                        wire:model="range">
+                                    @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -139,7 +120,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Facility</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Platform</h5>
                     <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -155,55 +136,41 @@
         </div>
     </div>
 
-    <!-- EDIT facility Modal -->
-    <div wire:ignore.self class="modal fade" id="editfacility" data-bs-backdrop="static" data-bs-keyboard="false"
+    <!-- EDIT platform Modal -->
+    <div wire:ignore.self class="modal fade" id="editplatform" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Update Facility</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Platform</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
-                        <div class="row">
+                              <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="facilityName2" class="form-label">Facility Name</label>
-                                    <input type="text" id="facilityName2" class="form-control" name="name"
+                                    <label for="platformName2" class="form-label">Platform</label>
+                                    <input type="text" id="platformName2" class="form-control" name="name"
                                         wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="type2" class="form-label">Type</label>
-                                    <select class="form-select" id="type2" wire:model="type">
-                                        <option selected value="">Select</option>
-                                        <option value='Institution'>Institution</option>
-                                        <option value='Health Facility'>Health Facility</option>
-                                    </select>
-                                    @error('type')
+                                    <label for="platformRange2" class="form-label">Range</label>
+                                    <input type="text" id="platformRange2" class="form-control"
+                                        wire:model="range">
+                                    @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-3">
-                                    <label for="parent2" class="form-label">Parent</label>
-                                    <select class="form-select" id="parent2" wire:model="parent_id">
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                            <option selected value="">Select</option>
-                                        @endforelse
-                                    </select>
-                                    @error('parent_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
+
                                 <div class="mb-3">
                                     <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" name="is_active"
-                                        wire:model="is_active">
+                                    <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
+                                        <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
                                     </select>
@@ -221,7 +188,6 @@
                         </div>
                     </form>
                 </div>
-
             </div> <!-- end modal content-->
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
@@ -229,14 +195,14 @@
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
-                $('#addFacility').modal('hide');
-                $('#editfacility').modal('hide');
+                $('#addPlatform').modal('hide');
+                $('#editplatform').modal('hide');
                 $('#delete_modal').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 
             window.addEventListener('edit-modal', event => {
-                $('#editfacility').modal('show');
+                $('#editplatform').modal('show');
             });
             window.addEventListener('delete-modal', event => {
                 $('#delete_modal').modal('show');

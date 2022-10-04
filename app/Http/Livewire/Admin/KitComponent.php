@@ -2,119 +2,113 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Kit;
+use App\Models\Platform;
 use Exception;
 use Livewire\Component;
-use App\Models\Facility;
 
 class KitComponent extends Component
 {
-    public $name,$type,$parent_id, $description, $is_active,$delete_id;
+    public $name;
+
+    public $platform_id;
+
+    public $is_active;
+
+    public $delete_id;
 
     public function updated($fields)
     {
-        $this->validateOnly($fields,[
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
-            'is_active'=>'required',
+        $this->validateOnly($fields, [
+            'name' => 'required',
+            'is_active' => 'required',
 
         ]);
     }
-    
+
     public function storeData()
     {
         $this->validate([
-            'name'=>'required|unique:facilities',
-            'type'=>'required',
-            'is_active'=>'required',
+            'name' => 'required',
+            'is_active' => 'required',
         ]);
-        
-        $facility= new Facility();
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->save();
-        session()->flash('success', 'Facility created successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+
+        $kit = new Kit();
+        $kit->name = $this->name;
+        $kit->platform_id = $this->platform_id;
+        $kit->is_active = $this->is_active;
+        $kit->save();
+        session()->flash('success', 'Kit created successfully.');
+        $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
     public function editdata($id)
-    {  
-        $facility= Facility::where('id', $id)->first();
-         $this->edit_id = $facility->id;
-         $this->name = $facility->name;
-         $this->type = $facility->type;
-         $this->parent_id = $facility->parent_id;
-         $this->is_active = $facility->is_active;
+    {
+        $kit = Kit::where('id', $id)->first();
+        $this->edit_id = $kit->id;
+        $this->name = $kit->name;
+        $this->platform_id = $kit->platform_id;
+        $this->is_active = $kit->is_active;
         $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function resetInputs()
     {
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $this->reset(['name', 'platform_id', 'is_active']);
     }
 
     public function updateData()
     {
         $this->validate([
-            'name'=>'required',
+            'name' => 'required',
+            'is_active' => 'required',
         ]);
-        $facility= Facility::find($this->edit_id);
-        $facility->name = $this->name;
-        $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id;
-        $facility->is_active = $this->is_active;
-        $facility->update();
-        session()->flash('success', 'Facility updated successfully.');
-        $this->name="";
-        $this->type="";
-        $this->parent_id="";
-        $this->is_active="";
+        $kit = Kit::find($this->edit_id);
+        $kit->name = $this->name;
+        $kit->platform_id = $this->platform_id;
+        $kit->is_active = $this->is_active;
+        $kit->update();
+        session()->flash('success', 'Kit updated successfully.');
+        $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }
 
-
-
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id; //student id
+        $this->delete_id = $id;
 
         $this->dispatchBrowserEvent('delete-modal');
     }
 
-  
     public function deleteData()
-    { 
-        try{
-        $facility= Facility::where('id', $this->delete_id)->first();
-        $facility->delete();
-        $this->delete_id = '';
-        $this->dispatchBrowserEvent('close-modal');
-        session()->flash('success', 'Facility deleted successfully.');
-        }
-        catch(Exception $error){
-            session()->flash('erorr', 'Facility can not be deleted !!.');
+    {
+        try {
+            $kit = Kit::where('id', $this->delete_id)->first();
+            $kit->delete();
+            $this->delete_id = '';
+            $this->dispatchBrowserEvent('close-modal');
+            session()->flash('success', 'Kit deleted successfully.');
+        } catch(Exception $error) {
+            session()->flash('erorr', 'Kit can not be deleted !!.');
         }
     }
+
     public function cancel()
     {
         $this->delete_id = '';
     }
+
     public function close()
     {
         $this->resetInputs();
     }
+
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
-        return view('livewire.admin.facility-component',compact('facilities'))->layout('layouts.app');
-       
-        
+        $kits = Kit::with('platform')->latest()->get();
+        $platforms = Platform::latest()->get();
+
+        return view('livewire.admin.kit-component', compact('kits', 'platforms'))->layout('layouts.app');
     }
 }
