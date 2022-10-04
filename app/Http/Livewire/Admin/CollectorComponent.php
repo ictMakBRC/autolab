@@ -64,6 +64,7 @@ class CollectorComponent extends Component
         $collector->email = $this->email;
         $collector->facility_id = $this->facility_id;
         $collector->study_id = $this->study_id==""?NULL:$this->study_id;
+
         $collector->save();
 
         session()->flash('success', 'Collector created successfully.');

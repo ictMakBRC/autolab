@@ -7,7 +7,6 @@ use App\Models\Study;
 use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Requester;
-
 class RequesterComponent extends Component
 {
     public $name;
@@ -26,6 +25,7 @@ class RequesterComponent extends Component
 
     public $study_id;
 
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -38,6 +38,7 @@ class RequesterComponent extends Component
         ]);
     }
 
+
     public function getStudies()
     {
         $this->studies = Study::where('facility_id', $this->facility_id)->latest()->get();
@@ -48,6 +49,7 @@ class RequesterComponent extends Component
         $this->studies = collect();
     }
     
+
     public function storeData()
     {
         $this->validate([
@@ -66,7 +68,9 @@ class RequesterComponent extends Component
         $requester->study_id = $this->study_id==""?NULL:$this->study_id;;
         $requester->save();
         session()->flash('success', 'Requester created successfully.');
+
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
+
         $this->dispatchBrowserEvent('close-modal');
     }
 
@@ -82,12 +86,15 @@ class RequesterComponent extends Component
         $this->is_active = $requester->is_active;
 
         $this->studies = Study::where('facility_id', $requester->facility_id)->latest()->get();
+
         $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function resetInputs()
     {
+
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
+
     }
 
     public function updateData()
@@ -109,7 +116,11 @@ class RequesterComponent extends Component
         $requester->update();
 
         session()->flash('success', 'Requester updated successfully.');
+
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
+
+
+
         $this->dispatchBrowserEvent('close-modal');
     }
 

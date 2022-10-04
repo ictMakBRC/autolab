@@ -75,7 +75,7 @@ class PlatformComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id; 
+        $this->delete_id = $id;
 
         $this->dispatchBrowserEvent('delete-modal');
     }
