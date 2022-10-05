@@ -95,16 +95,36 @@
                         </tr>
                     </table>
                 </div>
+                @elseif ($test->unit =='Measurable')
+                @foreach ($testresults as $item)
+                <div class="row">
+                    <div class="col-md-6">
+                        <select name="type" readonly class="form-control" id="">
+                            <option value="{{$item->id}}">{{$test->unit}}</option>
+                        </select>                       
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group form-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    {{__('Unit of Messure')}}
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" name="uom" id="uom" value="{{$item->uom}}" >
+                        </div>
+                    </div>
+                </div>
+                @endforeach
                 @else
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col">
                             <select name="type" onchange="reslutstype()" id="resultype" class="form-select" style="width: 100%; height:36px;" required>
-                                <option selected value="{{$test->unit}}">{{$test->unit}}</option>
-                                <option value="text">Text</option>
-                                <option value="file">File</option>
-                                <option value="Absolute">Absolute</option>
-                                <option value="Measurable">Measurable</option>
+                                <option selected value="{{$test->unit}}">Input ({{$test->unit}})</option>
+                                <option disabled value="text">Text</option>
+                                <option disabled value="file">File</option>
+                                <option disabled value="Absolute">Absolute</option>
+                                <option disabled value="Measurable">Measurable</option>
                             </select>
                         </div>
                         <div id="resultoption" style="display: none" class="col">
@@ -124,8 +144,12 @@
                             </div>
                         </div>
                         <div id="uomdefault" style="display: none" class="col">
-                            <div class="form-group">
-                                <label for="uom">{{__('Unit of Messure')}}</label>
+                            <div class="input-group form-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        {{__('Unit of Messure')}}
+                                    </span>
+                                </div>
                                 <input type="text" class="form-control" name="uom" id="uom" @if(isset($test)) value="{{$test->uom}}" @endif>
                             </div>
                         </div>
@@ -161,8 +185,12 @@
                                 </div>
                             </div>
                             <div id="uomdefault" style="display: none" class="col">
-                                <div class="form-group">
-                                    <label for="uom">{{__('Unit of Messure')}}</label>
+                                <div class="input-group form-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            {{__('Unit of Messure')}}
+                                        </span>
+                                    </div>
                                     <input type="text" class="form-control" name="uom" id="uom" @if(isset($test)) value="{{$test->uom}}" @endif>
                                 </div>
                             </div>
@@ -268,7 +296,26 @@
                                 <td><button type="button" name="" id="dynamic-comment" wire:click.prevent="storecomment()" class="btn btn-outline-primary">Add</button></td>
                             </tr>
                         </table>
-                    </div>               
+                    </div> 
+                        
+                    @else
+                    <div class="row">
+                        <div class="col-lg-12 table-responsive">
+                           
+                            <table class="table table-bordered" id="dynamicAddRemove">
+                                <tr>
+                                    <th>Comment</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" name="comments[]" placeholder="Enter comment" class="form-control" />
+                                    </td>
+                                    <td><button type="button" name="add" id="dynamic-ar" class="btn btn-outline-primary">Add</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                 
+                    </div>            
                     @endif
                 </div>
             </div>

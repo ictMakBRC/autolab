@@ -29,6 +29,6 @@ Route::group(['middleware' => ['auth','role:superadministrator|administrator|use
 Route::get('categories', TestCategoryComponent::class)->name('categories');
 Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
 Route::resource('tests', TestController::class);
-Route::get('edit-test/{id}', EditTestComponent::class)->name('editTest');
+Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
 });
 require __DIR__.'/auth.php';

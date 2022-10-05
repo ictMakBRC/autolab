@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class EditTestComponent extends Component
 {
-    public $test_id, $possible_result, $comment, $sample, $student_edit_id, $deleteResult_id;
+    public $test_id, $possible_result, $comment, $sample, $edit_id, $deleteResult_id, $possible_result2;
 
     public $header = 'New Order';
     public $testid;
@@ -31,7 +31,21 @@ class EditTestComponent extends Component
             'sample'=>'required|unique:test_sample_types',
          ]);
      }
-     
+     public function updateData()
+     {
+         $this->validate([
+             'sample_name'=>'required|unique:sample_types,sample_name,'.$this->edit_id.'',
+             'status'=>'required',
+         ]);
+         $TestCategory = Test::find($this->edit_id);
+         $TestCategory->sample_name = $this->sample_name;
+         $TestCategory->status = $this->status;
+         $TestCategory->update();
+         session()->flash('success', 'Rcord updated successfully.');
+         $this->status="";
+         $this->sample_name="";
+         $this->dispatchBrowserEvent('close-modal');
+     }
      public function storeResult()
      {
          $this->validate([
@@ -72,7 +86,7 @@ class EditTestComponent extends Component
      public function storeSampleType()
      {
          $this->validate([
-             'sample'=>'required|unique:test_sample_types',
+             'sample'=>'required|unique:test_sample_types,test_id,'.$this->testid.'',
          ]);
          $value = new TestSampleType();
          $value->sample = $this->sample;
