@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Livewire\Admin\KitComponent;
@@ -13,7 +12,7 @@ use App\Http\Livewire\Admin\LaboratoryComponent;
 use App\Http\Livewire\Admin\SampleTypeComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
-
+use App\Http\Livewire\Admin\EditTestComponent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,6 +31,7 @@ Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatu
 // Route::get('/dashboard', function () {
 //     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
+
 Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('categories', TestCategoryComponent::class)->name('categories');
     Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
@@ -46,5 +46,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     
     Route::get('studies', StudyComponent::class)->name('studies');
     Route::get('user-management', UserComponent::class)->name('usermanagement');
+    Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
+
 });
 require __DIR__.'/auth.php';

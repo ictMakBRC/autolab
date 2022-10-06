@@ -51,7 +51,7 @@
                                         <td><span class="badge bg-danger">Suspended</span></td>
                                     @endif
                                     <td class="table-action">
-                                        
+                                        <a href="{{ route('editTest',['id'=>$item->id]) }}" class="text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom"  title="Edit"><i class="bi bi-pencil-fill"></i></a>
                                     </td>
                                 </tr>
                                 @empty
