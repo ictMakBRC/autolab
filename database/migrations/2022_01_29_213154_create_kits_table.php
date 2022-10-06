@@ -19,6 +19,7 @@ class CreateKitsTable extends Migration
             $table->unsignedBigInteger('platform_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
     }

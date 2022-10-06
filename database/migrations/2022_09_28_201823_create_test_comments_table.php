@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('test_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->longText('comment')->nullable();
+            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
     }

@@ -2,39 +2,49 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\User;
-use App\Models\Study;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Laboratory;
 use App\Models\Designation;
-use Livewire\WithFileUploads;
+use App\Models\Laboratory;
+use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-
-use function Ramsey\Uuid\v1;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class UserComponent extends Component
 {
-    use WithFileUploads; 
-    
+    use WithFileUploads;
+
     public $title;
+
     public $emp_no;
+
     public $surname;
+
     public $first_name;
+
     public $other_name;
+
     public $email;
+
     public $contact;
+
     public $laboratory_id;
+
     public $designation_id;
+
     public $avatar;
+
     public $signature;
+
     public $is_active;
+
     public $password;
 
     public $delete_id;
+
     public $avatarPath = '';
+
     public $signaturePath = '';
 
     public function updated($fields)
@@ -48,7 +58,7 @@ class UserComponent extends Component
             'laboratory_id' => 'required',
             'designation_id' => 'required',
             'is_active' => 'required',
-            'avatar' => ['image', 'mimes:jpg,png', 'max:100','dimensions:max_width=160,max_height=160'],
+            'avatar' => ['image', 'mimes:jpg,png', 'max:100', 'dimensions:max_width=160,max_height=160'],
             'signature' => ['image', 'mimes:jpg,png', 'max:100'],
 
         ]);
@@ -59,11 +69,12 @@ class UserComponent extends Component
         $this->generatePassword();
     }
 
-    public function generatePassword($length = 2) {
-        $numbers='0123456789';
-        $symbols='!@#$%^&*()';
-        $lowercase='abcdefghijklmnopqrstuvwxyz';
-        $uppercase='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public function generatePassword($length = 2)
+    {
+        $numbers = '0123456789';
+        $symbols = '!@#$%^&*()';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $numberLength = strlen($numbers);
         $symbolLength = strlen($symbols);
         $uppercaseLength = strlen($uppercase);
@@ -78,7 +89,7 @@ class UserComponent extends Component
             $randomUppercase .= $uppercase[rand(0, $uppercaseLength - 1)];
             $randomLowercase .= $lowercase[rand(0, $lowercaseLength - 1)];
         }
-        $this->password=str_shuffle($randomNumber.$randomSymbol.$randomUppercase.$randomLowercase);
+        $this->password = str_shuffle($randomNumber.$randomSymbol.$randomUppercase.$randomLowercase);
     }
 
     public function storeData()
@@ -92,17 +103,15 @@ class UserComponent extends Component
             'laboratory_id' => 'required',
             'designation_id' => 'required',
             'password' => ['required',
-            Password::min(8)
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised()],
-            'is_active' => ['required', 'integer', 'max:3'], 
+                Password::min(8)
+                            ->mixedCase()
+                            ->numbers()
+                            ->symbols()
+                            ->uncompromised(), ],
+            'is_active' => ['required', 'integer', 'max:3'],
         ]);
 
-       
-
-        if ( $this->avatar!=null && $this->signature!=null) {
+        if ($this->avatar != null && $this->signature != null) {
             $this->validate([
                 'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
                 'signature' => ['image', 'mimes:jpg,png', 'max:100'],
@@ -110,18 +119,17 @@ class UserComponent extends Component
 
             $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
             $signatureName = date('YmdHis').$this->surname.'.'.$this->signature->extension();
-          
+
             $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
             $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
-        } elseif ($this->avatar!=null) {
-
+        } elseif ($this->avatar != null) {
             $this->validate([
                 'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
             ]);
             $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
             $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
             $this->signaturePath = null;
-        } elseif ($this->signature!=null) {
+        } elseif ($this->signature != null) {
             $this->validate([
                 'signature' => ['image', 'mimes:jpg,png', 'max:100'],
             ]);
@@ -143,7 +151,7 @@ class UserComponent extends Component
         $user->contact = $this->contact;
         $user->email = $this->email;
         $user->laboratory_id = $this->laboratory_id;
-        $user->designation_id = $this->designation_id==""?NULL:$this->designation_id;
+        $user->designation_id = $this->designation_id == '' ? null : $this->designation_id;
         $user->avatar = $this->avatarPath;
         $user->password = Hash::make($this->password);
         $user->signature = $this->signaturePath;
@@ -177,7 +185,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['password','title', 'emp_no', 'surname', 'first_name', 'other_name', 'email','contact','laboratory_id','designation_id','is_active','avatar','signature','avatarPath','signaturePath']);
+        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'laboratory_id', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
@@ -195,7 +203,7 @@ class UserComponent extends Component
 
         $user = User::find($this->edit_id);
 
-        if ($this->avatar!=null && $this->signature!=null) {
+        if ($this->avatar != null && $this->signature != null) {
             $this->validate([
                 'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
                 'signature' => ['image', 'mimes:jpg,png', 'max:100'],
@@ -211,7 +219,7 @@ class UserComponent extends Component
                 @unlink(storage_path('app/public/').$user->avatar);
                 @unlink(storage_path('app/public/').$user->signature);
             }
-        } elseif ($this->avatar!=null) {
+        } elseif ($this->avatar != null) {
             $this->validate([
                 'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
             ]);
@@ -222,7 +230,7 @@ class UserComponent extends Component
             if (file_exists(storage_path('app/public/').$user->avatar)) {
                 @unlink(storage_path('app/public/').$user->avatar);
             }
-        } elseif ($this->signature!=null) {
+        } elseif ($this->signature != null) {
             $this->validate([
                 'signature' => ['image', 'mimes:jpg,png', 'max:100'],
             ]);
@@ -246,8 +254,8 @@ class UserComponent extends Component
         $user->name = $this->first_name;
         $user->contact = $this->contact;
         $user->email = $this->email;
-        $user->laboratory_id = $this->laboratory_id;
-        $user->designation_id = $this->designation_id==""?NULL:$this->designation_id;
+        $user->laboratory_id = $this->laboratory_id != "" ? $this->laboratory_id : null;;
+        $user->designation_id = $this->designation_id == '' ? null : $this->designation_id;
         $user->is_active = $this->is_active;
         $user->avatar = $this->avatarPath;
         $user->signature = $this->signaturePath;
@@ -290,10 +298,10 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::with('laboratory','designation')->latest()->get();
-        $designations = Designation::where('is_active',1)->latest()->get();
-        $laboratories = Laboratory::where('is_active',1)->latest()->get();
+        $users = User::with('laboratory', 'designation')->latest()->get();
+        $designations = Designation::where('is_active', 1)->latest()->get();
+        $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 
-        return view('livewire.admin.user-component', compact('users', 'designations','laboratories'))->layout('layouts.app');
+        return view('livewire.admin.user-component', compact('users', 'designations', 'laboratories'))->layout('layouts.app');
     }
 }

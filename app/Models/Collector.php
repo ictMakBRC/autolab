@@ -10,7 +10,7 @@ class Collector extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'is_active', 'facility_id', 'study_id', 'contact', 'email', 'created_by'];
+    protected $fillable = ['name', 'is_active', 'facility_id', 'study_id', 'contact', 'email', 'created_by', 'creator_lab'];
 
     public function facility()
     {
@@ -28,6 +28,11 @@ class Collector extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->creator_lab = auth()->user()->laboratory_id;
+            });
+
+            self::updating(function ($model) {
+                $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
     }

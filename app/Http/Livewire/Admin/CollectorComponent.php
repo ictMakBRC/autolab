@@ -63,7 +63,7 @@ class CollectorComponent extends Component
         $collector->contact = $this->contact;
         $collector->email = $this->email;
         $collector->facility_id = $this->facility_id;
-        $collector->study_id = $this->study_id==""?NULL:$this->study_id;
+        $collector->study_id = $this->study_id == '' ? null : $this->study_id;
 
         $collector->save();
 

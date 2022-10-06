@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('category_name');
             $table->string('description')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('Restrict')->onUpdate('Restrict');
+            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
     }

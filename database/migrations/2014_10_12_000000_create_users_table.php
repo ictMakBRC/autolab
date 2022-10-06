@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('autonumber')->nullable();
             $table->integer('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
 

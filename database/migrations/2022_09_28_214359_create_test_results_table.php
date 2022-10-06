@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('possible_result')->nullable();
             $table->string('result_type')->nullable();
             $table->string('uom')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
     }

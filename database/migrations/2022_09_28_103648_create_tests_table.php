@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('status')->default(1);
             $table->text('precautions')->nullable();
             $table->text('extra_details')->nullable();
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
             $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->softDeletes();

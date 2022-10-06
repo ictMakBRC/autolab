@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Courier;
 use App\Models\Facility;
-use App\Models\Requester;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
 
-class RequesterComponent extends Component
+class CourierComponent extends Component
 {
     public $name;
 
@@ -53,19 +53,19 @@ class RequesterComponent extends Component
         $this->validate([
             'name' => 'required',
             'contact' => 'required',
-            'email' => 'required|unique:requesters|email:filter',
+            'email' => 'required|unique:couriers|email:filter',
             'facility_id' => 'required',
             'is_active' => 'required',
         ]);
 
-        $requester = new Requester();
-        $requester->name = $this->name;
-        $requester->contact = $this->contact;
-        $requester->email = $this->email;
-        $requester->facility_id = $this->facility_id;
-        $requester->study_id = $this->study_id == '' ? null : $this->study_id;
-        $requester->save();
-        session()->flash('success', 'Requester created successfully.');
+        $courier = new Courier();
+        $courier->name = $this->name;
+        $courier->contact = $this->contact;
+        $courier->email = $this->email;
+        $courier->facility_id = $this->facility_id;
+        $courier->study_id = $this->study_id == '' ? null : $this->study_id;
+        $courier->save();
+        session()->flash('success', 'Courier created successfully.');
 
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
 
@@ -74,16 +74,16 @@ class RequesterComponent extends Component
 
     public function editdata($id)
     {
-        $requester = Requester::where('id', $id)->first();
-        $this->edit_id = $requester->id;
-        $this->name = $requester->name;
-        $this->contact = $requester->contact;
-        $this->email = $requester->email;
-        $this->facility_id = $requester->facility_id;
-        $this->study_id = $requester->study_id;
-        $this->is_active = $requester->is_active;
+        $courier = Courier::where('id', $id)->first();
+        $this->edit_id = $courier->id;
+        $this->name = $courier->name;
+        $this->contact = $courier->contact;
+        $this->email = $courier->email;
+        $this->facility_id = $courier->facility_id;
+        $this->study_id = $courier->study_id;
+        $this->is_active = $courier->is_active;
 
-        $this->studies = Study::where('facility_id', $requester->facility_id)->latest()->get();
+        $this->studies = Study::where('facility_id', $courier->facility_id)->latest()->get();
 
         $this->dispatchBrowserEvent('edit-modal');
     }
@@ -102,16 +102,16 @@ class RequesterComponent extends Component
             'facility_id' => 'required',
             'is_active' => 'required',
         ]);
-        $requester = Requester::find($this->edit_id);
-        $requester->name = $this->name;
-        $requester->contact = $this->contact;
-        $requester->email = $this->email;
-        $requester->facility_id = $this->facility_id;
-        $requester->study_id = $this->study_id == '' ? null : $this->study_id;
-        $requester->is_active = $this->is_active;
-        $requester->update();
+        $courier = Courier::find($this->edit_id);
+        $courier->name = $this->name;
+        $courier->contact = $this->contact;
+        $courier->email = $this->email;
+        $courier->facility_id = $this->facility_id;
+        $courier->study_id = $this->study_id == '' ? null : $this->study_id;
+        $courier->is_active = $this->is_active;
+        $courier->update();
 
-        session()->flash('success', 'Requester updated successfully.');
+        session()->flash('success', 'Courier updated successfully.');
 
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
 
@@ -128,13 +128,13 @@ class RequesterComponent extends Component
     public function deleteData()
     {
         try {
-            $requester = Requester::where('id', $this->delete_id)->first();
-            $requester->delete();
+            $courier = Courier::where('id', $this->delete_id)->first();
+            $courier->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Requester deleted successfully.');
+            session()->flash('success', 'Courier deleted successfully.');
         } catch(Exception $error) {
-            session()->flash('erorr', 'Requester can not be deleted !!.');
+            session()->flash('erorr', 'Courier can not be deleted !!.');
         }
     }
 
@@ -150,9 +150,9 @@ class RequesterComponent extends Component
 
     public function render()
     {
-        $requesters = Requester::with('facility', 'study')->latest()->get();
+        $couriers = Courier::with('facility', 'study')->latest()->get();
         $facilities = Facility::latest()->get();
 
-        return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
+        return view('livewire.admin.courier-component', compact('couriers', 'facilities'))->layout('layouts.app');
     }
 }

@@ -16,7 +16,8 @@ class TestResults extends Model
         'result_type',
         'possible_result',
         'uom',
-        'user_id',
+        'created_by',
+        'creator_lab',
     ];
 
     public function test_type()
@@ -29,7 +30,12 @@ class TestResults extends Model
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
-                $model->user_id = auth()->id();
+                $model->created_by = auth()->id();
+                $model->creator_lab = auth()->user()->laboratory_id;
+            });
+
+            self::updating(function ($model) {
+                $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
     }
