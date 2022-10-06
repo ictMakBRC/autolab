@@ -2,13 +2,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="">{{__('Category')}}</label>
-            <select name="category_id" class="select2 form-control"   id="category" required>
-                @if(isset($test))
-                    <option value="{{$test->category_id}}" selected>{{$test->category->category_name}}</option>
-                @else                
-                <option value="">Select</option>
-                @endif
-               
+            <select name="category_id" wire:model='category_id' class="select2 form-control"   id="category" required>
                 @foreach ($categories as $item)
                     <option value="{{$item->id}}">{{$item->category_name}}</option>
                 @endforeach
@@ -18,20 +12,20 @@
     <div class="col-lg-3">
       <div class="form-group">
         <label for="name">{{__('Name')}}</label>
-        <input type="text" class="form-control" name="name" id="name" @if(isset($test)) value="{{$test->name}}" @endif required>
+        <input type="text" class="form-control" name="name" id="name" @if(isset($test))  wire:model="name" @endif required>
       </div> 
     </div>
     <div class="col-lg-3">
       <div class="form-group">
         <label for="shortcut">{{__('Short code')}}</label>
-        <input type="text" class="form-control" name="shortcut" id="shortcut" @if(isset($test)) value="{{$test->short_code}}" @endif required>
+        <input type="text" class="form-control" name="shortcut" id="shortcut" @if(isset($test)) wire:model='short_code' @endif required>
       </div>
     </div> 
     <div class="col-lg-3">
        <div class="form-group">
             <label for="price">{{__('Price')}}</label>
             <div class="input-group form-group mb-3">
-                <input type="number" step="any" class="form-control" name="price" min="0" id="price" @if(isset($test)) value="{{$test->price}}" @endif required>
+                <input type="number" step="any" class="form-control" name="price" min="0" id="price" @if(isset($test)) wire:model='price' @endif required>
                 <div class="input-group-append">
                 <span class="input-group-text">
                     UGX
@@ -43,19 +37,19 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="reference_range_min">Min-Reference range</label>
-            <input type="number" step="any" name="reference_range_min" @if(isset($test)) value="{{$test->reference_range_min}}"@endif class="form-control" id="reference_range_min">
+            <input type="number" step="any" name="reference_range_min" @if(isset($test)) wire:model='reference_range_min' @endif class="form-control" id="reference_range_min">
         </div>
     </div>
     <div class="col-lg-3">
         <div class="form-group">
             <label for="reference_range_max">Max-Reference range</label>
-            <input type="number" step="any" name="reference_range_max" @if(isset($test)) value="{{$test->reference_range_max}}"@endif class="form-control" id="reference_range_max">
+            <input type="number" step="any" name="reference_range_max" @if(isset($test)) wire:model='reference_range_max' @endif class="form-control" id="reference_range_max">
         </div>
     </div>
     <div class="col-lg-6">
         <div class="form-group">
              <label for="precautions">{{__('Precautions')}}</label>
-             <textarea name="precautions" id="precautions" rows="3" class="form-control" placeholder="{{__('Precautions')}}">@if(isset($test)){{$test['precautions']}}@endif</textarea>
+             <textarea name="precautions" id="precautions" rows="3" @if(isset($test)) wire:model='precautions' @endif class="form-control" placeholder="{{__('Precautions')}}"></textarea>
         </div>
     </div>
 </div>
