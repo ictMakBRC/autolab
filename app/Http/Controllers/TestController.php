@@ -45,9 +45,13 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'comments.*.comment' => 'required'
-        // ]);
+         $request->validate([
+            'category_id' => 'required',
+            'name'=>'required|unique:tests',
+            'unit'=> 'required',
+            'precautions'=> 'required',
+            
+         ]);
 
         $test = Test::create([
             'category_id' => $request['category_id'],
