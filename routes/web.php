@@ -1,13 +1,4 @@
 <?php
-
-<<<<<<< HEAD
-use App\Http\Controllers\TestController;
-use App\Http\Livewire\Admin\EditTestComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Livewire\Admin\TestCategoryComponent;
-use Illuminate\Support\Facades\Artisan;
-=======
->>>>>>> develop
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Livewire\Admin\KitComponent;
@@ -21,7 +12,7 @@ use App\Http\Livewire\Admin\LaboratoryComponent;
 use App\Http\Livewire\Admin\SampleTypeComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
-
+use App\Http\Livewire\Admin\EditTestComponent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes

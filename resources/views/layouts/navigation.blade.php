@@ -1,94 +1,5 @@
        <!--start sidebar -->
        <aside class="sidebar-wrapper">
-<<<<<<< HEAD
-        <div class="iconmenu">
-            <div class="nav-toggle-box">
-                <div class="nav-toggle-icon"><i class="bi bi-list"></i></div>
-            </div>
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-dashboards"
-                        type="button"><i class="bi bi-house-door-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-patients" type="button"><i
-                            class="bi bi-person-workspace"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
-                            class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Referral">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-referrals"
-                        type="button"><i class="bi bi-airplane-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-storage" type="button"><i
-                            class="bi bi-archive-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
-                        <i class='bx bxs-flask'></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-logistics"
-                        type="button"><i class="bi bi-bar-chart-line-fill"></i></button>
-                </li>
-
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Trainings">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-trainings"
-                        type="button"><i class="bi bi-easel2-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Documents/Resources">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-resources"
-                        type="button"><i class="bi bi-file-earmark-medical-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Engagements">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-engagements"
-                        type="button"><i class="bi bi-file-earmark-easel-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Help Desk">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk"
-                        type="button"><i class="bi bi-question-square-fill"></i></button>
-                </li>
-                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
-                    title="General Management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management"
-                        type="button"><i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
-                </li>
-
-            </ul>
-        </div>
-        <div class="textmenu">
-            <div class="brand-logo">
-                <img src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140" alt="" />
-            </div>
-            <div class="tab-content">
-                <div class="tab-pane fade" id="pills-dashboards">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-0">HOME</h5>
-                            </div>
-                        </div>
-                        <a href="{{ route('super.dashboard') }}" class="list-group-item"><i
-                                class="bi bi-house-door-fill"></i>Dashboard</a>
-                        <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
-                                class="bi bi-cast"></i>Facility Profile</a>
-                        <a href="{{ route('usermanagement') }}" class="list-group-item"><i
-                                class="bi bi-wallet"></i>User Management</a>
-                        <a href="{{ route('user-roles.index') }}" class="list-group-item"><i
-                                class="bi bi-bar-chart-line"></i>User Roles</a>
-                        <a href="{{ route('user-permissions.index') }}" class="list-group-item"><i
-                                class="bi bi-archive"></i>User Permissions</a>
-                        <a href="{{ route('user-roles-assignment.index') }}" class="list-group-item"><i
-                                class="bi bi-cast"></i>Role Assiginment</a>
-                        <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-cast"></i>User
-                            Logs</a>
-                        <a href="#" class="list-group-item"><i class="bi bi-cast"></i>User Activity</a>
-                    </div>
-                </div>
-=======
            <div class="iconmenu">
                <div class="nav-toggle-box">
                    <div class="nav-toggle-icon"><i class="bi bi-list"></i></div>
@@ -115,7 +26,7 @@
                                class="bi bi-archive-fill"></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
-                       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
+                       <button class="nav-link {{ (request()->is('Admin/test*')) ? 'active' : '' }}" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
                            <i class='bx bxs-flask'></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
@@ -176,8 +87,6 @@
                            <a href="#" class="list-group-item"><i class="bi bi-cast"></i>User Activity</a>
                        </div>
                    </div>
->>>>>>> develop
-
                 <div class="tab-pane fade" id="pills-patients">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
@@ -251,7 +160,7 @@
                            <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
                        </div>
                    </div>
-                   <div class="tab-pane fade" id="pills-tests">
+                   <div class="tab-pane fade {{ (request()->segment(2) == 'test') ? 'active show' : '' }}" id="pills-tests">
                        <div class="list-group list-group-flush">
                            <div class="list-group-item">
                                <div class="d-flex w-100 justify-content-between">
@@ -262,16 +171,12 @@
                                    class="bi bi-house-door-fill"></i>Test Categories</a>
                            <a href="{{ route('sampletypes') }}" class="list-group-item"><i
                                    class="bi bi-house-door-fill"></i>Sample Types</a>
-                           <a href="{{ route('tests.index') }}" class="list-group-item"><i
+                           <a href="{{ route('tests.index') }}" class="list-group-item {{ Request::routeIs('editTest') ? 'active' : '' }}"><i
                                    class="bi bi-house-door-fill"></i>Test Types</a>
                            <a href="{{ route('tests.create') }}" class="list-group-item"><i
                                    class="bi bi-cast"></i>New Test Type</a>
                        </div>
                    </div>
->>>>>>> develop
-
-
-
                 <div class="tab-pane fade" id="pills-logistics">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">

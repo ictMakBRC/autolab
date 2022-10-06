@@ -50,6 +50,7 @@ class EditTestComponent extends Component
      {
          $this->validate([
              'possible_result'=>'required|unique:test_results',
+            // 'possible_result' => ['required', 'unique:test_results,ip,'.$this->testid.','.$request->input('id').',id,hostname,'.$request->input('hostname')]
          ]);
          $value = new TestResults();
          $value->possible_result = $this->possible_result;
