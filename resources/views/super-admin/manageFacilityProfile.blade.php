@@ -252,7 +252,7 @@
                                         <div class="mb-3 col-md-3">
                                             <label for="facility_type2" class="form-label">Facility Type<span
                                                     class="text-danger">*</span></label>
-                                            <select class="form-select select2" data-toggle="select2"
+                                            <select class="form-select" data-toggle="select2"
                                                 id="facility_type2" name="facility_type" required>
 
                                                 <option selected value="{{ $profile->facility_type }}">

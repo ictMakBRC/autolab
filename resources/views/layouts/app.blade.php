@@ -13,7 +13,8 @@
     <link href="{{ asset('autolab-assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
       {{-- <link href="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" /> --}}
-   
+      <link href="{{ asset('autolab-assets/plugins/multiselect/css/multi-select.css')}}" rel="stylesheet" type="text/css" />
+      <link href="{{ asset('autolab-assets/plugins/select2/dist/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <!-- Bootstrap CSS -->
     <link href="{{ asset('autolab-assets/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/bootstrap-extended.css') }}" rel="stylesheet" />
@@ -46,7 +47,7 @@
         @include('layouts.navigation')  
         <!--start content-->
         <main class="page-content">
-            <x-breadcrumb></x-breadcrumb>                  
+            {{-- <x-breadcrumb></x-breadcrumb>                   --}}
              @include('layouts.messages')
             {{ $slot }}
             {{-- @include('layouts.user-table') --}}
@@ -77,6 +78,9 @@
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/index.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/dist/js/select2.full.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('autolab-assets/plugins/multiselect/js/jquery.multi-select.js')}}"></script>
+    <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -97,7 +101,30 @@
         new PerfectScrollbar(".best-product")
         new PerfectScrollbar(".top-sellers-list")
     </script> --}}
-
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+          
+            // For select 2
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+         
+            // For multiselect
+            $('#pre-selected-options').multiSelect();
+            $('#optgroup').multiSelect({
+                selectableOptgroup: true
+            });
+            $('#public-methods').multiSelect();
+            $('#select-all').click(function() {
+                $('#public-methods').multiSelect('select_all');
+                return false;
+            });
+            $('#deselect-all').click(function() {
+                $('#public-methods').multiSelect('deselect_all');
+                return false;
+            });
+         
+        });
+        </script>
     <script>
         $(document).ready(function() {
             $("#datableButtons").DataTable({

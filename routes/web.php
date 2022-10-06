@@ -1,10 +1,18 @@
 <?php
-
-use App\Http\Controllers\TestController;
-use App\Http\Livewire\Admin\TestCategoryComponent;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TestController;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
+use App\Http\Livewire\Admin\EditTestComponent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,10 +29,24 @@ Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('gu
 Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatusUpdate'])->middleware('auth')->name('contractStatus.update');
 
 // Route::get('/dashboard', function () {
-//     return view('dashboard');
+//     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
-Route::group(['middleware' => ['auth','role:superadministrator|administrator|user'], 'prefix' => 'Admin' ], function() {
-Route::get('categories', TestCategoryComponent::class)->name('categories');
-Route::resource('tests', TestController::class);
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
+    Route::get('categories', TestCategoryComponent::class)->name('categories');
+    Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
+    Route::resource('tests', TestController::class);
+    Route::get('designations', DesignationComponent::class)->name('designations');
+    Route::get('laboratories', LaboratoryComponent::class)->name('laboratories');
+    Route::get('facilities', FacilityComponent::class)->name('facilities');
+    Route::get('requesters', RequesterComponent::class)->name('requesters');
+    Route::get('sample-collectors', CollectorComponent::class)->name('collectors');
+    Route::get('kits', KitComponent::class)->name('kits');
+    Route::get('platforms', PlatformComponent::class)->name('platforms');
+    
+    Route::get('studies', StudyComponent::class)->name('studies');
+    Route::get('user-management', UserComponent::class)->name('usermanagement');
+    Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
+
 });
 require __DIR__.'/auth.php';

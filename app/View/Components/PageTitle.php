@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-use App\Helpers\GenerateQuote;
 use Illuminate\View\Component;
 
 class PageTitle extends Component
@@ -12,11 +11,8 @@ class PageTitle extends Component
      *
      * @return void
      */
-    
-
     public function __construct()
     {
-        
     }
 
     /**

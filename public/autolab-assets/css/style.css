@@ -22,7 +22,9 @@ File: style.css
 - Responsive
 
  */
-
+ @import url(../plugins/font-awesome/css/font-awesome.min.css);
+ @import url(../plugins/sweetalert/sweetalert.css);
+ @import url(../plugins/select2/dist/css/select2.min.css);
 
 /* General */
 
