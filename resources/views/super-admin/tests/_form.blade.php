@@ -2,7 +2,7 @@
     <div class="col-lg-3">
         <div class="form-group">
             <label for="">{{__('Category')}}</label>
-            <select name="category_id" class="select2 form-control custom-select" style="width: 100%; height:40px; id="category" required>
+            <select name="category_id" class="select2 form-control"   id="category" required>
                 @if(isset($test))
                     <option value="{{$test->category_id}}" selected>{{$test->category->category_name}}</option>
                 @else                
@@ -107,7 +107,7 @@
                         <div class="input-group form-group">
                             <div class="input-group-append">
                                 <span class="input-group-text">
-                                    {{__('Unit of Messure')}}
+                                    {{__('Unit of Measure')}}
                                 </span>
                             </div>
                             <input type="text" class="form-control" name="uom" id="uom" value="{{$item->uom}}" >
@@ -147,7 +147,7 @@
                             <div class="input-group form-group">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        {{__('Unit of Messure')}}
+                                        {{__('Unit of Measure')}}
                                     </span>
                                 </div>
                                 <input type="text" class="form-control" name="uom" id="uom" @if(isset($test)) value="{{$test->uom}}" @endif>
@@ -188,7 +188,7 @@
                                 <div class="input-group form-group">
                                     <div class="input-group-append">
                                         <span class="input-group-text">
-                                            {{__('Unit of Messure')}}
+                                            {{__('Unit of Measure')}}
                                         </span>
                                     </div>
                                     <input type="text" class="form-control" name="uom" id="uom" @if(isset($test)) value="{{$test->uom}}" @endif>
@@ -206,7 +206,7 @@
         <div class="card card-primary">
             <div class="card-header">
                 <h5 class="card-title">
-                    {{__('Result sample types')}}
+                    {{__('Test sample types')}}
                 </h5>
             </div>
             <div class="card-body">
@@ -267,7 +267,7 @@
         <div class="card card-primary">
             <div class="card-header">
                 <h5 class="card-title">
-                    {{__('Result comments')}}
+                    {{__('Test comments')}}
                 </h5>
             </div>
             <div class="card-body">
