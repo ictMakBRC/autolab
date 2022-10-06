@@ -2,69 +2,84 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Validator;
+use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
-use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
+use App\Models\TestCategory;
 use App\Models\TestSampleType;
-use Livewire\Component;
+use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Database\Eloquent\Collection;
 
 class EditTestComponent extends Component
 {
-    public $test_id;
+    public $test_id, $possible_result, $comment, $sample, $edit_id, $deleteResult_id, $possible_result2, $edit_test_id;
 
-    public $possible_result;
-
-    public $comment;
-
-    public $sample;
-
-    public $edit_id;
-
-    public $deleteResult_id;
-
-    public $possible_result2;
-
-    public $header = 'New Order';
-
+    public  $category_id,
+    $name ,
+    $short_code,
+    $code,
+    $price,
+    $unit,
+    $precautions,
+    $reference_range_min,
+    $reference_range_max;
     public $testid;
 
+   
     public function mount($id)
     {
-        $this->testid = $id;
-    }
-
+                $this->testid = $id;
+        $testdata = Test::with('category')->where('id', $id)->first();
+        $this->edit_test_id = $testdata->id;
+        $this->category_id =$testdata->category_id;
+        $this->name = $testdata->name;
+        $this->short_code = $testdata->short_code;
+        $this->price = $testdata->price;
+        $this->unit = $testdata->unit;
+        $this->precautions = $testdata->precautions;
+        $this->reference_range_min = $testdata->reference_range_min;
+        $this->reference_range_max = $testdata->reference_range_max;
+       
+     }
      public function updated($fields)
      {
-         $this->validateOnly($fields, [
-             'possible_result' => 'required|unique:test_results',
-             'comment' => 'required|unique:test_comments',
-             'sample' => 'required|unique:test_sample_types',
+         $this->validateOnly($fields,[
+            // //'possible_result'=>'required|unique:test_results',
+            // 'possible_result' => ['required', 'unique:test_results,test_id,'.$this->testid.',test_id,possible_result,'.$this->possible_result],
+            'possible_result' => 'required',
+            'comment'=>'required',
+            'sample'=>'required',
          ]);
      }
 
      public function updateData()
      {
          $this->validate([
-             'sample_name' => 'required|unique:sample_types,sample_name,'.$this->edit_id.'',
-             'status' => 'required',
+             'name'=>'required',
+             'category_id'=>'required',
          ]);
-         $TestCategory = Test::find($this->edit_id);
-         $TestCategory->sample_name = $this->sample_name;
-         $TestCategory->status = $this->status;
-         $TestCategory->update();
-         session()->flash('success', 'Rcord updated successfully.');
-         $this->status = '';
-         $this->sample_name = '';
-         $this->dispatchBrowserEvent('close-modal');
+         $testdata = Test::where('id', $this->edit_test_id)->first();
+         $testdata->category_id= $this->category_id;
+         $testdata->name = $this->name;
+         $testdata->short_code= $this->short_code;
+         $testdata->price = $this->price;
+         $testdata->unit = $this->unit;
+         $testdata->precautions = $this->precautions;
+         $testdata->reference_range_min = $this->reference_range_min;
+         $testdata->reference_range_max = $this->reference_range_max;
+         $testdata->update();
+         session()->flash('success', 'Record updated successfully.');
      }
 
      public function storeResult()
      {
          $this->validate([
-             'possible_result' => 'required|unique:test_results',
-             // 'possible_result' => ['required', 'unique:test_results,ip,'.$this->testid.','.$request->input('id').',id,hostname,'.$request->input('hostname')]
+            // 'possible_result'=>'required|unique:test_results',
+            'possible_result' => 'required|unique:test_results,test_id,' . $this->testid .'',
+             //'possible_result' => ['required|unique:test_results,id,' . $this->testid . ',id,possible_result,' . $this->possible_result],
          ]);
          $value = new TestResults();
          $value->possible_result = $this->possible_result;
@@ -77,7 +92,7 @@ class EditTestComponent extends Component
      public function storecomment()
      {
          $this->validate([
-             'comment' => 'required|unique:test_comments',
+             'comment'=>'required',
          ]);
          $value = new TestComment();
          $value->comment = $this->comment;
@@ -155,6 +170,7 @@ class EditTestComponent extends Component
     public function render()
     {
         $test = Test::with('category')->where('id', $this->testid)->first();
+
         $testcomments = TestComment::where('test_id', $this->testid)->get();
         $testresults = TestResults::where('test_id', $this->testid)->get();
         $testsampletypes = TestSampleType::where('test_id', $this->testid)->get();

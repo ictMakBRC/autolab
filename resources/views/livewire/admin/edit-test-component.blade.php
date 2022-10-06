@@ -2,7 +2,7 @@
     @include('layouts.messages')
     <div class="card">
         <div class="card-body">
-            <form id="test_form">
+            <form id="test_form" wire:submit.prevent="updateData">
                 <!-- /.card-header -->
                 <div class="card-body">
                     @csrf
@@ -11,7 +11,7 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer text-end float-right">
-                    <x-button wire:click.prevent="store()">{{__('Update')}}</x-button>                       
+                    <x-button>{{__('Update')}}</x-button>                       
                 </div>
             </form>
 
