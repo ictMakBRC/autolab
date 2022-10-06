@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\TestController;
-use App\Http\Livewire\Admin\CollectorComponent;
-use App\Http\Livewire\Admin\DesignationComponent;
-use App\Http\Livewire\Admin\FacilityComponent;
-use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\LaboratoryComponent;
-use App\Http\Livewire\Admin\PlatformComponent;
-use App\Http\Livewire\Admin\RequesterComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Livewire\Admin\StudyComponent;
-use App\Http\Livewire\Admin\TestCategoryComponent;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestController;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('sample-collectors', CollectorComponent::class)->name('collectors');
     Route::get('kits', KitComponent::class)->name('kits');
     Route::get('platforms', PlatformComponent::class)->name('platforms');
+    
     Route::get('studies', StudyComponent::class)->name('studies');
+    Route::get('user-management', UserComponent::class)->name('usermanagement');
 });
 require __DIR__.'/auth.php';

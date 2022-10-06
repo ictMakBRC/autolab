@@ -14,62 +14,96 @@
 
                      <div class="row">
                          <div class="row col-md-12">
-                             <div class="mb-3 col-md-6">
-                                 <label for="emp_id" class="form-label">Emp-No<span class="text-success text-center"
-                                         style="display: none" id="found"><i>(Employee Matched)</i></span><i
-                                         class="text-danger text-center" style="display: none" id="notFound">(Employee
-                                         Not Found)</i></label>
-                                 <input type="text" style="text-transform: uppercase" id="emp_id"
-                                     class="form-control" name="emp_id" required>
-                             </div>
-                             <input type="text" id="employee_id" hidden class="form-control" name="employee_id"
-                                 required>
-                             <div class="mb-3 col-md-6">
-                                 <label for="title" class="form-label">Title</label>
-                                 <select class="form-select" id="title" name="title" required>
+                            <div class="mb-3 col-md-4">
+                                <label for="title" class="form-label">Title</label>
+                                <select class="form-select" id="title" name="title" required>
+                                    <option value="" selected>Select</option>
+                                    <option value="Mr">Mr</option>
+                                    <option value="Mrs">Mrs</option>
+                                    <option value="Ms">Ms</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Dr">Dr</option>
+                                    <option value="Eng">Eng</option>
+                                    <option value="Prof">Prof</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="emp_no" class="form-label">Employee No</label>
+                                <input type="text" id="emp_no" class="form-control" name="emp_no">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="surname" class="form-label">Surname</label>
+                                <input type="text" id="surname" class="form-control" name="surname">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" id="first_name" class="form-control" name="first_name">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="other_name" class="form-label">Other Name</label>
+                                <input type="text" id="other_name" class="form-control" name="other_name">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="usercontact" class="form-label">Contact</label>
+                                <input type="text" id="usercontact" class="form-control" name="contact">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="userEmail" class="form-label">Email</label>
+                                <input type="email" id="userEmail" class="form-control" name="email">
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="laboratory_id" class="form-label">Laboratory</label>
+                                <select class="form-select" id="laboratory_id" name="laboratory_id">
+                                    <option selected value="">Select</option>
+                                    @forelse ($laboratories as $laboratory)
+                                        <option value='{{ $laboratory->id }}'>{{ $laboratory->laboratory_name }}
+                                        </option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-5">
+                                <label for="designation_id" class="form-label">Designation</label>
+                                <select class="form-select" id="designation_id" name="designation_id">
+                                    @if (!$designations->isEmpty())
+                                        <option selected value="">Select</option>
+                                        @foreach ($designations as $designation)
+                                            <option value='{{ $designation->id }}'>{{ $designation->name }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option selected value="">None</option>
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="avatar" class="form-label">Photo</label>
+                                <input type="file" id="avatar" class="form-control" name="avatar">
+                            </div>
 
-                                 </select>
-                             </div>
-                             <div class="mb-3 col-md-6">
-                                 <label for="name" class="form-label">Name</label>
-                                 <input type="text" id="name" class="form-control" readonly name="name"
-                                     required>
-                             </div>
-                             <div class="mb-3 col-md-6">
-                                 <label for="email" class="form-label">Email</label>
-                                 <input type="email" id="email" class="form-control" name="email" readonly
-                                     required>
-                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="signature" class="form-label">Signature</label>
+                                <input type="file" id="signature" class="form-control" name="signature">
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label for="isActive" class="form-label">Status</label>
+                                <select class="form-select" id="isActive" name="is_active">
+                                    <option selected value="">Select</option>
+                                    <option value='1'>Active</option>
+                                    <option value='0'>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="text" id="password" class="form-control" name="password" required readonly
+                                    placeholder="Focus to Auto-Generate" onfocus="generatePass();"
+                                    name="password">
+                            </div>
                          </div> <!-- end col -->
-
-                         <div class="mb-3 col-md-6">
-                             <label for="contact" class="form-label">Contact</label>
-                             <input type="text" id="contact" class="form-control" name="contact" readonly required>
-                         </div>
-                         <div class="mb-3 col-md-6">
-                             <label for="image" class="form-label">Image</label>
-                             <input type="file" id="image" class="form-control" name="avatar">
-                         </div>
-
-                         <div class="mb-3 col-md-6">
-                             <label for="is_active" class="form-label">Status</label>
-                             <select class="form-select" id="is_active" name="is_active" required>
-                                 <option value="1" style="color: green" selected>Active</option>
-                                 <option value="0" style="color: red">Suspended</option>
-                             </select>
-                         </div>
-
-
-                         <div class="mb-3 col-md-6">
-                             <label for="password" class="form-label">Password</label>
-                             <input type="text" id="password" class="form-control" name="password" required readonly
-                                 placeholder="Focus to Auto-Generate" onfocus="generatePass();">
-                         </div>
                      </div>
                      <!-- end row-->
                      <div class="d-grid mb-0 text-center">
-                         <button class="btn btn-success" type="submit"
-                             onclick="this.innerHTML='Processing please wait.....';" id="submitBtn"> Add User</button>
+                         <button class="btn btn-success" type="submit" id="submitBtn"> Add User</button>
                      </div>
                  </form>
              </div>
@@ -148,9 +182,8 @@
                          </div>
                          <!-- end row-->
                          <div class="d-grid mb-0 text-center">
-                             <button class="btn btn-success" type="submit"
-                                 onclick="this.innerHTML='Processing please wait.....';" id="submitButton"> Update
-                                 User</button>
+                             <button class="btn btn-success" type="submit" id="submitButton"> Update
+                            </button>
                          </div>
                      </form>
                  </div>

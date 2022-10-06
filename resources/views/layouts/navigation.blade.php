@@ -74,7 +74,7 @@
                                    class="bi bi-house-door-fill"></i>Dashboard</a>
                            <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
                                    class="bi bi-cast"></i>Facility Profile</a>
-                           <a href="{{ route('users.index') }}" class="list-group-item"><i
+                           <a href="{{ route('usermanagement') }}" class="list-group-item"><i
                                    class="bi bi-wallet"></i>User Management</a>
                            <a href="{{ route('user-roles.index') }}" class="list-group-item"><i
                                    class="bi bi-bar-chart-line"></i>User Roles</a>

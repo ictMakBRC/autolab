@@ -1,22 +1,24 @@
 <?php
 
-use App\Helpers\LogActivity;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\UserPermissionsController;
-use App\Http\Controllers\Auth\UserRolesAssignmentController;
-use App\Http\Controllers\Auth\UserRolesController;
-use App\Http\Controllers\Auth\VerifyEmailController;
-// use App\Http\Controllers\Auth\UserRolesPermissionsController;
-use App\Http\Controllers\FacilityInformationController;
 use App\Models\User;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use App\Helpers\LogActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\UserRolesController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\FacilityInformationController;
+use App\Http\Controllers\Auth\UserPermissionsController;
+// use App\Http\Controllers\Auth\UserRolesPermissionsController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 // Route::get('/register', [RegisteredUserController::class, 'create'])
 //                 ->middleware('auth')
@@ -90,8 +92,10 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', function () {
         $users = User::latest()->get();
+        $designations = Designation::latest()->get();
+        $laboratories = Laboratory::latest()->get();
 
-        return view('super-admin.dashboard', compact('users'));
+        return view('super-admin.dashboard', compact('users','designations','laboratories'));
     })->name('super.dashboard');
 
     Route::get('/users/logs', function () {
