@@ -25,8 +25,8 @@
                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-storage" type="button"><i
                                class="bi bi-archive-fill"></i></button>
                    </li>
-                   <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
-                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
+                   <li class="nav-item " data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
+                    <button class="nav-link {{ (request()->is('Admin/test*')) ? 'active' : '' }}" data-bs-toggle="pill" data-bs-target="#pills-tests" type="button">
                         <i class='bx bxs-flask'></i></button>
                    </li>
                    <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
@@ -161,7 +161,7 @@
                            <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
                        </div>
                    </div>
-                   <div class="tab-pane fade" id="pills-tests">
+                   <div class="tab-pane fade {{ (request()->segment(2) == 'test') ? 'active show' : '' }}"  id="pills-tests">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
@@ -170,7 +170,7 @@
                         </div>
                         <a href="{{route('categories')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Categories</a>
                         <a href="{{route('sampletypes')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Sample Types</a>
-                        <a href="{{route('tests.index')}}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Test Types</a>
+                        <a href="{{route('tests.index')}}"  class="list-group-item {{ Request::routeIs('editTest') ? 'active' : '' }} "><i class="bi bi-house-door-fill"></i>Test Types</a>
                         <a href="{{route('tests.create')}}" class="list-group-item"><i class="bi bi-cast"></i>New Test Type</a>
                     </div>
                 </div>
