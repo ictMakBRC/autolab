@@ -40,7 +40,7 @@ class NewPasswordController extends Controller
             ->mixedCase()
             ->numbers()
             ->symbols()
-            ->uncompromised()],
+            ->uncompromised(), ],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we

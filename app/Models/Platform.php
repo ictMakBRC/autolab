@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class SampleType extends Model
+class Platform extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sample_name', 'stauts'];
+    protected $fillable = ['name', 'range', 'is_active', 'created_by'];
 
     public static function boot()
     {

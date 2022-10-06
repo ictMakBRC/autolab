@@ -2,15 +2,15 @@
 @section('pagename', 'Test Categories')
 @section('linkname', 'Categories')
 <div>
-    @include('layouts.messages')
+    {{-- @include('layouts.messages') --}}
     <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class ="card">
                         <div class="card-body">
                         
-                            <div class="d-flex align-items-center mb-4">
-                                <h5 class="mb-0">Test Category Table</h5>
+                            <div class="d-flex align-categorys-center mb-4">
+                                <h5 class="mb-0">Test Categories</h5>
                                  <div class="ms-auto position-relative float-right ">
                                     <button data-bs-toggle="modal" data-bs-target="#modalAdd"  class="btn btn-success btn-sm">Add New</button>
                                  </div>
@@ -19,19 +19,19 @@
                                 <table class="table align-middle" id="datableButtons">
                                     <thead class="table-light">
                                         <tr>
-                                        <td>Nema</td>
+                                        <td>Category</td>
                                         <td>Description</td>
                                         <td>Action</td>
                                         </tr>
                                     </thead>
                                         <tbody>
-                                            @foreach ($categories as $item)
+                                            @foreach ($categories as $category)
                                             <tr>
-                                                <td>{{$item->category_name}}</td>
-                                                <td>{{$item->description}}</td>
+                                                <td>{{$category->category_name}}</td>
+                                                <td>{{$category->description}}</td>
                                                 <td>
-                                                    <a href="javascript:;" class="text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" wire:click="editdata({{$item->id}})" data-target="#edit_modal"  title="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                                    <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" wire:click="deleteConfirmation({{ $item->id }})"  title="Delete"><i class="bi bi-trash-fill"></i></a> 
+                                                    <a href="javascript:;" class="text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" wire:click="editdata({{$category->id}})" data-target="#edit_modal"  title="Edit"><i class="bi bi-pencil-fill"></i></a>
+                                                    <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" wire:click="deleteConfirmation({{ $category->id }})"  title="Delete"><i class="bi bi-trash-fill"></i></a> 
                                                 </td>
                                             </tr>                                        
                                             @endforeach

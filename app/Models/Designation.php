@@ -5,23 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 
-class TestResults extends Model
+class Designation extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'test_id',
-        'result_type',
-        'possible_result',
-        'uom',
-        'user_id',
-    ];
+    protected $fillable = ['name', 'description', 'status', 'created_by'];
 
-    public function test_type()
+    public function users()
     {
-        return $this->belongsTo(Tests::class);
+        return $this->hasMany(User::class);
     }
 
     public static function boot()
@@ -29,7 +22,7 @@ class TestResults extends Model
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
-                $model->user_id = auth()->id();
+                $model->created_by = auth()->id();
             });
         }
     }
