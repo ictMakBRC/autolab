@@ -12,9 +12,7 @@
     <!--plugins-->
     <link href="{{ asset('autolab-assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
-      {{-- <link href="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" /> --}}
-      <link href="{{ asset('autolab-assets/plugins/multiselect/css/multi-select.css')}}" rel="stylesheet" type="text/css" />
-      <link href="{{ asset('autolab-assets/plugins/select2/dist/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+
     <!-- Bootstrap CSS -->
     <link href="{{ asset('autolab-assets/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/bootstrap-extended.css') }}" rel="stylesheet" />
@@ -22,6 +20,8 @@
     <link href="{{ asset('autolab-assets/css/icons.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link href="{{ asset('autolab-assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('autolab-assets/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
@@ -72,15 +72,12 @@
     <script src="{{ asset('autolab-assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('autolab-assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/pace.min.js') }}"></script>
-    {{-- <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/apexcharts-bundle/js/apexcharts.min.js') }}"></script> --}}
+
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/index.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/dist/js/select2.full.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('autolab-assets/plugins/multiselect/js/jquery.multi-select.js')}}"></script>
     <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
+    
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -97,34 +94,9 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
-    {{-- <script>
-        new PerfectScrollbar(".best-product")
-        new PerfectScrollbar(".top-sellers-list")
-    </script> --}}
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
-          
-            // For select 2
-            $(".select2").select2();
-            $('.selectpicker').selectpicker();
-         
-            // For multiselect
-            $('#pre-selected-options').multiSelect();
-            $('#optgroup').multiSelect({
-                selectableOptgroup: true
-            });
-            $('#public-methods').multiSelect();
-            $('#select-all').click(function() {
-                $('#public-methods').multiSelect('select_all');
-                return false;
-            });
-            $('#deselect-all').click(function() {
-                $('#public-methods').multiSelect('deselect_all');
-                return false;
-            });
-         
-        });
-        </script>
+    <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('autolab-assets/js/select2.script.js')}}" type="text/javascript"></script>
+
     <script>
         $(document).ready(function() {
             $("#datableButtons").DataTable({

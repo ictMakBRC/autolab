@@ -150,23 +150,23 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="designation_name" class="form-label">Designation Name</label>
-                                    <input type="text" id="designation_name" class="form-control"
-                                        value="{{ $designation->name }}" name="name" wire:model="name">
+                                    <label for="designation_name2" class="form-label">Designation Name</label>
+                                    <input type="text" id="designation_name2" class="form-control"
+                                        wire:model="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="is_active" class="form-label">Status</label>
-                                    <select class="form-select" id="is_active" wire:model="is_active">
+                                    <label for="is_active2" class="form-label">Status</label>
+                                    <select class="form-select" id="is_active2" wire:model="is_active">
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" name="description" wire:model="description"></textarea>
+                                    <label for="description2" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description2" rows="3" wire:model="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

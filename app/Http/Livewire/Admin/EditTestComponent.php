@@ -2,16 +2,16 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Validator;
 use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
-use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
+use App\Models\TestCategory;
 use App\Models\TestSampleType;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Collection;
-use Validator;
 
 
 class EditTestComponent extends Component
@@ -73,7 +73,8 @@ class EditTestComponent extends Component
          $testdata->reference_range_max = $this->reference_range_max;
          $testdata->update();
 
-         session()->flash('success', 'Rcord updated successfully.');
+         session()->flash('success', 'Record updated successfully.');
+
      }
 
      public function storeResult()
@@ -88,7 +89,7 @@ class EditTestComponent extends Component
          $value->test_id = $this->testid;
          $value->save();
          session()->flash('success', 'Record data created successfully.');
-         $this->possible_result="";
+         $this->possible_result = '';
      }
 
      public function storecomment()
@@ -101,65 +102,61 @@ class EditTestComponent extends Component
          $value->test_id = $this->testid;
          $value->save();
          session()->flash('success', 'Record data created successfully.');
-         $this->comment="";
+         $this->comment = '';
      }
 
      public function deleteComment($id)
      {
-        try{
-            $value = TestComment::where('id', $id)->first();
-            $value->delete();
-            session()->flash('success', 'Record deleted successfully.');
-            }
-            catch(\Exception $error){
-                session()->flash('erorr', 'Record can not be deleted !!.');
-            }
+         try {
+             $value = TestComment::where('id', $id)->first();
+             $value->delete();
+             session()->flash('success', 'Record deleted successfully.');
+         } catch(\Exception $error) {
+             session()->flash('erorr', 'Record can not be deleted !!.');
+         }
      }
 
      public function storeSampleType()
      {
          $this->validate([
-             'sample'=>'required|unique:test_sample_types,test_id,'.$this->testid.'',
+             'sample' => 'required|unique:test_sample_types,test_id,'.$this->testid.'',
          ]);
          $value = new TestSampleType();
          $value->sample = $this->sample;
          $value->test_id = $this->testid;
          $value->save();
          session()->flash('success', 'Record data created successfully.');
+         $this->comment = '';
 
-         $this->comment="";
      }
 
      public function deletesample($id)
      {
-        try{
-            $value = TestSampleType::where('id', $id)->first();
-            $value->delete();
-            session()->flash('success', 'Record deleted successfully.');
-            }
-            catch(\Exception $error){
-                session()->flash('erorr', 'Record can not be deleted !!.');
-            }
+         try {
+             $value = TestSampleType::where('id', $id)->first();
+             $value->delete();
+             session()->flash('success', 'Record deleted successfully.');
+         } catch(\Exception $error) {
+             session()->flash('erorr', 'Record can not be deleted !!.');
+         }
      }
 
      public function deleteConfirmation($id)
      {
          $this->deleteResult_id = $id; //student id
- 
+
          $this->dispatchBrowserEvent('delete-modal');
      }
- 
-   
+
      public function deleteData()
-     { 
-         try{
-         $value = TestResults::where('id', $this->deleteResult_id)->first();
-         $value->delete();
-         $this->deleteResult_id = '';
-         $this->dispatchBrowserEvent('close-modal');
-         session()->flash('success', 'Record deleted successfully.');
-         }
-         catch(\Exception $error){
+     {
+         try {
+             $value = TestResults::where('id', $this->deleteResult_id)->first();
+             $value->delete();
+             $this->deleteResult_id = '';
+             $this->dispatchBrowserEvent('close-modal');
+             session()->flash('success', 'Record deleted successfully.');
+         } catch(\Exception $error) {
              session()->flash('erorr', 'Record can not be deleted !!.');
          }
      }
@@ -174,7 +171,6 @@ class EditTestComponent extends Component
          $this->resetInputs();
      }
 
-
     public function render()
     {
         $test = Test::with('category')->where('id', $this->testid)->first();
@@ -184,6 +180,9 @@ class EditTestComponent extends Component
         $testsampletypes = TestSampleType::where('test_id', $this->testid)->get();
         $sampletypes = SampleType::all();
         $categories = TestCategory::all();
-        return view('livewire.admin.edit-test-component',compact('sampletypes','categories','test','testcomments','testsampletypes','testresults'))->layout('layouts.app');
+
+
+        return view('livewire.admin.edit-test-component', compact('sampletypes', 'categories', 'test', 'testcomments', 'testsampletypes', 'testresults'))->layout('layouts.app');
+
     }
 }

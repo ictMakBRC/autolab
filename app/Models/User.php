@@ -3,13 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notifiable;
-use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -38,6 +38,7 @@ class User extends Authenticatable
         'color_scheme',
         'created_by',
         'emp_id',
+        'creator_lab',
     ];
 
     public function laboratory()
@@ -49,6 +50,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Designation::class, 'designation_id', 'id');
     }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -74,13 +76,18 @@ class User extends Authenticatable
             get: fn () => $this->title.' '.$this->surname.' '.$this->first_name.' '.$this->other_name,
         );
     }
-    
+
     public static function boot()
     {
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->creator_lab = auth()->user()->laboratory_id;
+            });
+
+            self::updating(function ($model) {
+                $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
     }

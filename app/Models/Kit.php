@@ -10,7 +10,7 @@ class Kit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'platform_id', 'is_active', 'created_by'];
+    protected $fillable = ['name', 'platform_id', 'is_active', 'created_by', 'creator_lab'];
 
     public function platform()
     {
@@ -23,6 +23,11 @@ class Kit extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->creator_lab = auth()->user()->laboratory_id;
+            });
+
+            self::updating(function ($model) {
+                $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
     }

@@ -13,11 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sample_types', function (Blueprint $table) {
+        Schema::create('couriers', function (Blueprint $table) {
             $table->id();
-            $table->string('sample_name')->unique();
-            $table->boolean('status')->default(1);
-            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->string('name', 60);
+            $table->string('contact', 20)->nullable();
+            $table->string('email', 30)->nullable();
+            $table->unsignedBigInteger('facility_id')->nullable();
+            $table->unsignedBigInteger('study_id')->nullable();
+            $table->boolean('is_active')->default(1);
+            $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sample_types');
+        Schema::dropIfExists('couriers');
     }
 };

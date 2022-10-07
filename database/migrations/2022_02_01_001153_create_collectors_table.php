@@ -22,6 +22,7 @@ class CreateCollectorsTable extends Migration
             $table->unsignedBigInteger('study_id')->nullable();
             $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });
     }

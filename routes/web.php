@@ -1,18 +1,22 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\TestController;
-use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\UserComponent;
-use App\Http\Livewire\Admin\StudyComponent;
-use App\Http\Livewire\Admin\FacilityComponent;
-use App\Http\Livewire\Admin\PlatformComponent;
 use App\Http\Livewire\Admin\CollectorComponent;
-use App\Http\Livewire\Admin\RequesterComponent;
-use App\Http\Livewire\Admin\LaboratoryComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\CourierComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
-use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\EditTestComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,13 +47,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('sample-collectors', CollectorComponent::class)->name('collectors');
     Route::get('kits', KitComponent::class)->name('kits');
     Route::get('platforms', PlatformComponent::class)->name('platforms');
-    
+
     Route::get('studies', StudyComponent::class)->name('studies');
+    Route::get('couriers', CourierComponent::class)->name('couriers');
     Route::get('user-management', UserComponent::class)->name('usermanagement');
     Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
-
-
     Route::get('test/show', [TestController::class, 'show'])->name('showTest');
-
+});
+Route::group(['middleware' => ['auth'], 'prefix' => 'SampleManagement'], function () {
+    Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
 });
 require __DIR__.'/auth.php';
