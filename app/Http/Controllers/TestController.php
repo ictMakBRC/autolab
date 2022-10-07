@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+//use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
-use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
-use App\Models\TestSampleType;
+use App\Models\TestCategory;
 use Illuminate\Http\Request;
+use App\Models\TestSampleType;
+Use PDF;
 
 class TestController extends Controller
 {
@@ -50,7 +52,7 @@ class TestController extends Controller
             'name'=>'required|unique:tests',
             'unit'=> 'required',
             'precautions'=> 'required',
-            
+
          ]);
 
         $test = Test::create([
@@ -106,9 +108,13 @@ class TestController extends Controller
      * @param  \App\Models\Admin\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $test)
+    public function show()
     {
-        //
+        $pdf = PDF::loadView('user.sample-management.downloadReport');
+        // $pdf = \App::make('dompdf.wrapper');     
+         $pdf->getDOMPdf()->set_option('isPhpEnabled', true); 
+         return $pdf->download(rand().'.pdf');
+        return view('user.sample-management.downloadReport');
     }
 
     /**

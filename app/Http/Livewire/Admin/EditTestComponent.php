@@ -13,6 +13,7 @@ use App\Models\TestSampleType;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Collection;
 
+
 class EditTestComponent extends Component
 {
     public $test_id, $possible_result, $comment, $sample, $edit_id, $deleteResult_id, $possible_result2, $edit_test_id;
@@ -71,7 +72,9 @@ class EditTestComponent extends Component
          $testdata->reference_range_min = $this->reference_range_min;
          $testdata->reference_range_max = $this->reference_range_max;
          $testdata->update();
+
          session()->flash('success', 'Record updated successfully.');
+
      }
 
      public function storeResult()
@@ -124,6 +127,7 @@ class EditTestComponent extends Component
          $value->save();
          session()->flash('success', 'Record data created successfully.');
          $this->comment = '';
+
      }
 
      public function deletesample($id)
@@ -177,6 +181,8 @@ class EditTestComponent extends Component
         $sampletypes = SampleType::all();
         $categories = TestCategory::all();
 
+
         return view('livewire.admin.edit-test-component', compact('sampletypes', 'categories', 'test', 'testcomments', 'testsampletypes', 'testresults'))->layout('layouts.app');
+
     }
 }
