@@ -48,5 +48,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('user-management', UserComponent::class)->name('usermanagement');
     Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
 
+
+    Route::get('test/show', [TestController::class, 'show'])->name('showTest');
+
 });
 require __DIR__.'/auth.php';
