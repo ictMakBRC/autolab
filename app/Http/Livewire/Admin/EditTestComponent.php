@@ -13,6 +13,7 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Collection;
 use Validator;
 
+
 class EditTestComponent extends Component
 {
     public $test_id, $possible_result, $comment, $sample, $edit_id, $deleteResult_id, $possible_result2, $edit_test_id;
@@ -54,6 +55,7 @@ class EditTestComponent extends Component
             'sample'=>'required',
          ]);
      }
+
      public function updateData()
      {
          $this->validate([
@@ -70,8 +72,10 @@ class EditTestComponent extends Component
          $testdata->reference_range_min = $this->reference_range_min;
          $testdata->reference_range_max = $this->reference_range_max;
          $testdata->update();
+
          session()->flash('success', 'Rcord updated successfully.');
      }
+
      public function storeResult()
      {
          $this->validate([
@@ -86,6 +90,7 @@ class EditTestComponent extends Component
          session()->flash('success', 'Record data created successfully.');
          $this->possible_result="";
      }
+
      public function storecomment()
      {
          $this->validate([
@@ -121,6 +126,7 @@ class EditTestComponent extends Component
          $value->test_id = $this->testid;
          $value->save();
          session()->flash('success', 'Record data created successfully.');
+
          $this->comment="";
      }
 
@@ -157,14 +163,18 @@ class EditTestComponent extends Component
              session()->flash('erorr', 'Record can not be deleted !!.');
          }
      }
+
      public function cancel()
      {
          $this->delete_id = '';
      }
+
      public function close()
      {
          $this->resetInputs();
      }
+
+
     public function render()
     {
         $test = Test::with('category')->where('id', $this->testid)->first();
@@ -174,6 +184,6 @@ class EditTestComponent extends Component
         $testsampletypes = TestSampleType::where('test_id', $this->testid)->get();
         $sampletypes = SampleType::all();
         $categories = TestCategory::all();
-        return view('livewire.admin.edit-test-component',compact('sampletypes','categories','test','testcomments','testsampletypes','testresults'))->layout('layouts.app');;
+        return view('livewire.admin.edit-test-component',compact('sampletypes','categories','test','testcomments','testsampletypes','testresults'))->layout('layouts.app');
     }
 }
