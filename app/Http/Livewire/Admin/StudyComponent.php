@@ -19,6 +19,8 @@ class StudyComponent extends Component
 
     public $delete_id;
 
+    public $edit_id;
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
