@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('couriers', CourierComponent::class)->name('couriers');
     Route::get('user-management', UserComponent::class)->name('usermanagement');
     Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
+    Route::get('test/show', [TestController::class, 'show'])->name('showTest');
 });
 Route::group(['middleware' => ['auth'], 'prefix' => 'SampleManagement'], function () {
     Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
