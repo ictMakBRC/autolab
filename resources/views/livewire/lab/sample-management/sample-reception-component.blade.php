@@ -27,8 +27,8 @@
                                                 data-bs-target="#addFacility">Add Facility</a>
                                             <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
                                                 data-bs-target="#addCourier">Add Courier</a>
-                                                <a class="dropdown-item" href="javascript:;"
-                                                wire:click="close()">Reset form</a>
+                                            <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
+                                                form</a>
                                         </div>
                                     </div>
                                 </div>
@@ -209,9 +209,10 @@
                                                     wire:click="showData({{ $sampleReception->id }})"
                                                     data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
 
-                                                <a href="javascript: void(0);" class="action-ico" data-bs-toggle="modal"
-                                                wire:click="editdata({{ $sampleReception->id }})"
-                                                data-bs-target="#edituser"> <i
+                                                <a href="javascript: void(0);" class="action-ico"
+                                                    data-bs-toggle="modal"
+                                                    wire:click="editdata({{ $sampleReception->id }})"
+                                                    data-bs-target="#edituser"> <i
                                                         class="bi bi-pencil-square"></i></a>
 
                                                 <a href="javascript: void(0);"
