@@ -35,13 +35,13 @@ class SampleReception extends Model
         return $this->belongsTo(User::class, 'reviewed_by', 'id');
     }
 
-    protected function dateDelivered(): Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => Carbon::parse($value)->format('d-m-Y H:i'),
-            // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
-        );
-    }
+    // protected function dateDelivered(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn ($value) => Carbon::parse($value)->format('d-m-Y H:i'),
+    //         // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
+    //     );
+    // }
 
     protected function createdAt(): Attribute
     {

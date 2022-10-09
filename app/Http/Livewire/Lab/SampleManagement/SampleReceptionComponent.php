@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 use App\Models\Courier;
 use App\Models\Facility;
 use App\Models\SampleReception;
+use App\Models\Study;
 use App\Models\User;
 use Exception;
 use Livewire\Component;
@@ -32,6 +33,12 @@ class SampleReceptionComponent extends Component
     public $received_by;
 
     public $couriers;
+
+    public $edit_id;
+
+    public $delete_id;
+
+    public $toggleForm = false;
 
     //SHOW DETAILS
     public $delivery_date;
@@ -65,6 +72,30 @@ class SampleReceptionComponent extends Component
     public $comment;
 
     public $batch_status;
+
+    //NEW FACILITY FIELDS
+    public $facilityname;
+
+    public $facility_type;
+
+    public $facility_parent_id;
+
+    public $facility_status;
+
+    //NEW COURIER FIELDS
+    public $couriername;
+
+    public $couriercontact;
+
+    public $courierfacility;
+
+    public $courierstudy;
+
+    public $courierstatus;
+
+    public $courieremail;
+
+    public $studies;
 
     public function updated($fields)
     {
@@ -118,6 +149,11 @@ class SampleReceptionComponent extends Component
         return $batch_no;
     }
 
+    public function getStudies()
+    {
+        $this->studies = Study::where('facility_id', $this->courierfacility)->latest()->get();
+    }
+
     public function getCouriers()
     {
         $this->couriers = Courier::where('facility_id', $this->facility_id)->latest()->get();
@@ -126,6 +162,7 @@ class SampleReceptionComponent extends Component
     public function mount()
     {
         $this->couriers = collect();
+        $this->studies = collect();
     }
 
     public function storeData()
@@ -157,14 +194,13 @@ class SampleReceptionComponent extends Component
         session()->flash('success', 'Sample Reception Data created successfully.');
 
         $this->resetInputs();
-
-        // $this->dispatchBrowserEvent('close-modal');
     }
 
     public function editdata($id)
     {
         $sampleReception = SampleReception::where('id', $id)->first();
         $this->edit_id = $sampleReception->id;
+        $this->batch_no = $sampleReception->batch_no;
         $this->date_delivered = $sampleReception->date_delivered;
         $this->samples_delivered = $sampleReception->samples_delivered;
         $this->samples_accepted = $sampleReception->samples_accepted;
@@ -177,7 +213,8 @@ class SampleReceptionComponent extends Component
 
         $this->couriers = Courier::where('facility_id', $sampleReception->facility_id)->latest()->get();
 
-        $this->dispatchBrowserEvent('edit-modal');
+        $this->toggleForm = true;
+        // $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function showData(SampleReception $sampleReception)
@@ -209,6 +246,8 @@ class SampleReceptionComponent extends Component
     public function resetInputs()
     {
         $this->reset(['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'rejection_reason', 'courier_signed']);
+        $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
+        $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
     }
 
     public function updateData()
@@ -240,8 +279,7 @@ class SampleReceptionComponent extends Component
         session()->flash('success', 'Sample Reception Data updated successfully.');
 
         $this->resetInputs();
-
-        // $this->dispatchBrowserEvent('close-modal');
+        $this->toggleForm = false;
     }
 
     public function deleteConfirmation($id)
@@ -264,6 +302,52 @@ class SampleReceptionComponent extends Component
         }
     }
 
+    public function storeFacility()
+    {
+        $this->validate([
+            'facilityname' => 'required',
+            'facility_type' => 'required',
+            'facility_status' => 'required',
+        ]);
+
+        $facility = new Facility();
+        $facility->name = $this->facilityname;
+        $facility->type = $this->facility_type;
+        $facility->parent_id = $this->facility_parent_id;
+        $facility->is_active = $this->facility_status;
+        $facility->save();
+        session()->flash('success', 'Facility created successfully.');
+        $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
+
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function storeCourier()
+    {
+        $this->validate([
+            'couriername' => 'required',
+            'couriercontact' => 'required',
+            'courieremail' => 'required',
+            'courierfacility' => 'required',
+            'courierstudy' => 'required',
+            'courierstatus' => 'required',
+        ]);
+
+        $courier = new Courier();
+        $courier->name = $this->couriername;
+        $courier->contact = $this->couriercontact;
+        $courier->email = $this->courieremail;
+        $courier->facility_id = $this->courierfacility;
+        $courier->study_id = $this->courierstudy;
+        $courier->is_active = $this->courierstatus;
+
+        $courier->save();
+        session()->flash('success', 'Courier created successfully.');
+        $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
+
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
     public function cancel()
     {
         $this->delete_id = '';
@@ -272,14 +356,15 @@ class SampleReceptionComponent extends Component
     public function close()
     {
         $this->resetInputs();
+        $this->toggleForm = false;
+        $this->couriers = collect();
     }
 
     public function render()
     {
         $users = User::latest()->get();
         $facilities = Facility::latest()->get();
-        $sampleReceptions = SampleReception::where('status', '!=', 'Completed')->latest()->get();
-        // $couriers = Courier::latest()->get();
+        $sampleReceptions = SampleReception::latest()->get();
 
         return view('livewire.lab.sample-management.sample-reception-component', compact('sampleReceptions', 'users', 'facilities'))->layout('layouts.app');
     }

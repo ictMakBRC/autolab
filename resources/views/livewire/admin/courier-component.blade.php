@@ -69,7 +69,7 @@
         </div> <!-- end card -->
     </div><!-- end col-->
 
-    {{-- ADD FACILITY --}}
+    {{-- ADD COURIER--}}
     <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -80,7 +80,6 @@
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="storeData">
-                        {{-- @csrf --}}
                         <div class="row">
                             <div class="mb-3 col-md-4">
                                 <label for="courierName" class="form-label">Name</label>

@@ -10,7 +10,6 @@ use App\Models\TestResults;
 use App\Models\TestSampleType;
 use Livewire\Component;
 
-
 class EditTestComponent extends Component
 {
     public $test_id;
@@ -93,7 +92,6 @@ class EditTestComponent extends Component
          $testdata->update();
 
          session()->flash('success', 'Record updated successfully.');
-
      }
 
      public function storeResult()
@@ -146,7 +144,6 @@ class EditTestComponent extends Component
          $value->save();
          session()->flash('success', 'Record data created successfully.');
          $this->comment = '';
-
      }
 
      public function deletesample($id)
@@ -200,8 +197,6 @@ class EditTestComponent extends Component
         $sampletypes = SampleType::all();
         $categories = TestCategory::all();
 
-
         return view('livewire.admin.edit-test-component', compact('sampletypes', 'categories', 'test', 'testcomments', 'testsampletypes', 'testresults'))->layout('layouts.app');
-
     }
 }

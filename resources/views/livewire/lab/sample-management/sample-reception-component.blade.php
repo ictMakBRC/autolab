@@ -6,7 +6,14 @@
                     <div class="row mb-2">
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
-                                <h5 class="mb-2 mb-sm-0">Sample Reception</h5>
+                                <h5 class="mb-2 mb-sm-0">
+                                    @if (!$toggleForm)
+                                        Sample Reception
+                                    @else
+                                        Update Sample Reception Data for
+                                        <strong class="text-success">{{ $batch_no }}</strong>
+                                    @endif
+                                </h5>
                                 <div class="ms-auto">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-primary">More...</button>
@@ -16,8 +23,12 @@
                                                 Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            <a class="dropdown-item" href="javascript:;">Add Facility</a>
-                                            <a class="dropdown-item" href="javascript:;">Add Courier</a>
+                                            <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                data-bs-target="#addFacility">Add Facility</a>
+                                            <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                data-bs-target="#addCourier">Add Courier</a>
+                                                <a class="dropdown-item" href="javascript:;"
+                                                wire:click="close()">Reset form</a>
                                         </div>
                                     </div>
                                 </div>
@@ -26,7 +37,10 @@
                     </div>
                     <hr>
                     <div class="row mb-0">
-                        <form wire:submit.prevent="storeData">
+                        <form
+                            @if (!$toggleForm) wire:submit.prevent="storeData"
+                        @else
+                        wire:submit.prevent="updateData" @endif>
                             <div class="row">
                                 <div class="mb-3 col-md-2">
                                     <label for="date_delivered" class="form-label">Date/Time Delivered</label>
@@ -124,7 +138,13 @@
 
 
                                 <div class="col-md-2 text-start mt-4">
-                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <button type="submit" class="btn btn-success">
+                                        @if (!$toggleForm)
+                                            Save
+                                        @else
+                                            Update
+                                        @endif
+                                    </button>
                                 </div>
 
                             </div>
@@ -160,11 +180,11 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $sampleReception->batch_no }}</td>
-                                            <td>{{ $sampleReception->date_delivered }}</td>
+                                            <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
+                                            </td>
                                             <td>{{ $sampleReception->samples_delivered }}</td>
                                             <td>{{ $sampleReception->facility->name }}</td>
                                             <td>{{ $sampleReception->courier->name }}</td>
-                                            {{-- <td>{{$sampleReception->courier_signed}}</td> --}}
                                             <td>{{ $sampleReception->samples_accepted }}</td>
                                             <td>{{ $sampleReception->samples_rejected }}</td>
                                             <td>{{ $sampleReception->receiver->fullName }}</td>
@@ -188,12 +208,12 @@
                                                     data-bs-toggle="modal"
                                                     wire:click="showData({{ $sampleReception->id }})"
                                                     data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
-                                                {{-- <a href="javascript:;" class="text-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="Edit info" aria-label="Edit"><i class="bi bi-pencil-fill"></i></a>
-                                                <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="Delete" aria-label="Delete"><i class="bi bi-trash-fill"></i></a> --}}
-                                                <a href="javascript: void(0);" class="action-ico"> <i
-                                                        class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                        wire:click="editdata({{ $sampleReception->id }})"
-                                                        data-bs-target="#edituser"></i></a>
+
+                                                <a href="javascript: void(0);" class="action-ico" data-bs-toggle="modal"
+                                                wire:click="editdata({{ $sampleReception->id }})"
+                                                data-bs-target="#edituser"> <i
+                                                        class="bi bi-pencil-square"></i></a>
+
                                                 <a href="javascript: void(0);"
                                                     wire:click="deleteConfirmation({{ $sampleReception->id }})"
                                                     class="action-ico">
@@ -202,8 +222,6 @@
                                         </tr>
                                     @empty
                                     @endforelse
-
-
                                 </tbody>
                             </table>
                         </div> <!-- end preview-->
@@ -213,7 +231,7 @@
             </div> <!-- end card -->
         </div><!-- end col-->
 
-        {{-- ADD FACILITY --}}
+        {{-- VIEW BATCH DETAILS --}}
         <div wire:ignore.self class="modal fade" id="show-data" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -228,63 +246,60 @@
                             <div class="col-md-7">
                                 {{-- <div class="card border shadow-none radius-10">
                                     <div class="card-body"> --}}
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="icon-box bg-light-primary border-0">
-                                                <i class="bi bi-prescription"></i><i class='bx bxs-vial'></i>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-box bg-light-primary border-0">
+                                        <i class="bi bi-prescription text-success"></i><i
+                                            class='bx bxs-vial text-success'></i>
+                                    </div>
+                                    <div class="info">
+                                        <p class="mb-1"><strong>Batch No</strong> : {{ $batch_no }}
+                                            @if ($batch_status == 'Pending')
+                                                <span class="badge bg-warning">{{ $batch_status }}</span>
+                                            @elseif($batch_status == 'Processing')
+                                                <span class="badge bg-info">{{ $batch_status }}</span>
+                                            @else
+                                                <span class="badge bg-success">{{ $batch_status }}</span>
+                                            @endif
+                                        </p>
+                                        <p class="mb-1"><strong>Date Delivered</strong> :
+                                            {{ $delivery_date }}</p>
+                                        <p class="mb-1"><strong>Source Facility</strong> :
+                                            {{ $facility_name }}</p>
+                                        <p class="mb-1"><strong>Samples Delivered</strong> :
+                                            {{ $delivered_samples }}</p>
+                                        <p class="mb-1"><strong>Samples Accepted</strong> :
+                                            {{ $accepted }}</p>
+                                        <p class="mb-1"><strong class="text-danger">Samples
+                                                Rejected</strong> : {{ $rejected }}</p>
+                                        <p class="mb-1"><strong>Received By</strong> : {{ $receiver }}
+                                        </p>
+                                        <p class="mb-1"><strong>Samples Handled</strong> :
+                                            {{ $handled }}</p>
+                                        <p class="mb-1"><strong>Reviewed By</strong> :
+                                            {{ $reviewer }}</p>
+                                        <p class="mb-1"><strong>Date Reviewed</strong> :
+                                            {{ $review_date }}</p>
+                                        @if ($reason_for_rejection)
+                                            <p class="mb-1">
+                                            <div class="spinner-grow spinner-grow-sm text-danger" role="status">
+                                            </div>{{ $reason_for_rejection }}</p>
+                                        @endif
+                                        @if ($comment)
+                                            <div>
+                                                <h6 class="text-success">Reviewer Comment</h6>
+                                                <p>{{ $comment }}</p>
                                             </div>
-                                            <div class="info">
-                                                <p class="mb-1"><strong>Batch No</strong> : {{ $batch_no }}
-                                                    @if ($batch_status == 'Pending')
-                                                    <span
-                                                            class="badge bg-warning">{{ $batch_status }}</span>
-                                                    
-                                                @elseif($batch_status == 'Processing')
-                                                    <span class="badge bg-info">{{ $batch_status }}</span>
-                                                    
-                                                @else
-                                                   <span
-                                                            class="badge bg-success">{{ $batch_status }}</span>
-                                                   
-                                                @endif
-                                                </p>
-                                                <p class="mb-1"><strong>Date Delivered</strong> :
-                                                    {{ $delivery_date }}</p>
-                                                <p class="mb-1"><strong>Source Facility</strong> :
-                                                    {{ $facility_name }}</p>
-                                                <p class="mb-1"><strong>Samples Delivered</strong> :
-                                                    {{ $delivered_samples }}</p>
-                                                <p class="mb-1"><strong>Samples Accepted</strong> :
-                                                    {{ $accepted }}</p>
-                                                <p class="mb-1"><strong class="text-danger">Samples
-                                                        Rejected</strong> : {{ $rejected }}</p>
-                                                <p class="mb-1"><strong>Received By</strong> : {{ $receiver }}
-                                                </p>
-                                                <p class="mb-1"><strong>Samples Handled</strong> :
-                                                    {{ $handled }}</p>
-                                                    <p class="mb-1"><strong>Reviewed By</strong> :
-                                                        {{ $reviewer }}</p>
-                                                        <p class="mb-1"><strong>Date Reviewed</strong> :
-                                                            {{ $review_date }}</p>
-                                                @if ($reason_for_rejection)
-                                                    <p class="mb-1"><div class="spinner-grow spinner-grow-sm text-danger" role="status">
-                                                    </div>{{ $reason_for_rejection }}</p>
-                                                @endif
-                                                @if ($comment)
-                                                    <div>
-                                                        <h6 class="text-success">Reviewer Comment</h6>
-                                                        <p>{{ $comment }}</p>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    {{-- </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- </div>
                                 </div> --}}
                             </div>
                             <div class="col-md-5">
                                 <div class="card border shadow-none radius-10">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="icon-box bg-light-success border-0">
+                                            <div class="icon-box bg-light-primary border-0">
                                                 <i class="bi bi-truck text-success"></i>
                                             </div>
                                             <div class="info">
@@ -331,115 +346,175 @@
             </div>
         </div>
 
-        <!-- EDIT requester Modal -->
-        {{-- <div wire:ignore.self class="modal fade" id="editrequester" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Update Requester</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
-                </div> <!-- end modal header -->
-                <div class="modal-body">
-                    <form wire:submit.prevent="updateData">
-                        <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label for="requesterName2" class="form-label">Name</label>
-                                <input type="text" id="requesterName2" class="form-control" name="name"
-                                    wire:model="name">
-                                @error('name')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="requestercontact2" class="form-label">Contact</label>
-                                <input type="text" id="requestercontact2" class="form-control"
-                                    wire:model="contact">
-                                @error('contact')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="requesterEmail2" class="form-label">Email</label>
-                                <input type="email" id="requesterEmail2" class="form-control" name="email"
-                                    wire:model="email">
-                                @error('email')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3 col-md-5">
-                                <label for="facility2" class="form-label">Facility</label>
-                                <select class="form-select" id="facility2" wire:model="facility_id"
-                                    wire:change="getStudies">
-                                    @if ($facility_id == '')
-                                        <option selected value="">None</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    @else
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
+        {{-- ADD FACILITY --}}
+        <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                            wire:click="close()"></button>
+                    </div> <!-- end modal header -->
+                    <div class="modal-body">
+                        <form wire:submit.prevent="storeFacility">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="facilityName" class="form-label">Facility Name</label>
+                                        <input type="text" id="facilityName" class="form-control"
+                                            name="facilityname" wire:model="facilityname">
+                                        @error('facilityname')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="type" class="form-label">Type</label>
+                                        <select class="form-select" id="type" wire:model="facility_type">
+                                            <option selected value="">Select</option>
+                                            <option value='Institution'>Institution</option>
+                                            <option value='Health Facility'>Health Facility</option>
+                                        </select>
+                                        @error('facility_type')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="parent" class="form-label">Parent</label>
+                                        <select class="form-select" id="parent" wire:model="facility_parent_id">
                                             <option selected value="">None</option>
-                                        @endforelse
-                                    @endif
-                                </select>
-                                @error('facility_id')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                        @error('facility_parent_id')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="isActive" class="form-label">Status</label>
+                                        <select class="form-select" id="isActive" wire:model="facility_status">
+                                            <option selected value="">Select</option>
+                                            <option value='1'>Active</option>
+                                            <option value='0'>Inactive</option>
+                                        </select>
+                                        @error('facility_status')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div> <!-- end col -->
                             </div>
-                            <div class="mb-3 col-md-5">
-                                <label for="study_id2" class="form-label">Study/project</label>
-                                <select class="form-select" id="study_id2" wire:model="study_id">
-                                    @if ($facility_id && !$studies->isEmpty())
-                                        <option value="">Select/None</option>
-                                        @foreach ($studies as $study)
-                                            <option value='{{ $study->id }}'>{{ $study->name }}</option>
-                                        @endforeach
-                                    @else
-                                        <option selected value="">None</option>
-                                    @endif
-                                </select>
-                                @error('study_id')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
+                            <!-- end row-->
+                            <div class="d-grid mb-0 text-center">
+                                <button type="submit" class="btn btn-success">Save</button>
                             </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="isActive2" class="form-label">Status</label>
-                                <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
-                                    <option value='1'>Active</option>
-                                    <option value='0'>Inactive</option>
-                                </select>
-                                @error('is_active')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <!-- end row-->
-                        <div class="modal-footer">
-                            <x-button>{{ __('Update') }}</x-button>
-                            <x-button type="button" class="btn btn-danger" wire:click="close()"
-                                data-bs-dismiss="modal">{{ __('Close') }}</x-button>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                </div> <!-- end modal content-->
+            </div> <!-- end modal dialog-->
+        </div> <!-- end modal-->
 
-            </div> <!-- end modal content-->
-        </div> <!-- end modal dialog-->
-    </div> <!-- end modal--> --}}
+        {{-- ADD COURIER --}}
+        <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Add New Courier</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                            wire:click="close()"></button>
+                    </div> <!-- end modal header -->
+                    <div class="modal-body">
+                        <form wire:submit.prevent="storeCourier">
+                            <div class="row">
+                                <div class="mb-3 col-md-4">
+                                    <label for="courierName" class="form-label">Name</label>
+                                    <input type="text" id="courierName" class="form-control" name="couriername"
+                                        wire:model="couriername">
+                                    @error('couriername')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label for="couriercontact" class="form-label">Contact</label>
+                                    <input type="text" id="couriercontact" class="form-control"
+                                        wire:model="couriercontact">
+                                    @error('couriercontact')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label for="courierEmail" class="form-label">Email</label>
+                                    <input type="email" id="courierEmail" class="form-control"
+                                        wire:model="courieremail">
+                                    @error('courieremail')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 col-md-5">
+                                    <label for="facility" class="form-label">Facility</label>
+                                    <select class="form-select" id="facility" wire:model="courierfacility"
+                                        wire:change="getStudies">
+                                        <option selected value="">Select</option>
+                                        @forelse ($facilities as $facility)
+                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    @error('courierfacility')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 col-md-5">
+                                    <label for="study_id" class="form-label">Study/project</label>
+                                    <select class="form-select" id="study_id" wire:model="courierstudy">
+                                        @if ($courierfacility && !$studies->isEmpty())
+                                            <option selected value="">Select/None</option>
+                                            @foreach ($studies as $study)
+                                                <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                            @endforeach
+                                        @else
+                                            <option selected value="">None</option>
+                                        @endif
+                                    </select>
+                                    @error('courierstudy')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 col-md-2">
+                                    <label for="isActive2" class="form-label">Status</label>
+                                    <select class="form-select" id="isActive2" wire:model="courierstatus">
+                                        <option selected value="">Select</option>
+                                        <option value='1'>Active</option>
+                                        <option value='0'>Inactive</option>
+                                    </select>
+                                    @error('courierstatus')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <!-- end row-->
+                            <div class="d-grid mb-0 text-center">
+                                <button type="submit" class="btn btn-success">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end modal content-->
+            </div> <!-- end modal dialog-->
+        </div> <!-- end modal-->
+
 
         @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
                     $('#show-data').modal('hide');
-                    $('#editrequester').modal('hide');
+                    $('#addFacility').modal('hide');
+                    $('#addCourier').modal('hide');
                     $('#delete_modal').modal('hide');
                     $('#show-delete-confirmation-modal').modal('hide');
-                });
-
-                window.addEventListener('edit-modal', event => {
-                    $('#editrequester').modal('show');
                 });
 
                 window.addEventListener('delete-modal', event => {
