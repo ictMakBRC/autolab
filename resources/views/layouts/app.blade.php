@@ -38,6 +38,7 @@
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />    
     @livewireStyles
+    {{-- <livewire:styles /> --}}
 </head>
 
 <body>
@@ -98,7 +99,7 @@
 
     {{-- <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/js/select2.full.min.js')}}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('autolab-assets/js/select2.script.js')}}" type="text/javascript"></script>
+    {{-- <script src="{{ asset('autolab-assets/js/select2.script.js')}}" type="text/javascript"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -121,7 +122,9 @@
         });
     </script>
 @stack('scripts')
+
 @livewireScripts
+{{-- <livewire:scripts /> --}}
 </body>
 
 </html>

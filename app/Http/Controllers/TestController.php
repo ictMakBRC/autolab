@@ -49,19 +49,11 @@ class TestController extends Controller
     {
         $request->validate([
             'category_id' => 'required',
-<<<<<<< HEAD
-            'name' => 'required|unique:tests',
-            'unit' => 'required',
-            'precautions' => 'required',
-
-        ]);
-=======
             'name'=>'required|unique:tests',
-            'unit'=> 'required',
+           // 'unit'=> 'required',
             'precautions'=> 'required',
 
          ]);
->>>>>>> 7a294e1b0765c7c51167cfcb7c7b2afd48f56fcd
 
         $test = Test::create([
             'category_id' => $request['category_id'],
@@ -69,7 +61,7 @@ class TestController extends Controller
             'short_code' => $request['shortcut'],
             'code' => time(),
             'price' => $request['price'],
-            'unit' => $request['type'],
+           // 'unit' => $request['type'],
             'precautions' => $request['precautions'],
             'reference_range_min' => $request['reference_range_min'],
             'reference_range_max' => $request['reference_range_max'],
