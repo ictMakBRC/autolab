@@ -73,7 +73,7 @@ class FacilityComponent extends Component
         $facility = Facility::find($this->edit_id);
         $facility->name = $this->name;
         $facility->type = $this->type;
-        $facility->parent_id = $this->parent_id != "" ? $this->parent_id : null;
+        $facility->parent_id = $this->parent_id != '' ? $this->parent_id : null;
         $facility->is_active = $this->is_active;
         $facility->update();
         session()->flash('success', 'Facility updated successfully.');

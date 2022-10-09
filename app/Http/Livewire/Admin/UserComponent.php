@@ -254,7 +254,7 @@ class UserComponent extends Component
         $user->name = $this->first_name;
         $user->contact = $this->contact;
         $user->email = $this->email;
-        $user->laboratory_id = $this->laboratory_id != "" ? $this->laboratory_id : null;;
+        $user->laboratory_id = $this->laboratory_id != '' ? $this->laboratory_id : null;
         $user->designation_id = $this->designation_id == '' ? null : $this->designation_id;
         $user->is_active = $this->is_active;
         $user->avatar = $this->avatarPath;

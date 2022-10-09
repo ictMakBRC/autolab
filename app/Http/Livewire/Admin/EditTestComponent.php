@@ -2,39 +2,58 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Validator;
-use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
+use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
-use App\Models\TestCategory;
 use App\Models\TestSampleType;
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Database\Eloquent\Collection;
+use Livewire\Component;
 
 class EditTestComponent extends Component
 {
-    public $test_id, $possible_result, $comment, $sample, $edit_id, $deleteResult_id, $possible_result2, $edit_test_id;
+    public $test_id;
 
-    public  $category_id,
-    $name ,
-    $short_code,
-    $code,
-    $price,
-    $unit,
-    $precautions,
-    $reference_range_min,
-    $reference_range_max;
+    public $possible_result;
+
+    public $comment;
+
+    public $sample;
+
+    public $edit_id;
+
+    public $deleteResult_id;
+
+    public $possible_result2;
+
+    public $edit_test_id;
+
+    public $category_id;
+
+    public $name;
+
+    public $short_code;
+
+    public $code;
+
+    public $price;
+
+    public $unit;
+
+    public $precautions;
+
+    public $reference_range_min;
+
+    public $reference_range_max;
+
     public $testid;
 
-   
     public function mount($id)
     {
-                $this->testid = $id;
+        $this->testid = $id;
         $testdata = Test::with('category')->where('id', $id)->first();
         $this->edit_test_id = $testdata->id;
-        $this->category_id =$testdata->category_id;
+        $this->category_id = $testdata->category_id;
         $this->name = $testdata->name;
         $this->short_code = $testdata->short_code;
         $this->price = $testdata->price;
@@ -42,29 +61,29 @@ class EditTestComponent extends Component
         $this->precautions = $testdata->precautions;
         $this->reference_range_min = $testdata->reference_range_min;
         $this->reference_range_max = $testdata->reference_range_max;
-       
-     }
+    }
+
      public function updated($fields)
      {
-         $this->validateOnly($fields,[
-            // //'possible_result'=>'required|unique:test_results',
-            // 'possible_result' => ['required', 'unique:test_results,test_id,'.$this->testid.',test_id,possible_result,'.$this->possible_result],
-            'possible_result' => 'required',
-            'comment'=>'required',
-            'sample'=>'required',
+         $this->validateOnly($fields, [
+             // //'possible_result'=>'required|unique:test_results',
+             // 'possible_result' => ['required', 'unique:test_results,test_id,'.$this->testid.',test_id,possible_result,'.$this->possible_result],
+             'possible_result' => 'required',
+             'comment' => 'required',
+             'sample' => 'required',
          ]);
      }
 
      public function updateData()
      {
          $this->validate([
-             'name'=>'required',
-             'category_id'=>'required',
+             'name' => 'required',
+             'category_id' => 'required',
          ]);
          $testdata = Test::where('id', $this->edit_test_id)->first();
-         $testdata->category_id= $this->category_id;
+         $testdata->category_id = $this->category_id;
          $testdata->name = $this->name;
-         $testdata->short_code= $this->short_code;
+         $testdata->short_code = $this->short_code;
          $testdata->price = $this->price;
          $testdata->unit = $this->unit;
          $testdata->precautions = $this->precautions;
@@ -77,8 +96,8 @@ class EditTestComponent extends Component
      public function storeResult()
      {
          $this->validate([
-            // 'possible_result'=>'required|unique:test_results',
-            'possible_result' => 'required|unique:test_results,test_id,' . $this->testid .'',
+             // 'possible_result'=>'required|unique:test_results',
+             'possible_result' => 'required|unique:test_results,test_id,'.$this->testid.'',
              //'possible_result' => ['required|unique:test_results,id,' . $this->testid . ',id,possible_result,' . $this->possible_result],
          ]);
          $value = new TestResults();
@@ -92,7 +111,7 @@ class EditTestComponent extends Component
      public function storecomment()
      {
          $this->validate([
-             'comment'=>'required',
+             'comment' => 'required',
          ]);
          $value = new TestComment();
          $value->comment = $this->comment;
