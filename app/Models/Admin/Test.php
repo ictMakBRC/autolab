@@ -56,6 +56,11 @@ class Test extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->creator_lab = auth()->user()->laboratory_id;
+            });
+
+            self::updating(function ($model) {
+                $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
     }

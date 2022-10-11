@@ -26,9 +26,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($sampletypes as $item)
+                                    @foreach ($sampleType as $item)
                                         <tr>
-                                            <td>{{ $item->sample_name }}</td>
+                                            <td>{{ $item->type }}</td>
                                             <td>
                                                 @if ($item->status == 1)
                                                     <span class="badge bg-success">Active</span>
@@ -56,28 +56,48 @@
         </div>
         <!-- Modal -->
         <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"
-            role="dialog">
-            <div class="modal-dialog">
+            role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add a new Sample</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Add a new Sample Type
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            wire:click="close()"></button>
                     </div>
                     <form wire:submit.prevent="storeData">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Sample name</label>
-                                <input type="text" name="sample_name" id="sample_name" wire:model="sample_name"
-                                    class="form-control">
-                                @error('sample_name')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
+                            <div class="row">
+                                <div class="col-md-12 form-group mb-3">
+                                    <label for="name" class="form-label">Sample Type</label>
+                                    <input type="text" id="type" wire:model="type" class="form-control">
+                                    @error('type')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <h6>Attach Possible Tests</h6>
+                                <hr>
+                                <div class=" col-md-12 form-group mt-2">
+                                    @foreach ($tests as $test)
+                                        <div class="form-check form-check-inline mb-1 test-list" id="test-list">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="testtype{{ $test->id }}" name="possible_tests[]"
+                                                value="{{ $test->id }}" wire:model='possible_tests'>
+                                            <label class="form-check-label"
+                                                for="testtype{{ $test->id }}">{{ $test->name }}</label>
+                                        </div>
+                                    @endforeach
+                                    test:{{ var_export($possible_tests) }}
+                                </div>
                             </div>
-
                         </div>
                         <div class="modal-footer">
-                            <x-button>{{ __('Save') }}</x-button>
+                            <x-button>
+                                {{ __('Save') }}
+                            </x-button>
+
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
@@ -90,36 +110,52 @@
 
         <!-- Modal -->
         <div wire:ignore.self id="edit_modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel"
-            role="dialog">
-            <div class="modal-dialog">
+            role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
 
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Sample</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Sample Type</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            wire:click="close()"></button>
                     </div>
                     <form wire:submit.prevent="updateData">
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="name">Sample name</label>
-                                <input type="text" name="sample_name" id="sample_name" wire:model="sample_name"
-                                    class="form-control">
-                                @error('sample_name')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select" id="status" wire:model="status" name="status" required>
-                                    <option value="">select</option>
-                                    <option value="1" style="color: green" selected>Active</option>
-                                    <option value="0" style="color: red">Suspended</option>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label for="type" class="form-label">Sample Type</label>
+                                    <input type="text" id="type" wire:model="type" class="form-control">
+                                    @error('type')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="status" wire:model="status">
+                                        <option value="">select</option>
+                                        <option value="1" style="color: green" selected>Active</option>
+                                        <option value="0" style="color: red">Suspended</option>
+                                    </select>
+                                </div>
+                                <h6>Attach Possible Tests</h6>
+                                <hr>
+                                <div class=" col-md-12 ">
+                                    @foreach ($tests as $test)
+                                        <div class="form-check form-check-inline mb-1 test-list" id="test-list">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="testtype{{ $test->id }}" name="possible_tests[]"
+                                                value="{{ $test->id }}" wire:model='possible_tests'>
+                                            <label class="form-check-label"
+                                                for="testtype{{ $test->id }}">{{ $test->name }}</label>
+                                        </div>
+                                    @endforeach
+                                    test:{{ var_export($possible_tests) }}
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <x-button>{{ __('Save') }}</x-button>
+                            <x-button class="btn-success">{{ __('Save') }}</x-button>
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
@@ -152,8 +188,6 @@
         </div>
     </div>
 </div>
-</div>
-</div>
 
 @push('scripts')
     <script>
@@ -169,5 +203,9 @@
         window.addEventListener('delete-modal', event => {
             $('#delete_modal').modal('show');
         });
+
+        // window.addEventListener('update-modal', event => {
+        //     $('#modalAdd').modal('show');
+        // });
     </script>
 @endpush

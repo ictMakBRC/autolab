@@ -10,7 +10,16 @@ class SampleType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sample_name', 'status', 'created_by', 'creator_lab'];
+    protected $fillable = ['type', 'status','possible_tests', 'created_by', 'creator_lab'];
+
+     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'possible_tests' => 'array',
+    ];
 
     public static function boot()
     {

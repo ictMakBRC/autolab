@@ -246,7 +246,7 @@
                     <option value="">Select</option>
                     @if (count($sampletypes) > 0)
                         @foreach ($sampletypes as $item)
-                            <option value="{{ $item->sample_name }}">{{ $item->sample_name }}</option>
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
                         @endforeach
                     @endif
                 </select>
@@ -261,7 +261,7 @@
                     multiple="multiple" data-placeholder="Choose sample types">
                     @if (count($sampletypes) > 0)
                         @foreach ($sampletypes as $item)
-                            <option value="{{ $item->sample_name }}">{{ $item->sample_name }}</option>
+                            <option value="{{ $item->name }}">{{ $item->name }}</option>
                         @endforeach
                     @endif
                 </select>

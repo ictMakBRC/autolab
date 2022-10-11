@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('test_sample_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('test_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->string('sample')->nullable();
+            $table->string('sample');
             $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();

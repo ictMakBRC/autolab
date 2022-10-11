@@ -2,68 +2,73 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\SampleType;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
 
 class SampleTypeComponent extends Component
 {
-    public $sample_name;
-
+    public $type;
     public $status;
-
     public $edit_id;
-
     public $delete_id;
+    public $possible_tests=[];
 
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'sample_name' => 'required|unique:sample_types',
-
+            'type' => 'required|unique:sample_types',
         ]);
     }
 
     public function storeData()
     {
         $this->validate([
-            'sample_name' => 'required|unique:sample_types',
+            'type' => 'required|unique:sample_types',
         ]);
-        $TestCategory = new SampleType();
-        $TestCategory->sample_name = $this->sample_name;
-        $TestCategory->save();
-        session()->flash('success', 'Record data created successfully.');
+        $sampleType = new SampleType();
+        $sampleType->type = $this->type;
+        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->save();
+        session()->flash('success', 'Sample Type created successfully.');
         $this->status = '';
-        $this->sample_name = '';
+        $this->type = '';
+        $this->possible_tests = [];
         $this->dispatchBrowserEvent('close-modal');
     }
 
     public function editdata($id)
     {
-        $TestCategory = SampleType::where('id', $id)->first();
-        $this->edit_id = $TestCategory->id;
-        $this->sample_name = $TestCategory->sample_name;
+        $sampleType = SampleType::where('id', $id)->first();
+        $this->edit_id = $sampleType->id;
+        $this->type = $sampleType->type;
+        $this->status = $sampleType->status;
+        $this->possible_tests = $sampleType->possible_tests??[];
+
         $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function resetInputs()
     {
         $this->status = '';
-        $this->sample_name = '';
+        $this->type = '';
+        $this->possible_tests = [];
     }
 
     public function updateData()
     {
         $this->validate([
-            'sample_name' => 'required|unique:sample_types,sample_name,'.$this->edit_id.'',
+            'type' => 'required|unique:sample_types,type,'.$this->edit_id.'',
             'status' => 'required',
         ]);
-        $TestCategory = SampleType::find($this->edit_id);
-        $TestCategory->sample_name = $this->sample_name;
-        $TestCategory->status = $this->status;
-        $TestCategory->update();
-        session()->flash('success', 'Rcord updated successfully.');
-        $this->status = '';
-        $this->sample_name = '';
+        $sampleType = SampleType::find($this->edit_id);
+        $sampleType->type = $this->type;
+        $sampleType->status = $this->status;
+        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->update();
+
+        session()->flash('success', 'Sample Type updated successfully');
+        $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
     }
 
@@ -99,8 +104,9 @@ class SampleTypeComponent extends Component
 
     public function render()
     {
-        $sampletypes = SampleType::all();
+        $sampleType = SampleType::all();
+        $tests = Test::select('id','name')->get();
 
-        return view('livewire.admin.sample-type-component', compact('sampletypes'))->layout('layouts.app');
+        return view('livewire.admin.sample-type-component', compact('sampleType','tests'))->layout('layouts.app');
     }
 }

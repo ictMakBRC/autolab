@@ -43,25 +43,25 @@
                 </div>
             </div>
             <!-- Modal -->
-            <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"  role="dialog">
+            <div wire:ignore.self class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel"  role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">            
                 <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Add a new category</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="close()"></button>
                         </div>
                         <form wire:submit.prevent="storeData">
                             <div class="modal-body">                      
-                                <div class="form-group">
-                                    <label for="name">Category name</label>
+                                <div class="form-group mb-3">
+                                    <label for="name" class="form-label">Category name</label>
                                     <input type="text" name="category_name" id="category_name" wire:model="category_name" class="form-control">
                                     @error('category_name')
                                         <div class="text-danger text-small">{{$message}}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="email">Description</label>
+                                <div class="form-group mb-3">
+                                    <label for="email" class="form-label">Description</label>
                                     <input type="text" name="description" id="description" wire:model="description" class="form-control">
                                     @error('description')
                                         <div class="text-danger text-small">{{$message}}</div>
@@ -81,7 +81,7 @@
                     
               
             <!-- Modal -->
-            <div wire:ignore.self id="edit_modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel"  role="dialog">
+            <div wire:ignore.self id="edit_modal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel"  role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
                 <div class="modal-dialog">
               
                   <!-- Modal content-->
@@ -93,14 +93,14 @@
                     <form wire:submit.prevent="updateData">
                         <div class="modal-body">                      
                             <div class="form-group">
-                                <label for="name">Category name</label>
+                                <label for="name" class="form-label">Category name</label>
                                 <input type="text" name="category_name" id="category_name" wire:model="category_name" class="form-control">
                                 @error('category_name')
                                     <div class="text-danger text-small">{{$message}}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="email">Description</label>
+                                <label for="email" class="form-label">Description</label>
                                 <input type="text" name="description" id="description" wire:model="description" class="form-control">
                                 @error('description')
                                     <div class="text-danger text-small">{{$message}}</div>
