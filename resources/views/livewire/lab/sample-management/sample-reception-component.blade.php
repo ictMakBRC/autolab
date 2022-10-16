@@ -126,7 +126,6 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                {{-- @if ($reasonInput) --}}
                                 <div class="mb-1 col-md-4">
                                     <label for="rejection_reason" class="form-label">Reason for Rejection</label>
                                     <textarea type="text" id="rejection_reason" class="form-control" wire:model="rejection_reason"></textarea>
@@ -134,26 +133,21 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                {{-- @endif --}}
-
 
                                 <div class="col-md-2 text-start mt-4">
-                                    <button type="submit" class="btn btn-success">
-                                        @if (!$toggleForm)
-                                            Save
-                                        @else
-                                            Update
-                                        @endif
-                                    </button>
+                                    @if (!$toggleForm)
+                                    <x-button>{{__('Save')}}</x-button>
+                                    @else
+                                    <x-button>{{__('Update')}}</x-button>
+                                    @endif
                                 </div>
 
                             </div>
                             <!-- end row-->
-
                         </form>
                     </div>
                 </div>
-                {{-- <hr> --}}
+
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="table-responsive">
@@ -166,7 +160,6 @@
                                         <th>Delivered</th>
                                         <th>Reffering Facility</th>
                                         <th>Courier</th>
-                                        {{-- <th>Courier Signed?</th> --}}
                                         <th>Accepted</th>
                                         <th>Rejected</th>
                                         <th>Received By</th>
@@ -179,7 +172,10 @@
                                     @forelse ($sampleReceptions as $key => $sampleReception)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $sampleReception->batch_no }}</td>
+                                            <td>
+                                                <a href="javascript: void(0);" class="action-ico"
+                                                wire:click="editdata({{ $sampleReception->id }})">{{ $sampleReception->batch_no }} </a>
+                                            </td>
                                             <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
                                             </td>
                                             <td>{{ $sampleReception->samples_delivered }}</td>
@@ -209,10 +205,7 @@
                                                     wire:click="showData({{ $sampleReception->id }})"
                                                     data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
 
-                                                <a href="javascript: void(0);" class="action-ico"
-                                                    data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $sampleReception->id }})"
-                                                    data-bs-target="#edituser"> <i
+                                                <a href="{{route('specimen-request',$sampleReception->batch_no)}}" class="action-ico"> <i
                                                         class="bi bi-pencil-square"></i></a>
 
                                                 <a href="javascript: void(0);"
@@ -227,7 +220,6 @@
                             </table>
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
-
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -245,8 +237,6 @@
                     <div class="modal-body">
                         <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3">
                             <div class="col-md-7">
-                                {{-- <div class="card border shadow-none radius-10">
-                                    <div class="card-body"> --}}
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="icon-box bg-light-primary border-0">
                                         <i class="bi bi-prescription text-success"></i><i
@@ -293,8 +283,6 @@
                                         @endif
                                     </div>
                                 </div>
-                                {{-- </div>
-                                </div> --}}
                             </div>
                             <div class="col-md-5">
                                 <div class="card border shadow-none radius-10">
@@ -331,7 +319,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Requester</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Reception Data</h5>
                         <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -407,8 +395,10 @@
                                 </div> <!-- end col -->
                             </div>
                             <!-- end row-->
-                            <div class="d-grid mb-0 text-center">
-                                <button type="submit" class="btn btn-success">Save</button>
+                            <div class="modal-footer">
+                                <x-button>{{ __('Save') }}</x-button>
+                                <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                    data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                             </div>
                         </form>
                     </div>
@@ -498,8 +488,10 @@
                                 </div>
                             </div>
                             <!-- end row-->
-                            <div class="d-grid mb-0 text-center">
-                                <button type="submit" class="btn btn-success">Save</button>
+                            <div class="modal-footer">
+                                <x-button>{{ __('Save') }}</x-button>
+                                <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                    data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                             </div>
                         </form>
                     </div>

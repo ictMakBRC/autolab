@@ -161,8 +161,8 @@ class SampleReceptionComponent extends Component
 
     public function mount()
     {
-        $this->couriers = collect();
-        $this->studies = collect();
+        $this->couriers = collect([]);
+        $this->studies = collect([]);
     }
 
     public function storeData()
@@ -196,9 +196,9 @@ class SampleReceptionComponent extends Component
         $this->resetInputs();
     }
 
-    public function editdata($id)
+    public function editdata(SampleReception $sampleReception)
     {
-        $sampleReception = SampleReception::where('id', $id)->first();
+        // $sampleReception = SampleReception::where('id', $id)->first();
         $this->edit_id = $sampleReception->id;
         $this->batch_no = $sampleReception->batch_no;
         $this->date_delivered = $sampleReception->date_delivered;
@@ -285,7 +285,6 @@ class SampleReceptionComponent extends Component
     public function deleteConfirmation($id)
     {
         $this->delete_id = $id;
-
         $this->dispatchBrowserEvent('delete-modal');
     }
 

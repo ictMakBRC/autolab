@@ -15,6 +15,7 @@ use App\Http\Livewire\Admin\StudyComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
+use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,7 +37,7 @@ Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatu
 //     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::get('categories', TestCategoryComponent::class)->name('categories');
     Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
     Route::resource('tests', TestController::class);
@@ -54,7 +55,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'Admin'], function () {
     Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
     Route::get('test/show', [TestController::class, 'show'])->name('showTest');
 });
-Route::group(['middleware' => ['auth'], 'prefix' => 'SampleManagement'], function () {
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'SampleMgt'], function () {
     Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
+    Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->name('specimen-request');
 });
 require __DIR__.'/auth.php';

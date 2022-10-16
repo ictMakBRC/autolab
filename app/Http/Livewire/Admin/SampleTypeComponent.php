@@ -2,17 +2,21 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
+use Livewire\Component;
 
 class SampleTypeComponent extends Component
 {
     public $type;
+
     public $status;
+
     public $edit_id;
+
     public $delete_id;
-    public $possible_tests=[];
+
+    public $possible_tests = [];
 
     public function updated($fields)
     {
@@ -43,7 +47,7 @@ class SampleTypeComponent extends Component
         $this->edit_id = $sampleType->id;
         $this->type = $sampleType->type;
         $this->status = $sampleType->status;
-        $this->possible_tests = $sampleType->possible_tests??[];
+        $this->possible_tests = $sampleType->possible_tests ?? [];
 
         $this->dispatchBrowserEvent('edit-modal');
     }
@@ -105,8 +109,8 @@ class SampleTypeComponent extends Component
     public function render()
     {
         $sampleType = SampleType::all();
-        $tests = Test::select('id','name')->get();
+        $tests = Test::select('id', 'name')->get();
 
-        return view('livewire.admin.sample-type-component', compact('sampleType','tests'))->layout('layouts.app');
+        return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');
     }
 }

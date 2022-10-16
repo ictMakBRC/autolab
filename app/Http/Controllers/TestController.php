@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 //use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
+use App\Models\TestCategory;
 use App\Models\TestComment;
 use App\Models\TestResults;
-use App\Models\TestCategory;
-use Illuminate\Http\Request;
 use App\Models\TestSampleType;
-Use PDF;
+use Illuminate\Http\Request;
+use PDF;
 
 class TestController extends Controller
 {
@@ -49,11 +49,11 @@ class TestController extends Controller
     {
         $request->validate([
             'category_id' => 'required',
-            'name'=>'required|unique:tests',
-           // 'unit'=> 'required',
-            'precautions'=> 'required',
+            'name' => 'required|unique:tests',
+            // 'unit'=> 'required',
+            'precautions' => 'required',
 
-         ]);
+        ]);
 
         $test = Test::create([
             'category_id' => $request['category_id'],
@@ -61,7 +61,7 @@ class TestController extends Controller
             'short_code' => $request['shortcut'],
             'code' => time(),
             'price' => $request['price'],
-           // 'unit' => $request['type'],
+            // 'unit' => $request['type'],
             'precautions' => $request['precautions'],
             'reference_range_min' => $request['reference_range_min'],
             'reference_range_max' => $request['reference_range_max'],
@@ -111,9 +111,11 @@ class TestController extends Controller
     public function show()
     {
         $pdf = PDF::loadView('user.sample-management.downloadReport');
-        // $pdf = \App::make('dompdf.wrapper');     
-         $pdf->getDOMPdf()->set_option('isPhpEnabled', true); 
-         return $pdf->download(rand().'.pdf');
+        // $pdf = \App::make('dompdf.wrapper');
+        $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
+
+        return $pdf->download(rand().'.pdf');
+
         return view('user.sample-management.downloadReport');
     }
 

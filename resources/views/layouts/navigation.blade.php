@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="pills-samples">
+            <div class="tab-pane fade {{ request()->segment(2) == 'batch' ? 'active show' : '' }}" id="pills-samples">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -115,7 +115,7 @@
                     </div>
                     <a href="{{ route('samplereception') }}" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Reception</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
+                    <a href="#" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Request</a>
                     <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
                     <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
                         Month</a>
