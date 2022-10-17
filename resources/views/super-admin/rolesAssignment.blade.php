@@ -1,4 +1,4 @@
-<x-app-layout>
+ia<x-app-layout>
     <!-- start page title -->
     {{-- <x-page-title>
         Roles Assignment
@@ -33,27 +33,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $key=>$user)
-                                <tr>
-                                  <td>
-                                    {{$key+1}}
-                                  </td>
-                                  <td>
-                                    {{$user->name ?? 'The model doesn\'t have a `name` attribute'}}
-                                  </td>
-                                  <td >
-                                    {{$user->roles_count}}
-                                  </td>
-                                  @if(config('laratrust.panel.assign_permissions_to_user'))
-                                  <td >
-                                    {{$user->permissions_count}}
-                                  </td>
-                                  @endif
-                                  <td>
-                                    <a
-                                      href="{{route('user-roles-assignment.edit', $user->id)}}" class="action-icon"> <i class="mdi mdi-pencil">Assign</i></a>
-                                  </td>
-                                </tr>
+                                @foreach ($users as $key => $user)
+                                    <tr>
+                                        <td>
+                                            {{ $key + 1 }}
+                                        </td>
+                                        <td>
+                                            {{ $user->name ?? 'The model doesn\'t have a `name` attribute' }}
+                                        </td>
+                                        <td>
+                                            {{ $user->roles_count }}
+                                        </td>
+                                        @if (config('laratrust.panel.assign_permissions_to_user'))
+                                            <td>
+                                                {{ $user->permissions_count }}
+                                            </td>
+                                        @endif
+                                        <td>
+                                            <a href="{{ route('user-roles-assignment.edit', $user->id) }}"
+                                                class="action-icon"> <i class="mdi mdi-pencil">Assign</i></a>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
