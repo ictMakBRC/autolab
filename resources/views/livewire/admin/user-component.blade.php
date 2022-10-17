@@ -77,7 +77,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"  wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="storeData">
@@ -201,8 +202,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="text" id="password" class="form-control"
-                                    placeholder="Auto-Generated" 
-                                    wire:model="password" readonly>
+                                    placeholder="Auto-Generated" wire:model="password" readonly>
                                 @error('password')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

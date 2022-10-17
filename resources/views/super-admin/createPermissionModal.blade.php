@@ -25,16 +25,18 @@
                          </div>
                          <div class="mb-3 col-md-12">
                              <label for="description" class="form-label">Description</label>
-                             <textarea type="email" id="description" class="form-control" name="description" placeholder="Some description for the permission"></textarea>
+                             <textarea type="email" id="description" class="form-control" name="description"
+                                 placeholder="Some description for the permission"></textarea>
                          </div>
                      </div>
                      <!-- end row-->
-                     <div class="d-grid mb-0 text-center">
-                         <button class="btn btn-success" type="submit">Save</button>
+                     <div class="modal-footer">
+                         <x-button>{{ __('Save') }}</x-button>
+                         <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __('Close') }}
+                         </x-button>
                      </div>
                  </form>
              </div>
-
          </div> <!-- end modal content-->
      </div> <!-- end modal dialog-->
  </div> <!-- end modal-->

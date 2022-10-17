@@ -51,14 +51,14 @@
                                             {{ $permission->description }}
                                         </td>
                                         <td class="table-action">
-                                            <a href="{{route('user-permissions.edit', $permission->id)}}" class="action-icon"> <i class="mdi mdi-pencil">edit</i></a>
+                                            <a href="{{ route('user-permissions.edit', $permission->id) }}"
+                                                class="action-icon"> <i class="mdi mdi-pencil">edit</i></a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
-
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

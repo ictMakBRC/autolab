@@ -217,10 +217,15 @@
                                                                 <textarea type="text" id="about2" class="form-control" name="about">{{ old('about', '') }}</textarea>
                                                             </div>
 
-                                                            <div class="mb-3 mt-1 col-md-12 text-end">
+                                                            {{-- <div class="mb-3 mt-1 col-md-12 text-end">
                                                                 <button class="btn btn-success" type="submit"
                                                                     id="submitBt">Save</button>
-                                                            </div>
+                                                            </div> --}}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <x-button>{{ __('Save') }}</x-button>
+                                                            {{-- <x-button type="button" class="btn btn-danger" 
+                                                                data-bs-dismiss="modal">{{ __('Close') }}</x-button> --}}
                                                         </div>
                                                     </form>
                                                 </div>
@@ -252,8 +257,8 @@
                                         <div class="mb-3 col-md-3">
                                             <label for="facility_type2" class="form-label">Facility Type<span
                                                     class="text-danger">*</span></label>
-                                            <select class="form-select" data-toggle="select2"
-                                                id="facility_type2" name="facility_type" required>
+                                            <select class="form-select" data-toggle="select2" id="facility_type2"
+                                                name="facility_type" required>
 
                                                 <option selected value="{{ $profile->facility_type }}">
                                                     {{ $profile->facility_type }}</option>
@@ -335,10 +340,9 @@
                                             <label for="about" class="form-label">About/Description</label>
                                             <textarea type="text" id="about" class="form-control" name="about" rows="5">{{ $profile->about }}</textarea>
                                         </div>
-                                        <div class="mb-3 mt-1 col-md-12 text-end">
-                                            <button class="btn btn-success" type="submit"
-                                                id="submitBt">Update</button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <x-button>{{ __('Update') }}</x-button>
                                     </div>
                                 </form>
                             @else
@@ -357,4 +361,4 @@
     </div>
     <!--end of row-->
 
-</x-super-admin-layout>
+    </x-super-admin-layout>
