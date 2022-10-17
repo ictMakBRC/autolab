@@ -25,32 +25,33 @@
                          </div>
                          <div class="mb-3 col-md-12">
                              <label for="description" class="form-label">Description</label>
-                             <textarea type="email" id="description" class="form-control" name="description" placeholder="Some description for the role"></textarea>
+                             <textarea type="email" id="description" class="form-control" name="description"
+                                 placeholder="Some description for the role"></textarea>
                          </div>
                      </div>
 
                      <div class="row">
-                        <h3 class="text-success">Permissions</h3>
+                         <h3 class="text-success">Permissions</h3>
                          @foreach ($permissions as $permission)
-                         <div class="mb-3 col-md-2">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="permission{{ $permission->id }}"
-                                    name="permissions[]" value="{{ $permission->id }}">
-                                <label class="form-check-label"
-                                    for="permission{{ $permission->id }}">{{$permission->display_name ?? $permission->name}}</label>
-                            </div>
-                         </div>
-                             
+                             <div class="mb-3 col-md-2">
+                                 <div class="form-check form-check-inline">
+                                     <input class="form-check-input" type="checkbox"
+                                         id="permission{{ $permission->id }}" name="permissions[]"
+                                         value="{{ $permission->id }}">
+                                     <label class="form-check-label"
+                                         for="permission{{ $permission->id }}">{{ $permission->display_name ?? $permission->name }}</label>
+                                 </div>
+                             </div>
                          @endforeach
-
                      </div>
                      <!-- end row-->
-                     <div class="d-grid mb-0 text-center">
-                         <button class="btn btn-success" type="submit">Save</button>
+                     <div class="modal-footer">
+                         <x-button>{{ __('Save') }}</x-button>
+                         <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __('Close') }}
+                         </x-button>
                      </div>
                  </form>
              </div>
-
          </div> <!-- end modal content-->
      </div> <!-- end modal dialog-->
  </div> <!-- end modal-->

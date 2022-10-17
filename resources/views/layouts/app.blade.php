@@ -12,8 +12,7 @@
     <!--plugins-->
     <link href="{{ asset('autolab-assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
-      {{-- <link href="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" /> --}}
-   
+
     <!-- Bootstrap CSS -->
     <link href="{{ asset('autolab-assets/css/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/bootstrap-extended.css') }}" rel="stylesheet" />
@@ -21,6 +20,10 @@
     <link href="{{ asset('autolab-assets/css/icons.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    {{-- <link href="{{ asset('autolab-assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('autolab-assets/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
@@ -33,9 +36,9 @@
     <link href="{{ asset('autolab-assets/css/dark-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/light-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
-    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />
-
+    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />    
     @livewireStyles
+    {{-- <livewire:styles /> --}}
 </head>
 
 <body>
@@ -44,10 +47,11 @@
     <div class="wrapper">
 
         @include('layouts.header')
-        @include('layouts.navigation')
-
+        @include('layouts.navigation')  
         <!--start content-->
         <main class="page-content">
+            {{-- <x-breadcrumb></x-breadcrumb>                   --}}
+             @include('layouts.messages')
             {{ $slot }}
             {{-- @include('layouts.user-table') --}}
         </main>
@@ -71,12 +75,12 @@
     <script src="{{ asset('autolab-assets/plugins/simplebar/js/simplebar.min.js') }}"></script>
     <script src="{{ asset('autolab-assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/pace.min.js') }}"></script>
-    {{-- <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/apexcharts-bundle/js/apexcharts.min.js') }}"></script> --}}
+
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/index.js') }}"></script>
+    <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
+    
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -93,10 +97,9 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
-    {{-- <script>
-        new PerfectScrollbar(".best-product")
-        new PerfectScrollbar(".top-sellers-list")
-    </script> --}}
+    {{-- <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/js/select2.full.min.js')}}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="{{ asset('autolab-assets/js/select2.script.js')}}" type="text/javascript"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -110,7 +113,7 @@
             $('#example1').DataTable({
                 "paging": true,
                 "lengthChange": false,
-                "searching": false,
+                "searching": true,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
@@ -118,8 +121,10 @@
             });
         });
     </script>
+@stack('scripts')
 
 @livewireScripts
+{{-- <livewire:scripts /> --}}
 </body>
 
 </html>

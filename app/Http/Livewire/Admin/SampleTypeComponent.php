@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Http\Livewire\Admin;
+
+use App\Models\Admin\Test;
+use App\Models\SampleType;
+use Livewire\Component;
+
+class SampleTypeComponent extends Component
+{
+    public $type;
+
+    public $status;
+
+    public $edit_id;
+
+    public $delete_id;
+
+    public $possible_tests = [];
+
+    public function updated($fields)
+    {
+        $this->validateOnly($fields, [
+            'type' => 'required|unique:sample_types',
+        ]);
+    }
+
+    public function storeData()
+    {
+        $this->validate([
+            'type' => 'required|unique:sample_types',
+        ]);
+        $sampleType = new SampleType();
+        $sampleType->type = $this->type;
+        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->save();
+        session()->flash('success', 'Sample Type created successfully.');
+        $this->status = '';
+        $this->type = '';
+        $this->possible_tests = [];
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function editdata($id)
+    {
+        $sampleType = SampleType::where('id', $id)->first();
+        $this->edit_id = $sampleType->id;
+        $this->type = $sampleType->type;
+        $this->status = $sampleType->status;
+        $this->possible_tests = $sampleType->possible_tests ?? [];
+
+        $this->dispatchBrowserEvent('edit-modal');
+    }
+
+    public function resetInputs()
+    {
+        $this->status = '';
+        $this->type = '';
+        $this->possible_tests = [];
+    }
+
+    public function updateData()
+    {
+        $this->validate([
+            'type' => 'required|unique:sample_types,type,'.$this->edit_id.'',
+            'status' => 'required',
+        ]);
+        $sampleType = SampleType::find($this->edit_id);
+        $sampleType->type = $this->type;
+        $sampleType->status = $this->status;
+        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->update();
+
+        session()->flash('success', 'Sample Type updated successfully');
+        $this->resetInputs();
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function deleteConfirmation($id)
+    {
+        $this->delete_id = $id;
+
+        $this->dispatchBrowserEvent('delete-modal');
+    }
+
+    public function deleteData()
+    {
+        try {
+            $value = SampleType::where('id', $this->delete_id)->first();
+            $value->delete();
+            $this->delete_id = '';
+            $this->dispatchBrowserEvent('close-modal');
+            session()->flash('success', 'Record deleted successfully.');
+        } catch(\Exception $error) {
+            session()->flash('erorr', 'Record can not be deleted !!.');
+        }
+    }
+
+    public function cancel()
+    {
+        $this->delete_id = '';
+    }
+
+    public function close()
+    {
+        $this->resetInputs();
+    }
+
+    public function render()
+    {
+        $sampleType = SampleType::all();
+        $tests = Test::select('id', 'name')->get();
+
+        return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');
+    }
+}

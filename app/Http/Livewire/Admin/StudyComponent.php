@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Livewire\Admin;
+
+use App\Models\Facility;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
+
+class StudyComponent extends Component
+{
+    public $name;
+
+    public $description;
+
+    public $facility_id;
+
+    public $is_active;
+
+    public $delete_id;
+
+    public $edit_id;
+
+    public function updated($fields)
+    {
+        $this->validateOnly($fields, [
+            'name' => 'required|unique:studies',
+            'facility_id' => 'required',
+            'is_active' => 'required',
+
+        ]);
+    }
+
+    public function storeData()
+    {
+        $this->validate([
+            'name' => 'required|unique:studies',
+            'facility_id' => 'required',
+            'is_active' => 'required',
+        ]);
+
+        $study = new Study();
+        $study->name = $this->name;
+        $study->description = $this->description;
+        $study->facility_id = $this->facility_id;
+        $study->save();
+        session()->flash('success', 'Study/Project created successfully.');
+        $this->reset(['name', 'description', 'facility_id', 'is_active']);
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function editdata($id)
+    {
+        $study = Study::where('id', $id)->first();
+        $this->edit_id = $study->id;
+        $this->name = $study->name;
+        $this->description = $study->description;
+        $this->facility_id = $study->facility_id;
+        $this->is_active = $study->is_active;
+        $this->dispatchBrowserEvent('edit-modal');
+    }
+
+    public function resetInputs()
+    {
+        $this->reset(['name', 'description', 'facility_id', 'is_active']);
+    }
+
+    public function updateData()
+    {
+        $this->validate([
+            'name' => 'required',
+        ]);
+        $study = Study::find($this->edit_id);
+        $study->name = $this->name;
+        $study->description = $this->description;
+        $study->facility_id = $this->facility_id;
+        $study->is_active = $this->is_active;
+        $study->update();
+        session()->flash('success', 'Study/project updated successfully.');
+        $this->reset(['name', 'description', 'facility_id', 'is_active']);
+        $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function deleteConfirmation($id)
+    {
+        $this->delete_id = $id;
+
+        $this->dispatchBrowserEvent('delete-modal');
+    }
+
+    public function deleteData()
+    {
+        try {
+            $study = Study::where('id', $this->delete_id)->first();
+            $study->delete();
+            $this->delete_id = '';
+            $this->dispatchBrowserEvent('close-modal');
+            session()->flash('success', 'Study/Project deleted successfully.');
+        } catch(Exception $error) {
+            session()->flash('erorr', 'Study/Project can not be deleted.');
+        }
+    }
+
+    public function cancel()
+    {
+        $this->delete_id = '';
+    }
+
+    public function close()
+    {
+        $this->resetInputs();
+    }
+
+    public function render()
+    {
+        $studies = Study::with('facility')->latest()->get();
+        $facilities = Facility::latest()->get();
+
+        return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
+    }
+}

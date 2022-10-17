@@ -22,12 +22,14 @@ File: style.css
 - Responsive
 
  */
-
+ @import url(../plugins/font-awesome/css/font-awesome.min.css);
+ @import url(../plugins/sweetalert/sweetalert.css);
+ @import url(../plugins/select2/dist/css/select2.min.css);
 
 /* General */
 
 body {
-    font-size: 14px;
+    font-size: 11px;
 	color: #4c5258;
 	letter-spacing: .5px;
     font-family: Roboto, sans-serif;
@@ -68,7 +70,7 @@ a {
 .top-header .navbar .top-navbar .nav-link {
 
     color: #293445;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     font-weight: 500;
 
