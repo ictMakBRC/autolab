@@ -114,9 +114,9 @@
                         </div>
                     </div>
                     <a href="{{ route('samplereception') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Reception</a>
+                            class="bi bi-house-door-fill"></i>Sample Reception</a>
                     <a href="#" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Request</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
+                    <a href="{{route('test-request')}}" class="list-group-item"><i class="bi bi-wallet"></i>Test Requests</a>
                     <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
                         Month</a>
                     <a href="#" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>

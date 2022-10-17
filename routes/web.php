@@ -16,6 +16,7 @@ use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,5 +60,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'SampleMgt'], function () {
     Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
     Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->name('specimen-request');
+    Route::get('tests/requests', TestRequestComponent::class)->name('test-request');
 });
 require __DIR__.'/auth.php';

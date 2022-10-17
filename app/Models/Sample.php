@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Study;
-use App\Models\Collector;
-use App\Models\Requester;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Sample extends Model
 {
@@ -45,6 +42,7 @@ class Sample extends Model
     {
         return $this->belongsTo(Collector::class, 'collected_by', 'id');
     }
+
     public static function boot()
     {
         parent::boot();

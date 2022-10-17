@@ -524,6 +524,11 @@
 
                                         <div class="modal-footer">
                                             @if (!$toggleForm)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="1"
+                                                    id="same_participant" checked wire:model="same_participant">
+                                                <label class="form-check-label" for="same_participant">Multiple sample entry for the same participant?</label>
+                                            </div>
                                                 <x-button class="btn-success">{{ __('Save') }}</x-button>
                                             @else
                                                 <x-button class="btn-success">{{ __('Update') }}</x-button>
@@ -553,6 +558,7 @@
                                             <th>Address</th>
                                             <th>Sample</th>
                                             <th>Sample ID</th>
+                                            <th>Lab No</th>
                                             <th>Study</th>
                                             <th>Requested By</th>
                                             <th>Collected By</th>
@@ -588,6 +594,13 @@
                                                 <td>
                                                     @if ($participant->sample)
                                                         {{ $participant->sample->sample_identity }}
+                                                    @else
+                                                        {{ __('N/A') }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($participant->sample)
+                                                      <strong class="text-success">{{ $participant->sample->lab_no }}</strong>  
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
