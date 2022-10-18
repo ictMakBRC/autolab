@@ -110,7 +110,9 @@
                                             @endif
                                             <td class="table-action">
                                                 @if ($sample->request_acknowledged_by)
-                                                <a type="button" class="btn btn-outline-success radius-30 px-3">Process</a>
+                                                <a type="button" class="btn btn-outline-success radius-30 px-3" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" title=""
+                                                data-bs-original-title="Attach Results">Process</a>
                                                 @else
                                                 <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title=""

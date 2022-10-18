@@ -6,54 +6,54 @@
         </div>
         <ul class="nav nav-pills flex-column">
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-dashboards"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-dashboards"
                     type="button"><i class="bi bi-house-door-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-patients" type="button"><i
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-patients" type="button"><i
                         class="bi bi-person-workspace"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-samples" type="button"><i
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
                         class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Referral">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-referrals"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-referrals"
                     type="button"><i class="bi bi-airplane-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-storage" type="button"><i
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-storage" type="button"><i
                         class="bi bi-archive-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Test management">
                 <button class="nav-link {{ request()->is('Admin/test*') ? 'active' : '' }}" data-bs-toggle="pill"
-                    data-bs-target="javascript: void(0);pills-tests" type="button">
+                    data-bs-target="#pills-tests" type="button">
                     <i class='bx bxs-flask'></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-logistics"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-logistics"
                     type="button"><i class="bi bi-bar-chart-line-fill"></i></button>
             </li>
 
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Trainings">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-trainings"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-trainings"
                     type="button"><i class="bi bi-easel2-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Documents/Resources">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-resources"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-resources"
                     type="button"><i class="bi bi-file-earmark-medical-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Engagements">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-engagements"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-engagements"
                     type="button"><i class="bi bi-file-earmark-easel-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Help Desk">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-helpdesk"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk"
                     type="button"><i class="bi bi-question-square-fill"></i></button>
             </li>
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
                 title="General Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="javascript: void(0);pills-management"
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management"
                     type="button"><i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
             </li>
 
