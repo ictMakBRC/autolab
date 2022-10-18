@@ -135,6 +135,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->reset(['tests_requested', 'tests']);
         $sampleType = SampleType::where('id', $this->sample_type_id)->first();
+        sleep(2);
         $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
     }
 
@@ -416,7 +417,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->tests_requested = $this->tests_requested;
-
+        $sample->test_count = count($this->tests_requested);
         $sample->save();
         $this->same_participant_id = $sample->participant_id;
         // foreach ($this->tests_requested as $test) {
@@ -485,6 +486,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->tests_requested = $this->tests_requested ?? [];
+        $sample->test_count = count($this->tests_requested)?? 0;
         $sample->update();
 
         $this->resetSampleInformationInputs();
