@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade {{ request()->segment(2) == 'batch' ? 'active show' : '' }}" id="pills-samples">
+            <div class="tab-pane fade {{ request()->segment(2) == 'batch'|| request()->segment(4) == 'test-results' ? 'active show' : '' }}" id="pills-samples">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -117,9 +117,8 @@
                             class="bi bi-house-door-fill"></i>Sample Reception</a>
                     <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Accessioning</a>
                     <a href="{{route('test-request')}}" class="list-group-item"><i class="bi bi-wallet"></i>Test Requests</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
-                        Month</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
+                    <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i class="bi bi-bar-chart-line"></i>Attach Results</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Test Reports</a>
                     <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
                 </div>
             </div>
@@ -178,6 +177,8 @@
                             class="bi bi-house-door-fill"></i>Test Types</a>
                     <a href="{{ route('tests.create') }}" class="list-group-item"><i
                             class="bi bi-cast"></i>New Test Type</a>
+                    <a href="{{ route('tests') }}" class="list-group-item"><i
+                        class="bi bi-cast"></i>Tests</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-logistics">

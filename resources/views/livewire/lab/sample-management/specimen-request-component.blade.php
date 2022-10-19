@@ -465,8 +465,8 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
                                         </div>
+                                        
                                         <div class="row mx-auto">
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
@@ -493,8 +493,8 @@
                                             <div class="spinner-border text-info" role="status"> <span
                                                     class="visually-hidden">Loading...</span>
                                             </div>
-                                            {{-- Fetching Associated Tests... --}}
                                         </div>
+
                                         @if (!$tests->isEmpty())
                                             <div class="row mx-auto" wire:loading.class='invisible'>
                                                 <h6> <strong class="text-success">Test(s) Requested</strong>
@@ -510,21 +510,18 @@
                                                                 id="test{{ $test->id }}"
                                                                 value="{{ $test->id }}"
                                                                 wire:model='tests_requested'>
-
                                                         </div>
                                                     @endforeach
                                                     @error('tests_requested')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
                                             </div>
                                         @else
                                             <div class="row mx-auto" wire:loading.class='invisible'>
                                                 <div class="text-danger col-md-12">No associated tests! Please select
                                                     sample type</div>
                                             </div>
-
                                         @endif
 
                                         <div class="modal-footer">
@@ -579,30 +576,35 @@
                                                     {{ $batch_no }}
                                                 </td>
                                                 <td>
+                                                @if ($participant->sample)
                                                     @if ($participant->sample->request_acknowledged_by)
-                                                        {{ $participant->identity }}
+                                                    {{ $participant->identity }}
                                                     @else
                                                         <a href="javascript: void(0);" class="action-ico"
                                                             wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
                                                     @endif
-
+                                                @else
+                                                    <a href="javascript: void(0);" class="action-ico"
+                                                    wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                @endif
                                                 </td>
+
                                                 <td>{{ $participant->age }}</td>
                                                 <td>{{ $participant->gender }}</td>
                                                 <td>{{ $participant->contact }}</td>
                                                 <td>{{ $participant->address }}</td>
                                                 <td>
-                                                    @if ($participant->sample->request_acknowledged_by)
-                                                        {{ $participant->sample->sampleType->type }}
-                                                    @else
-                                                        @if ($participant->sample)
-                                                            <a href="javascript: void(0);" class="action-ico"
-                                                                wire:click="editSampleInformation({{ $participant->sample->id }})">{{ $participant->sample->sampleType ? $participant->sample->sampleType->type : 'N/A' }}</a>
+                                                    @if ($participant->sample)
+                                                        @if ($participant->sample->request_acknowledged_by)
+                                                            {{ $participant->sample->sampleType->type }}
                                                         @else
-                                                            {{ __('N/A') }}
-                                                            <a href="javascript: void(0);" class="action-ico"
-                                                                wire:click="setParticipantId({{ $participant->id }})">Add</a>
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                        wire:click="editSampleInformation({{ $participant->sample->id }})">{{ $participant->sample->sampleType ? $participant->sample->sampleType->type : 'N/A' }}</a>
                                                         @endif
+                                                    @else
+                                                        {{ __('N/A') }}
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                            wire:click="setParticipantId({{ $participant->id }})">Add</a>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -644,14 +646,12 @@
                                                 <td class="table-action">
                                                     @if ($participant->sample)
                                                         {{ __('N/A') }}
-                                                        {{-- <a href="javascript: void(0);" class="action-ico" disabled> <i class="bi bi-trash"></i></a> --}}
                                                     @else
                                                         <a href="javascript: void(0);"
                                                             wire:click="deleteConfirmation({{ $participant->id }})"
                                                             class="action-ico">
                                                             <i class="bi bi-trash"></i></a>
                                                     @endif
-
                                                 </td>
                                             </tr>
                                         @empty
@@ -662,7 +662,6 @@
                         </div> <!-- end tab-content-->
                     </div> <!-- end card body-->
                 @endif
-
             </div> <!-- end card -->
         </div><!-- end col-->
 

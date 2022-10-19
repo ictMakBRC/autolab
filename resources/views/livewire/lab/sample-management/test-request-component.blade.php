@@ -37,11 +37,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <hr>
-                    <div class="row mb-0">
-
-                        
-                    </div> --}}
                 </div>
 
                 {{-- @if (!$samples->isEmpty()) --}}
@@ -62,6 +57,7 @@
                                         <th>Collected By</th>
                                         <th>Test Count</th>
                                         <th>Priority</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -81,13 +77,11 @@
                                             <td>
                                                 {{ $sample->sample_identity }}
                                             </td>
-
                                             <td>
                                                 <a href="javascript: void(0);"
                                                     wire:click="viewTests({{ $sample->id }})" class="action-ico">
                                                     <strong class="text-success">{{ $sample->lab_no }}</strong>
                                                 </a>
-
                                             </td>
                                             <td>
                                                 {{ $sample->study->name }}
@@ -108,20 +102,25 @@
                                                 <td><span class="badge bg-danger">{{ $sample->priority }}</span>
                                                 </td>
                                             @endif
+                                            <td>
+                                                <span class="badge bg-success">{{$sample->status }}</span>
+                                            </td>
                                             <td class="table-action">
                                                 @if ($sample->request_acknowledged_by)
-                                                <a type="button" class="btn btn-outline-success radius-30 px-3" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Attach Results">Process</a>
+                                                    <a href="{{ route('attach-test-results', $sample->id) }}"
+                                                        type="button" class="btn btn-outline-success radius-30 px-3"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title=""
+                                                        data-bs-original-title="Attach Results">Process</a>
                                                 @else
-                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Acknowledge Request"
-                                                    wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                    class="action-ico">
-                                                    <i class="bi bi-hand-thumbs-up"></i></a>
+                                                    <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Acknowledge Request"
+                                                        wire:click="acknowledgeRequest({{ $sample->id }})"
+                                                        class="action-ico">
+                                                        <i class="bi bi-hand-thumbs-up"></i></a>
                                                 @endif
-                                                
+
                                             </td>
                                         </tr>
                                     @empty
@@ -132,32 +131,8 @@
                     </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
                 {{-- @endif --}}
-
             </div> <!-- end card -->
         </div><!-- end col-->
-
-        {{-- //DELETE CONFIRMATION MODAL --}}
-        {{-- <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
-            data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Participant</h5>
-                        <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body pt-4 pb-4">
-                        <h6>This will delete this <strong class="text-danger">Participant together with associated
-                                Sample Data</strong> for this particular batch! Do you want to continue?</h6>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
-                        <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
         <div wire:ignore.self class="modal fade" id="view-tests" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -170,19 +145,35 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->
-                    <ul class="list-group">
-                        @forelse ($tests_requested as $test)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $test->name }}
-                            </li>
-                        @empty
-                        @endforelse
-                    </ul>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="list-group">
+                                @forelse ($tests_requested as $test)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ $test->name }}
+                                    </li>
+                                @empty
+                                @endforelse
+                            </ul>
+                        </div>
+                        @if ($clinical_notes)
+                            <div class="col-md-12">
+                                <div class="card-body text-center">
+                                    <div>
+                                        <h5 class="card-title">Clinical Notes</h5>
+                                    </div>
+                                    <p class="card-text">{{ $clinical_notes }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                    </div>
+
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
-                        <a type="button" class="btn btn-success radius-30 px-3">Process</a>
+                            <a type="button" class="btn btn-success radius-30 px-3">Process</a>
                         @endif
-                        
+
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
                             aria-label="Close">Close</button>
                     </div>
