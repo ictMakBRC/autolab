@@ -85,7 +85,7 @@
                             class="bi bi-cast"></i>Role Assiginment</a>
                     <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-cast"></i>User
                         Logs</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>User Activity</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>User Activity</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-patients">
@@ -95,18 +95,18 @@
                             <h5 class="mb-0">PATIENTS</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Create
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Create
                         New</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
                         Month</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
                 </div>
             </div>
 
-            <div class="tab-pane fade {{ request()->segment(2) == 'batch' ? 'active show' : '' }}" id="pills-samples">
+            <div class="tab-pane fade {{ request()->segment(2) == 'batch'|| request()->segment(4) == 'test-results' ? 'active show' : '' }}" id="pills-samples">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -114,13 +114,12 @@
                         </div>
                     </div>
                     <a href="{{ route('samplereception') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Reception</a>
-                    <a href="#" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Request</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
-                        Month</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
+                            class="bi bi-house-door-fill"></i>Sample Reception</a>
+                    <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Accessioning</a>
+                    <a href="{{route('test-request')}}" class="list-group-item"><i class="bi bi-wallet"></i>Test Requests</a>
+                    <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i class="bi bi-bar-chart-line"></i>Attach Results</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Test Reports</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-referrals">
@@ -130,15 +129,15 @@
                             <h5 class="mb-0">REFERRAL</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Outgoing</a>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Incoming</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Sequence Data</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>Track Sample</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>Equipment
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Sequence Data</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>Track Sample</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>Equipment
                         Profiling</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-archive"></i>Reports</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Reports</a>
 
                 </div>
             </div>
@@ -149,16 +148,16 @@
                             <h5 class="mb-0">STORAGE</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Search
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Search
                         Sample</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Store
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Store
                         New</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
                         Month</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
                 </div>
             </div>
             <div class="tab-pane fade {{ request()->segment(2) == 'test' ? 'active show' : '' }}"
@@ -178,6 +177,8 @@
                             class="bi bi-house-door-fill"></i>Test Types</a>
                     <a href="{{ route('tests.create') }}" class="list-group-item"><i
                             class="bi bi-cast"></i>New Test Type</a>
+                    <a href="{{ route('tests') }}" class="list-group-item"><i
+                        class="bi bi-cast"></i>Tests</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-logistics">
@@ -187,12 +188,12 @@
                             <h5 class="mb-0">LOGISTICS</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Inventory</a>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Suppliers</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-cast"></i>Couriers</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-wallet"></i>Dry Ice Sources</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Couriers</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>Dry Ice Sources</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-management">
@@ -230,9 +231,9 @@
                             <h5 class="mb-0">RESOURCES</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>General
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>General
                         Documents</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Shipment
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Shipment
                         Documents</a>
                 </div>
             </div>
@@ -244,11 +245,11 @@
                             <h5 class="mb-0">TRAININGS</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Trainers</a>
-                    <a href="#" class="list-group-item"><i
+                    <a href="javascript: void(0);" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Trainees</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Training
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Training
                         Materials</a>
                 </div>
             </div>
@@ -260,9 +261,9 @@
                             <h5 class="mb-0">ENGAGEMENTS</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Minutes</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Other</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Minutes</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Other</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
                 </div>
             </div>
 
@@ -273,10 +274,10 @@
                             <h5 class="mb-0">HELP DESK</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Tickets</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Resolved
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Tickets</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Resolved
                         Issues</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
                 </div>
             </div>
 
@@ -287,10 +288,10 @@
                             <h5 class="mb-0">HELP DESK</h5>
                         </div>
                     </div>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Tickets</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Resolved
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Tickets</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Resolved
                         Issues</a>
-                    <a href="#" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Reports</a>
                 </div>
             </div>
 

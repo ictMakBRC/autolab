@@ -15,11 +15,17 @@ return new class extends Migration
     {
         Schema::create('test_results', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('test_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->string('possible_result')->nullable();
-            $table->string('result_type')->nullable();
-            $table->string('uom')->nullable();
-            $table->foreignId('created_by')->references('id')->on('users')->nullable()->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('sample_id');
+            $table->unsignedBigInteger('test_id');
+            $table->string('result');
+            $table->string('attachment')->nullable();
+            $table->unsignedBigInteger('performed_by')->nullable();
+            $table->unsignedBigInteger('reviewed_by')->nullable();
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->dateTime('reviewed_at')->nullable();
+            $table->dateTime('approved_at')->nullable();
+            $table->string('status')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();
         });

@@ -1,22 +1,25 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
-use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\TestComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\StudyComponent;
 use App\Http\Livewire\Admin\CourierComponent;
-use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\EditTestComponent;
 use App\Http\Livewire\Admin\FacilityComponent;
-use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\LaboratoryComponent;
 use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\CollectorComponent;
 use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
 use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
-use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
-use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::get('categories', TestCategoryComponent::class)->name('categories');
     Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
     Route::resource('tests', TestController::class);
+    Route::get('test', TestComponent::class)->name('tests');
     Route::get('designations', DesignationComponent::class)->name('designations');
     Route::get('laboratories', LaboratoryComponent::class)->name('laboratories');
     Route::get('facilities', FacilityComponent::class)->name('facilities');
@@ -59,5 +63,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'SampleMgt'], function () {
     Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
     Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->name('specimen-request');
+    Route::get('tests/requests', TestRequestComponent::class)->name('test-request');
+    Route::get('sample/{sample}/test-results', AttachTestResultComponent::class)->name('attach-test-results');
 });
 require __DIR__.'/auth.php';
