@@ -64,6 +64,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'SampleMgt'], function () {
     Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
     Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->name('specimen-request');
     Route::get('tests/requests', TestRequestComponent::class)->name('test-request');
-    Route::get('sample/{sample}/test-results', AttachTestResultComponent::class)->name('attach-test-results');
+    Route::get('sample/{id}/test-results', AttachTestResultComponent::class)->name('attach-test-results');
 });
 require __DIR__.'/auth.php';

@@ -7,17 +7,14 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-
-                                    Attach Test Results
-                                    {{-- <strong class="text-success">{{ $batch_no }}</strong>
-                                    (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>) --}}
+                                    <h6 class="modal-title" id="staticBackdropLabel">Attach Test Results For Sample (<span
+                                            class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
+                                            class="text-info">{{ $lab_no }}</span></h6>
                                 </h5>
+                                result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }}
                                 <div class="ms-auto">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-primary">More...</button>
-
-
                                         <button type="button"
                                             class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
@@ -28,157 +25,167 @@
                                             {{-- @if ($tabToggleBtn)
                                                 <a class="dropdown-item" href="javascript:;"
                                                     wire:click="toggleTab()">Toggle Tabs</a>
-                                            @endif
+                                            @endif --}}
                                             <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
-                                                form</a> --}}
+                                                form</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- <hr>
-                    <div class="row mb-0">
-
-                        
-                    </div> --}}
                 </div>
-
-                {{-- @if (!$samples->isEmpty()) --}}
                 <div class="card-body">
-                    <div class="row">
-                        <div class="mb-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped mb-0 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Test Requested</th>
-                                            <th>Result to Append</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- @if (!$testrequest->request_detail->isEmpty())
-                                            @foreach ($testrequest->request_detail as $detail)
-                                                @if ($detail->test_type != null)
-                                                    <tr>
-                                                        <td><strong>{{ $detail->test_type->type }}
-                                                            </strong>
-                                                        </td>
-                                                        <td>
-                                                            <form method="POST"
-                                                                action="{{ route('testresults.store') }}"
-                                                                onsubmit="return confirm('{{ trans('Are you sure you want save this Result?') }}');"
-                                                                enctype="multipart/form-data">
-                                                                @csrf
+                    @if (!$testsRequested->isEmpty())
+                        <div class="row">
+                            <div class="mb-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0 w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Test Requested</th>
+                                                <th>Results and Comments</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- @if (!$testsRequested->isEmpty()) --}}
+                                            @foreach ($testsRequested as $test)
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                            wire:click="activateResultInput({{ $test->id }})"><strong
+                                                                class="text-success">{{ $test->name }}
+                                                            </strong></a>
+                                                    </td>
+                                                    <td>
+                                                        @if ($test->id === $test_id)
+                                                            <form wire:submit.prevent="storeTestResults()">
                                                                 <div class="row">
-                                                                    <div class="col-sm-8">
-                                                                        <input type="text"
-                                                                            class="form-control"
-                                                                            name="request_detail_id"
-                                                                            value="{{ $detail->id }}"
-                                                                            hidden required>
-                                                                        <input type="text"
-                                                                            class="form-control"
-                                                                            name="tracker"
-                                                                            value="{{ $testrequest->tracker }}"
-                                                                            hidden>
-                                                                        
-                                                                        @foreach ($detail->test_type->possible_results as $result)
-                                                                            <input type="text"
-                                                                                class="form-control"
-                                                                                name="type"
-                                                                                value="{{ $detail->test_type->type }}"
-                                                                                hidden>
-                                                                            @if ($result->result_type == 'Absolute')
-                                                                                <div class="form-check">
-                                                                                    <input type="radio"
-                                                                                        id="customRadio1"
-                                                                                        name="result"
-                                                                                        class="form-check-input"
-                                                                                        value="{{ $result->possible_result }}">
-                                                                                    <label
-                                                                                        class="form-check-label"
-                                                                                        for="customRadio1">{{ $result->possible_result }}</label>
-                                                                                </div>
-                                                                            @elseif($result->result_type == 'Attachment')
-                                                                                <div class="mb-2">
-                                                                                    @if ($result->possible_result == 'Referred')
-                                                                                        <input type="radio"
-                                                                                            id="customRadio1"
-                                                                                            name="result"
-                                                                                            class="form-check-input"
-                                                                                            value="{{ $result->possible_result }}">
-                                                                                        <label
-                                                                                            class="form-check-label"
-                                                                                            for="customRadio1">{{ $result->possible_result }}</label>
-                                                                                    @else
-                                                                                        <div
-                                                                                            class="mb-2">
-                                                                                            <input
-                                                                                                type="radio"
-                                                                                                id="customRadio1"
-                                                                                                name="result"
-                                                                                                class="form-check-input"
-                                                                                                value="{{ $result->possible_result }}">
-                                                                                            <label
-                                                                                                class="form-check-label"
-                                                                                                for="customRadio1">{{ $result->possible_result }}</label>
-                                                                                        </div>
-                                                                                        <input type="file"
-                                                                                            id="attachment"
-                                                                                            class="form-control"
-                                                                                            name="attachment"
-                                                                                            accept=".pdf">
-                                                                                    @endif
-                                                                                </div>
-                                                                            @elseif($result->result_type == 'Measurable')
-                                                                                <div class="mb-2">
-                                                                                    <input type="text"
-                                                                                        class="form-control"
-                                                                                        name="result"
-                                                                                        placeholder="Include units Like 10 {{ $result->uom }}"
-                                                                                        required>
-                                                                                </div>
-                                                                            @elseif($result->result_type == 'Free Text')
-                                                                                <div class="mb-2">
-
-                                                                                    @if ($detail->test_type->type == 'Urinalysis')
-                                                                                        <blade
-                                                                                            ___html_tags_0___ />
-                                                                                    @else
-                                                                                        <blade
-                                                                                            ___html_tags_1___ />
-                                                                                    @endif
-                                                                                </div>
-                                                                            @endif
-                                                                        @endforeach
+                                                                    <div class="col-md-5">
+                                                                        @if ($test->result_type == 'Absolute')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result</label>
+                                                                                <select class="form-select"
+                                                                                    id="result" wire:model="result">
+                                                                                    <option selected value="">
+                                                                                        Select</option>
+                                                                                    @foreach ($test->absolute_results as $result)
+                                                                                        <option
+                                                                                            value='{{ $result }}'>
+                                                                                            {{ $result }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                @error('result')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        @elseif($test->result_type == 'Text')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result</label>
+                                                                                <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}" wire:model="result"></textarea>
+                                                                                @error('result')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        @elseif($test->result_type == 'Measurable')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    wire:model="result"
+                                                                                    placeholder="Include units in {{ $test->measurable_result_uom }}">
+                                                                                @error('result')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        @elseif($test->result_type == 'File')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result
+                                                                                    Attachment</label>
+                                                                                <input type="file"
+                                                                                    class="form-control"
+                                                                                    wire:model="attachment"
+                                                                                    placeholder="Attach file">
+                                                                                @error('attachment')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        @endif
                                                                     </div>
-                                                                    <div class="col-sm-4">
-                                                                        <button type="submit"
-                                                                            class="btn btn-success"><i
-                                                                                class="mdi mdi-check"></i>Save
-                                                                            Result</button>
+
+                                                                    {{-- COMMENTS --}}
+                                                                    <div class="col-md-3">
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label">Comment</label>
+                                                                            @if ($test->comments != null)
+                                                                                <select class="form-select"
+                                                                                    id="comment" wire:model="comment">
+                                                                                    <option selected value="">
+                                                                                        Select</option>
+                                                                                    @foreach ($test->comments as $comment)
+                                                                                        <option
+                                                                                            value='{{ $comment }}'>
+                                                                                            {{ $comment }}
+                                                                                        </option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            @else
+                                                                                <textarea wire:model="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}"></textarea>
+                                                                            @endif
+                                                                            @error('comment')
+                                                                                <div class="text-danger text-small">
+                                                                                    {{ $message }}</div>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label">Performed
+                                                                                By</label>
+                                                                            <select class="form-select"
+                                                                                wire:model="performed_by">
+                                                                                <option selected value="">Select
+                                                                                </option>
+                                                                                @foreach ($users as $user)
+                                                                                    <option
+                                                                                        value='{{ $user->id }}'>
+                                                                                        {{ $user->fullName }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                            @error('performed_by')
+                                                                                <div class="text-danger text-small">
+                                                                                    {{ $message }}</div>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-1 mt-4 text-end">
+                                                                        <x-button>{{ __('Save') }}</x-button>
                                                                     </div>
                                                                 </div>
                                                             </form>
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                                                        @else
+                                                            <p>Please click Test to enter Result</p>
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endforeach
-                                        @else
-                                            <tr class="text-center">
-                                                <td colspan="2">
-                                                    <h3>No Data Available</h3>
-                                                </td>
-                                            </tr>
-
-                                        @endif --}}
-                                    </tbody>
-                                </table>
-                            </div> <!-- end preview-->
+                                        </tbody>
+                                    </table>
+                                </div> <!-- end preview-->
+                            </div>
+                            <hr>
                         </div>
-                        <hr>
-                    </div>
+                    @else
+                        {{-- <tr class="text-center">
+                            <td colspan="2">
+                                <h3>No Data Available</h3>
+                            </td>
+                        </tr> --}}
+                    @endif
                     <div class="tab-content">
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 ">
@@ -252,7 +259,6 @@
                                                     class="action-ico">
                                                     <i class="bi bi-hand-thumbs-up"></i></a>
                                                 @endif
-                                                
                                             </td>
                                         </tr>
                                     @empty
@@ -262,8 +268,6 @@
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
-                {{-- @endif --}}
-
             </div> <!-- end card -->
         </div><!-- end col-->
 
@@ -280,4 +284,3 @@
         @endpush
     </div>
 </div>
-

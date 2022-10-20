@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('priority')->nullable();
             $table->text('tests_requested')->nullable();
             $table->integer('test_count')->default(0);
+            $table->text('tests_performed')->nullable();
             $table->unsignedBigInteger('request_acknowledged_by')->nullable();
             $table->dateTime('date_acknowledged')->nullable();
             $table->unsignedBigInteger('created_by');

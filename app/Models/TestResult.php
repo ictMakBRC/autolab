@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 
-class TestResults extends Model
+class TestResult extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,7 @@ class TestResults extends Model
         'result',
         'attachment',
         'performed_by',
+        'comment',
         'reviewed_by',
         'approved_by',
         'reviewed_at',
@@ -26,9 +27,9 @@ class TestResults extends Model
         'creator_lab',
     ];
 
-    public function test_type()
+    public function sample()
     {
-        return $this->belongsTo(Tests::class);
+        return $this->belongsTo(Sample::class,'sample_id','id');
     }
 
     public static function boot()

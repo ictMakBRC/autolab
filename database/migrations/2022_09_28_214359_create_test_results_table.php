@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sample_id');
             $table->unsignedBigInteger('test_id');
-            $table->string('result');
+            $table->string('result')->nullable();
             $table->string('attachment')->nullable();
             $table->unsignedBigInteger('performed_by')->nullable();
+            $table->text('comment')->nullable();
             $table->unsignedBigInteger('reviewed_by')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->dateTime('reviewed_at')->nullable();

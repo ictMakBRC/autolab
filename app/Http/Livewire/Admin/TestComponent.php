@@ -62,6 +62,10 @@ class TestComponent extends Component
 
         $this->dynamicComments = [
             ['comment' => 'comment'],
+            ['comment' => 'comment'],
+            ['comment' => 'comment'],
+            ['comment' => 'comment'],
+            ['comment' => 'comment'],
         ];
     }
 

@@ -118,6 +118,8 @@
                     <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i class="bi bi-cast"></i>Specimen Accessioning</a>
                     <a href="{{route('test-request')}}" class="list-group-item"><i class="bi bi-wallet"></i>Test Requests</a>
                     <a href="javascript: void(0);" class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i class="bi bi-bar-chart-line"></i>Attach Results</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Review Requests</a>
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Approval Requests</a>
                     <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Test Reports</a>
                     <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
                 </div>
