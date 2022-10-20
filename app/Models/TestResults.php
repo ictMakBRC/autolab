@@ -12,10 +12,16 @@ class TestResults extends Model
     use HasFactory;
 
     protected $fillable = [
+        'sample_id',
         'test_id',
-        'result_type',
-        'possible_result',
-        'uom',
+        'result',
+        'attachment',
+        'performed_by',
+        'reviewed_by',
+        'approved_by',
+        'reviewed_at',
+        'approved_at',
+        'status',
         'created_by',
         'creator_lab',
     ];

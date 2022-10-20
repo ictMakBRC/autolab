@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->dateTime('reviewed_at')->nullable();
             $table->dateTime('approved_at')->nullable();
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();

@@ -33,6 +33,7 @@ return new class extends Migration
             $table->dateTime('date_acknowledged')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
+            $table->string('status');
             $table->timestamps();
         });
     }
