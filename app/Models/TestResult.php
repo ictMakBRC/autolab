@@ -2,20 +2,34 @@
 
 namespace App\Models;
 
-use App\Models\Admin\Test;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 
-class TestComment extends Model
+class TestResult extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['test_id', 'comment', 'created_by', 'creator_lab'];
+    protected $fillable = [
+        'sample_id',
+        'test_id',
+        'result',
+        'attachment',
+        'performed_by',
+        'comment',
+        'reviewed_by',
+        'approved_by',
+        'reviewed_at',
+        'approved_at',
+        'status',
+        'created_by',
+        'creator_lab',
+    ];
 
-    public function test()
+    public function sample()
     {
-        return $this->belongsTo(Test::class, 'test_id', 'id');
+        return $this->belongsTo(Sample::class,'sample_id','id');
     }
 
     public static function boot()

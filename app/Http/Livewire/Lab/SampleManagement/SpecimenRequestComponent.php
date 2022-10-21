@@ -34,6 +34,10 @@ class SpecimenRequestComponent extends Component
 
     public $activeParticipantTab = true;
 
+    public $same_participant;
+
+    public $same_participant_id;
+
     public $delete_id;
 
     public $toggleForm = false;
@@ -131,6 +135,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->reset(['tests_requested', 'tests']);
         $sampleType = SampleType::where('id', $this->sample_type_id)->first();
+        sleep(2);
         $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
     }
 
@@ -205,13 +210,55 @@ class SpecimenRequestComponent extends Component
             $participant->nok_relationship = $this->nok_relationship;
 
             $participant->save();
+
             $this->participant_id = $participant->id;
+            // $this->participant_id = $this->saveParticipant();
             $this->activeParticipantTab = false;
+            $this->resetParticipantInputs();
+
+            // if (!$this->same_participant) {
+            //     $this->resetParticipantInputs();
+            // }
 
             session()->flash('success', 'Participant Data Recorded successfully.');
-
-            $this->resetParticipantInputs();
         }
+    }
+
+    public function saveParticipant($id)
+    {
+        $participant = Participant::findOrFail($id);
+        $newParticipant = new Participant;
+        $newParticipant->sample_reception_id = $participant->sample_reception_id;
+        $newParticipant->participant_no = $this->generateParticipantNo();
+        $newParticipant->identity = $participant->identity;
+        $newParticipant->age = $participant->age;
+        $newParticipant->address = $participant->address;
+        $newParticipant->gender = $participant->gender;
+        $newParticipant->contact = $participant->contact;
+        $newParticipant->nok_contact = $participant->nok_contact;
+        $newParticipant->nok_address = $participant->nok_address;
+        $newParticipant->clinical_notes = $participant->clinical_notes;
+
+        $newParticipant->title = $participant->title;
+        $newParticipant->nin_number = $participant->nin_number;
+        $newParticipant->surname = $participant->surname;
+        $newParticipant->first_name = $participant->first_name;
+        $newParticipant->other_name = $participant->other_name;
+        $newParticipant->nationality = $participant->nationality;
+        $newParticipant->district = $participant->district;
+        $newParticipant->dob = $participant->dob;
+        $newParticipant->birth_place = $participant->birth_place;
+        $newParticipant->religious_affiliation = $participant->religious_affiliation;
+        $newParticipant->occupation = $participant->occupation;
+        $newParticipant->civil_status = $participant->civil_status;
+        $newParticipant->email = $participant->email;
+        $newParticipant->nok = $participant->nok;
+        $newParticipant->nok_relationship = $participant->nok_relationship;
+
+        $newParticipant->save();
+
+        return $newParticipant->id;
+        // $this->activeParticipantTab = false;
     }
 
     public function editParticipant(Participant $participant)
@@ -308,57 +355,88 @@ class SpecimenRequestComponent extends Component
             $this->resetSampleInformationInputs();
             $this->dispatchBrowserEvent('maximum-reached');
         } else {
-            $this->validate([
-                'requested_by' => 'required|integer',
-                'date_requested' => 'required|date',
-                'collected_by' => 'required|integer',
-                'date_collected' => 'required|date',
-                'study_id' => 'required|integer',
-                'sample_identity' => 'required|string|unique:samples',
-                'sample_is_for' => 'required|string',
-                'priority' => 'required|string',
-                'sample_type_id' => 'integer|required',
-                'tests_requested' => 'array|required',
-            ]);
-
-            $sample = new Sample();
-            $sample->participant_id = $this->participant_id;
-            $sample->sample_type_id = $this->sample_type_id;
-            $sample->sample_no = $this->generateSampleNo();
-            $sample->lab_no = $this->generateSampleNo();
-            $sample->requested_by = $this->requested_by;
-            $sample->date_requested = $this->date_requested;
-            $sample->collected_by = $this->collected_by;
-            $sample->date_collected = $this->date_collected;
-            $sample->study_id = $this->study_id;
-            $sample->sample_identity = $this->sample_identity;
-            $sample->sample_is_for = $this->sample_is_for;
-            $sample->priority = $this->priority;
-            $sample->tests_requested = $this->tests_requested;
-
-            $sample->save();
-
-            // foreach ($this->tests_requested as $test) {
-            //     $testRequest = new  TestRequest();
-            //     $testRequest->sample_id = $sample->id;
-            //     $testRequest->test_id = $test;
-            //     $testRequest->result_status = 'Pending';
-            //     $testRequest->save();
-            // }
-            $sampleReception = SampleReception::where('batch_no', $this->batch_no)->first();
-            $sampleReception->increment('samples_handled');
-            $this->batch_samples_handled = $sampleReception->samples_handled;
-            $this->tests_requested = [];
-
-            if ($this->batch_sample_count == $this->batch_samples_handled) {
+            if ($this->same_participant && $this->participant_id) {
+                //just save sample information
+                $this->saveSampleInformation();
+                $this->resetSampleInformationInputs();
+                $this->tests = collect([]);
+                $this->activeParticipantTab = false;
+                session()->flash('success', 'Sample Request Data Recorded successfully.');
+            } elseif ($this->same_participant && ! $this->participant_id) {
+                //save participant and save sample information
+                $this->participant_id = $this->saveParticipant($this->same_participant_id);
+                $this->saveSampleInformation();
+                $this->resetParticipantInputs();
+                $this->resetSampleInformationInputs();
+                $this->tests = collect([]);
+                $this->activeParticipantTab = false;
+                session()->flash('success', 'Sample Request Data Recorded successfully.');
+            } elseif (! $this->same_participant && $this->participant_id) {
+                //just save sample information but return to participant tab
+                $this->saveSampleInformation();
+                $this->resetSampleInformationInputs();
+                $this->tests = collect([]);
+                $this->reset(['same_participant_id', 'same_participant']);
                 $this->activeParticipantTab = true;
-                $this->tabToggleBtn = true;
+                session()->flash('success', 'Sample Request Data Recorded successfully.');
+            } else {
+                //return to participant tab
+                $this->tests = collect([]);
+                $this->reset(['same_participant_id', 'same_participant']);
+                $this->activeParticipantTab = true;
             }
-            $this->activeParticipantTab = true;
-            $this->resetSampleInformationInputs();
-            session()->flash('success', 'Sample Request Data Recorded successfully.');
         }
-        // $this->resetParticipantInputs();
+    }
+
+    public function saveSampleInformation()
+    {
+        $this->validate([
+            'requested_by' => 'required|integer',
+            'date_requested' => 'required|date',
+            'collected_by' => 'required|integer',
+            'date_collected' => 'required|date',
+            'study_id' => 'required|integer',
+            'sample_identity' => 'required|string|unique:samples',
+            'sample_is_for' => 'required|string',
+            'priority' => 'required|string',
+            'sample_type_id' => 'integer|required',
+            'tests_requested' => 'array|required',
+        ]);
+
+        $sample = new Sample();
+        $sample->participant_id = $this->participant_id;
+        $sample->sample_type_id = $this->sample_type_id;
+        $sample->sample_no = $this->generateSampleNo();
+        $sample->lab_no = $this->generateSampleNo();
+        $sample->requested_by = $this->requested_by;
+        $sample->date_requested = $this->date_requested;
+        $sample->collected_by = $this->collected_by;
+        $sample->date_collected = $this->date_collected;
+        $sample->study_id = $this->study_id;
+        $sample->sample_identity = $this->sample_identity;
+        $sample->sample_is_for = $this->sample_is_for;
+        $sample->priority = $this->priority;
+        $sample->tests_requested = $this->tests_requested;
+        $sample->test_count = count($this->tests_requested);
+        $sample->save();
+        $this->same_participant_id = $sample->participant_id;
+        // foreach ($this->tests_requested as $test) {
+        //     $testRequest = new  TestRequest();
+        //     $testRequest->sample_id = $sample->id;
+        //     $testRequest->test_id = $test;
+        //     $testRequest->result_status = 'Pending';
+        //     $testRequest->save();
+        // }
+        $sampleReception = SampleReception::where('batch_no', $this->batch_no)->first();
+        $sampleReception->increment('samples_handled');
+        $this->batch_samples_handled = $sampleReception->samples_handled;
+        $this->tests_requested = [];
+
+        if ($this->batch_sample_count == $this->batch_samples_handled) {
+            $this->activeParticipantTab = true;
+            $this->tabToggleBtn = true;
+            $this->reset(['same_participant_id', 'same_participant']);
+        }
     }
 
     public function editSampleInformation(Sample $sample)
@@ -408,6 +486,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->tests_requested = $this->tests_requested ?? [];
+        $sample->test_count = count($this->tests_requested) ?? 0;
         $sample->update();
 
         $this->resetSampleInformationInputs();
@@ -480,6 +559,8 @@ class SpecimenRequestComponent extends Component
                 $participant_no = 'BRC'.$yearStart->year.'-100P';
             }
         } else {
+            // $dig= str_pad($dig, 3, '0', STR_PAD_LEFT);
+            // str_pad($value, 8, '0', STR_PAD_LEFT);
             $participant_no = 'BRC'.$yearStart->year.'-100P';
         }
 
@@ -514,7 +595,7 @@ class SpecimenRequestComponent extends Component
         $requesters = Requester::where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
         $studies = Study::where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
         $sampleTypes = SampleType::orderBy('type', 'asc')->get();
-        $participants = Participant::with(['sample','sample.sampleType:id,type','sample.study:id,name','sample.requester:id,name','sample.collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
+        $participants = Participant::with(['sample', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
 
         return view('livewire.lab.sample-management.specimen-request-component', compact('sampleTypes', 'collectors', 'studies', 'requesters', 'participants'))->layout('layouts.app');
     }

@@ -465,8 +465,8 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
                                         </div>
+                                        
                                         <div class="row mx-auto">
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
@@ -482,7 +482,6 @@
                                                             <option value='{{ $sampleType->id }}'>
                                                                 {{ $sampleType->type }}</option>
                                                         @endforeach
-                                                        <option value=''>Reset</option>
                                                     </select>
                                                     @error('sample_type_id')
                                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -490,8 +489,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div wire:loading.delay>
+                                            <div class="spinner-border text-info" role="status"> <span
+                                                    class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+
                                         @if (!$tests->isEmpty())
-                                            <div class="row mx-auto">
+                                            <div class="row mx-auto" wire:loading.class='invisible'>
                                                 <h6> <strong class="text-success">Test(s) Requested</strong>
                                                 </h6>
                                                 <hr>
@@ -505,25 +510,28 @@
                                                                 id="test{{ $test->id }}"
                                                                 value="{{ $test->id }}"
                                                                 wire:model='tests_requested'>
-
                                                         </div>
                                                     @endforeach
                                                     @error('tests_requested')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
                                             </div>
                                         @else
-                                            <div class="row mx-auto">
+                                            <div class="row mx-auto" wire:loading.class='invisible'>
                                                 <div class="text-danger col-md-12">No associated tests! Please select
                                                     sample type</div>
                                             </div>
-
                                         @endif
 
                                         <div class="modal-footer">
                                             @if (!$toggleForm)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="1"
+                                                        id="same_participant" checked wire:model="same_participant">
+                                                    <label class="form-check-label" for="same_participant">Multiple
+                                                        sample entry for the same participant?</label>
+                                                </div>
                                                 <x-button class="btn-success">{{ __('Save') }}</x-button>
                                             @else
                                                 <x-button class="btn-success">{{ __('Update') }}</x-button>
@@ -553,6 +561,7 @@
                                             <th>Address</th>
                                             <th>Sample</th>
                                             <th>Sample ID</th>
+                                            <th>Lab No</th>
                                             <th>Study</th>
                                             <th>Requested By</th>
                                             <th>Collected By</th>
@@ -567,27 +576,48 @@
                                                     {{ $batch_no }}
                                                 </td>
                                                 <td>
+                                                @if ($participant->sample)
+                                                    @if ($participant->sample->request_acknowledged_by)
+                                                    {{ $participant->identity }}
+                                                    @else
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                            wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                    @endif
+                                                @else
                                                     <a href="javascript: void(0);" class="action-ico"
-                                                        wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                    wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                @endif
                                                 </td>
+
                                                 <td>{{ $participant->age }}</td>
                                                 <td>{{ $participant->gender }}</td>
                                                 <td>{{ $participant->contact }}</td>
                                                 <td>{{ $participant->address }}</td>
                                                 <td>
                                                     @if ($participant->sample)
+                                                        @if ($participant->sample->request_acknowledged_by)
+                                                            {{ $participant->sample->sampleType->type }}
+                                                        @else
                                                         <a href="javascript: void(0);" class="action-ico"
-                                                            wire:click="editSampleInformation({{ $participant->sample->id }})">{{ $participant->sample->sampleType ? $participant->sample->sampleType->type : 'N/A' }}</a>
+                                                        wire:click="editSampleInformation({{ $participant->sample->id }})">{{ $participant->sample->sampleType ? $participant->sample->sampleType->type : 'N/A' }}</a>
+                                                        @endif
                                                     @else
-                                                    {{ __('N/A') }}
+                                                        {{ __('N/A') }}
                                                         <a href="javascript: void(0);" class="action-ico"
                                                             wire:click="setParticipantId({{ $participant->id }})">Add</a>
                                                     @endif
-
                                                 </td>
                                                 <td>
                                                     @if ($participant->sample)
                                                         {{ $participant->sample->sample_identity }}
+                                                    @else
+                                                        {{ __('N/A') }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($participant->sample)
+                                                        <strong
+                                                            class="text-success">{{ $participant->sample->lab_no }}</strong>
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
@@ -614,10 +644,14 @@
                                                     @endif
                                                 </td>
                                                 <td class="table-action">
-                                                    <a href="javascript: void(0);"
-                                                        wire:click="deleteConfirmation({{ $participant->id }})"
-                                                        class="action-ico">
-                                                        <i class="bi bi-trash"></i></a>
+                                                    @if ($participant->sample)
+                                                        {{ __('N/A') }}
+                                                    @else
+                                                        <a href="javascript: void(0);"
+                                                            wire:click="deleteConfirmation({{ $participant->id }})"
+                                                            class="action-ico">
+                                                            <i class="bi bi-trash"></i></a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
@@ -628,7 +662,6 @@
                         </div> <!-- end tab-content-->
                     </div> <!-- end card body-->
                 @endif
-
             </div> <!-- end card -->
         </div><!-- end col-->
 
@@ -669,7 +702,6 @@
                 window.addEventListener('maximum-reached', event => {
                     alert('Maximum number of participants in this batch already Recorded.');
                 });
-
             </script>
         @endpush
     </div>

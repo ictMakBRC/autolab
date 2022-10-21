@@ -164,6 +164,7 @@
                                         <th>Rejected</th>
                                         <th>Received By</th>
                                         <th>Date Received</th>
+                                        <th>Accessioned</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -185,6 +186,7 @@
                                             <td>{{ $sampleReception->samples_rejected }}</td>
                                             <td>{{ $sampleReception->receiver->fullName }}</td>
                                             <td>{{ $sampleReception->created_at }}</td>
+                                            <td>{{ $sampleReception->samples_handled }}</td>
                                             @if ($sampleReception->status == 'Pending')
                                                 <td><span
                                                         class="badge bg-warning">{{ $sampleReception->status }}</span>
@@ -205,10 +207,14 @@
                                                     wire:click="showData({{ $sampleReception->id }})"
                                                     data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
 
-                                                <a href="{{route('specimen-request',$sampleReception->batch_no)}}" class="action-ico"> <i
+                                                <a href="{{route('specimen-request',$sampleReception->batch_no)}}" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Accession Samples" class="action-ico"> <i
                                                         class="bi bi-pencil-square"></i></a>
 
-                                                <a href="javascript: void(0);"
+                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" title=""
+                                                data-bs-original-title="Delete Record"
                                                     wire:click="deleteConfirmation({{ $sampleReception->id }})"
                                                     class="action-ico">
                                                     <i class="bi bi-trash"></i></a>

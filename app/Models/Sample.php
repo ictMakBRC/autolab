@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Study;
-use App\Models\Collector;
-use App\Models\Requester;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Sample extends Model
 {
@@ -15,10 +12,11 @@ class Sample extends Model
 
     protected $fillable = ['participant_id', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
 
-        'study_id', 'sample_is_for', 'priority', 'tests_requested', 'created_by', 'creator_lab', ];
+        'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count','tests_performed', 'date_acknowledged', 'request_acknowledged_by','status', 'created_by', 'creator_lab', ];
 
     protected $casts = [
         'tests_requested' => 'array',
+        'tests_performed' =>'array',
     ];
 
     public function participant()
@@ -45,6 +43,7 @@ class Sample extends Model
     {
         return $this->belongsTo(Collector::class, 'collected_by', 'id');
     }
+
     public static function boot()
     {
         parent::boot();
