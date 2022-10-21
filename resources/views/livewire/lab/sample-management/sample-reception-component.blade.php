@@ -177,8 +177,13 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
+                                                @if ($sampleReception->samples_handled==0)
                                                 <a href="javascript: void(0);" class="action-ico"
                                                 wire:click="editdata({{ $sampleReception->id }})">{{ $sampleReception->batch_no }} </a>
+                                                @else
+                                                {{ $sampleReception->batch_no }}
+                                                @endif
+                                                
                                             </td>
                                             <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
                                             </td>
@@ -214,13 +219,14 @@
                                                     data-bs-placement="bottom" title=""
                                                     data-bs-original-title="Accession Samples" class="action-ico"> <i
                                                         class="bi bi-pencil-square"></i></a>
-
+                                                @if ($sampleReception->samples_handled==0)
                                                 <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title=""
                                                 data-bs-original-title="Delete Record"
                                                     wire:click="deleteConfirmation({{ $sampleReception->id }})"
                                                     class="action-ico">
                                                     <i class="bi bi-trash"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @endif

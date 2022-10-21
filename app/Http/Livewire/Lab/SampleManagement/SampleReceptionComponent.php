@@ -189,7 +189,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->rejection_reason;
+        $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
         $sampleReception->save();
         session()->flash('success', 'Sample Reception Data created successfully.');
 
@@ -273,7 +273,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->rejection_reason;
+        $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
         $sampleReception->update();
 
         session()->flash('success', 'Sample Reception Data updated successfully.');
