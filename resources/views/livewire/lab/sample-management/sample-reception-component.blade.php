@@ -171,6 +171,9 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($sampleReceptions as $key => $sampleReception)
+                                    @if ($sampleReception->samples_accepted != $sampleReception->samples_handled)
+                                        
+                                   
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
@@ -220,6 +223,7 @@
                                                     <i class="bi bi-trash"></i></a>
                                             </td>
                                         </tr>
+                                        @endif
                                     @empty
                                     @endforelse
                                 </tbody>

@@ -418,6 +418,7 @@ class SpecimenRequestComponent extends Component
         $sample->priority = $this->priority;
         $sample->tests_requested = $this->tests_requested;
         $sample->test_count = count($this->tests_requested);
+        $sample->status = 'Accessioned';
         $sample->save();
         $this->same_participant_id = $sample->participant_id;
         // foreach ($this->tests_requested as $test) {

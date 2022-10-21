@@ -2,54 +2,65 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\User;
-use App\Models\Sample;
-use Livewire\Component;
 use App\Models\Admin\Test;
+use App\Models\Sample;
 use App\Models\TestResult;
+use App\Models\User;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AttachTestResultComponent extends Component
 {
     use WithFileUploads;
-    
+
     public $requestedTests;
-    public $tests_performed=[];
+
+    public $tests_performed = [];
+
     public $sample;
+
     public $sample_id;
+
     public $test_id;
+
     public $result;
+
     public $attachment;
+
     public $attachmentPath;
+
     public $performed_by;
+
     public $reviewed_by;
+
     public $approved_by;
+
     public $comment;
+
     public $status;
 
     public $sample_identity;
+
     public $lab_no;
 
     public function mount($id)
     {
-        $sample=Sample::findOrFail($id);
+        $sample = Sample::findOrFail($id);
         $this->sample = $sample;
         $this->sample_id = $sample->id;
         $this->sample_identity = $sample->sample_identity;
         $this->lab_no = $sample->lab_no;
-        $testsPendingResults=array_diff($sample->tests_requested,$sample->tests_performed??[]);
+        $testsPendingResults = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
-        if (count($testsPendingResults)>0) {
+        if (count($testsPendingResults) > 0) {
             $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)->orderBy('name', 'asc')->get();
             $this->test_id = $this->requestedTests[0]->id;
-        } 
-        else {
-            $this->requestedTests=collect([]);
+        } else {
+            $this->requestedTests = collect([]);
             $this->reset('test_id');
         }
 
         $this->tests_performed = (array) $sample->tests_performed;
-       
     }
 
     public function storeTestResults()
@@ -64,7 +75,6 @@ class AttachTestResultComponent extends Component
             ]);
             $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
             $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
-
         } else {
             $this->attachmentPath = null;
         }
@@ -75,19 +85,20 @@ class AttachTestResultComponent extends Component
         $testResult->result = $this->result;
         $testResult->attachment = $this->attachmentPath;
         $testResult->performed_by = $this->performed_by;
-        $testResult->comment= $this->comment;
-        $testResult->status= 'Pending Review';
+        $testResult->comment = $this->comment;
+        $testResult->status = 'Pending Review';
 
         $testResult->save();
 
-        array_push($this->tests_performed,"{$testResult->test_id}");
-        $associatedSample= Sample::findOrfail($this->sample_id);
-        $associatedSample->update(['tests_performed'=>$this->tests_performed]);
+        array_push($this->tests_performed, "{$testResult->test_id}");
+        $associatedSample = Sample::findOrfail($this->sample_id);
+        $associatedSample->update(['tests_performed' => $this->tests_performed]);
 
-        if (count(array_diff($associatedSample->tests_requested,$associatedSample->tests_performed))==0) {
-            $associatedSample->update(['status'=>'Tests Done']);
+        if (count(array_diff($associatedSample->tests_requested, $associatedSample->tests_performed)) == 0) {
+            $associatedSample->update(['status' => 'Tests Done']);
+            redirect()->route('test-request');
         }
-        
+
         $this->resetResultInputs();
         $this->mount($associatedSample->id);
         session()->flash('success', 'Test Results Recorded successfully.');
@@ -95,25 +106,25 @@ class AttachTestResultComponent extends Component
 
     public function activateResultInput($id)
     {
-        $this->reset(['result','attachment','performed_by','comment']);
+        $this->reset(['result', 'attachment', 'performed_by', 'comment']);
         $this->test_id = $id;
-       
     }
 
     public function resetResultInputs()
     {
-        $this->reset(['result','attachment','performed_by','comment','attachmentPath']);
+        $this->reset(['result', 'attachment', 'performed_by', 'comment', 'attachmentPath']);
     }
 
     public function close()
     {
-        $this->reset(['result','attachment','performed_by','comment']);
+        $this->reset(['result', 'attachment', 'performed_by', 'comment']);
     }
 
     public function render()
     {
         $users = User::all();
-        $testsRequested=$this->requestedTests??collect();
-        return view('livewire.lab.sample-management.attach-test-result-component',compact('users','testsRequested'));
+        $testsRequested = $this->requestedTests ?? collect();
+
+        return view('livewire.lab.sample-management.attach-test-result-component', compact('users', 'testsRequested'));
     }
 }

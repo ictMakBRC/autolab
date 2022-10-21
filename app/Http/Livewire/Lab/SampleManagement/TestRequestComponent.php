@@ -14,9 +14,12 @@ class TestRequestComponent extends Component
     public $request_acknowledged_by;
 
     public $sample_identity;
+
     public $clinical_notes;
 
     public $lab_no;
+
+    public $sample_id;
 
     public function mount()
     {
@@ -26,12 +29,14 @@ class TestRequestComponent extends Component
     public function viewTests(Sample $sample)
     {
         $this->reset(['tests_requested']);
+
         $tests = Test::whereIn('id', $sample->tests_requested)->get();
         $this->tests_requested = $tests;
         $this->sample_identity = $sample->sample_identity;
         $this->lab_no = $sample->lab_no;
         $this->request_acknowledged_by = $sample->request_acknowledged_by;
-        $this->clinical_notes=$sample->participant->clinical_notes;
+        $this->clinical_notes = $sample->participant->clinical_notes;
+        $this->sample_id = $sample->id;
 
         $this->dispatchBrowserEvent('view-tests');
     }
@@ -48,12 +53,12 @@ class TestRequestComponent extends Component
     public function close()
     {
         $this->tests_requested = collect([]);
-        $this->reset(['sample_identity', 'lab_no', 'request_acknowledged_by']);
+        $this->reset(['sample_id', 'sample_identity', 'lab_no', 'request_acknowledged_by']);
     }
 
     public function render()
     {
-        $samples = Sample::with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->get();
+        $samples = Sample::with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->whereIn('status', ['Accessioned', 'Processing'])->get();
 
         return view('livewire.lab.sample-management.test-request-component', compact('samples'));
     }

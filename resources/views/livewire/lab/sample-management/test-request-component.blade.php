@@ -117,8 +117,8 @@
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Acknowledge Request"
                                                         wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico">
-                                                        <i class="bi bi-hand-thumbs-up"></i></a>
+                                                        class="action-ico btn btn-outline-success radius-30 px-3">
+                                                        Acknowledge</a>
                                                 @endif
 
                                             </td>
@@ -171,7 +171,7 @@
 
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
-                            <a type="button" class="btn btn-success radius-30 px-3">Process</a>
+                            <a href="{{ route('attach-test-results', $sample_id) }}" type="button" class="btn btn-success radius-30 px-3">Process</a>
                         @endif
 
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
