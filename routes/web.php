@@ -38,16 +38,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 
-Route::get('/updateContractStatus', [MassUpdateController::class, 'contractStatusUpdate'])->middleware('auth')->name('contractStatus.update');
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
-    Route::get('categories', TestCategoryComponent::class)->name('categories');
-    Route::get('sample_types', SampleTypeComponent::class)->name('sampletypes');
-    Route::resource('tests', TestController::class);
+    Route::get('test-categories', TestCategoryComponent::class)->name('categories');
+    Route::get('sample-types', SampleTypeComponent::class)->name('sampletypes');
     Route::get('test', TestComponent::class)->name('tests');
     Route::get('designations', DesignationComponent::class)->name('designations');
     Route::get('laboratories', LaboratoryComponent::class)->name('laboratories');
@@ -56,12 +53,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::get('sample-collectors', CollectorComponent::class)->name('collectors');
     Route::get('kits', KitComponent::class)->name('kits');
     Route::get('platforms', PlatformComponent::class)->name('platforms');
-
     Route::get('studies', StudyComponent::class)->name('studies');
     Route::get('couriers', CourierComponent::class)->name('couriers');
     Route::get('user-management', UserComponent::class)->name('usermanagement');
-    Route::get('test/edit/{id}', EditTestComponent::class)->name('editTest');
-    Route::get('test/show', [TestController::class, 'show'])->name('showTest');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'sampleMgt'], function () {

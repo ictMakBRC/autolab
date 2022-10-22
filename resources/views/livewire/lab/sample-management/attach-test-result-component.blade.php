@@ -180,13 +180,9 @@
                             <hr>
                         </div>
                     @else
-                        {{-- <tr class="text-center">
-                            <td colspan="2">
-                                <h3>No Data Available</h3>
-                            </td>
-                        </tr> --}}
+
                     @endif
-                    <div class="tab-content">
+                    {{-- <div class="tab-content">
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 ">
                                 <thead>
@@ -204,83 +200,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @forelse ($samples as $key => $sample)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>
-                                                {{ $sample->participant->sampleReception->batch_no }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->participant->identity }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->sampleType->type }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->sample_identity }}
-                                            </td>
 
-                                            <td>
-                                                <a href="javascript: void(0);"
-                                                    wire:click="viewTests({{ $sample->id }})" class="action-ico">
-                                                    <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                                </a>
-
-                                            </td>
-                                            <td>
-                                                {{ $sample->study->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->requester->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->collector->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->test_count }}
-                                            </td>
-                                            @if ($sample->priority == 'Normal')
-                                                <td><span class="badge bg-info">{{ $sample->priority }}</span>
-                                                </td>
-                                            @else
-                                                <td><span class="badge bg-danger">{{ $sample->priority }}</span>
-                                                </td>
-                                            @endif
-                                            <td class="table-action">attach-test-results
-                                                @if ($sample->request_acknowledged_by)
-                                                <a href="{{route('attach-test-results',$sample->id )}}" type="button" class="btn btn-outline-success radius-30 px-3" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Attach Results">Process</a>
-                                                @else
-                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Acknowledge Request"
-                                                    wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                    class="action-ico">
-                                                    <i class="bi bi-hand-thumbs-up"></i></a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                    @endforelse --}}
                                 </tbody>
                             </table>
                         </div> <!-- end preview-->
-                    </div> <!-- end tab-content-->
+                    </div> <!-- end tab-content--> --}}
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
 
-        @push('scripts')
-            <script>
-                // window.addEventListener('close-modal', event => {
-                //     $('#view_tests').modal('hide');
-                // });
-
-                // window.addEventListener('view-tests', event => {
-                //     $('#view-tests').modal('show');
-                // });
-            </script>
-        @endpush
     </div>
 </div>
