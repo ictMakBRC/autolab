@@ -7,11 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-
                                     Test Requests
-                                    {{-- <strong class="text-success">{{ $batch_no }}</strong>
-                                    (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>) --}}
                                 </h5>
                                 <div class="ms-auto">
                                     <div class="btn-group">
@@ -39,11 +35,10 @@
                     </div>
                 </div>
 
-                {{-- @if (!$samples->isEmpty()) --}}
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                            <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -130,7 +125,6 @@
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
-                {{-- @endif --}}
             </div> <!-- end card -->
         </div><!-- end col-->
 
