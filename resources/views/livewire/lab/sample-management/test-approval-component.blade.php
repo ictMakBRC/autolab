@@ -89,7 +89,7 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="Approve Results"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-success"><i class="bi bi-check2-square"></i></a>
+                                                        class="action-ico btn btn-outline-info"><i class="bi bi-check2-square"></i></a>
                                                 </td>
                                             </tr>
                                         @empty

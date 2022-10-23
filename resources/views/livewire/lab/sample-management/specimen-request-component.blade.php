@@ -19,11 +19,11 @@
                                 </h5>
                                 <div class="ms-auto">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary">More...</button>
+                                        <button type="button" class="btn btn-outline-info">More...</button>
 
 
                                         <button type="button"
-                                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
                                                 Dropdown</span>
                                         </button>

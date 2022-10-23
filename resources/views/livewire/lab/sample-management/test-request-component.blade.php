@@ -87,7 +87,7 @@
                                             <td class="table-action">
                                                 @if ($sample->request_acknowledged_by)
                                                     <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-success"
+                                                        type="button" class="btn btn-outline-info"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title=""
                                                         data-bs-original-title="Attach Results"><i class="bi bi-file-earmark-medical"></i></a>
@@ -96,7 +96,7 @@
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Acknowledge Request"
                                                         wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico btn btn-outline-success">
+                                                        class="action-ico btn btn-outline-info">
                                                         <i class="bi bi-hand-thumbs-up"></i></a>
                                                 @endif
 

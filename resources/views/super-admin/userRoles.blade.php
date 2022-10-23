@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-sm-end mt-3">
-                                <a type="button" href="#" class="btn btn-success mb-2 me-1"
+                                <a type="button" href="#" class="btn btn-info mb-2 me-1"
                                     data-bs-toggle="modal" data-bs-target="#addRole">Create Role</a>
                             </div>
                         </div><!-- end col-->
