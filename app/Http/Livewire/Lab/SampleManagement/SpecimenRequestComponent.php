@@ -10,7 +10,6 @@ use App\Models\Sample;
 use App\Models\SampleReception;
 use App\Models\SampleType;
 use App\Models\Study;
-use App\Models\TestRequest;
 use Carbon\Carbon;
 use Exception;
 use Livewire\Component;
@@ -250,8 +249,8 @@ class SpecimenRequestComponent extends Component
         $newParticipant->nok_relationship = $participant->nok_relationship;
 
         $newParticipant->save();
-        return $newParticipant->id;
 
+        return $newParticipant->id;
     }
 
     public function editParticipant(Participant $participant)
@@ -354,7 +353,6 @@ class SpecimenRequestComponent extends Component
                 $this->tests = collect([]);
                 $this->activeParticipantTab = false;
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
-
             } elseif ($this->same_participant && ! $this->participant_id) {
                 //save participant and save sample information
                 $this->participant_id = $this->saveParticipant($this->same_participant_id);
@@ -512,7 +510,6 @@ class SpecimenRequestComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant deleted successfully!']);
-
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Participant can not be deleted!']);
         }

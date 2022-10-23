@@ -132,6 +132,11 @@ class SampleReceptionComponent extends Component
         }
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function generateBatchNo()
     {
         $date = date('dmY');
@@ -189,7 +194,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
+        $sampleReception->rejection_reason = $this->samples_rejected > 0 ? $this->rejection_reason : null;
         $sampleReception->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
 
@@ -273,7 +278,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
+        $sampleReception->rejection_reason = $this->samples_rejected > 0 ? $this->rejection_reason : null;
         $sampleReception->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
 
@@ -340,7 +345,7 @@ class SampleReceptionComponent extends Component
         $courier->is_active = $this->courierstatus;
 
         $courier->save();
-        
+
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
         $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
 

@@ -15,6 +15,11 @@
                                     @endif
                                 </h5>
                                 <div class="ms-auto">
+
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-primary">More...</button>
                                         <button type="button"
@@ -136,9 +141,9 @@
 
                                 <div class="col-md-2 text-start mt-4">
                                     @if (!$toggleForm)
-                                    <x-button>{{__('Save')}}</x-button>
+                                        <x-button>{{ __('Save') }}</x-button>
                                     @else
-                                    <x-button>{{__('Update')}}</x-button>
+                                        <x-button>{{ __('Update') }}</x-button>
                                     @endif
                                 </div>
 
@@ -171,64 +176,64 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($sampleReceptions as $key => $sampleReception)
-                                    @if ($sampleReception->samples_accepted != $sampleReception->samples_handled)
-                                        
-                                   
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>
-                                                @if ($sampleReception->samples_handled==0)
-                                                <a href="javascript: void(0);" class="action-ico"
-                                                wire:click="editdata({{ $sampleReception->id }})">{{ $sampleReception->batch_no }} </a>
-                                                @else
-                                                {{ $sampleReception->batch_no }}
-                                                @endif
-                                                
-                                            </td>
-                                            <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
-                                            </td>
-                                            <td>{{ $sampleReception->samples_delivered }}</td>
-                                            <td>{{ $sampleReception->facility->name }}</td>
-                                            <td>{{ $sampleReception->courier->name }}</td>
-                                            <td>{{ $sampleReception->samples_accepted }}</td>
-                                            <td>{{ $sampleReception->samples_rejected }}</td>
-                                            <td>{{ $sampleReception->receiver->fullName }}</td>
-                                            <td>{{ $sampleReception->created_at }}</td>
-                                            <td>{{ $sampleReception->samples_handled }}</td>
-                                            @if ($sampleReception->status == 'Pending')
-                                                <td><span
-                                                        class="badge bg-warning">{{ $sampleReception->status }}</span>
-                                                </td>
-                                            @elseif($sampleReception->status == 'Processing')
-                                                <td><span class="badge bg-info">{{ $sampleReception->status }}</span>
-                                                </td>
-                                            @else
-                                                <td><span
-                                                        class="badge bg-success">{{ $sampleReception->status }}</span>
-                                                </td>
-                                            @endif
-                                            <td class="table-action">
-                                                <a href="javascript:;" class="text-primary" data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="View details" aria-label="Views"
-                                                    data-bs-toggle="modal"
-                                                    wire:click="showData({{ $sampleReception->id }})"
-                                                    data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
+                                        @if ($sampleReception->samples_accepted != $sampleReception->samples_handled)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>
+                                                    @if ($sampleReception->samples_handled == 0)
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                            wire:click="editdata({{ $sampleReception->id }})">{{ $sampleReception->batch_no }}
+                                                        </a>
+                                                    @else
+                                                        {{ $sampleReception->batch_no }}
+                                                    @endif
 
-                                                <a href="{{route('specimen-request',$sampleReception->batch_no)}}" data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Accession Samples" class="action-ico"> <i
-                                                        class="bi bi-pencil-square"></i></a>
-                                                @if ($sampleReception->samples_handled==0)
-                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Delete Record"
-                                                    wire:click="deleteConfirmation({{ $sampleReception->id }})"
-                                                    class="action-ico">
-                                                    <i class="bi bi-trash"></i></a>
+                                                </td>
+                                                <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
+                                                </td>
+                                                <td>{{ $sampleReception->samples_delivered }}</td>
+                                                <td>{{ $sampleReception->facility->name }}</td>
+                                                <td>{{ $sampleReception->courier->name }}</td>
+                                                <td>{{ $sampleReception->samples_accepted }}</td>
+                                                <td>{{ $sampleReception->samples_rejected }}</td>
+                                                <td>{{ $sampleReception->receiver->fullName }}</td>
+                                                <td>{{ $sampleReception->created_at }}</td>
+                                                <td>{{ $sampleReception->samples_handled }}</td>
+                                                @if ($sampleReception->status == 'Pending')
+                                                    <td><span
+                                                            class="badge bg-warning">{{ $sampleReception->status }}</span>
+                                                    </td>
+                                                @elseif($sampleReception->status == 'Processing')
+                                                    <td><span
+                                                            class="badge bg-info">{{ $sampleReception->status }}</span>
+                                                    </td>
+                                                @else
+                                                    <td><span
+                                                            class="badge bg-success">{{ $sampleReception->status }}</span>
+                                                    </td>
                                                 @endif
-                                            </td>
-                                        </tr>
+                                                <td class="table-action">
+                                                    <a href="javascript:;" class="text-primary"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="View details"
+                                                        aria-label="Views" data-bs-toggle="modal"
+                                                        wire:click="showData({{ $sampleReception->id }})"
+                                                        data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
+
+                                                    <a href="{{ route('specimen-request', $sampleReception->batch_no) }}"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Accession Samples"
+                                                        class="action-ico"> <i class="bi bi-pencil-square"></i></a>
+                                                    @if ($sampleReception->samples_handled == 0)
+                                                        <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom" title=""
+                                                            data-bs-original-title="Delete Record"
+                                                            wire:click="deleteConfirmation({{ $sampleReception->id }})"
+                                                            class="action-ico">
+                                                            <i class="bi bi-trash"></i></a>
+                                                    @endif
+                                                </td>
+                                            </tr>
                                         @endif
                                     @empty
                                     @endforelse
@@ -534,17 +539,6 @@
                     $('#show-data').modal('show');
                 });
 
-                // $('#facility_id').select2({
-                //     theme: 'bootstrap-5',
-                // }).on('change', function() {
-                //     @this.set('facility_id', $(this).val());
-                // });
-
-                // $('#courier_id').select2({
-                //     theme: 'bootstrap-5',
-                // }).on('change', function() {
-                //     @this.set('courier_id', $(this).val());
-                // });
             </script>
         @endpush
     </div>

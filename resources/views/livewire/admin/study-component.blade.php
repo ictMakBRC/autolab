@@ -10,8 +10,12 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end mt-3">
-                            <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addStudy">Add Study</a>
+                            <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                            data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
+                            <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                            data-bs-target="#addStudy">Add Study</a>
                         </div>
                     </div><!-- end col-->
                 </div>

@@ -9,6 +9,11 @@
                                 <h5 class="mb-2 mb-sm-0">
                                     Test Result Reports
                                 </h5>
+                                <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,11 +77,11 @@
                                             <td>
                                                 <span class="badge bg-success">{{ $testResult->status }}</span>
                                             </td>
-                                            <td>
+                                            <td class="action-ico">
                                                 <a href="{{route('result-report',$testResult->id)}}" type="button" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title=""
                                                 data-bs-original-title="Result Report" target="_blank"
-                                                class="action-ico btn btn-outline-success radius-30 px-3">Download</a>
+                                                class="action-ico btn btn-outline-success"><i class="bi bi-arrow-down-square"></i></a>
                                             </td> 
                                         </tr>
                                     @empty

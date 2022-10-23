@@ -11,6 +11,11 @@
                                     <h5 class="mb-2 mb-sm-0">
                                         Test Result Reviews
                                     </h5>
+                                    <div class="ms-auto">
+                                        <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -79,9 +84,9 @@
                                                 <td>
                                                     <a href="javascript: void(0);" type="button"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title=""
+                                                        title="" data-bs-original-title="Review Results"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-success radius-30 px-3">Review</a>
+                                                        class="action-ico btn btn-outline-success"><i class="bi bi-check-square"></i></a>
                                                 </td>
                                             </tr>
                                         @empty

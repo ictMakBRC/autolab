@@ -75,6 +75,11 @@ class DesignationComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation updated  successfully!']);
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function deleteConfirmation($id)
     {
         $this->delete_id = $id;

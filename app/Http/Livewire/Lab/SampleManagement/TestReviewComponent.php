@@ -8,9 +8,10 @@ use Livewire\Component;
 
 class TestReviewComponent extends Component
 {
-    public $viewReport=false;
+    public $viewReport = false;
+
     public $resultId;
-    
+
     public function markAsReviewed(TestResult $testResult)
     {
         $testResult->reviewed_by = Auth::id();
@@ -18,20 +19,25 @@ class TestReviewComponent extends Component
         $testResult->status = 'Reviewed';
         $testResult->update();
 
-        $this->viewReport=false;
+        $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);
     }
 
     public function viewPreliminaryReport(TestResult $testResult)
     {
-        $this->resultId=$testResult->id;
-        $this->viewReport=true;
+        $this->resultId = $testResult->id;
+        $this->viewReport = true;
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function render()
     {
         if ($this->viewReport) {
-            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id'=>$this->resultId,'status'=>'Pending Review'])->first();
+            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
             $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')->get();
         }

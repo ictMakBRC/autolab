@@ -53,6 +53,11 @@ class SampleTypeComponent extends Component
         $this->dispatchBrowserEvent('edit-modal');
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function resetInputs()
     {
         $this->status = '';
@@ -92,7 +97,6 @@ class SampleTypeComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Record deleted successfully!']);
-
         } catch(\Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Record can not be deleted!']);
         }

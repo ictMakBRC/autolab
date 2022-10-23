@@ -49,6 +49,11 @@ class FacilityComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function editdata($id)
     {
         $facility = Facility::where('id', $id)->first();

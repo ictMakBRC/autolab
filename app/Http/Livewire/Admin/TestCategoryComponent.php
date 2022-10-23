@@ -52,6 +52,11 @@ class TestCategoryComponent extends Component
         $this->dispatchBrowserEvent('edit-modal');
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function resetInputs()
     {
         $this->description = '';

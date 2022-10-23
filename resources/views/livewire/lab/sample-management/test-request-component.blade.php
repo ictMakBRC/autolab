@@ -10,25 +10,9 @@
                                     Test Requests
                                 </h5>
                                 <div class="ms-auto">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary">More...</button>
-
-
-                                        <button type="button"
-                                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
-                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
-                                                Dropdown</span>
-                                        </button>
-
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            {{-- @if ($tabToggleBtn)
-                                                <a class="dropdown-item" href="javascript:;"
-                                                    wire:click="toggleTab()">Toggle Tabs</a>
-                                            @endif
-                                            <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
-                                                form</a> --}}
-                                        </div>
-                                    </div>
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -103,17 +87,17 @@
                                             <td class="table-action">
                                                 @if ($sample->request_acknowledged_by)
                                                     <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-success radius-30 px-3"
+                                                        type="button" class="btn btn-outline-success"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title=""
-                                                        data-bs-original-title="Attach Results">Process</a>
+                                                        data-bs-original-title="Attach Results"><i class="bi bi-file-earmark-medical"></i></a>
                                                 @else
                                                     <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Acknowledge Request"
                                                         wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico btn btn-outline-success radius-30 px-3">
-                                                        Acknowledge</a>
+                                                        class="action-ico btn btn-outline-success">
+                                                        <i class="bi bi-hand-thumbs-up"></i></a>
                                                 @endif
 
                                             </td>

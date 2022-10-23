@@ -77,10 +77,15 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->is_active = $this->is_active;
         $study->update();
-        
+
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)

@@ -264,7 +264,11 @@ class UserComponent extends Component
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User updated successfully!']);
-        
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)

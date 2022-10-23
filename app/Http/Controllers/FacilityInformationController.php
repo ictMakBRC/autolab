@@ -109,7 +109,7 @@ class FacilityInformationController extends Controller
 
         if ($request->hasFile('logo') && $request->hasFile('logo2')) {
             $request->validate(['logo' => 'image|max:300|dimensions:max_width=600,max_height=400',
-                'logo2' => 'image|max:300|dimensions:max_width=600,max_height=400']);
+                'logo2' => 'image|max:300|dimensions:max_width=600,max_height=400', ]);
 
             $logoName = 'logo.'.$request->file('logo')->extension();
             $logoPath = $request->file('logo')->storeAs('facilitylogo', $logoName, 'public');
@@ -129,7 +129,6 @@ class FacilityInformationController extends Controller
             $logoName = 'logo.'.$request->file('logo')->extension();
             $logoPath = $request->file('logo')->storeAs('facilitylogo', $logoName, 'public');
             $logo2Path = $currentLogo2;
-
         } elseif ($request->hasFile('logo2')) {
             $request->validate(['logo2' => 'image|max:300|dimensions:max_width=600,max_height=400']);
 

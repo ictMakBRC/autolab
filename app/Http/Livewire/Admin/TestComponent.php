@@ -234,6 +234,11 @@ class TestComponent extends Component
         }
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function cancel()
     {
         $this->delete_id = '';

@@ -105,20 +105,20 @@
                         </div>
                     </div>
                     <a href="{{ route('samplereception') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Sample Reception</a>
+                            class="bi bi-box2"></i>Sample Reception</a>
                     <a href="javascript: void(0);"
                         class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
-                            class="bi bi-cast"></i>Specimen Accessioning</a>
-                    <a href="{{ route('test-request') }}" class="list-group-item"><i class="bi bi-wallet"></i>Test
+                            class="bi bi-receipt"></i>Specimen Accessioning</a>
+                    <a href="{{ route('test-request') }}" class="list-group-item"><i class="bi bi-file-medical"></i>Test
                         Requests</a>
                     <a href="javascript: void(0);"
                         class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
-                            class="bi bi-bar-chart-line"></i>Attach Results</a>
-                    <a href="{{ route('test-review') }}" class="list-group-item"><i class="bi bi-archive"></i>Test
+                            class="bi bi-file-earmark-medical"></i>Attach Results</a>
+                    <a href="{{ route('test-review') }}" class="list-group-item"><i class="bi bi-check-square"></i>Test
                         Review</a>
-                    <a href="{{ route('test-approval') }}" class="list-group-item"><i class="bi bi-archive"></i>Test
+                    <a href="{{ route('test-approval') }}" class="list-group-item"><i class="bi bi-check2-square"></i>Test
                         Approval</a>
-                    <a href="{{ route('test-reports') }}" class="list-group-item"><i class="bi bi-archive"></i>Test
+                    <a href="{{ route('test-reports') }}" class="list-group-item"><i class="bi bi-file-earmark-text"></i>Test
                         Reports</a>
                 </div>
             </div>
@@ -189,18 +189,18 @@
                         </div>
                     </div>
                     <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
-                            class="bi bi-cast"></i>Facility Profile</a>
-                    <a href="{{ route('usermanagement') }}" class="list-group-item"><i class="bi bi-wallet"></i>User
+                            class="bi bi-hospital"></i>Facility Profile</a>
+                    <a href="{{ route('usermanagement') }}" class="list-group-item"><i class="bi bi-person"></i>User
                         Management</a>
                     <a href="{{ route('user-roles.index') }}" class="list-group-item"><i
-                            class="bi bi-bar-chart-line"></i>User Roles</a>
+                            class="bi bi-person-check"></i>User Roles</a>
                     <a href="{{ route('user-permissions.index') }}" class="list-group-item"><i
-                            class="bi bi-archive"></i>User Permissions</a>
+                            class="bi bi-person-x"></i>User Permissions</a>
                     <a href="{{ route('user-roles-assignment.index') }}" class="list-group-item"><i
-                            class="bi bi-cast"></i>Role Assiginment</a>
-                    <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-cast"></i>User
+                            class="bi bi-card-checklist"></i>Role Assiginment</a>
+                    <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>User
                         Logs</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>User
+                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-list-columns"></i>User
                         Activity</a>
 
                 </div>
@@ -213,28 +213,28 @@
                         </div>
                     </div>
                     <a href="{{ route('laboratories') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Laboratories</a>
+                            class="bx bx-clinic"></i>Laboratories</a>
                     <a href="{{ route('designations') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Designations</a>
+                            class="bi bi-person-square"></i>Designations</a>
                     <a href="{{ route('facilities') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Facilities</a>
+                            class="bi bi-hospital"></i>Facilities</a>
                     <a href="{{ route('studies') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Studies/Projects</a>
+                            class="bi bi-kanban"></i>Studies/Projects</a>
                     <a href="{{ route('requesters') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Requesters</a>
+                            class="bi bi-people"></i>Requesters</a>
                     <a href="{{ route('collectors') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Sample Collectors</a>
+                            class="bx bx-test-tube"></i>Sample Collectors</a>
                     <a href="{{ route('couriers') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Couriers</a>
+                            class="bi bi-truck"></i>Couriers</a>
                     <a href="{{ route('platforms') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Platforms</a>
+                            class="bi bi-gear-wide-connected"></i>Platforms</a>
                     <a href="{{ route('kits') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Kits</a>
+                            class="bx bx-bong"></i>Kits</a>
                     <a href="{{ route('sampletypes') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Sample Types</a>
+                            class="bx bxs-vial"></i>Sample Types</a>
                     <a href="{{ route('categories') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Test Categories</a>
-                    <a href="{{ route('tests') }}" class="list-group-item"><i class="bi bi-cast"></i>Tests</a>
+                            class="bi bi-virus"></i>Test Categories</a>
+                    <a href="{{ route('tests') }}" class="list-group-item"><i class="bx bxs-flask"></i>Tests</a>
 
                 </div>
             </div>

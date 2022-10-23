@@ -16,6 +16,9 @@
                                     @endif
                                 </h5>
                                 <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-primary">More...</button>
                                         <button type="button"

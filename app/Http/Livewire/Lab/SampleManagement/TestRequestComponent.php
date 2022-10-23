@@ -26,6 +26,11 @@ class TestRequestComponent extends Component
         $this->tests_requested = collect([]);
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function viewTests(Sample $sample)
     {
         $this->reset(['tests_requested']);

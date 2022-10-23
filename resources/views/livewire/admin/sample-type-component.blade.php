@@ -1,21 +1,30 @@
-@section('title', 'Test categories')
-@section('pagename', 'Test Categories')
-@section('linkname', 'Categories')
 <div>
     {{-- @include('layouts.messages') --}}
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
-
-                        <div class="d-flex align-items-center mb-4">
-                            <h5 class="mb-0">Samples/Specimens</h5>
-                            <div class="ms-auto position-relative float-right ">
-                                <button data-bs-toggle="modal" data-bs-target="#modalAdd"
-                                    class="btn btn-success btn-sm">Add New</button>
+                    <div class="card-header pt-0">
+                        <div class="row mb-2">
+                            <div class="col-sm-4">
+                                <div class="text-sm-end mt-3">
+                                    <h4 class="header-title mb-3  text-center">Samples/Specimens</h4>
+                                </div>
                             </div>
+                            <div class="col-sm-8">
+                                <div class="text-sm-end mt-3">
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+        
+                                    <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#modalAdd">Add Sample</a>
+                                </div>
+                            </div><!-- end col-->
                         </div>
+                    </div>
+
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table align-middle" id="datableButtons">
                                 <thead class="table-light">

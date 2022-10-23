@@ -115,6 +115,11 @@ class RequesterComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester updated successfully!']);
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function deleteConfirmation($id)
     {
         $this->delete_id = $id;

@@ -115,6 +115,11 @@ class CourierComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier updated successfully!']);
     }
 
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
     public function deleteConfirmation($id)
     {
         $this->delete_id = $id;
@@ -130,7 +135,6 @@ class CourierComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier deleted successfully!']);
-
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Courier can not be deleted!']);
         }
