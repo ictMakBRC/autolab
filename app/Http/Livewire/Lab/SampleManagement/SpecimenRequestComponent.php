@@ -169,7 +169,6 @@ class SpecimenRequestComponent extends Component
 
             $this->resetParticipantInputs();
             $this->dispatchBrowserEvent('maximum-reached', ['type' => 'warning',  'message' => 'Oops! Sample maximum already reached for this batch!']);
-            // $this->dispatchBrowserEvent('maximum-reached');
         } else {
             $this->validate([
                 'identity' => 'required|string',

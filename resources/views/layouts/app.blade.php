@@ -50,10 +50,8 @@
         @include('layouts.navigation')
         <!--start content-->
         <main class="page-content">
-            {{-- <x-breadcrumb></x-breadcrumb>                   --}}
-            @include('layouts.messages')
+            {{-- @include('layouts.messages') --}}
             {{ $slot }}
-            {{-- @include('layouts.user-table') --}}
         </main>
         <!--end page main-->
 
@@ -79,8 +77,6 @@
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     {{-- <script src="{{ asset('autolab-assets/js/index.js') }}"></script> --}}
-    {{-- <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script> --}}
-
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -143,8 +139,8 @@
             }
 
             if (event.detail.type == 'warning') {
-                iziToast.error({
-                    title: 'Error!',
+                iziToast.warning({
+                    title: 'Warning!',
                     message: `${event.detail.message}`,
                     timeout: 5000,
                     position: 'topRight'
@@ -152,16 +148,10 @@
             }
         });
 
-        window.addEventListener('', event => {
+        window.addEventListener('maximum-reached', event => {
 
             if (event.detail.type == 'warning') {
                 swal('Warning', `${event.detail.message}`, 'warning');
-                // iziToast.success({
-                //     title: 'Success!',
-                //     message: `${event.detail.message}`,
-                //     timeout: 5000,
-                //     position: 'topRight'
-                // });
             }
             
         });
