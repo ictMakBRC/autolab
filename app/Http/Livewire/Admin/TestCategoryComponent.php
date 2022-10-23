@@ -36,10 +36,11 @@ class TestCategoryComponent extends Component
         $TestCategory->category_name = $this->category_name;
         $TestCategory->description = $this->description;
         $TestCategory->save();
-        session()->flash('success', 'Test Category data created successfully.');
+
         $this->description = '';
         $this->category_name = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Category data created successfully!']);
     }
 
     public function editdata($id)
@@ -67,10 +68,11 @@ class TestCategoryComponent extends Component
         $TestCategory->category_name = $this->category_name;
         $TestCategory->description = $this->description;
         $TestCategory->update();
-        session()->flash('success', 'Test Category data updated successfully.');
+
         $this->description = '';
         $this->category_name = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Category data updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -87,9 +89,9 @@ class TestCategoryComponent extends Component
             $TestCategory->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Category data deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Category data deleted successfully!']);
         } catch(\Exception $error) {
-            session()->flash('erorr', 'Category data can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Category data can not be deleted!']);
         }
     }
 

@@ -43,10 +43,10 @@ class FacilityComponent extends Component
         $facility->type = $this->type;
         $facility->parent_id = $this->parent_id;
         $facility->save();
-        session()->flash('success', 'Facility created successfully.');
-        $this->reset(['name', 'type', 'parent_id', 'is_active']);
 
+        $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
     }
 
     public function editdata($id)
@@ -76,9 +76,10 @@ class FacilityComponent extends Component
         $facility->parent_id = $this->parent_id != '' ? $this->parent_id : null;
         $facility->is_active = $this->is_active;
         $facility->update();
-        session()->flash('success', 'Facility updated successfully.');
+
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -95,9 +96,9 @@ class FacilityComponent extends Component
             $facility->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Facility deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Facility can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Facility can not be deleted!']);
         }
     }
 

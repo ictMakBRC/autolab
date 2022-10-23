@@ -34,11 +34,12 @@ class SampleTypeComponent extends Component
         $sampleType->type = $this->type;
         $sampleType->possible_tests = $this->possible_tests;
         $sampleType->save();
-        session()->flash('success', 'Sample Type created successfully.');
+
         $this->status = '';
         $this->type = '';
         $this->possible_tests = [];
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type created successfully!']);
     }
 
     public function editdata($id)
@@ -71,9 +72,9 @@ class SampleTypeComponent extends Component
         $sampleType->possible_tests = $this->possible_tests;
         $sampleType->update();
 
-        session()->flash('success', 'Sample Type updated successfully');
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -90,9 +91,10 @@ class SampleTypeComponent extends Component
             $value->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Record deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Record deleted successfully!']);
+
         } catch(\Exception $error) {
-            session()->flash('erorr', 'Record can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Record can not be deleted!']);
         }
     }
 

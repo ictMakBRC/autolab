@@ -699,9 +699,9 @@
                     $('#delete_modal').modal('show');
                 });
 
-                window.addEventListener('maximum-reached', event => {
-                    alert('Maximum number of participants in this batch already Recorded.');
-                });
+                // window.addEventListener('maximum-reached', event => {
+                //     alert('Maximum number of participants in this batch already Recorded.');
+                // });
             </script>
         @endpush
     </div>

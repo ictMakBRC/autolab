@@ -168,7 +168,8 @@ class SpecimenRequestComponent extends Component
             $this->tabToggleBtn = true;
 
             $this->resetParticipantInputs();
-            $this->dispatchBrowserEvent('maximum-reached');
+            $this->dispatchBrowserEvent('maximum-reached', ['type' => 'warning',  'message' => 'Oops! Sample maximum already reached for this batch!']);
+            // $this->dispatchBrowserEvent('maximum-reached');
         } else {
             $this->validate([
                 'identity' => 'required|string',
@@ -212,15 +213,9 @@ class SpecimenRequestComponent extends Component
             $participant->save();
 
             $this->participant_id = $participant->id;
-            // $this->participant_id = $this->saveParticipant();
             $this->activeParticipantTab = false;
             $this->resetParticipantInputs();
-
-            // if (!$this->same_participant) {
-            //     $this->resetParticipantInputs();
-            // }
-
-            session()->flash('success', 'Participant Data Recorded successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
         }
     }
 
@@ -256,9 +251,8 @@ class SpecimenRequestComponent extends Component
         $newParticipant->nok_relationship = $participant->nok_relationship;
 
         $newParticipant->save();
-
         return $newParticipant->id;
-        // $this->activeParticipantTab = false;
+
     }
 
     public function editParticipant(Participant $participant)
@@ -334,10 +328,9 @@ class SpecimenRequestComponent extends Component
         $participant->update();
 
         $this->participant_id = $participant->id; //variable needs more review/
-        // $this->activeParticipantTab = false;
         $this->toggleForm = false;
         $this->resetParticipantInputs();
-        session()->flash('success', 'Participant Data updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
     }
 
     public function setParticipantId(Participant $participant)
@@ -353,7 +346,7 @@ class SpecimenRequestComponent extends Component
             $this->tabToggleBtn = true;
             $this->resetParticipantInputs();
             $this->resetSampleInformationInputs();
-            $this->dispatchBrowserEvent('maximum-reached');
+            $this->dispatchBrowserEvent('maximum-reached', ['type' => 'warning',  'message' => 'Oops! Sample maximum already reached for this batch!']);
         } else {
             if ($this->same_participant && $this->participant_id) {
                 //just save sample information
@@ -361,7 +354,8 @@ class SpecimenRequestComponent extends Component
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
                 $this->activeParticipantTab = false;
-                session()->flash('success', 'Sample Request Data Recorded successfully.');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+
             } elseif ($this->same_participant && ! $this->participant_id) {
                 //save participant and save sample information
                 $this->participant_id = $this->saveParticipant($this->same_participant_id);
@@ -370,7 +364,7 @@ class SpecimenRequestComponent extends Component
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
                 $this->activeParticipantTab = false;
-                session()->flash('success', 'Sample Request Data Recorded successfully.');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
             } elseif (! $this->same_participant && $this->participant_id) {
                 //just save sample information but return to participant tab
                 $this->saveSampleInformation();
@@ -378,7 +372,7 @@ class SpecimenRequestComponent extends Component
                 $this->tests = collect([]);
                 $this->reset(['same_participant_id', 'same_participant']);
                 $this->activeParticipantTab = true;
-                session()->flash('success', 'Sample Request Data Recorded successfully.');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
             } else {
                 //return to participant tab
                 $this->tests = collect([]);
@@ -392,9 +386,9 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date',
+            'date_requested' => 'required|date|after_or_equal:date_collected',
             'collected_by' => 'required|integer',
-            'date_collected' => 'required|date',
+            'date_collected' => 'required|date|before_or_equal:date_requested',
             'study_id' => 'required|integer',
             'sample_identity' => 'required|string|unique:samples',
             'sample_is_for' => 'required|string',
@@ -420,14 +414,8 @@ class SpecimenRequestComponent extends Component
         $sample->test_count = count($this->tests_requested);
         $sample->status = 'Accessioned';
         $sample->save();
+
         $this->same_participant_id = $sample->participant_id;
-        // foreach ($this->tests_requested as $test) {
-        //     $testRequest = new  TestRequest();
-        //     $testRequest->sample_id = $sample->id;
-        //     $testRequest->test_id = $test;
-        //     $testRequest->result_status = 'Pending';
-        //     $testRequest->save();
-        // }
         $sampleReception = SampleReception::where('batch_no', $this->batch_no)->first();
         $sampleReception->increment('samples_handled');
         $this->batch_samples_handled = $sampleReception->samples_handled;
@@ -465,9 +453,9 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date',
+            'date_requested' => 'required|date|after_or_equal:date_collected',
             'collected_by' => 'required|integer',
-            'date_collected' => 'required|date',
+            'date_collected' => 'required|date|before_or_equal:date_requested',
             'study_id' => 'required|integer',
             'sample_identity' => 'required',
             'sample_is_for' => 'required|string',
@@ -494,7 +482,7 @@ class SpecimenRequestComponent extends Component
         $this->resetParticipantInputs();
         $this->toggleForm = false;
         $this->activeParticipantTab = true;
-        session()->flash('success', 'Sample Data updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Data updated successfully!']);
     }
 
     public function resetParticipantInputs()
@@ -524,9 +512,10 @@ class SpecimenRequestComponent extends Component
             $participant->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Participant deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant deleted successfully!']);
+
         } catch(Exception $error) {
-            session()->flash('erorr', 'Participant can not be deleted!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Participant can not be deleted!']);
         }
     }
 

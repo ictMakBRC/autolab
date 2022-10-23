@@ -47,7 +47,7 @@ class TestRequestComponent extends Component
         $sample->date_acknowledged = now();
         $sample->status = 'Processing';
         $sample->update();
-        session()->flash('success', 'Test Request Updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Request Updated successfully!']);
     }
 
     public function close()

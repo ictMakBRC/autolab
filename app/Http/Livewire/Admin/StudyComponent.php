@@ -44,9 +44,10 @@ class StudyComponent extends Component
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
         $study->save();
-        session()->flash('success', 'Study/Project created successfully.');
+
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project created successfully!']);
     }
 
     public function editdata($id)
@@ -76,7 +77,8 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->is_active = $this->is_active;
         $study->update();
-        session()->flash('success', 'Study/project updated successfully.');
+        
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
     }

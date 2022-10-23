@@ -142,7 +142,7 @@ class TestComponent extends Component
         $test->save();
 
         $this->resetTestInputs();
-        session()->flash('success', 'Test created successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test created successfully!']);
     }
 
     public function editTest(Test $test)
@@ -205,7 +205,7 @@ class TestComponent extends Component
 
         $this->toggleForm = false;
         $this->resetTestInputs();
-        session()->flash('success', 'Test updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test updated successfully!']);
     }
 
     public function resetTestInputs()
@@ -228,8 +228,9 @@ class TestComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'Test deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test deleted successfully!']);
         } catch(\Exception $error) {
-            session()->flash('erorr', 'Test can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test can not be deleted!']);
         }
     }
 

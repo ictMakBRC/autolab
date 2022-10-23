@@ -191,7 +191,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
         $sampleReception->save();
-        session()->flash('success', 'Sample Reception Data created successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
 
         $this->resetInputs();
     }
@@ -275,8 +275,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->rejection_reason = $this->samples_rejected>0?$this->rejection_reason:null;
         $sampleReception->update();
-
-        session()->flash('success', 'Sample Reception Data updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
 
         $this->resetInputs();
         $this->toggleForm = false;
@@ -297,7 +296,7 @@ class SampleReceptionComponent extends Component
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'SampleReception deleted successfully.');
         } catch(Exception $error) {
-            session()->flash('erorr', 'SampleReception can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['error' => 'success',  'message' => 'SampleReception can not be deleted!']);
         }
     }
 
@@ -315,7 +314,7 @@ class SampleReceptionComponent extends Component
         $facility->parent_id = $this->facility_parent_id;
         $facility->is_active = $this->facility_status;
         $facility->save();
-        session()->flash('success', 'Facility created successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
         $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -341,7 +340,8 @@ class SampleReceptionComponent extends Component
         $courier->is_active = $this->courierstatus;
 
         $courier->save();
-        session()->flash('success', 'Courier created successfully.');
+        
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
         $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
 
         $this->dispatchBrowserEvent('close-modal');

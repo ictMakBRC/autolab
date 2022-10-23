@@ -101,7 +101,7 @@ class AttachTestResultComponent extends Component
 
         $this->resetResultInputs();
         $this->mount($associatedSample->id);
-        session()->flash('success', 'Test Results Recorded successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }
 
     public function activateResultInput($id)

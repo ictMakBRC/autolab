@@ -37,9 +37,10 @@ class PlatformComponent extends Component
         $platform->range = $this->range;
         $platform->is_active = $this->is_active;
         $platform->save();
-        session()->flash('success', 'Platform created successfully.');
+
         $this->reset(['name', 'range', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform created successfully!']);
     }
 
     public function editdata($id)
@@ -68,9 +69,10 @@ class PlatformComponent extends Component
         $platform->range = $this->range;
         $platform->is_active = $this->is_active;
         $platform->update();
-        session()->flash('success', 'Platform updated successfully.');
+
         $this->reset(['name', 'range', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -87,9 +89,9 @@ class PlatformComponent extends Component
             $platform->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Platform deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Platform can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform can not be deleted!']);
         }
     }
 

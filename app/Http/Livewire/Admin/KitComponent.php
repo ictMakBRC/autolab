@@ -38,9 +38,10 @@ class KitComponent extends Component
         $kit->platform_id = $this->platform_id;
         $kit->is_active = $this->is_active;
         $kit->save();
-        session()->flash('success', 'Kit created successfully.');
+
         $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit created successfully!']);
     }
 
     public function editdata($id)
@@ -69,9 +70,10 @@ class KitComponent extends Component
         $kit->platform_id = $this->platform_id;
         $kit->is_active = $this->is_active;
         $kit->update();
-        session()->flash('success', 'Kit updated successfully.');
+
         $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -88,9 +90,9 @@ class KitComponent extends Component
             $kit->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Kit deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Kit can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Kit can not be deleted!']);
         }
     }
 

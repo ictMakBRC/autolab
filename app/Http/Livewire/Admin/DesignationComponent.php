@@ -35,10 +35,10 @@ class DesignationComponent extends Component
         $designation->name = $this->name;
         $designation->description = $this->description;
         $designation->save();
-        session()->flash('success', 'Designation created successfully.');
         $this->description = '';
         $this->name = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation created successfully!']);
     }
 
     public function editdata($id)
@@ -67,11 +67,12 @@ class DesignationComponent extends Component
         $designation->description = $this->description;
         $designation->is_active = $this->is_active;
         $designation->update();
-        session()->flash('success', 'Designation updated successfully.');
+
         $this->description = '';
         $this->name = '';
         $this->is_active = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation updated  successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -88,9 +89,9 @@ class DesignationComponent extends Component
             $designation->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Designation deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Designation can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Designation can not be deleted!']);
         }
     }
 

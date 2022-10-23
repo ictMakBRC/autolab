@@ -66,10 +66,9 @@ class CollectorComponent extends Component
         $collector->study_id = $this->study_id == '' ? null : $this->study_id;
 
         $collector->save();
-
-        session()->flash('success', 'Collector created successfully.');
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Collector created successfully!']);
     }
 
     public function editdata($id)
@@ -111,9 +110,9 @@ class CollectorComponent extends Component
         $collector->is_active = $this->is_active;
         $collector->update();
 
-        session()->flash('success', 'Collector updated successfully.');
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Collector updated successfully!']);
     }
 
     public function deleteConfirmation($id)

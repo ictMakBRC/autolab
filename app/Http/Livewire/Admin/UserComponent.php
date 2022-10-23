@@ -158,9 +158,9 @@ class UserComponent extends Component
 
         $user->save();
 
-        session()->flash('success', 'User created successfully.');
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully!']);
     }
 
     public function editdata($id)
@@ -261,9 +261,10 @@ class UserComponent extends Component
         $user->signature = $this->signaturePath;
         $user->update();
 
-        session()->flash('success', 'User updated successfully.');
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User updated successfully!']);
+        
     }
 
     public function deleteConfirmation($id)
@@ -280,9 +281,9 @@ class UserComponent extends Component
             $user->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'User deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'User can not be deleted!.');
+            $this->dispatchBrowserEvent('alert', ['error' => 'success',  'message' => 'User can not be deleted!']);
         }
     }
 

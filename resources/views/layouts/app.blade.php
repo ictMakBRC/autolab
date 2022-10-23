@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('autolab-assets/images/favicon-32x32.png') }}" type="image/png" />
-   
+
     <!--plugins-->
     <link href="{{ asset('autolab-assets/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
@@ -20,10 +20,10 @@
     <link href="{{ asset('autolab-assets/css/icons.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    {{-- <link href="{{ asset('autolab-assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('autolab-assets/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css" /> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link href="{{ asset('js/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
 
     <!-- Datatables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
@@ -36,9 +36,9 @@
     <link href="{{ asset('autolab-assets/css/dark-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/light-theme.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
-    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />    
+    <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />
     @livewireStyles
-    {{-- <livewire:styles /> --}}
+
 </head>
 
 <body>
@@ -47,11 +47,11 @@
     <div class="wrapper">
 
         @include('layouts.header')
-        @include('layouts.navigation')  
+        @include('layouts.navigation')
         <!--start content-->
         <main class="page-content">
             {{-- <x-breadcrumb></x-breadcrumb>                   --}}
-             @include('layouts.messages')
+            @include('layouts.messages')
             {{ $slot }}
             {{-- @include('layouts.user-table') --}}
         </main>
@@ -78,9 +78,9 @@
 
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
-    <script src="{{ asset('autolab-assets/js/index.js') }}"></script>
-    <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script>
-    
+    {{-- <script src="{{ asset('autolab-assets/js/index.js') }}"></script> --}}
+    {{-- <script src="{{ asset('autolab-assets/plugins/sweetalert/sweetalert.min.js')}}" type="text/javascript"></script> --}}
+
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -97,9 +97,8 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
-    {{-- <script type="text/javascript" src="{{ asset('autolab-assets/plugins/select2/js/select2.full.min.js')}}"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    {{-- <script src="{{ asset('autolab-assets/js/select2.script.js')}}" type="text/javascript"></script> --}}
+    <script src="{{ asset('js/izitoast/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert/sweetalert.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -121,10 +120,56 @@
             });
         });
     </script>
-@stack('scripts')
 
-@livewireScripts
-{{-- <livewire:scripts /> --}}
+    <script>
+        window.addEventListener('alert', event => {
+
+            if (event.detail.type == 'success') {
+                iziToast.success({
+                    title: 'Success!',
+                    message: `${event.detail.message}`,
+                    timeout: 5000,
+                    position: 'topRight'
+                });
+            }
+
+            if (event.detail.type == 'Error') {
+                iziToast.error({
+                    title: 'Error!',
+                    message: `${event.detail.message}`,
+                    timeout: 5000,
+                    position: 'topRight'
+                });
+            }
+
+            if (event.detail.type == 'warning') {
+                iziToast.error({
+                    title: 'Error!',
+                    message: `${event.detail.message}`,
+                    timeout: 5000,
+                    position: 'topRight'
+                });
+            }
+        });
+
+        window.addEventListener('', event => {
+
+            if (event.detail.type == 'warning') {
+                swal('Warning', `${event.detail.message}`, 'warning');
+                // iziToast.success({
+                //     title: 'Success!',
+                //     message: `${event.detail.message}`,
+                //     timeout: 5000,
+                //     position: 'topRight'
+                // });
+            }
+            
+        });
+    </script>
+    @stack('scripts')
+
+    @livewireScripts
+
 </body>
 
 </html>

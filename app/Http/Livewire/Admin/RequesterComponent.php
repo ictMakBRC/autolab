@@ -65,11 +65,10 @@ class RequesterComponent extends Component
         $requester->facility_id = $this->facility_id;
         $requester->study_id = $this->study_id == '' ? null : $this->study_id;
         $requester->save();
-        session()->flash('success', 'Requester created successfully.');
 
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester created successfully!']);
     }
 
     public function editdata($id)
@@ -111,11 +110,9 @@ class RequesterComponent extends Component
         $requester->is_active = $this->is_active;
         $requester->update();
 
-        session()->flash('success', 'Requester updated successfully.');
-
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -132,9 +129,9 @@ class RequesterComponent extends Component
             $requester->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Requester deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Requester can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Requester can not be deleted!']);
         }
     }
 
