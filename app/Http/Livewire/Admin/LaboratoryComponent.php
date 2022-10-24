@@ -22,6 +22,7 @@ class LaboratoryComponent extends Component
     {
         $this->validateOnly($fields, [
             'laboratory_name' => 'required|unique:laboratories',
+            'short_code' => 'required',
             'is_active' => 'required',
 
         ]);
@@ -31,7 +32,7 @@ class LaboratoryComponent extends Component
     {
         $this->validate([
             'laboratory_name' => 'required|unique:laboratories',
-            'short_code' => 'unique:laboratories',
+            'short_code' => 'required|unique:laboratories',
         ]);
 
         $laboratory = new Laboratory();
@@ -68,6 +69,7 @@ class LaboratoryComponent extends Component
     {
         $this->validate([
             'laboratory_name' => 'required',
+            'short_code' => 'required',
         ]);
         $laboratory = Laboratory::find($this->edit_id);
         $laboratory->laboratory_name = $this->laboratory_name;

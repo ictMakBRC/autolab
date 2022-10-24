@@ -252,10 +252,9 @@ class TestComponent extends Component
 
     public function render()
     {
-        $tests = Test::latest()->get();
-        $testCategories = TestCategory::latest()->get();
-        // $this->absolute_results=$this->pushResults();
-        // $this->comments=$this->pushComments();
+        $tests = Test::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
+        $testCategories = TestCategory::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
+
         return view('livewire.admin.test-component', compact('tests', 'testCategories'));
     }
 }

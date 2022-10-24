@@ -98,7 +98,7 @@ class StudyComponent extends Component
     public function deleteData()
     {
         try {
-            $study = Study::where('id', $this->delete_id)->first();
+            $study = Study::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $study->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -120,8 +120,8 @@ class StudyComponent extends Component
 
     public function render()
     {
-        $studies = Study::with('facility')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $studies = Study::where('creator_lab',auth()->user()->laboratory_id)->with('facility')->latest()->get();
+        $facilities = Facility::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
     }

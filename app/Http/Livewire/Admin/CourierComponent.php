@@ -40,7 +40,7 @@ class CourierComponent extends Component
 
     public function getStudies()
     {
-        $this->studies = Study::where('facility_id', $this->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
     }
 
     public function mount()
@@ -82,7 +82,7 @@ class CourierComponent extends Component
         $this->study_id = $courier->study_id;
         $this->is_active = $courier->is_active;
 
-        $this->studies = Study::where('facility_id', $courier->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $courier->facility_id)->latest()->get();
 
         $this->dispatchBrowserEvent('edit-modal');
     }
@@ -130,7 +130,7 @@ class CourierComponent extends Component
     public function deleteData()
     {
         try {
-            $courier = Courier::where('id', $this->delete_id)->first();
+            $courier = Courier::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $courier->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -152,8 +152,8 @@ class CourierComponent extends Component
 
     public function render()
     {
-        $couriers = Courier::with('facility', 'study')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $couriers = Courier::where('creator_lab',auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.courier-component', compact('couriers', 'facilities'))->layout('layouts.app');
     }

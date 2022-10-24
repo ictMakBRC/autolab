@@ -281,7 +281,7 @@ class UserComponent extends Component
     public function deleteData()
     {
         try {
-            $user = User::where('id', $this->delete_id)->first();
+            $user = User::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $user->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -303,7 +303,7 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::with('laboratory', 'designation')->latest()->get();
+        $users = User::where('creator_lab',auth()->user()->laboratory_id)->with('laboratory', 'designation')->latest()->get();
         $designations = Designation::where('is_active', 1)->latest()->get();
         $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 

@@ -602,11 +602,11 @@ class SpecimenRequestComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $requesters = Requester::where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $studies = Study::where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $sampleTypes = SampleType::orderBy('type', 'asc')->get();
-        $samples = Sample::with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
+        $collectors = Collector::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $requesters = Requester::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $sampleTypes = SampleType::where('creator_lab',auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $samples = Sample::where('creator_lab',auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
 
         return view('livewire.lab.sample-management.specimen-request-component', compact('sampleTypes', 'collectors', 'studies', 'requesters', 'samples'))->layout('layouts.app');
     }

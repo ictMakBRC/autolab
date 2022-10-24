@@ -97,7 +97,7 @@ class FacilityComponent extends Component
     public function deleteData()
     {
         try {
-            $facility = Facility::where('id', $this->delete_id)->first();
+            $facility = Facility::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $facility->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -119,7 +119,7 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
+        $facilities = Facility::where('creator_lab',auth()->user()->laboratory_id)->with('parent')->latest()->get();
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

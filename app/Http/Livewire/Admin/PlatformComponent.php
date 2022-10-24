@@ -90,7 +90,7 @@ class PlatformComponent extends Component
     public function deleteData()
     {
         try {
-            $platform = Platform::where('id', $this->delete_id)->first();
+            $platform = Platform::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $platform->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -112,7 +112,7 @@ class PlatformComponent extends Component
 
     public function render()
     {
-        $platforms = Platform::latest()->get();
+        $platforms = Platform::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.platform-component', compact('platforms'))->layout('layouts.app');
     }
