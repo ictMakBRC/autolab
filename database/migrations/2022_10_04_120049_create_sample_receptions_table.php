@@ -31,7 +31,7 @@ return new class extends Migration
             $table->dateTime('date_reviewed')->nullable();
             $table->longText('comment')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
-            $table->string('status')->default('Pending');
+            $table->string('status')->default('Pending Review');
             $table->timestamps();
         });
     }

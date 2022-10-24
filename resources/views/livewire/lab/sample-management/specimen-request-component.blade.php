@@ -7,21 +7,16 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    {{-- @if (!$toggleForm) --}}
-
                                     Specimen Request for Batch <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
                                         class="text-danger">{{ $batch_sample_count }}</strong>)
-                                    {{-- @else
-                                        Update Sample Reception Data for
-                                        <strong class="text-success">{{ $batch_no }}</strong>
-                                    @endif --}}
                                 </h5>
                                 <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-info">More...</button>
-
-
                                         <button type="button"
                                             class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
@@ -86,11 +81,15 @@
                                     wire:submit.prevent="updateParticipant" @endif>
                                         <div class="row mx-auto">
                                             <div class="mb-3 col-md-3">
-                                                <label for="identity" class="form-label">Participant ID<span
-                                                        class="text-danger">*</span></label>
+                                                <label for="identity" class="form-label">Participant ID<span   class="text-danger">*</span>
+                                                    @if ($participantMatch)
+                                                    <span class="text-success">Matched</span>
+                                                    @endif
+                                                
+                                                </label>
                                                 <input type="text" id="identity" class="form-control text-uppercase"
                                                     onkeyup="this.value = this.value.toUpperCase();" size="14"
-                                                    wire:model="identity">
+                                                    wire:model.lazy="identity">
                                                 @error('identity')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
@@ -349,8 +348,14 @@
 
                                         </div>
                                         <div class="modal-footer">
+
                                             @if (!$toggleForm)
+                                                @if ($participantMatch)
+                                                <a wire:click.prevent="setParticipantId({{$matched_participant_id}})" class="btn btn-success">{{ __('Load') }}</a>
+                                                @else
                                                 <x-button class="btn-success">{{ __('Save') }}</x-button>
+                                                @endif
+                                                {{-- <x-button class="btn-success">{{ __('Save') }}</x-button> --}}
                                             @else
                                                 <x-button class="btn-success">{{ __('Update') }}</x-button>
                                             @endif
@@ -545,7 +550,7 @@
                     </div>
                 </div>
 
-                @if (!$participants->isEmpty())
+                @if (!$samples->isEmpty())
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive">
@@ -569,86 +574,86 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($participants as $key => $participant)
+                                        @forelse ($samples as $key => $sample)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
                                                     {{ $batch_no }}
                                                 </td>
                                                 <td>
-                                                @if ($participant->sample)
-                                                    @if ($participant->sample->request_acknowledged_by)
-                                                    {{ $participant->identity }}
+                                                @if ($sample->participant)
+                                                    @if ($sample->request_acknowledged_by)
+                                                    {{ $sample->participant->identity }}
                                                     @else
                                                         <a href="javascript: void(0);" class="action-ico"
-                                                            wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                            wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
                                                     @endif
                                                 @else
                                                     <a href="javascript: void(0);" class="action-ico"
-                                                    wire:click="editParticipant({{ $participant->id }})">{{ $participant->identity }}</a>
+                                                    wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
                                                 @endif
                                                 </td>
 
-                                                <td>{{ $participant->age }}</td>
-                                                <td>{{ $participant->gender }}</td>
-                                                <td>{{ $participant->contact }}</td>
-                                                <td>{{ $participant->address }}</td>
+                                                <td>{{ $sample->participant->age }}</td>
+                                                <td>{{ $sample->participant->gender }}</td>
+                                                <td>{{ $sample->participant->contact }}</td>
+                                                <td>{{ $sample->participant->address }}</td>
                                                 <td>
-                                                    @if ($participant->sample)
-                                                        @if ($participant->sample->request_acknowledged_by)
-                                                            {{ $participant->sample->sampleType->type }}
+                                                    @if ($sample)
+                                                        @if ($sample->request_acknowledged_by)
+                                                            {{ $sample->sampleType->type }}
                                                         @else
                                                         <a href="javascript: void(0);" class="action-ico"
-                                                        wire:click="editSampleInformation({{ $participant->sample->id }})">{{ $participant->sample->sampleType ? $participant->sample->sampleType->type : 'N/A' }}</a>
+                                                        wire:click="editSampleInformation({{ $sample->id }})">{{ $sample->sampleType ? $sample->sampleType->type : 'N/A' }}</a>
                                                         @endif
                                                     @else
                                                         {{ __('N/A') }}
                                                         <a href="javascript: void(0);" class="action-ico"
-                                                            wire:click="setParticipantId({{ $participant->id }})">Add</a>
+                                                            wire:click="setParticipantId({{ $sample->participant->id }})">Add</a>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($participant->sample)
-                                                        {{ $participant->sample->sample_identity }}
+                                                    @if ($sample)
+                                                        {{ $sample->sample_identity }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($participant->sample)
+                                                    @if ($sample)
                                                         <strong
-                                                            class="text-success">{{ $participant->sample->lab_no }}</strong>
+                                                            class="text-success">{{ $sample->lab_no }}</strong>
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($participant->sample && $participant->sample->study)
-                                                        {{ $participant->sample->study->name }}
+                                                    @if ($sample && $sample->study)
+                                                        {{ $sample->study->name }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($participant->sample && $participant->sample->requester)
-                                                        {{ $participant->sample->requester->name }}
+                                                    @if ($sample && $sample->requester)
+                                                        {{ $sample->requester->name }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($participant->sample && $participant->sample->collector)
-                                                        {{ $participant->sample->collector->name }}
+                                                    @if ($sample && $sample->collector)
+                                                        {{ $sample->collector->name }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                                 <td class="table-action">
-                                                    @if ($participant->sample)
+                                                    @if ($sample)
                                                         {{ __('N/A') }}
                                                     @else
                                                         <a href="javascript: void(0);"
-                                                            wire:click="deleteConfirmation({{ $participant->id }})"
+                                                            wire:click="deleteConfirmation({{ $sample->id }})"
                                                             class="action-ico">
                                                             <i class="bi bi-trash"></i></a>
                                                     @endif

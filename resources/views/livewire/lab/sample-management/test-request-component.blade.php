@@ -45,7 +45,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
-                                                {{ $sample->participant->sampleReception->batch_no }}
+                                                {{ $sample->sampleReception->batch_no }}
                                             </td>
                                             <td>
                                                 {{ $sample->participant->identity }}

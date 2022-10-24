@@ -199,15 +199,11 @@
                                                 <td>{{ $sampleReception->receiver->fullName }}</td>
                                                 <td>{{ $sampleReception->created_at }}</td>
                                                 <td>{{ $sampleReception->samples_handled }}</td>
-                                                @if ($sampleReception->status == 'Pending')
+                                                @if ($sampleReception->status == 'Pending Review')
                                                     <td><span
                                                             class="badge bg-warning">{{ $sampleReception->status }}</span>
                                                     </td>
-                                                @elseif($sampleReception->status == 'Processing')
-                                                    <td><span
-                                                            class="badge bg-info">{{ $sampleReception->status }}</span>
-                                                    </td>
-                                                @else
+                                                @elseif($sampleReception->status == 'Reviewd')
                                                     <td><span
                                                             class="badge bg-success">{{ $sampleReception->status }}</span>
                                                     </td>

@@ -15,7 +15,7 @@ class ResultReportController extends Controller
      */
     public function show($id)
     {
-        $testResult = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
+        $testResult = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
 
         // return $testResult;
         return view('user.sample-management.downloadReport', compact('testResult'));

@@ -14,7 +14,7 @@ class TestReportsComponent extends Component
 
     public function render()
     {
-        $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name'])->where('status', 'Approved')->get();
+        $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])->where('status', 'Approved')->get();
 
         return view('livewire.lab.sample-management.test-reports-component', compact('testResults'));
     }

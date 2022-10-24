@@ -46,7 +46,7 @@
                                                 <td>{{ $key + 1 }}</td>
 
                                                 <td>
-                                                    {{ $testResult->sample->participant->sampleReception->batch_no }}
+                                                    {{ $testResult->sample->sampleReception->batch_no }}
                                                 </td>
                                                 <td>
                                                     {{ $testResult->sample->study->name }}
@@ -75,7 +75,7 @@
                                                     {{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}
                                                 </td>
                                                 <td>
-                                                    {{ date('d-m-Y H:i', strtotime($testResult->sample->participant->sampleReception->date_delivered)) }}
+                                                    {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                                                 </td>
                                                 <td>
                                                     {{ $testResult->created_at }}

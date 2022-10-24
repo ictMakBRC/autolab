@@ -10,7 +10,7 @@ class Sample extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['participant_id', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
+    protected $fillable = ['sample_reception_id', 'participant_id', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
 
         'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count', 'tests_performed', 'date_acknowledged', 'request_acknowledged_by', 'status', 'created_by', 'creator_lab', ];
 
@@ -18,6 +18,11 @@ class Sample extends Model
         'tests_requested' => 'array',
         'tests_performed' => 'array',
     ];
+
+    public function sampleReception()
+    {
+        return $this->belongsTo(SampleReception::class, 'sample_reception_id', 'id');
+    }
 
     public function participant()
     {

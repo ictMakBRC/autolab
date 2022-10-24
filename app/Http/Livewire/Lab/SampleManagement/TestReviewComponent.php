@@ -37,9 +37,9 @@ class TestReviewComponent extends Component
     public function render()
     {
         if ($this->viewReport) {
-            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
+            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
-            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.participant.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')->get();
+            $testResults = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')->get();
         }
 
         return view('livewire.lab.sample-management.test-review-component', compact('testResults'));

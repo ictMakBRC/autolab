@@ -115,7 +115,7 @@
                     <td class="btop"><strong>Collection Date:</strong> <br>
                         {{ date('d-m-Y', strtotime($testResult->sample->date_collected)) }}</td>
                     <td class="btop"><strong>Date received:</strong> <br>
-                        {{ date('d-m-Y H:i', strtotime($testResult->sample->participant->sampleReception->date_delivered)) }}
+                        {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                     </td>
                     <td class="btop"><strong>Result Date:</strong> <br>{{ $testResult->created_at }}</td>
                 </tr>

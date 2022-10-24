@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sample_reception_id');
             $table->string('participant_no')->unique();
             $table->string('identity');
             $table->integer('age');

@@ -173,7 +173,7 @@ class SampleReceptionComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'date_delivered' => 'required',
+            'date_delivered' => 'required|date|before_or_equal:now',
             'samples_delivered' => 'required',
             'facility_id' => 'required',
             'courier_id' => 'required',

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('samples', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sample_reception_id');
             $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('sample_type_id');
             $table->string('sample_no');

@@ -74,7 +74,7 @@
                         </td>
                         <td>
                             <strong class="text-inverse">Date Received:
-                            </strong>{{ date('d-m-Y H:i', strtotime($testResults->sample->participant->sampleReception->date_delivered)) }}
+                            </strong>{{ date('d-m-Y H:i', strtotime($testResults->sample->sampleReception->date_delivered)) }}
                         </td>
                         <td>
                             <strong class="text-inverse">Result Date: </strong>{{ $testResults->created_at }}
