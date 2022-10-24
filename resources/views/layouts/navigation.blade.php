@@ -73,7 +73,7 @@
                     </div>
                     <a href="{{ route('super.dashboard') }}" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Dashboard</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
+                    <a href="{{ route('participants') }}" class="list-group-item"><i
                             class="bi bi-house-door-fill"></i>Participants</a>
                 </div>
             </div>

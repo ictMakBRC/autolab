@@ -1,27 +1,28 @@
 <?php
 
-use App\Http\Controllers\ResultReportController;
-use App\Http\Livewire\Admin\CollectorComponent;
-use App\Http\Livewire\Admin\CourierComponent;
-use App\Http\Livewire\Admin\DesignationComponent;
-use App\Http\Livewire\Admin\FacilityComponent;
+use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\LaboratoryComponent;
-use App\Http\Livewire\Admin\PlatformComponent;
-use App\Http\Livewire\Admin\RequesterComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Livewire\Admin\StudyComponent;
-use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\TestComponent;
 use App\Http\Livewire\Admin\UserComponent;
-use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
-use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
-use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\CourierComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Controllers\ResultReportController;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
+use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
-use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
+use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
+use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
+use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,5 +67,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'sampleMgt'], function () {
     Route::get('sample/test-reports', TestReportsComponent::class)->name('test-reports');
     Route::get('sample/test-result{id}/report', [ResultReportController::class, 'show'])->name('result-report');
     Route::get('sample/test-result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
+    Route::get('participants', ParticipantListComponent::class)->name('participants');
 });
 require __DIR__.'/auth.php';
