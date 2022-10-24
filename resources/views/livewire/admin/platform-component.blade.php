@@ -3,23 +3,24 @@
         <div class="card">
             <div class="card-header pt-0">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Platforms</h4>
+                    <div class="col-sm-12 mt-3">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                Platforms
+                            </h5>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
+                                <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#addPlatform">Add Platform</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end mt-3">
-                            <a type="button" class="btn btn-outline-info" wire:click="refresh()"
-                            data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                            data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-
-                            <a type="button" class="btn btn-info" data-bs-toggle="modal"
-                            data-bs-target="#addPlatform">Add Platform</a>
-                        </div>
-                    </div><!-- end col-->
                 </div>
             </div>
+
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive">
@@ -89,8 +90,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="platformRange" class="form-label">Range</label>
-                                    <input type="text" id="platformRange" class="form-control"
-                                        wire:model="range">
+                                    <input type="text" id="platformRange" class="form-control" wire:model="range">
                                     @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -152,11 +152,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Platform</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
-                              <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="platformName2" class="form-label">Platform</label>
@@ -178,7 +179,8 @@
 
                                 <div class="mb-3">
                                     <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
+                                    <select class="form-select" id="isActive2" name="is_active"
+                                        wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>

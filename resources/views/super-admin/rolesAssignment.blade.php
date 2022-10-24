@@ -1,24 +1,20 @@
-ia<x-app-layout>
-    <!-- start page title -->
-    {{-- <x-page-title>
-        Roles Assignment
-    </x-page-title> --}}
+<x-app-layout>
 
-    <!-- end row-->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
                     <div class="row mb-2">
-                        <div class="col-sm-4">
-                            <div class="text-sm-end mt-3">
-                                <h4 class="header-title mb-3  text-center">Roles Assignment</h4>
+                        <div class="col-sm-12 mt-3">
+                            <div class="d-sm-flex align-items-center">
+                                <h5 class="mb-2 mb-sm-0">
+                                    Roles Assignment
+                                </h5>
                             </div>
                         </div>
-                        <div class="col-sm-8">
-                        </div><!-- end col-->
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="datableButtons" class="table w-100 nowrap">
@@ -58,7 +54,6 @@ ia<x-app-layout>
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
-
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

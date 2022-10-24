@@ -1,8 +1,4 @@
 <x-app-layout>
-    <!-- start page title -->
-    {{-- <x-page-title>
-        Permissions
-    </x-page-title> --}}
 
     <!-- end row-->
     <div class="row">
@@ -10,19 +6,20 @@
             <div class="card">
                 <div class="card-header pt-0">
                     <div class="row mb-2">
-                        <div class="col-sm-4">
-                            <div class="text-sm-end mt-3">
-                                <h4 class="header-title mb-3  text-center">User Permissions</h4>
+                        <div class="col-sm-12 mt-3">
+                            <div class="d-sm-flex align-items-center">
+                                <h5 class="mb-2 mb-sm-0">
+                                    User Permissions
+                                </h5>
+                                <div class="ms-auto">
+                                    <a type="button" href="#" class="btn btn-info mb-2 me-1"
+                                    data-bs-toggle="modal" data-bs-target="#addPermission">Create Permission</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-8">
-                            <div class="text-sm-end mt-3">
-                                <a type="button" href="#" class="btn btn-info mb-2 me-1"
-                                    data-bs-toggle="modal" data-bs-target="#addPermission">Create Permission</a>
-                            </div>
-                        </div><!-- end col-->
                     </div>
                 </div>
+
                 <div class="card-body">
 
                     <div class="table-responsive">
