@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="minimal-theme">
+ 
 
 <head>
     <!-- Required meta tags -->
@@ -114,8 +115,11 @@
                 "autoWidth": false,
                 "responsive": true,
             });
+
+            document.body.style.zoom = "90%" 
         });
     </script>
+
 
     <script>
         window.addEventListener('alert', event => {
