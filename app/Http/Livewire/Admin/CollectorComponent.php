@@ -40,7 +40,7 @@ class CollectorComponent extends Component
 
     public function getStudies()
     {
-        $this->studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
     }
 
     public function mount()
@@ -82,7 +82,7 @@ class CollectorComponent extends Component
         $this->study_id = $collector->study_id;
         $this->is_active = $collector->is_active;
 
-        $this->studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $collector->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $collector->facility_id)->latest()->get();
 
         $this->dispatchBrowserEvent('edit-modal');
     }
@@ -130,7 +130,7 @@ class CollectorComponent extends Component
     public function deleteData()
     {
         try {
-            $collector = Collector::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
+            $collector = Collector::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $collector->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -152,8 +152,8 @@ class CollectorComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::where('creator_lab',auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
-        $facilities = Facility::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
+        $collectors = Collector::where('creator_lab', auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.collector-component', compact('collectors', 'facilities'))->layout('layouts.app');
     }

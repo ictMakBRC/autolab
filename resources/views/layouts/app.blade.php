@@ -152,12 +152,17 @@
         });
 
         window.addEventListener('maximum-reached', event => {
-
             if (event.detail.type == 'warning') {
                 swal('Warning', `${event.detail.message}`, 'warning');
             }
-            
         });
+
+        window.addEventListener('study-mismatch', event => {
+            if (event.detail.type == 'Error') {
+                swal('Error', `${event.detail.message}`, 'error');
+            }
+        });
+        
     </script>
     @stack('scripts')
 

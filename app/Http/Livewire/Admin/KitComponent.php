@@ -91,7 +91,7 @@ class KitComponent extends Component
     public function deleteData()
     {
         try {
-            $kit = Kit::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
+            $kit = Kit::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $kit->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -113,8 +113,8 @@ class KitComponent extends Component
 
     public function render()
     {
-        $kits = Kit::where('creator_lab',auth()->user()->laboratory_id)->with('platform')->latest()->get();
-        $platforms = Platform::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
+        $kits = Kit::where('creator_lab', auth()->user()->laboratory_id)->with('platform')->latest()->get();
+        $platforms = Platform::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.kit-component', compact('kits', 'platforms'))->layout('layouts.app');
     }

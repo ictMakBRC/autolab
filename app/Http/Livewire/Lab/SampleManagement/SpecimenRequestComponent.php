@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Helpers\Generate;
 use App\Models\Admin\Test;
 use App\Models\Collector;
 use App\Models\Participant;
@@ -10,7 +11,6 @@ use App\Models\Sample;
 use App\Models\SampleReception;
 use App\Models\SampleType;
 use App\Models\Study;
-use Carbon\Carbon;
 use Exception;
 use Livewire\Component;
 
@@ -154,7 +154,7 @@ class SpecimenRequestComponent extends Component
             $this->activeParticipantTab = false;
             $this->resetParticipantInputs();
         } else {
-            $this->reset(['same_participant_id', 'same_participant', 'same_requested_by', 'same_study_id', 'same_collected_by']);
+            $this->reset(['participant_id', 'same_participant_id', 'same_participant', 'same_requested_by', 'same_study_id', 'same_collected_by', 'requested_by', 'study_id', 'collected_by']);
             $this->activeParticipantTab = true;
         }
     }
@@ -225,7 +225,7 @@ class SpecimenRequestComponent extends Component
             ]);
 
             $participant = new Participant();
-            $participant->participant_no = $this->generateParticipantNo();
+            $participant->participant_no = Generate::participantNo();
             $participant->identity = $this->identity;
             $participant->age = $this->age;
             $participant->address = $this->address;
@@ -250,13 +250,13 @@ class SpecimenRequestComponent extends Component
             $participant->email = $this->email;
             $participant->nok = $this->nok;
             $participant->nok_relationship = $this->nok_relationship;
+            $participant->facility_id = $this->facility_id;
 
             $participant->save();
 
             $this->participant_id = $participant->id;
             $this->activeParticipantTab = false;
             $this->resetParticipantInputs();
-            // $this->reset('participantMatch');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
         }
     }
@@ -342,6 +342,7 @@ class SpecimenRequestComponent extends Component
     public function setParticipantId(Participant $participant)
     {
         $this->participant_id = $participant->id;
+        $this->study_id = $participant->study_id;
         $this->activeParticipantTab = false;
     }
 
@@ -356,18 +357,45 @@ class SpecimenRequestComponent extends Component
         } else {
             if ($this->same_participant && $this->participant_id) {
                 //just save sample information
-                $this->saveSampleInformation();
+
+                // $this->saveSampleInformation();
+                $participant = Participant::where('id', $this->participant_id)->first();
+                if ($participant->study_id == null || $participant->study_id == $this->study_id) {
+                    if ($participant->study_id == null) {
+                        $this->saveSampleInformation();
+                        $participant->update(['study_id' => $this->study_id]);
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    } elseif ($participant->study_id == $this->study_id) {
+                        $this->saveSampleInformation();
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    }
+                } else {
+                    $this->dispatchBrowserEvent('study-mismatch', ['type' => 'Error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
+                }
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
                 $this->requested_by = $this->same_requested_by;
                 $this->study_id = $this->same_study_id;
                 $this->collected_by = $this->same_collected_by;
                 $this->activeParticipantTab = false;
-                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+            // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
             } elseif ($this->same_participant && ! $this->participant_id) {
                 //set participant id and save sample information
                 $this->participant_id = $this->same_participant_id;
-                $this->saveSampleInformation();
+                // $this->saveSampleInformation();
+                $participant = Participant::where('id', $this->participant_id)->first();
+                if ($participant->study_id == null || $participant->study_id == $this->study_id) {
+                    if ($participant->study_id == null) {
+                        $this->saveSampleInformation();
+                        $participant->update(['study_id' => $this->study_id]);
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    } elseif ($participant->study_id == $this->study_id) {
+                        $this->saveSampleInformation();
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    }
+                } else {
+                    $this->dispatchBrowserEvent('study-mismatch', ['type' => 'Error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
+                }
                 $this->resetParticipantInputs();
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
@@ -375,15 +403,28 @@ class SpecimenRequestComponent extends Component
                 $this->study_id = $this->same_study_id;
                 $this->collected_by = $this->same_collected_by;
                 $this->activeParticipantTab = false;
-                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+            // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
             } elseif (! $this->same_participant && $this->participant_id) {
                 //just save sample information but return to participant tab
-                $this->saveSampleInformation();
+                // $this->saveSampleInformation();
+                $participant = Participant::where('id', $this->participant_id)->first();
+                if ($participant->study_id == null || $participant->study_id == $this->study_id) {
+                    if ($participant->study_id == null) {
+                        $this->saveSampleInformation();
+                        $participant->update(['study_id' => $this->study_id]);
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    } elseif ($participant->study_id == $this->study_id) {
+                        $this->saveSampleInformation();
+                        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+                    }
+                } else {
+                    $this->dispatchBrowserEvent('study-mismatch', ['type' => 'Error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
+                }
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
                 $this->reset(['same_participant_id', 'same_participant', 'same_requested_by', 'same_study_id', 'same_collected_by']);
                 $this->activeParticipantTab = true;
-                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
+            // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
             } else {
                 //return to participant tab
                 $this->tests = collect([]);
@@ -407,13 +448,12 @@ class SpecimenRequestComponent extends Component
             'sample_type_id' => 'integer|required',
             'tests_requested' => 'array|required',
         ]);
-
         $sample = new Sample();
         $sample->sample_reception_id = $this->sample_reception_id;
         $sample->participant_id = $this->participant_id;
         $sample->sample_type_id = $this->sample_type_id;
-        $sample->sample_no = $this->generateSampleNo();
-        $sample->lab_no = $this->generateSampleNo();
+        $sample->sample_no = Generate::sampleNo();
+        $sample->lab_no = Generate::sampleNo();
         $sample->requested_by = $this->requested_by;
         $sample->date_requested = $this->date_requested;
         $sample->collected_by = $this->collected_by;
@@ -434,6 +474,7 @@ class SpecimenRequestComponent extends Component
 
         $sampleReception = SampleReception::where('batch_no', $this->batch_no)->first();
         $sampleReception->increment('samples_handled');
+
         $this->batch_samples_handled = $sampleReception->samples_handled;
         $this->tests_requested = [];
         $this->tests = collect([]);
@@ -554,59 +595,13 @@ class SpecimenRequestComponent extends Component
         $this->activeParticipantTab = true;
     }
 
-    public function generateParticipantNo()
-    {
-        $participant_no = '';
-        $yearStart = Carbon::now();
-        $latestParticipantNo = Participant::select('participant_no')->orderBy('id', 'desc')->first();
-
-        if ($latestParticipantNo) {
-            $participantNumberSplit = explode('-', $latestParticipantNo->participant_no);
-            $participantNumberYear = (int) filter_var($participantNumberSplit[0], FILTER_SANITIZE_NUMBER_INT);
-
-            if ($participantNumberYear == $yearStart->year) {
-                $participant_no = $participantNumberSplit[0].'-'.((int) filter_var($participantNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1).'P';
-            } else {
-                $participant_no = 'BRC'.$yearStart->year.'-100P';
-            }
-        } else {
-            // $dig= str_pad($dig, 3, '0', STR_PAD_LEFT);
-            // str_pad($value, 8, '0', STR_PAD_LEFT);
-            $participant_no = 'BRC'.$yearStart->year.'-100P';
-        }
-
-        return $participant_no;
-    }
-
-    public function generateSampleNo()
-    {
-        $sample_no = '';
-        $yearStart = Carbon::now();
-        $latestSampleNo = Sample::select('sample_no')->orderBy('id', 'desc')->first();
-
-        if ($latestSampleNo) {
-            $sampleNumberSplit = explode('-', $latestSampleNo->sample_no);
-            $sampleNumberYear = (int) filter_var($sampleNumberSplit[0], FILTER_SANITIZE_NUMBER_INT);
-
-            if ($sampleNumberYear == $yearStart->year) {
-                $sample_no = $sampleNumberSplit[0].'-'.((int) filter_var($sampleNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1).'S';
-            } else {
-                $sample_no = 'PTSP'.$yearStart->year.'-100S';
-            }
-        } else {
-            $sample_no = 'PTSP'.$yearStart->year.'-100S';
-        }
-
-        return $sample_no;
-    }
-
     public function render()
     {
-        $collectors = Collector::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $requesters = Requester::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
-        $sampleTypes = SampleType::where('creator_lab',auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
-        $samples = Sample::where('creator_lab',auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
+        $collectors = Collector::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $requesters = Requester::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $studies = Study::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->orderBy('name', 'asc')->get();
+        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->where('sample_reception_id', $this->sample_reception_id)->latest()->get();
 
         return view('livewire.lab.sample-management.specimen-request-component', compact('sampleTypes', 'collectors', 'studies', 'requesters', 'samples'))->layout('layouts.app');
     }

@@ -14,11 +14,21 @@ class Participant extends Model
     protected $fillable = ['participant_no', 'identity', 'age', 'gender', 'contact', 'address', 'nok_contact', 'nok_address',
 
         'clinical_notes', 'title', 'nin_number', 'surname', 'first_name', 'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation', 'occupation', 'civil_status', 'nok', 'nok_relationship',
-        'created_by', 'creator_lab', ];
+        'facility_id', 'study_id', 'created_by', 'creator_lab', ];
 
     public function sample()
     {
         return $this->hasMany(Sample::class, 'participant_id', 'id');
+    }
+
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class, 'facility_id', 'id');
+    }
+
+    public function study()
+    {
+        return $this->belongsTo(Study::class, 'study_id', 'id');
     }
 
     protected function fullName(): Attribute

@@ -92,7 +92,7 @@ class SampleTypeComponent extends Component
     public function deleteData()
     {
         try {
-            $value = SampleType::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
+            $value = SampleType::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $value->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -114,8 +114,8 @@ class SampleTypeComponent extends Component
 
     public function render()
     {
-        $sampleType = SampleType::where('creator_lab',auth()->user()->laboratory_id)->get();
-        $tests = Test::where('creator_lab',auth()->user()->laboratory_id)->select('id', 'name')->get();
+        $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
+        $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->select('id', 'name')->get();
 
         return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');
     }

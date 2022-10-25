@@ -63,7 +63,7 @@ class TestRequestComponent extends Component
 
     public function render()
     {
-        $samples = Sample::where('creator_lab',auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])->get();
+        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])->get();
 
         return view('livewire.lab.sample-management.test-request-component', compact('samples'));
     }

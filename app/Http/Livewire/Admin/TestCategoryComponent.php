@@ -90,7 +90,7 @@ class TestCategoryComponent extends Component
     public function deleteData()
     {
         try {
-            $TestCategory = TestCategory::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
+            $TestCategory = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $TestCategory->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -112,7 +112,7 @@ class TestCategoryComponent extends Component
 
     public function render()
     {
-        $categories = TestCategory::where('creator_lab',auth()->user()->laboratory_id)->get();
+        $categories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->get();
 
         return view('livewire.admin.test-category', compact('categories'))->layout('layouts.app');
     }

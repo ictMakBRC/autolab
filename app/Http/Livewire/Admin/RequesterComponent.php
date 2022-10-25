@@ -40,7 +40,7 @@ class RequesterComponent extends Component
 
     public function getStudies()
     {
-        $this->studies = Study::where('creator_lab',auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
     }
 
     public function mount()
@@ -130,7 +130,7 @@ class RequesterComponent extends Component
     public function deleteData()
     {
         try {
-            $requester = Requester::where('creator_lab',auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
+            $requester = Requester::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $requester->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -152,8 +152,8 @@ class RequesterComponent extends Component
 
     public function render()
     {
-        $requesters = Requester::where('creator_lab',auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
-        $facilities = Facility::where('creator_lab',auth()->user()->laboratory_id)->latest()->get();
+        $requesters = Requester::where('creator_lab', auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }
