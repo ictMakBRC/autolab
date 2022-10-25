@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\TestResult;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sample extends Model
 {
@@ -27,6 +28,11 @@ class Sample extends Model
     public function participant()
     {
         return $this->belongsTo(Participant::class, 'participant_id', 'id');
+    }
+
+    public function testResult()
+    {
+        return $this->hasMany(TestResult::class, 'sample_id', 'id');
     }
 
     public function sampleType()

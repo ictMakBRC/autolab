@@ -7,7 +7,8 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Specimen Request for Batch <strong class="text-success">{{ $batch_no }}</strong>
+                                    {{ $participant_id }}
+                                    <span class="text-info">{{$source_facility}}</span> Specimen Request for Batch <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
                                         class="text-danger">{{ $batch_sample_count }}</strong>)
                                 </h5>
@@ -50,7 +51,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="tab-icon"><i class='bi bi-person font-18 me-1'></i>
                                                 </div>
-                                                <div class="tab-title">Participant {{ $participant_id }}</div>
+                                                <div class="tab-title">Participant</div>
                                             </div>
                                         </a>
                                     </li>
@@ -378,7 +379,7 @@
                                                     wire:model="requested_by">
                                                     <option selected value="">Select</option>
                                                     @forelse ($requesters as $requester)
-                                                        <option value='{{ $requester->id }}'>{{ $requester->name }}
+                                                        <option value='{{ $requester->id }}'>{{ $requester->name.'('.$requester->study->name.')' }}
                                                         </option>
                                                     @empty
                                                     @endforelse

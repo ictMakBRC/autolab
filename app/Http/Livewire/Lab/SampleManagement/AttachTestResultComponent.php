@@ -71,7 +71,7 @@ class AttachTestResultComponent extends Component
 
         if ($this->attachment != null) {
             $this->validate([
-                'attachment' => ['mimes:pdf,xls,xlsx,cvs,doc,docx', 'max:5000'],
+                'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
             ]);
             $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
             $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
@@ -122,7 +122,7 @@ class AttachTestResultComponent extends Component
 
     public function render()
     {
-        $users = User::where('creator_lab', auth()->user()->laboratory_id)->all();
+        $users = User::where('creator_lab', auth()->user()->laboratory_id)->get();
         $testsRequested = $this->requestedTests ?? collect();
 
         return view('livewire.lab.sample-management.attach-test-result-component', compact('users', 'testsRequested'));

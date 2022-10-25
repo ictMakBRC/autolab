@@ -33,6 +33,7 @@ class RequesterComponent extends Component
             'contact' => 'required',
             'email' => 'required|email:filter',
             'facility_id' => 'required',
+            'study_id' => 'required|unique:requesters',
             'is_active' => 'required',
 
         ]);
@@ -53,8 +54,10 @@ class RequesterComponent extends Component
         $this->validate([
             'name' => 'required',
             'contact' => 'required',
-            'email' => 'required|unique:requesters|email:filter',
+            // 'email' => 'required|unique:requesters|email:filter',
+            'email' => 'required|email:filter',
             'facility_id' => 'required',
+            'study_id' => 'required|unique:requesters',
             'is_active' => 'required',
         ]);
 

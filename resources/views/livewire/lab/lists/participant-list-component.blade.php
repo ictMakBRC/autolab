@@ -36,6 +36,7 @@
                                         <th>Facility</th>
                                         <th>Study</th>
                                         <th>Sample Count</th>
+                                        <th>Test Count</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,13 +73,19 @@
                                             </td>
                                         
                                             <td>
-                                                {{-- {{ $participant->facility }} --}}
+                                                {{ $participant->facility->name }}
                                             </td>
                                             <td>
-                                                {{-- {{ $participant->sample }} --}}
+                                                {{ $participant->study->name }}
                                             </td>
+                                            {{-- <td>
+                                                {{ $participant->sample->name }}
+                                            </td> --}}
                                             <td>
                                                 {{ $participant->sample_count }}
+                                            </td>
+                                            <td>
+                                                {{ $participant->test_result_count}}
                                             </td>
                                         </tr>
                                     @empty

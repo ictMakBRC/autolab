@@ -17,6 +17,10 @@ class Study extends Model
         return $this->belongsTo(Facility::class, 'facility_id', 'id');
     }
 
+    public function requester()
+    {
+        return $this->hasOne(Requester::class, 'study_id', 'id');
+    }
     public static function boot()
     {
         parent::boot();

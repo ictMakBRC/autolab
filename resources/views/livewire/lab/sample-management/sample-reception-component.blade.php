@@ -247,7 +247,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Batch ({{ $batch_no }}) Details</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Batch (<span class="text-info">{{ $batch_no }}</span>) Details</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->

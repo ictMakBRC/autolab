@@ -9,7 +9,7 @@ class ParticipantListComponent extends Component
 {
     public function render()
     {
-        $participants = Participant::where('creator_lab', auth()->user()->laboratory_id)->withCount(['sample'])->get();
+        $participants = Participant::where('creator_lab', auth()->user()->laboratory_id)->withCount(['sample','testResult'])->with('facility','study')->get();
 
         return view('livewire.lab.lists.participant-list-component', compact('participants'));
     }
