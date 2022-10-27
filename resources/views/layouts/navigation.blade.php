@@ -109,10 +109,10 @@
                         </div>
                     </div>
                     <a href="{{ route('samplereception') }}" class="list-group-item"><i
-                            class="bi bi-box2"></i>Sample Reception</a>
+                            class="bi bi-box2"></i>Reception</a>
                     <a href="javascript: void(0);"
                         class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
-                            class="bi bi-receipt"></i>Specimen Accessioning</a>
+                            class="bi bi-receipt"></i>Accessioning</a>
                     <a href="{{ route('test-request') }}" class="list-group-item"><i class="bi bi-file-medical"></i>Test
                         Requests</a>
                     <a href="javascript: void(0);"
@@ -194,16 +194,15 @@
                     </div>
                     <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
                             class="bi bi-hospital"></i>Facility Profile</a>
-                    <a href="{{ route('usermanagement') }}" class="list-group-item"><i class="bi bi-person"></i>User
-                        Management</a>
+                    <a href="{{ route('usermanagement') }}" class="list-group-item"><i class="bi bi-person"></i>Users</a>
                     <a href="{{ route('user-roles.index') }}" class="list-group-item"><i
-                            class="bi bi-person-check"></i>User Roles</a>
+                            class="bi bi-person-check"></i>Roles</a>
                     <a href="{{ route('user-permissions.index') }}" class="list-group-item"><i
-                            class="bi bi-person-x"></i>User Permissions</a>
+                            class="bi bi-person-x"></i>Permissions</a>
                     <a href="{{ route('user-roles-assignment.index') }}" class="list-group-item"><i
                             class="bi bi-card-checklist"></i>Role Assiginment</a>
-                    <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>User
-                        Logs</a>
+                    <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>Login 
+                        Activity</a>
                     <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-list-columns"></i>User
                         Activity</a>
 
