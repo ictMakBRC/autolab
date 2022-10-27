@@ -20,6 +20,7 @@ class SpecimenRequestComponent extends Component
     public $batch_no;
 
     public $facility_id;
+
     public $source_facility;
 
     public $batch_sample_count;
@@ -151,20 +152,20 @@ class SpecimenRequestComponent extends Component
 
     public function updatedRequestedBy()
     {
-        $requester =Requester::findOrFail($this->requested_by);
+        $requester = Requester::findOrFail($this->requested_by);
         $this->reset(['study_id']);
         $this->study_id = $requester->study_id;
     }
+
     public function updatedStudyId()
     {
         $participant = Participant::where('id', $this->participant_id)->orWhere('id', $this->same_participant_id)->first();
         // dd($participant);
         if ($participant->study_id != null && $this->study_id != $participant->study_id) {
-
-            $this->dispatchBrowserEvent('study-mismatch', ['type' => 'Error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
+            $this->dispatchBrowserEvent('study-mismatch', ['type' => 'error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
         }
     }
- 
+
     public function updatedSameParticipant()
     {
         if ($this->same_participant) {
@@ -178,7 +179,7 @@ class SpecimenRequestComponent extends Component
 
     public function updatedIdentity()
     {
-        $participant = Participant::where(['identity'=>$this->identity,'creator_lab'=>auth()->user()->laboratory_id,'facility_id'=>$this->facility_id])->first();
+        $participant = Participant::where(['identity' => $this->identity, 'creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->first();
         if ($participant) {
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
@@ -368,15 +369,12 @@ class SpecimenRequestComponent extends Component
     public function storeSampleInformation()
     {
         if ($this->batch_sample_count == $this->batch_samples_handled) {
-           
             $this->activeParticipantTab = true;
             $this->tabToggleBtn = true;
             $this->resetParticipantInputs();
             $this->resetSampleInformationInputs();
             $this->dispatchBrowserEvent('maximum-reached', ['type' => 'warning',  'message' => 'Oops! Sample maximum already reached for this batch!']);
-        
         } else {
-
             if ($this->same_participant && $this->participant_id) {
                 //just save sample information
                 $this->saveSampleInformation();
@@ -387,7 +385,6 @@ class SpecimenRequestComponent extends Component
                 $this->collected_by = $this->same_collected_by;
                 $this->activeParticipantTab = false;
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
-           
             } elseif ($this->same_participant && ! $this->participant_id) {
                 //set participant id and save sample information
                 $this->participant_id = $this->same_participant_id;
@@ -400,7 +397,6 @@ class SpecimenRequestComponent extends Component
                 $this->collected_by = $this->same_collected_by;
                 $this->activeParticipantTab = false;
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
-           
             } elseif (! $this->same_participant && $this->participant_id) {
                 //just save sample information but return to participant tab
                 $this->saveSampleInformation();
@@ -409,7 +405,6 @@ class SpecimenRequestComponent extends Component
                 $this->reset(['same_participant_id', 'same_participant', 'same_requested_by', 'same_study_id', 'same_collected_by']);
                 $this->activeParticipantTab = true;
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Request Data Recorded successfully!']);
-           
             } else {
                 //return to participant tab
                 $this->tests = collect([]);
@@ -456,7 +451,7 @@ class SpecimenRequestComponent extends Component
         $this->same_requested_by = $sample->requested_by;
         $this->same_study_id = $sample->study_id;
         $this->same_collected_by = $sample->collected_by;
-        
+
         $participant = Participant::where('id', $sample->participant_id)->first();
         if ($participant->study_id == null) {
             $participant->update(['study_id' => $this->study_id]);
@@ -589,11 +584,11 @@ class SpecimenRequestComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::where(['creator_lab'=>auth()->user()->laboratory_id,'facility_id'=>$this->facility_id])->orderBy('name', 'asc')->get();
-        $requesters = Requester::where(['creator_lab'=>auth()->user()->laboratory_id,'facility_id'=>$this->facility_id])->orderBy('name', 'asc')->get();
-        $studies = Study::where(['creator_lab'=>auth()->user()->laboratory_id,'facility_id'=>$this->facility_id])->with('requester:id,name')->orderBy('name', 'asc')->get();
+        $collectors = Collector::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
+        $requesters = Requester::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
+        $studies = Study::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->with('requester:id,name')->orderBy('name', 'asc')->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
-        $samples = Sample::where(['creator_lab'=>auth()->user()->laboratory_id,'sample_reception_id'=>$this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
+        $samples = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_reception_id' => $this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
 
         return view('livewire.lab.sample-management.specimen-request-component', compact('sampleTypes', 'collectors', 'studies', 'requesters', 'samples'))->layout('layouts.app');
     }

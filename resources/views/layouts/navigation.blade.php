@@ -57,6 +57,10 @@
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management" type="button"><i
                         class="bi bi-gear-fill"></i></button>
             </li>
+            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="My Account">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-profile" type="button"><i
+                        class="bi bi-person-fill"></i></button>
+            </li>
         </ul>
     </div>
     <div class="textmenu">
@@ -303,6 +307,17 @@
                             class="bi bi-house-door-fill"></i>Reports</a>
                 </div>
             </div> --}}
+              <div class="tab-pane fade" id="pills-user-profile">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-0">User Profile</h5>
+                        </div>
+                    </div>
+                    <a href="{{route('user.account')}}" class="list-group-item"><i
+                            class="bi bi-person"></i>Account Details</a>
+                </div>
+            </div>
 
         </div>
     </div>

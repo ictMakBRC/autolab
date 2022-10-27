@@ -21,6 +21,7 @@ class Study extends Model
     {
         return $this->hasOne(Requester::class, 'study_id', 'id');
     }
+
     public static function boot()
     {
         parent::boot();

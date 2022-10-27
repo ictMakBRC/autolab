@@ -8,6 +8,30 @@ use Carbon\Carbon;
 
 class Generate
 {
+    public static function password($length = 2)
+    {
+        $numbers = '0123456789';
+        $symbols = '!@#$%^&*()';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $numberLength = strlen($numbers);
+        $symbolLength = strlen($symbols);
+        $uppercaseLength = strlen($uppercase);
+        $lowercaseLength = strlen($lowercase);
+        $randomNumber = '';
+        $randomSymbol = '';
+        $randomUppercase = '';
+        $randomLowercase = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomNumber .= $numbers[rand(0, $numberLength - 1)];
+            $randomSymbol .= $symbols[rand(0, $symbolLength - 1)];
+            $randomUppercase .= $uppercase[rand(0, $uppercaseLength - 1)];
+            $randomLowercase .= $lowercase[rand(0, $lowercaseLength - 1)];
+        }
+
+        return str_shuffle($randomNumber.$randomSymbol.$randomUppercase.$randomLowercase);
+    }
+
     public static function participantNo()
     {
         $participant_no = '';

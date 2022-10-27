@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\UserRolesController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 // use App\Http\Controllers\Auth\UserRolesPermissionsController;
 use App\Http\Controllers\FacilityInformationController;
+use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Models\Designation;
 use App\Models\Laboratory;
 use App\Models\User;
@@ -74,11 +75,12 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
-    Route::get('account', function () {
-        $user = User::where('id', auth()->user()->id)->first();
+    // Route::get('account', function () {
+    //     $user = User::where('id', auth()->user()->id)->first();
 
-        return view('super-admin.userAccount', compact('user'));
-    })->name('user.account');
+    //     return view('super-admin.userAccount', compact('user'));
+    // })->name('user.account');
+    Route::get('account', UserProfileComponent::class)->name('user.account');
 
     Route::put('settings/{id}', function (Request $request, $id) {
         if (User::findOrFail($id)->update($request->all())) {

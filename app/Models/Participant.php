@@ -20,11 +20,12 @@ class Participant extends Model
     {
         return $this->hasMany(Sample::class, 'participant_id', 'id');
     }
+
     public function testResult()
     {
         return $this->hasManyThrough(TestResult::class, Sample::class);
     }
-   
+
     public function facility()
     {
         return $this->belongsTo(Facility::class, 'facility_id', 'id');

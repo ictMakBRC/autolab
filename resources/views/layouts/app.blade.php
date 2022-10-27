@@ -158,11 +158,16 @@
         });
 
         window.addEventListener('study-mismatch', event => {
-            if (event.detail.type == 'Error') {
+            if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');
             }
         });
         
+        window.addEventListener('current-password-mismatch', event => {
+            if (event.detail.type == 'error') {
+                swal('Error', `${event.detail.message}`, 'error');
+            }
+        });
     </script>
     @stack('scripts')
 

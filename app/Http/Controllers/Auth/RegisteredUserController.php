@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\User;
 use App\Notifications\SendPasswordNotification;
 use Illuminate\Auth\Events\Registered;
@@ -19,8 +18,6 @@ class RegisteredUserController extends Controller
     public function index()
     {
         $users = User::latest()->get();
-
-        // $logs = ActivityLog::count();
 
         return view('super-admin.dashboard', compact('users'));
     }

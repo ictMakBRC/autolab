@@ -218,9 +218,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->

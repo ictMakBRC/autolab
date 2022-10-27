@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\TestResult;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Sample extends Model
 {

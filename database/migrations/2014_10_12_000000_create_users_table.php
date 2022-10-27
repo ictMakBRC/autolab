@@ -57,6 +57,7 @@ return new class extends Migration
             $table->string('email', 30)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('password_updated_at')->default(now());
             $table->string('contact', 20)->nullable();
             $table->string('title', 6)->nullable();
             $table->string('avatar')->nullable();
