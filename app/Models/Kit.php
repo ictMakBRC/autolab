@@ -2,15 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kit extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
     protected $fillable = ['name', 'platform_id', 'is_active', 'created_by', 'creator_lab'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('kits')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     public function platform()
     {

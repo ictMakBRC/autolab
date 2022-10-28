@@ -2,15 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Facility extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    // protected $fillable = ['facility_name','facility_type','parent_id','requester_name','requester_contact','requester_email'];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('facilities')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
     protected $fillable = ['name', 'type', 'parent_id', 'is_active', 'created_by', ''];
 
     public function parent()

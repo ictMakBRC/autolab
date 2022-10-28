@@ -2,14 +2,28 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Participant extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('participants')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     protected $fillable = ['participant_no', 'identity', 'age', 'gender', 'contact', 'address', 'nok_contact', 'nok_address',
 

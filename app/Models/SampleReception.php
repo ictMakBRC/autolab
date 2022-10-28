@@ -3,14 +3,28 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class SampleReception extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('sample_reception')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     protected $fillable = ['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'samples_handled', 'rejection_reason', 'courier_signed', 'created_by', 'creator_lab',
         'reviewed_by', 'date_reviewed', 'comment', 'status', ];
