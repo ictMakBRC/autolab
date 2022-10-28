@@ -1,25 +1,25 @@
 <?php
 
-use App\Helpers\LogActivity;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\UserPermissionsController;
-use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Models\User;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use Illuminate\Http\Request;
+use App\Helpers\LoginActivity;
+use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Http\Controllers\Auth\UserRolesController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 // use App\Http\Controllers\Auth\UserRolesPermissionsController;
 use App\Http\Controllers\FacilityInformationController;
-use App\Http\Livewire\Admin\UserProfileComponent;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\UserPermissionsController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 // Route::get('/register', [RegisteredUserController::class, 'create'])
 //                 ->middleware('auth')
@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth','password_expired']], function () {
     })->name('super.dashboard');
 
     Route::get('/users/logs', function () {
-        $logs = LogActivity::logActivityLists();
+        $logs = LoginActivity::logActivityLists();
 
         return view('super-admin.logActivity', compact('logs'));
     })->middleware(['auth'])->name('logs');

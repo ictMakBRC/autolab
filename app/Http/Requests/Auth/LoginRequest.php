@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Helpers\LogActivity;
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Helpers\LoginActivity;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -56,13 +56,13 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt(['email' => $this->email, 'password' => $this->password, 'is_active' => 1], $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            LogActivity::addToLog('login attempt failed', $this->email, $this->ip());
+            LoginActivity::addToLog('login attempt failed', $this->email, $this->ip());
 
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         } else {
-            LogActivity::addToLog('logged in', $this->email, $this->ip());
+            LoginActivity::addToLog('logged in', $this->email, $this->ip());
         }
 
         RateLimiter::clear($this->throttleKey());

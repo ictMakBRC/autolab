@@ -41,7 +41,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($participants as $key => $participant)
-                                        <tr>
+                                        <tr class="{{$activeRow==$participant->id?'bg-info':''}}" wire:click="$set('activeRow',{{$participant->id}})">
                                             <td>{{ $key + 1 }}</td>
                                            
                                             <td>

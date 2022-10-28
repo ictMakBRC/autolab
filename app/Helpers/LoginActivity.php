@@ -2,11 +2,11 @@
 
 namespace App\Helpers;
 
-use App\Models\ActivityLog as LogActivityModel;
+use App\Models\LoginRecord as LoginActivityModel;
 use Jenssegers\Agent\Facades\Agent;
 use Request;
 
-class LogActivity
+class LoginActivity
 {
     public static function addToLog($description, $email, $ip)
     {
@@ -22,11 +22,11 @@ class LogActivity
         // $log['url'] = Request::fullUrl();
         // $log['method'] = Request::method();
         $log['client_ip'] = $ip;
-        LogActivityModel::create($log);
+        LoginActivityModel::create($log);
     }
 
     public static function logActivityLists()
     {
-        return LogActivityModel::latest()->get();
+        return LoginActivityModel::latest()->get();
     }
 }

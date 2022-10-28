@@ -7,6 +7,13 @@ use Livewire\Component;
 
 class ParticipantListComponent extends Component
 {
+    public $activeRow;
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+    
     public function render()
     {
         $participants = Participant::where('creator_lab', auth()->user()->laboratory_id)->withCount(['sample', 'testResult'])->with('facility', 'study')->get();
