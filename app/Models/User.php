@@ -4,16 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notifiable;
-use Laratrust\Traits\LaratrustUserTrait;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
@@ -26,7 +26,7 @@ class User extends Authenticatable
         ->logOnly(['*'])
         ->logFillable()
         ->useLogName('users')
-        ->dontLogIfAttributesChangedOnly(['updated_at','password'])
+        ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
         ->logOnlyDirty()
         ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
@@ -35,6 +35,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *\Auth::user()->actions;
+     *
      * @var array<int, string>
      */
     protected $fillable = [

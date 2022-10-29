@@ -13,6 +13,7 @@ use App\Http\Livewire\Admin\SampleTypeComponent;
 use App\Http\Livewire\Admin\StudyComponent;
 use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\TestComponent;
+use App\Http\Livewire\Admin\UserActivityComponent;
 use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
@@ -40,8 +41,7 @@ Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('gu
 // Route::get('/dashboard', function () {
 //     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
-Route::group(['middleware' => ['auth','password_expired']], function () {
-    
+Route::group(['middleware' => ['auth', 'password_expired']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::get('test-categories', TestCategoryComponent::class)->name('categories');
         Route::get('sample-types', SampleTypeComponent::class)->name('sampletypes');
@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth','password_expired']], function () {
         Route::get('studies', StudyComponent::class)->name('studies');
         Route::get('couriers', CourierComponent::class)->name('couriers');
         Route::get('user-management', UserComponent::class)->name('usermanagement');
+        Route::get('user-activity', UserActivityComponent::class)->name('useractivity');
     });
 
     Route::group(['prefix' => 'sampleMgt'], function () {

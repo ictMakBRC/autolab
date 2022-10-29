@@ -13,7 +13,7 @@ class ParticipantListComponent extends Component
     {
         return redirect(request()->header('Referer'));
     }
-    
+
     public function render()
     {
         $participants = Participant::where('creator_lab', auth()->user()->laboratory_id)->withCount(['sample', 'testResult'])->with('facility', 'study')->get();

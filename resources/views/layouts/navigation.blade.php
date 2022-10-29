@@ -203,7 +203,7 @@
                             class="bi bi-card-checklist"></i>Role Assiginment</a>
                     <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>Login 
                         Activity</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-list-columns"></i>User
+                    <a href="{{route('useractivity')}}" class="list-group-item"><i class="bi bi-list-columns"></i>User
                         Activity</a>
 
                 </div>
