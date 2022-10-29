@@ -8,12 +8,8 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\UserPermissionsController;
-use App\Http\Controllers\Auth\UserRolesAssignmentController;
-use App\Http\Controllers\Auth\UserRolesController;
 // use App\Http\Controllers\Auth\UserRolesPermissionsController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\FacilityInformationController;
 use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Models\Designation;
 use App\Models\Laboratory;
@@ -80,15 +76,15 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
 
     //     return view('super-admin.userAccount', compact('user'));
     // })->name('user.account');
-    Route::get('account', UserProfileComponent::class)->name('user.account');
+    // Route::get('account', UserProfileComponent::class)->name('user.account');
 
-    Route::put('settings/{id}', function (Request $request, $id) {
-        if (User::findOrFail($id)->update($request->all())) {
-            return redirect()->back()->with(['success' => 'Settings successfully updated']);
-        } else {
-            return redirect()->back()->with(['error' => 'Something went wrong and settings were not updated']);
-        }
-    })->name('settings.update');
+    // Route::put('settings/{id}', function (Request $request, $id) {
+    //     if (User::findOrFail($id)->update($request->all())) {
+    //         return redirect()->back()->with(['success' => 'Settings successfully updated']);
+    //     } else {
+    //         return redirect()->back()->with(['error' => 'Something went wrong and settings were not updated']);
+    //     }
+    // })->name('settings.update');
 });
 
 Route::group(['middleware' => ['auth', 'password_expired']], function () {
@@ -100,18 +96,13 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
         return view('super-admin.dashboard', compact('users', 'designations', 'laboratories'));
     })->name('super.dashboard');
 
-    Route::get('/users/login-activity', function () {
-        $logs = LoginActivity::logActivityLists();
+    // Route::get('/users/login-activity', function () {
+    //     $logs = LoginActivity::logActivityLists();
 
-        return view('super-admin.logActivity', compact('logs'));
-    })->middleware(['auth'])->name('logs');
+    //     return view('super-admin.logActivity', compact('logs'));
+    // })->middleware(['auth'])->name('logs');
 
-    Route::resource('users', RegisteredUserController::class);
-    Route::resource('user-roles', UserRolesController::class);
-    Route::resource('user-permissions', UserPermissionsController::class);
-    Route::resource('user-roles-assignment', UserRolesAssignmentController::class);
-    //-------------------------------FACILITY PROFILE MANAGEMENT ROUTES------------------------
-    Route::resource('facilityInformation', FacilityInformationController::class);
+    // Route::resource('users', RegisteredUserController::class);
 
     // ->only(['index', 'create', 'store', 'edit', 'update'])
 });

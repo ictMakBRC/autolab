@@ -197,7 +197,6 @@ class SampleReceptionComponent extends Component
         $sampleReception->rejection_reason = $this->samples_rejected > 0 ? $this->rejection_reason : null;
         $sampleReception->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
-
         $this->resetInputs();
     }
 

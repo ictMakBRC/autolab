@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
 use App\Models\User;
-use Livewire\Component;
+use Exception;
 use Illuminate\Support\Facades\Artisan;
+use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
 class UserActivityComponent extends Component
@@ -48,8 +48,8 @@ class UserActivityComponent extends Component
         return $logs;
     }
 
-    public function cleanLogs(){
-
+    public function cleanLogs()
+    {
         try {
             Artisan::call('activitylog:clean');
             $this->dispatchBrowserEvent('close-modal');
@@ -57,7 +57,6 @@ class UserActivityComponent extends Component
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Something went wrong! Logs could not be clears!']);
         }
-
     }
 
     public function refresh()
@@ -74,7 +73,7 @@ class UserActivityComponent extends Component
     {
         $this->dispatchBrowserEvent('close-modal');
     }
-    
+
     public function render()
     {
         $logs = $this->filterLogs();

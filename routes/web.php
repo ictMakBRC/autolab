@@ -1,5 +1,10 @@
 <?php
 
+use App\Helpers\LoginActivity;
+use App\Http\Controllers\Auth\UserPermissionsController;
+use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Http\Controllers\Auth\UserRolesController;
+use App\Http\Controllers\FacilityInformationController;
 use App\Http\Controllers\ResultReportController;
 use App\Http\Livewire\Admin\CollectorComponent;
 use App\Http\Livewire\Admin\CourierComponent;
@@ -15,6 +20,7 @@ use App\Http\Livewire\Admin\TestCategoryComponent;
 use App\Http\Livewire\Admin\TestComponent;
 use App\Http\Livewire\Admin\UserActivityComponent;
 use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
@@ -55,11 +61,26 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
         Route::get('platforms', PlatformComponent::class)->name('platforms');
         Route::get('studies', StudyComponent::class)->name('studies');
         Route::get('couriers', CourierComponent::class)->name('couriers');
-        Route::get('user-management', UserComponent::class)->name('usermanagement');
-        Route::get('user-activity', UserActivityComponent::class)->name('useractivity');
+
+        Route::group(['prefix' => 'usermgt'], function () {
+            Route::get('users', UserComponent::class)->name('usermanagement');
+            Route::resource('user-roles', UserRolesController::class);
+            Route::resource('user-permissions', UserPermissionsController::class);
+            Route::resource('user-roles-assignment', UserRolesAssignmentController::class);
+            Route::resource('facilityInformation', FacilityInformationController::class);
+            Route::get('activity-trail', UserActivityComponent::class)->name('useractivity');
+            Route::get('login-activity', function () {
+                $logs = LoginActivity::logActivityLists();
+
+                return view('super-admin.logActivity', compact('logs'));
+            })->name('logs');
+        });
+       
     });
 
-    Route::group(['prefix' => 'sampleMgt'], function () {
+    Route::get('user/account', UserProfileComponent::class)->name('user.account');
+
+    Route::group(['prefix' => 'samplemgt'], function () {
         Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
         Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->name('specimen-request');
         Route::get('tests/requests', TestRequestComponent::class)->name('test-request');
