@@ -45,9 +45,10 @@
 
     <!--start wrapper-->
     <div class="wrapper">
-
-        @include('layouts.header')
-        @include('layouts.navigation')
+        <livewire:layout.header-component/>
+        <livewire:layout.navigation-component/>
+        {{-- @include('layouts.header')
+        @include('layouts.navigation') --}}
         <!--start content-->
         <main class="page-content">
             {{-- @include('layouts.messages') --}}
