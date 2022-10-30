@@ -15,11 +15,12 @@
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                     @if (!Route::is('myactivity'))
-                                    <a type="button" class="btn btn-outline-danger" wire:click="deleteConfirmation()"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                        data-bs-original-title="Clean Logs older than 365 days"><i
-                                            class="bi bi-trash"></i></a>
-                                    @endif   
+                                        <a type="button" class="btn btn-outline-danger"
+                                            wire:click="deleteConfirmation()" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title=""
+                                            data-bs-original-title="Clean Logs older than 365 days"><i
+                                                class="bi bi-trash"></i></a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -32,7 +33,8 @@
                                     <label for="causer" class="form-label">User/Causer</label>
                                     <select class="form-select" id="causer" wire:model="causer">
                                         @if (Route::is('myactivity'))
-                                        <option selected value="{{auth()->user()->id}}">{{auth()->user()->fullName}}</option>
+                                            <option selected value="{{ auth()->user()->id }}">
+                                                {{ auth()->user()->fullName }}</option>
                                         @else
                                             <option selected value="0">All</option>
                                             @forelse ($users as $user)
@@ -40,8 +42,8 @@
                                             @empty
                                             @endforelse
                                         @endif
-                                      
-                                       
+
+
                                     </select>
                                     @error('causer')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -51,9 +53,10 @@
                                     <label for="event" class="form-label">Event</label>
                                     <select class="form-select" id="event" wire:model="event">
                                         <option selected value="">All</option>
-                                        <option value="created">Created</option>
-                                        <option value="updated">Updated</option>
-                                        <option value="deleted">Deleted</option>
+                                        @forelse ($events as $event)
+                                            <option value='{{ $event->event }}'>{{ $event->event }}</option>
+                                        @empty
+                                        @endforelse
                                     </select>
                                     @error('event')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -127,6 +130,8 @@
                                                     <span class="badge bg-info">{{ $log->event }}</span>
                                                 @elseif($log->event == 'deleted')
                                                     <span class="badge bg-danger">{{ $log->event }}</span>
+                                                @else
+                                                    <span class="badge bg-info">{{ $log->event }}</span>
                                                 @endif
                                             </td>
                                             <td>{{ $log->log_name . '[' . $log->subject_id . ']' }}</td>
@@ -143,17 +148,22 @@
                                                 @endforelse
                                             </td>
                                             <td>
-                                                @forelse ($log->properties as $attr2 => $property)
-                                                    @if ($attr2 == 'attributes')
-                                                        @foreach ($property as $key => $value)
-                                                            <strong>{{ Str::ucfirst($key) }}: </strong>
-                                                            @json($value)
-                                                            <br>
-                                                        @endforeach
-                                                    @endif
-                                                @empty
-                                                    N/A
-                                                @endforelse
+                                                @if ($log->event == 'Assigned Role' || $log->event == 'Assigned Permission')
+                                                    @json($log->properties)
+                                                @else
+                                                    @forelse ($log->properties as $attr2 => $property)
+                                                        @if ($attr2 == 'attributes')
+                                                            @foreach ($property as $key => $value)
+                                                                <strong>{{ Str::ucfirst($key) }}: </strong>
+                                                                @json($value)
+                                                                <br>
+                                                            @endforeach
+                                                        @endif
+                                                    @empty
+                                                        N/A
+                                                    @endforelse
+                                                @endif
+
                                             </td>
                                         </tr>
                                     @empty

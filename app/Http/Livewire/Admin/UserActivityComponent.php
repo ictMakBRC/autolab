@@ -85,6 +85,7 @@ class UserActivityComponent extends Component
     {
         $logs = $this->filterLogs();
         $log_names = Activity::select('log_name')->distinct()->get();
+        $events = Activity::select('event')->distinct()->get();
 
         if (!Route::is('myactivity')){
             $users = User::all();
@@ -92,6 +93,6 @@ class UserActivityComponent extends Component
             $users = collect([]);
         }
 
-        return view('livewire.admin.user-activity-component', compact('logs', 'users', 'log_names'))->layout('layouts.app');
+        return view('livewire.admin.user-activity-component', compact('logs','events','users', 'log_names'))->layout('layouts.app');
     }
 }

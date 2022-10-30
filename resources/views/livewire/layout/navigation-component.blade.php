@@ -50,7 +50,8 @@
             <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Help Desk">
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk" type="button"><i
                         class="bi bi-question-square-fill"></i></button>
-            </li> --}}
+            </li> --}}            
+            @if (Auth::user()->hasRole(['Admin']))
                 <li class="nav-item {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
                     data-bs-toggle="tooltip" data-bs-placement="right" title="User Management">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-management"
@@ -61,6 +62,8 @@
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management" type="button"><i
                             class="bi bi-gear-fill"></i></button>
                 </li>
+            @endif
+
                 <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="My Account">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-profile"
                         type="button"><i class="bi bi-person-fill"></i></button>
@@ -194,6 +197,9 @@
                         Sources</a>
                 </div>
             </div> --}}
+
+                @if (Auth::user()->hasRole(['Admin']))
+
                 <div class="tab-pane fade {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
                     id="pills-user-management">
                     <div class="list-group list-group-flush">
@@ -225,6 +231,7 @@
 
                     </div>
                 </div>
+
                 <div class="tab-pane fade" id="pills-management">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
@@ -267,6 +274,8 @@
 
                     </div>
                 </div>
+                @endif
+                
                 {{-- <div class="tab-pane fade" id="pills-resources">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">

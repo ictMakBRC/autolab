@@ -48,7 +48,9 @@ Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('gu
 //     return view('dashboard');'role:superadministrator|administrator|user'
 // })->middleware(['auth'])->name('dashboard');
 Route::group(['middleware' => ['auth', 'password_expired']], function () {
-    Route::group(['prefix' => 'admin'], function () {
+
+    Route::group(['middleware' => ['role:Admin'],'prefix' => 'admin'], function () {
+        
         Route::get('test-categories', TestCategoryComponent::class)->name('categories');
         Route::get('sample-types', SampleTypeComponent::class)->name('sampletypes');
         Route::get('test', TestComponent::class)->name('tests');
@@ -62,7 +64,7 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
         Route::get('studies', StudyComponent::class)->name('studies');
         Route::get('couriers', CourierComponent::class)->name('couriers');
 
-        Route::group(['middleware' => ['role:Admin'],'prefix' => 'usermgt'], function () {
+        Route::group(['prefix' => 'usermgt'], function () {
             Route::get('users', UserComponent::class)->name('usermanagement');
             Route::resource('user-roles', UserRolesController::class);
             Route::resource('user-permissions', UserPermissionsController::class);
