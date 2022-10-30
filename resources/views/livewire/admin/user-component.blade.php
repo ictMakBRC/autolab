@@ -55,7 +55,7 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info"> <i
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $user->id }})"
                                                     data-bs-target="#edituser"></i></a>

@@ -50,13 +50,13 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($laboratory->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $laboratory->id }})"
                                                     data-bs-target="#editlaboratory"></i></a>
                                             <a href="javascript: void(0);"
                                                 wire:click="deleteConfirmation({{ $laboratory->id }})"
-                                                class="action-ico"> <i class="bi bi-trash"></i></a>
+                                                class="action-ico btn btn-outline-danger mx-1"> <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -1,7 +1,7 @@
 <x-app-layout>
-
     <!-- end row-->
     <div class="row">
+        
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
@@ -17,6 +17,7 @@
                 </div>
 
                 <div class="card-body">
+                   
                     <form method="POST" action="{{ route('user-roles-assignment.update', $user->id) }}">
                         @csrf
                         @method('PUT')

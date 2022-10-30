@@ -250,10 +250,10 @@
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @endif
                                             <td class="table-action">
-                                                <a href="javascript: void(0);" class="action-ico"
+                                                <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"
                                                     wire:click="editTest({{ $test->id }})"data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Edit Test" class="action-ico"> <i
+                                                    data-bs-original-title="Edit Test" class="action-ico btn btn-outline-danger mx-1"> <i
                                                         class="bi bi-pencil-square"></i></a>
                                             </td>
                                         </tr>

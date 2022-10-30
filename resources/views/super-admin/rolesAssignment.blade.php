@@ -1,5 +1,5 @@
 <x-app-layout>
-
+    @include('layouts.messages')
     <div class="row">
         <div class="col-12">
             <div class="card">

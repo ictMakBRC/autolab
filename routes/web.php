@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
         Route::get('studies', StudyComponent::class)->name('studies');
         Route::get('couriers', CourierComponent::class)->name('couriers');
 
-        Route::group(['prefix' => 'usermgt'], function () {
+        Route::group(['middleware' => ['role:Admin'],'prefix' => 'usermgt'], function () {
             Route::get('users', UserComponent::class)->name('usermanagement');
             Route::resource('user-roles', UserRolesController::class);
             Route::resource('user-permissions', UserPermissionsController::class);
@@ -79,6 +79,7 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
     });
 
     Route::get('user/account', UserProfileComponent::class)->name('user.account');
+    Route::get('user/my-activity', UserActivityComponent::class)->name('myactivity');
 
     Route::group(['prefix' => 'samplemgt'], function () {
         Route::get('reception', SampleReceptionComponent::class)->name('samplereception');
@@ -93,4 +94,5 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
         Route::get('participants', ParticipantListComponent::class)->name('participants');
     });
 });
+
 require __DIR__.'/auth.php';

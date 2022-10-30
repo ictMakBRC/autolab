@@ -341,9 +341,10 @@
                         </div>
                         <a href="{{ route('user.account') }}" class="list-group-item"><i
                                 class="bi bi-person"></i>Account Details</a>
+                        <a href="{{ route('myactivity') }}" class="list-group-item"><i
+                            class="bi bi-person"></i>My Activity</a>
                     </div>
                 </div>
-
             </div>
         </div>
     </aside>

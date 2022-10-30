@@ -1,8 +1,8 @@
 <x-app-layout>
-
     <!-- end row-->
     <div class="row">
         <div class="col-12">
+            @include('layouts.messages')
             <div class="card">
                 <div class="card-header pt-0">
                     <div class="row mb-2">
@@ -51,7 +51,7 @@
                                             <a href="{{ route('user-permissions.edit', $permission->id) }}"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="" data-bs-original-title="Edit"
-                                                class="action-ico btn btn-outline-info mx-1"> <i class="bi bi-pencil"></i></a>
+                                                class="action-ico btn btn-outline-info mx-1"> <i class="bi bi-pencil-square"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

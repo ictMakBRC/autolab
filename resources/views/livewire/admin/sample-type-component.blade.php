@@ -44,11 +44,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="javascript:;" class="text-warning" data-bs-toggle="tooltip"
+                                            <a href="javascript:;" class="action-ico btn btn-outline-info mx-1" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" wire:click="editdata({{ $item->id }})"
                                                 data-target="#edit_modal" title="Edit"><i
-                                                    class="bi bi-pencil-fill"></i></a>
-                                            <a href="javascript:;" class="text-danger" data-bs-toggle="tooltip"
+                                                    class="bi bi-pencil-square"></i></a>
+                                            <a href="javascript:;" class="action-ico btn btn-outline-danger mx-1" data-bs-toggle="tooltip"
                                                 wire:click="deleteConfirmation({{ $item->id }})" title="Delete"><i
                                                     class="bi bi-trash-fill"></i></a>
                                         </td>

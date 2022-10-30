@@ -1,6 +1,7 @@
 <x-app-layout>
 
     <div class="row">
+        @include('layouts.messages')
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">

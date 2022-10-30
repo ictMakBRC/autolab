@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
 use Livewire\Component;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Activitylog\Models\Activity;
 
 class UserActivityComponent extends Component
@@ -19,6 +20,12 @@ class UserActivityComponent extends Component
     public $from_date = '';
 
     public $to_date = '';
+
+    public function mount(){
+        if (Route::is('myactivity')){
+            $this->causer=auth()->user()->id;
+        }
+    }
 
     public function filterLogs()
     {
@@ -77,8 +84,13 @@ class UserActivityComponent extends Component
     public function render()
     {
         $logs = $this->filterLogs();
-        $users = User::all();
         $log_names = Activity::select('log_name')->distinct()->get();
+
+        if (!Route::is('myactivity')){
+            $users = User::all();
+        }else{
+            $users = collect([]);
+        }
 
         return view('livewire.admin.user-activity-component', compact('logs', 'users', 'log_names'))->layout('layouts.app');
     }
