@@ -17,7 +17,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="datableButtons" class="table w-100 nowrap">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -47,7 +47,9 @@
                                         @endif
                                         <td>
                                             <a href="{{ route('user-roles-assignment.edit', $user->id) }}"
-                                                class="action-icon"> <i class="mdi mdi-pencil">Assign</i></a>
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="" data-bs-original-title="Assign"
+                                                class="action-ico btn btn-outline-success mx-1"> <i class="bi bi-check-square"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

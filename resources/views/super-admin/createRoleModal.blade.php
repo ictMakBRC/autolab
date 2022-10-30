@@ -31,7 +31,7 @@
                      </div>
 
                      <div class="row">
-                         <h3 class="text-success">Permissions</h3>
+                         <h6 class="text-success">Permissions</h6>
                          @foreach ($permissions as $permission)
                              <div class="mb-3 col-md-2">
                                  <div class="form-check form-check-inline">

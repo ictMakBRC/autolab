@@ -1,5 +1,6 @@
 <x-app-layout>
     <div class="row">
+         @include('layouts.messages')
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
@@ -20,7 +21,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="datableButtons" class="table w-100 nowrap">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -40,20 +41,28 @@
                                         <td>{{ $role->permissions_count }}</td>
                                         <td class="table-action d-flex">
                                             @if (\Laratrust\Helper::roleIsEditable($role))
-                                                <a href="{{ route('user-roles.edit', $role->id) }}" class="action-icon">
-                                                    <i class="mdi mdi-pencil">edit</i></a>
+                                                <a href="{{ route('user-roles.edit', $role->id) }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="" data-bs-original-title="Edit"
+                                                    class="action-ico btn btn-outline-info mx-1">
+                                                    <i class="bi bi-pencil-square"></i></a>
                                             @else
-                                                <a href="{{ route('user-roles.show', $role->id) }}" class="action-icon">
-                                                    <i class="mdi mdi-eye">view</i></a>
+                                                <a href="{{ route('user-roles.show', $role->id) }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="" data-bs-original-title="View"
+                                                    class="action-ico btn btn-outline-success">
+                                                    <i class="bi bi-eye-fill"></i></a>
                                             @endif
 
                                             <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
                                                 @if (\Laratrust\Helper::roleIsDeletable($role))
-                                                    <a href="#" class="action-icon"
+                                                    <a href="#" class="action-ico btn btn-outline-danger mx-1" 
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="" data-bs-original-title="Delete"
                                                         onclick="event.preventDefault(); this.closest('form').submit();">
-                                                        <i class="mdi mdi-delete"></i></a>
+                                                        <i class="bi bi-trash"></i></a>
                                                 @else
                                                     {{-- <i class="uil-padlock"></i> --}}
                                                 @endif

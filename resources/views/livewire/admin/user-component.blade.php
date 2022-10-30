@@ -55,12 +55,14 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $user->id }})"
                                                     data-bs-target="#edituser"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $user->id }})" class="action-ico">
+                                            <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="" data-bs-original-title="Delete"
+                                                wire:click="deleteConfirmation({{ $user->id }})"
+                                                class="action-ico btn btn-outline-danger">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -404,20 +406,6 @@
             window.addEventListener('delete-modal', event => {
                 $('#delete_modal').modal('show');
             });
-
-            function generatePass() {
-                var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                var passwordLength = 12;
-                var password = "";
-                var passwordInput = document.getElementById("password");
-                for (var i = 0; i <= passwordLength; i++) {
-                    var randomNumber = Math.floor(Math.random() * chars.length);
-                    password += chars.substring(randomNumber, randomNumber + 1);
-                };
-                passwordInput.value = password;
-                passwordInput.select();
-                document.execCommand("copy");
-            }
         </script>
     @endpush
 </div>

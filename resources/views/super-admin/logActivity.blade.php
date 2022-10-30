@@ -16,7 +16,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="datableButtons" class="table w-100 nowrap">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>

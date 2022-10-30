@@ -655,7 +655,7 @@
                                                     @else
                                                         <a href="javascript: void(0);"
                                                             wire:click="deleteConfirmation({{ $sample->id }})"
-                                                            class="action-ico">
+                                                            class="action-ico btn btn-outline-danger mx-1">
                                                             <i class="bi bi-trash"></i></a>
                                                     @endif
                                                 </td>

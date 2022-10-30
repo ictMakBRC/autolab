@@ -209,7 +209,7 @@
                                                     </td>
                                                 @endif
                                                 <td class="table-action">
-                                                    <a href="javascript:;" class="text-primary"
+                                                    <a href="javascript:;" class="action-ico btn btn-outline-success mx-1"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View details"
                                                         aria-label="Views" data-bs-toggle="modal"
@@ -219,13 +219,13 @@
                                                     <a href="{{ route('specimen-request', $sampleReception->batch_no) }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="Accession Samples"
-                                                        class="action-ico"> <i class="bi bi-pencil-square"></i></a>
+                                                        class="action-ico btn btn-outline-info mx-1"> <i class="bi bi-pencil-square"></i></a>
                                                     @if ($sampleReception->samples_handled == 0)
                                                         <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title=""
                                                             data-bs-original-title="Delete Record"
                                                             wire:click="deleteConfirmation({{ $sampleReception->id }})"
-                                                            class="action-ico">
+                                                            class="action-ico btn btn-outline-danger mx-1">
                                                             <i class="bi bi-trash"></i></a>
                                                     @endif
                                                 </td>

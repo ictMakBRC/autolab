@@ -1,21 +1,22 @@
 <div>
     <!--start sidebar -->
-<aside class="sidebar-wrapper">
-    <div class="iconmenu">
-        <div class="nav-toggle-box">
-            <div class="nav-toggle-icon"><i class="bi bi-list"></i></div>
-        </div>
-        <ul class="nav nav-pills flex-column">
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-dashboards" type="button"><i
-                        class="bi bi-house-door-fill"></i></button>
-            </li>
-            <li class="nav-item {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
-                        class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
-            </li>
+    <aside class="sidebar-wrapper">
+        <div class="iconmenu">
+            <div class="nav-toggle-box">
+                <div class="nav-toggle-icon"><i class="bi bi-list"></i></div>
+            </div>
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-dashboards" type="button"><i
+                            class="bi bi-house-door-fill"></i></button>
+                </li>
+                <li class="nav-item {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
+                            class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
+                </li>
 
-            {{-- <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
+                {{-- <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-patients" type="button"><i
                         class="bi bi-person-workspace"></i></button>
             </li>
@@ -50,37 +51,39 @@
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk" type="button"><i
                         class="bi bi-question-square-fill"></i></button>
             </li> --}}
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="User Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-management" type="button">
-                    <i class='bi bi-person-workspace'></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="General Settings">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management" type="button"><i
-                        class="bi bi-gear-fill"></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="My Account">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-profile" type="button"><i
-                        class="bi bi-person-fill"></i></button>
-            </li>
-        </ul>
-    </div>
-    <div class="textmenu">
-        <div class="brand-logo">
-            <img src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140" alt="" />
+                <li class="nav-item {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="User Management">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-management"
+                        type="button">
+                        <i class='bi bi-person-workspace'></i></button>
+                </li>
+                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="General Settings">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-management" type="button"><i
+                            class="bi bi-gear-fill"></i></button>
+                </li>
+                <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="My Account">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-user-profile"
+                        type="button"><i class="bi bi-person-fill"></i></button>
+                </li>
+            </ul>
         </div>
-        <div class="tab-content">
-            <div class="tab-pane fade" id="pills-dashboards">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Home</h5>
-                        </div>
-                    </div>
-                    <a href="{{ route('super.dashboard') }}" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Dashboard</a>
-                </div>
+        <div class="textmenu">
+            <div class="brand-logo">
+                <img src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140" alt="" />
             </div>
-            {{-- <div class="tab-pane fade" id="pills-patients">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="pills-dashboards">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">Home</h5>
+                            </div>
+                        </div>
+                        <a href="{{ route('super.dashboard') }}" class="list-group-item"><i
+                                class="bi bi-house-door-fill"></i>Dashboard</a>
+                    </div>
+                </div>
+                {{-- <div class="tab-pane fade" id="pills-patients">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -99,35 +102,40 @@
                 </div>
             </div> --}}
 
-            <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}"
-                id="pills-samples">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Sample Mgt</h5>
+                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}"
+                    id="pills-samples">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">Sample Mgt</h5>
+                            </div>
                         </div>
-                    </div>
-                    <a href="{{ route('samplereception') }}" class="list-group-item"><i
-                            class="bi bi-box2"></i>Reception<x-count-badge>{{$batchesCount}}</x-count-badge></a>
-                    <a href="javascript: void(0);"
-                        class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
-                            class="bi bi-receipt"></i>Accessioning</a>
-                    <a href="{{ route('test-request') }}" class="list-group-item"><i class="bi bi-file-medical"></i>Test
-                        Requests<x-count-badge>{{$testRequestsCount}}</x-count-badge></a>
-                    <a href="javascript: void(0);"
-                        class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
-                            class="bi bi-file-earmark-medical"></i>Attach Results</a>
-                    <a href="{{ route('test-review') }}" class="list-group-item"><i class="bi bi-check-square"></i>Result
-                        Review<x-count-badge>{{$testsPendindReviewCount}}</x-count-badge></a>
-                    <a href="{{ route('test-approval') }}" class="list-group-item"><i class="bi bi-check2-square"></i>Result
-                        Approval<x-count-badge>{{$testsPendindApprovalCount}}</x-count-badge></a>
-                    <a href="{{ route('test-reports') }}" class="list-group-item"><i class="bi bi-file-earmark-text"></i>Result
-                        Reports<x-count-badge>{{$testReportsCount}}</x-count-badge></a>
+                        <a href="{{ route('samplereception') }}" class="list-group-item"><i
+                                class="bi bi-box2"></i>Reception<x-count-badge>{{ $batchesCount }}</x-count-badge></a>
+                        <a href="javascript: void(0);"
+                            class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
+                                class="bi bi-receipt"></i>Accessioning</a>
+                        <a href="{{ route('test-request') }}" class="list-group-item"><i
+                                class="bi bi-file-medical"></i>Test
+                            Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
+                        <a href="javascript: void(0);"
+                            class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
+                                class="bi bi-file-earmark-medical"></i>Attach Results</a>
+                        <a href="{{ route('test-review') }}" class="list-group-item"><i
+                                class="bi bi-check-square"></i>Result
+                            Review<x-count-badge>{{ $testsPendindReviewCount }}</x-count-badge></a>
+                        <a href="{{ route('test-approval') }}" class="list-group-item"><i
+                                class="bi bi-check2-square"></i>Result
+                            Approval<x-count-badge>{{ $testsPendindApprovalCount }}</x-count-badge></a>
+                        <a href="{{ route('test-reports') }}" class="list-group-item"><i
+                                class="bi bi-file-earmark-text"></i>Result
+                            Reports<x-count-badge>{{ $testReportsCount }}</x-count-badge></a>
                         <a href="{{ route('participants') }}" class="list-group-item"><i
-                            class="bi bi-people"></i>Participants <x-count-badge>{{$participantCount}}</x-count-badge></a>
+                                class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
+                            </x-count-badge></a>
+                    </div>
                 </div>
-            </div>
-            {{-- <div class="tab-pane fade" id="pills-referrals">
+                {{-- <div class="tab-pane fade" id="pills-referrals">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -186,63 +194,80 @@
                         Sources</a>
                 </div>
             </div> --}}
-            <div class="tab-pane fade" id="pills-user-management">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">User Management</h5>
+                <div class="tab-pane fade {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
+                    id="pills-user-management">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">User Management</h5>
+                            </div>
                         </div>
-                    </div>
-                    <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
-                            class="bi bi-hospital"></i>Facility Profile</a>
-                    <a href="{{ route('usermanagement') }}" class="list-group-item"><i class="bi bi-person"></i>Users<x-count-badge>{{$usersCount}}</x-count-badge></a>
-                    <a href="{{ route('user-roles.index') }}" class="list-group-item"><i
-                            class="bi bi-person-check"></i>Roles<x-count-badge>{{$rolesCount}}</x-count-badge></a>
-                    <a href="{{ route('user-permissions.index') }}" class="list-group-item"><i
-                            class="bi bi-person-x"></i>Permissions<x-count-badge>{{$permissionsCount}}</x-count-badge></a>
-                    <a href="{{ route('user-roles-assignment.index') }}" class="list-group-item"><i
-                            class="bi bi-card-checklist"></i>Role Assiginment</a>
-                    <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>Login 
-                        Activity</a>
-                    <a href="{{route('useractivity')}}" class="list-group-item"><i class="bi bi-list-columns"></i>User
-                        Activity</a>
+                        <a href="{{ route('facilityInformation.index') }}" class="list-group-item"><i
+                                class="bi bi-hospital"></i>Facility Profile</a>
+                        <a href="{{ route('usermanagement') }}" class="list-group-item"><i
+                                class="bi bi-person"></i>Users<x-count-badge>{{ $usersCount }}</x-count-badge></a>
+                        <a href="{{ route('user-roles.index') }}"
+                            class="list-group-item {{ request()->segment(3) == 'user-roles' ? 'active' : '' }}"><i
+                                class="bi bi-person-check"></i>Roles<x-count-badge>{{ $rolesCount }}</x-count-badge>
+                            </a>
+                        <a href="{{ route('user-permissions.index') }}"
+                            class="list-group-item {{ request()->segment(3) == 'user-permissions' ? 'active' : '' }}"><i
+                                class="bi bi-person-x"></i>Permissions<x-count-badge>{{ $permissionsCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('user-roles-assignment.index') }}"
+                            class="list-group-item {{ request()->segment(3) == 'user-roles-assignment' ? 'active' : '' }}"><i
+                                class="bi bi-card-checklist"></i>Role Assiginment</a>
+                        <a href="{{ route('logs') }}" class="list-group-item"><i class="bi bi-list-check"></i>Login
+                            Activity</a>
+                        <a href="{{ route('useractivity') }}" class="list-group-item"><i
+                                class="bi bi-list-columns"></i>User
+                            Activity</a>
 
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="pills-management">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Settings</h5>
+                <div class="tab-pane fade" id="pills-management">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">Settings</h5>
+                            </div>
                         </div>
-                    </div>
-                    <a href="{{ route('laboratories') }}" class="list-group-item"><i
-                            class="bx bx-clinic"></i>Laboratories<x-count-badge>{{$laboratoryCount}}</x-count-badge></a>
-                    <a href="{{ route('designations') }}" class="list-group-item"><i
-                            class="bi bi-person-square"></i>Designations<x-count-badge>{{$designationCount}}</x-count-badge></a>
-                    <a href="{{ route('facilities') }}" class="list-group-item"><i
-                            class="bi bi-hospital"></i>Facilities<x-count-badge>{{$facilityCount}}</x-count-badge></a>
-                    <a href="{{ route('studies') }}" class="list-group-item"><i
-                            class="bi bi-kanban"></i>Studies/Projects<x-count-badge>{{$studyCount}}</x-count-badge></a>
-                    <a href="{{ route('requesters') }}" class="list-group-item"><i
-                            class="bi bi-people"></i>Requesters<x-count-badge>{{$requesterCount}}</x-count-badge></a>
-                    <a href="{{ route('collectors') }}" class="list-group-item"><i
-                            class="bx bx-test-tube"></i>Sample Collectors<x-count-badge>{{$collectorCount}}</x-count-badge></a>
-                    <a href="{{ route('couriers') }}" class="list-group-item"><i
-                            class="bi bi-truck"></i>Couriers<x-count-badge>{{$courierCount}}</x-count-badge></a>
-                    <a href="{{ route('platforms') }}" class="list-group-item"><i
-                            class="bi bi-gear-wide-connected"></i>Platforms<x-count-badge>{{$platformCount}}</x-count-badge></a>
-                    <a href="{{ route('kits') }}" class="list-group-item"><i
-                            class="bx bx-bong"></i>Kits<x-count-badge>{{$kitCount}}</x-count-badge></a>
-                    <a href="{{ route('sampletypes') }}" class="list-group-item"><i
-                            class="bx bxs-vial"></i>Sample Types<x-count-badge>{{$sampleTypeCount}}</x-count-badge></a>
-                    <a href="{{ route('categories') }}" class="list-group-item"><i
-                            class="bi bi-virus"></i>Test Categories<x-count-badge>{{$testCategoryCount}}</x-count-badge></a>
-                    <a href="{{ route('tests') }}" class="list-group-item"><i class="bx bxs-flask"></i>Tests<x-count-badge>{{$testCount}}</x-count-badge></a>
+                        <a href="{{ route('laboratories') }}" class="list-group-item"><i
+                                class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('designations') }}" class="list-group-item"><i
+                                class="bi bi-person-square"></i>Designations<x-count-badge>{{ $designationCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('facilities') }}" class="list-group-item"><i
+                                class="bi bi-hospital"></i>Facilities<x-count-badge>{{ $facilityCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('studies') }}" class="list-group-item"><i
+                                class="bi bi-kanban"></i>Studies/Projects<x-count-badge>{{ $studyCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('requesters') }}" class="list-group-item"><i
+                                class="bi bi-people"></i>Requesters<x-count-badge>{{ $requesterCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('collectors') }}" class="list-group-item"><i
+                                class="bx bx-test-tube"></i>Sample Collectors<x-count-badge>{{ $collectorCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('couriers') }}" class="list-group-item"><i
+                                class="bi bi-truck"></i>Couriers<x-count-badge>{{ $courierCount }}</x-count-badge></a>
+                        <a href="{{ route('platforms') }}" class="list-group-item"><i
+                                class="bi bi-gear-wide-connected"></i>Platforms<x-count-badge>{{ $platformCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('kits') }}" class="list-group-item"><i class="bx bx-bong"></i>Kits
+                            <x-count-badge>{{ $kitCount }}</x-count-badge></a>
+                        <a href="{{ route('sampletypes') }}" class="list-group-item"><i
+                                class="bx bxs-vial"></i>Sample Types<x-count-badge>{{ $sampleTypeCount }}
+                            </x-count-badge></a>
+                        <a href="{{ route('categories') }}" class="list-group-item"><i class="bi bi-virus"></i>Test
+                            Categories<x-count-badge>{{ $testCategoryCount }}</x-count-badge></a>
+                        <a href="{{ route('tests') }}" class="list-group-item"><i class="bx bxs-flask"></i>Tests
+                            <x-count-badge>{{ $testCount }}</x-count-badge></a>
 
+                    </div>
                 </div>
-            </div>
-            {{-- <div class="tab-pane fade" id="pills-resources">
+                {{-- <div class="tab-pane fade" id="pills-resources">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -258,7 +283,7 @@
                 </div>
             </div> --}}
 
-            {{-- <div class="tab-pane fade" id="pills-trainings">
+                {{-- <div class="tab-pane fade" id="pills-trainings">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -275,7 +300,7 @@
                 </div>
             </div> --}}
 
-            {{-- <div class="tab-pane fade" id="pills-engagements">
+                {{-- <div class="tab-pane fade" id="pills-engagements">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -291,7 +316,7 @@
                 </div>
             </div> --}}
 
-            {{-- <div class="tab-pane fade" id="pills-helpdesk">
+                {{-- <div class="tab-pane fade" id="pills-helpdesk">
                 <div class="list-group list-group-flush">
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -307,21 +332,21 @@
                             class="bi bi-house-door-fill"></i>Reports</a>
                 </div>
             </div> --}}
-              <div class="tab-pane fade" id="pills-user-profile">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">User Profile</h5>
+                <div class="tab-pane fade" id="pills-user-profile">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">User Profile</h5>
+                            </div>
                         </div>
+                        <a href="{{ route('user.account') }}" class="list-group-item"><i
+                                class="bi bi-person"></i>Account Details</a>
                     </div>
-                    <a href="{{route('user.account')}}" class="list-group-item"><i
-                            class="bi bi-person"></i>Account Details</a>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-</aside>
-<!--end start sidebar -->
+    </aside>
+    <!--end start sidebar -->
 
 </div>

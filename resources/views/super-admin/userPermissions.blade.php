@@ -23,7 +23,7 @@
                 <div class="card-body">
 
                     <div class="table-responsive">
-                        <table id="datableButtons" class="table w-100 nowrap">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -49,7 +49,9 @@
                                         </td>
                                         <td class="table-action">
                                             <a href="{{ route('user-permissions.edit', $permission->id) }}"
-                                                class="action-icon"> <i class="mdi mdi-pencil">edit</i></a>
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="" data-bs-original-title="Edit"
+                                                class="action-ico btn btn-outline-info mx-1"> <i class="bi bi-pencil"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

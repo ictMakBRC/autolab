@@ -33,7 +33,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="display_name" class="form-label">Display Name</label>
                                 <input type="text" id="display_name" class="form-control" name="display_name"
-                                    value="{{ $model->description }}" placeholder="Edit user profile" required>
+                                    value="{{ $model->display_name }}" placeholder="Edit user profile" required>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="description" class="form-label">Description</label>
@@ -43,7 +43,7 @@
                         </div>
                         @if ($type == 'role')
                             <div class="row">
-                                <h3 class="text-success">Permissions</h3>
+                                <h6 class="text-success">Permissions</h6>
                                 @foreach ($permissions as $permission)
                                     <div class="mb-3 col-md-2">
                                         <div class="form-check form-check-inline">
