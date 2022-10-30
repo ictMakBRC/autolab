@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Laratrust\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Laratrust\Helper;
 
 // use Illuminate\Support\Facades\Config;
 
@@ -102,7 +101,7 @@ class UserRolesAssignmentController
             ->performedOn($user)
             ->useLog('users')
             ->event('Assigned Role')
-            ->withProperties(['roles' => $request->get('roles')?? []])
+            ->withProperties(['roles' => $request->get('roles') ?? []])
             ->log('Assigned Role');
 
         if ($this->assignPermissions) {

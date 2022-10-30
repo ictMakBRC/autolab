@@ -14,7 +14,7 @@
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                    @if (!Route::is('myactivity'))
+                                    @if (!$checkroute)
                                         <a type="button" class="btn btn-outline-danger"
                                             wire:click="deleteConfirmation()" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title=""
@@ -32,7 +32,7 @@
                                 <div class="mb-3 col-md-3">
                                     <label for="causer" class="form-label">User/Causer</label>
                                     <select class="form-select" id="causer" wire:model="causer">
-                                        @if (Route::is('myactivity'))
+                                        @if ($checkroute)
                                             <option selected value="{{ auth()->user()->id }}">
                                                 {{ auth()->user()->fullName }}</option>
                                         @else

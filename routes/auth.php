@@ -1,28 +1,19 @@
 <?php
 
-use App\Helpers\LoginActivity;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 // use App\Http\Controllers\Auth\UserRolesPermissionsController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Models\Designation;
 use App\Models\Laboratory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/register', [RegisteredUserController::class, 'create'])
-//                 ->middleware('auth')
-//                 ->name('register');
-
-// Route::post('/register', [RegisteredUserController::class, 'store'])
-//                 ->middleware('auth');
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
@@ -71,13 +62,6 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 
 Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
-    // Route::get('account', function () {
-    //     $user = User::where('id', auth()->user()->id)->first();
-
-    //     return view('super-admin.userAccount', compact('user'));
-    // })->name('user.account');
-    // Route::get('account', UserProfileComponent::class)->name('user.account');
-
     // Route::put('settings/{id}', function (Request $request, $id) {
     //     if (User::findOrFail($id)->update($request->all())) {
     //         return redirect()->back()->with(['success' => 'Settings successfully updated']);
@@ -95,14 +79,6 @@ Route::group(['middleware' => ['auth', 'password_expired']], function () {
 
         return view('super-admin.dashboard', compact('users', 'designations', 'laboratories'));
     })->name('super.dashboard');
-
-    // Route::get('/users/login-activity', function () {
-    //     $logs = LoginActivity::logActivityLists();
-
-    //     return view('super-admin.logActivity', compact('logs'));
-    // })->middleware(['auth'])->name('logs');
-
-    // Route::resource('users', RegisteredUserController::class);
 
     // ->only(['index', 'create', 'store', 'edit', 'update'])
 });

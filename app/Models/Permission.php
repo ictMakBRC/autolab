@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
 use Laratrust\Models\LaratrustPermission;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Permission extends LaratrustPermission
 {
-   
     use LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
@@ -22,5 +21,6 @@ class Permission extends LaratrustPermission
         ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     public $guarded = [];
 }

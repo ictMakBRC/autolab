@@ -27,11 +27,14 @@
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
                                                 Dropdown</span>
                                         </button>
+
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
-                                                data-bs-target="#addFacility">Add Facility</a>
-                                            <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
-                                                data-bs-target="#addCourier">Add Courier</a>
+                                            @if (Auth::user()->hasPermission(['create-reception-info']))
+                                                <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                    data-bs-target="#addFacility">Add Facility</a>
+                                                <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                    data-bs-target="#addCourier">Add Courier</a>
+                                            @endif
                                             <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
                                                 form</a>
                                         </div>
@@ -41,116 +44,120 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row mb-0">
-                        <form
-                            @if (!$toggleForm) wire:submit.prevent="storeData"
+
+                    @if (Auth::user()->hasPermission(['create-reception-info']))
+                        <div class="row mb-0">
+                            <form
+                                @if (!$toggleForm) wire:submit.prevent="storeData"
                         @else
                         wire:submit.prevent="updateData" @endif>
-                            <div class="row">
-                                <div class="mb-3 col-md-2">
-                                    <label for="date_delivered" class="form-label">Date/Time Delivered</label>
-                                    <input id="date_delivered" type="datetime-local" class="form-control"
-                                        wire:model="date_delivered">
-                                    @error('date_delivered')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 col-md-2">
-                                    <label for="delivered" class="form-label">Samples Delivered</label>
-                                    <input type="number" id="delivered" class="form-control"
-                                        wire:model="samples_delivered">
-                                    @error('samples_delivered')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label for="facility_id" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility_id" wire:model="facility_id"
-                                        wire:change="getCouriers()">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('facility_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 col-md-3">
-                                    <label for="courier_id" class="form-label">Courier</label>
-                                    <select class="form-select" id="courier_id" wire:model="courier_id">
-                                        <option selected value="">Select</option>
-                                        @forelse ($couriers as $courier)
-                                            <option value='{{ $courier->id }}'>{{ $courier->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('courier_id')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 col-md-2">
-                                    <label for="accepted" class="form-label">Verified & Accepted</label>
-                                    <input type="number" id="accepted" class="form-control"
-                                        wire:model="samples_accepted">
-                                    @error('samples_accepted')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-1 col-md-2">
-                                    <label for="rejected" class="form-label">Rejected</label>
-                                    <input type="number" id="rejected" class="form-control"
-                                        wire:model="samples_rejected" readonly>
-                                    @error('samples_rejected')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-1 col-md-3">
-                                    <label for="received_by" class="form-label">Received By</label>
-                                    <select class="form-select" id="received_by" wire:model="received_by">
-                                        <option selected value="">Select</option>
-                                        @forelse ($users as $user)
-                                            <option value='{{ $user->id }}'>{{ $user->fullName }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('received_by')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb- col-md-1">
-                                    <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" value="1"
-                                            id="courier_signed" checked wire:model="courier_signed">
-                                        <label class="form-check-label" for="courier_signed">Did Courier Sign?</label>
+                                <div class="row">
+                                    <div class="mb-3 col-md-2">
+                                        <label for="date_delivered" class="form-label">Date/Time Delivered</label>
+                                        <input id="date_delivered" type="datetime-local" class="form-control"
+                                            wire:model="date_delivered">
+                                        @error('date_delivered')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    @error('courier_signed')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-1 col-md-4">
-                                    <label for="rejection_reason" class="form-label">Reason for Rejection</label>
-                                    <textarea type="text" id="rejection_reason" class="form-control" wire:model="rejection_reason"></textarea>
-                                    @error('rejection_reason')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="delivered" class="form-label">Samples Delivered</label>
+                                        <input type="number" id="delivered" class="form-control"
+                                            wire:model="samples_delivered">
+                                        @error('samples_delivered')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label for="facility_id" class="form-label">Facility</label>
+                                        <select class="form-select" id="facility_id" wire:model="facility_id"
+                                            wire:change="getCouriers()">
+                                            <option selected value="">Select</option>
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                        @error('facility_id')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                                <div class="col-md-2 text-start mt-4">
-                                    @if (!$toggleForm)
-                                        <x-button>{{ __('Save') }}</x-button>
-                                    @else
-                                        <x-button>{{ __('Update') }}</x-button>
-                                    @endif
-                                </div>
+                                    <div class="mb-3 col-md-3">
+                                        <label for="courier_id" class="form-label">Courier</label>
+                                        <select class="form-select" id="courier_id" wire:model="courier_id">
+                                            <option selected value="">Select</option>
+                                            @forelse ($couriers as $courier)
+                                                <option value='{{ $courier->id }}'>{{ $courier->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                        @error('courier_id')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="accepted" class="form-label">Verified & Accepted</label>
+                                        <input type="number" id="accepted" class="form-control"
+                                            wire:model="samples_accepted">
+                                        @error('samples_accepted')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-1 col-md-2">
+                                        <label for="rejected" class="form-label">Rejected</label>
+                                        <input type="number" id="rejected" class="form-control"
+                                            wire:model="samples_rejected" readonly>
+                                        @error('samples_rejected')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-1 col-md-3">
+                                        <label for="received_by" class="form-label">Received By</label>
+                                        <select class="form-select" id="received_by" wire:model="received_by">
+                                            <option selected value="">Select</option>
+                                            @forelse ($users as $user)
+                                                <option value='{{ $user->id }}'>{{ $user->fullName }}</option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                        @error('received_by')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                            </div>
-                            <!-- end row-->
-                        </form>
-                    </div>
+                                    <div class="mb- col-md-1">
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" value="1"
+                                                id="courier_signed" checked wire:model="courier_signed">
+                                            <label class="form-check-label" for="courier_signed">Did Courier
+                                                Sign?</label>
+                                        </div>
+                                        @error('courier_signed')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-1 col-md-4">
+                                        <label for="rejection_reason" class="form-label">Reason for Rejection</label>
+                                        <textarea type="text" id="rejection_reason" class="form-control" wire:model="rejection_reason"></textarea>
+                                        @error('rejection_reason')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-2 text-start mt-4">
+                                        @if (!$toggleForm)
+                                            <x-button>{{ __('Save') }}</x-button>
+                                        @else
+                                            <x-button>{{ __('Update') }}</x-button>
+                                        @endif
+                                    </div>
+
+                                </div>
+                                <!-- end row-->
+                            </form>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="card-body">
@@ -209,18 +216,22 @@
                                                     </td>
                                                 @endif
                                                 <td class="table-action">
-                                                    <a href="javascript:;" class="action-ico btn btn-outline-success mx-1"
+                                                    <a href="javascript:;"
+                                                        class="action-ico btn btn-outline-success mx-1"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View details"
                                                         aria-label="Views" data-bs-toggle="modal"
                                                         wire:click="showData({{ $sampleReception->id }})"
                                                         data-bs-target="#show-data"><i class="bi bi-eye-fill"></i></a>
+                                                    @if (Auth::user()->hasPermission(['accession-samples']))
+                                                        <a href="{{ route('specimen-request', $sampleReception->batch_no) }}"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="" data-bs-original-title="Accession Samples"
+                                                            class="action-ico btn btn-outline-info mx-1"> <i
+                                                                class="bi bi-pencil-square"></i></a>
+                                                    @endif
 
-                                                    <a href="{{ route('specimen-request', $sampleReception->batch_no) }}"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title="Accession Samples"
-                                                        class="action-ico btn btn-outline-info mx-1"> <i class="bi bi-pencil-square"></i></a>
-                                                    @if ($sampleReception->samples_handled == 0)
+                                                    @if ($sampleReception->samples_handled == 0 && Auth::user()->hasPermission(['create-reception-info']))
                                                         <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title=""
                                                             data-bs-original-title="Delete Record"
@@ -247,7 +258,8 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Batch (<span class="text-info">{{ $batch_no }}</span>) Details</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Batch (<span
+                                class="text-info">{{ $batch_no }}</span>) Details</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->
@@ -331,191 +343,194 @@
         </div> <!-- end modal-->
 
         {{-- //DELETE CONFIRMATION MODAL --}}
-        <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
-            data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Reception Data</h5>
-                        <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body pt-4 pb-4">
-                        <h6>Are you sure you want to delete this Record?</h6>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
-                            aria-label="Close">Cancel</button>
-                        <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
+        @if (Auth::user()->hasPermission(['create-reception-info']))
+            <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
+                data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Reception Data</h5>
+                            <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pt-4 pb-4">
+                            <h6>Are you sure you want to delete this Record?</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
+                            <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- ADD FACILITY --}}
-        <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                            wire:click="close()"></button>
-                    </div> <!-- end modal header -->
-                    <div class="modal-body">
-                        <form wire:submit.prevent="storeFacility">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label for="facilityName" class="form-label">Facility Name</label>
-                                        <input type="text" id="facilityName" class="form-control"
-                                            name="facilityname" wire:model="facilityname">
-                                        @error('facilityname')
+            {{-- ADD FACILITY --}}
+            <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Add New Facility</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                                wire:click="close()"></button>
+                        </div> <!-- end modal header -->
+                        <div class="modal-body">
+                            <form wire:submit.prevent="storeFacility">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <label for="facilityName" class="form-label">Facility Name</label>
+                                            <input type="text" id="facilityName" class="form-control"
+                                                name="facilityname" wire:model="facilityname">
+                                            @error('facilityname')
+                                                <div class="text-danger text-small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="type" class="form-label">Type</label>
+                                            <select class="form-select" id="type" wire:model="facility_type">
+                                                <option selected value="">Select</option>
+                                                <option value='Institution'>Institution</option>
+                                                <option value='Health Facility'>Health Facility</option>
+                                            </select>
+                                            @error('facility_type')
+                                                <div class="text-danger text-small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="parent" class="form-label">Parent</label>
+                                            <select class="form-select" id="parent"
+                                                wire:model="facility_parent_id">
+                                                <option selected value="">None</option>
+                                                @forelse ($facilities as $facility)
+                                                    <option value='{{ $facility->id }}'>{{ $facility->name }}
+                                                    </option>
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                            @error('facility_parent_id')
+                                                <div class="text-danger text-small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="isActive" class="form-label">Status</label>
+                                            <select class="form-select" id="isActive" wire:model="facility_status">
+                                                <option selected value="">Select</option>
+                                                <option value='1'>Active</option>
+                                                <option value='0'>Inactive</option>
+                                            </select>
+                                            @error('facility_status')
+                                                <div class="text-danger text-small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div>
+                                <!-- end row-->
+                                <div class="modal-footer">
+                                    <x-button>{{ __('Save') }}</x-button>
+                                    <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                        data-bs-dismiss="modal">{{ __('Close') }}</x-button>
+                                </div>
+                            </form>
+                        </div>
+                    </div> <!-- end modal content-->
+                </div> <!-- end modal dialog-->
+            </div> <!-- end modal-->
+
+            {{-- ADD COURIER --}}
+            <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Add New Courier</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                                wire:click="close()"></button>
+                        </div> <!-- end modal header -->
+                        <div class="modal-body">
+                            <form wire:submit.prevent="storeCourier">
+                                <div class="row">
+                                    <div class="mb-3 col-md-4">
+                                        <label for="courierName" class="form-label">Name</label>
+                                        <input type="text" id="courierName" class="form-control"
+                                            name="couriername" wire:model="couriername">
+                                        @error('couriername')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="type" class="form-label">Type</label>
-                                        <select class="form-select" id="type" wire:model="facility_type">
+                                    <div class="mb-3 col-md-4">
+                                        <label for="couriercontact" class="form-label">Contact</label>
+                                        <input type="text" id="couriercontact" class="form-control"
+                                            wire:model="couriercontact">
+                                        @error('couriercontact')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label for="courierEmail" class="form-label">Email</label>
+                                        <input type="email" id="courierEmail" class="form-control"
+                                            wire:model="courieremail">
+                                        @error('courieremail')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-5">
+                                        <label for="facility" class="form-label">Facility</label>
+                                        <select class="form-select" id="facility" wire:model="courierfacility"
+                                            wire:change="getStudies">
                                             <option selected value="">Select</option>
-                                            <option value='Institution'>Institution</option>
-                                            <option value='Health Facility'>Health Facility</option>
-                                        </select>
-                                        @error('facility_type')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="parent" class="form-label">Parent</label>
-                                        <select class="form-select" id="parent" wire:model="facility_parent_id">
-                                            <option selected value="">None</option>
                                             @forelse ($facilities as $facility)
                                                 <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('facility_parent_id')
+                                        @error('courierfacility')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="isActive" class="form-label">Status</label>
-                                        <select class="form-select" id="isActive" wire:model="facility_status">
+
+                                    <div class="mb-3 col-md-5">
+                                        <label for="study_id" class="form-label">Study/project</label>
+                                        <select class="form-select" id="study_id" wire:model="courierstudy">
+                                            @if ($courierfacility && !$studies->isEmpty())
+                                                <option selected value="">Select/None</option>
+                                                @foreach ($studies as $study)
+                                                    <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                                @endforeach
+                                            @else
+                                                <option selected value="">None</option>
+                                            @endif
+                                        </select>
+                                        @error('courierstudy')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3 col-md-2">
+                                        <label for="isActive2" class="form-label">Status</label>
+                                        <select class="form-select" id="isActive2" wire:model="courierstatus">
                                             <option selected value="">Select</option>
                                             <option value='1'>Active</option>
                                             <option value='0'>Inactive</option>
                                         </select>
-                                        @error('facility_status')
+                                        @error('courierstatus')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div> <!-- end col -->
-                            </div>
-                            <!-- end row-->
-                            <div class="modal-footer">
-                                <x-button>{{ __('Save') }}</x-button>
-                                <x-button type="button" class="btn btn-danger" wire:click="close()"
-                                    data-bs-dismiss="modal">{{ __('Close') }}</x-button>
-                            </div>
-                        </form>
-                    </div>
-                </div> <!-- end modal content-->
-            </div> <!-- end modal dialog-->
-        </div> <!-- end modal-->
-
-        {{-- ADD COURIER --}}
-        <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Add New Courier</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                            wire:click="close()"></button>
-                    </div> <!-- end modal header -->
-                    <div class="modal-body">
-                        <form wire:submit.prevent="storeCourier">
-                            <div class="row">
-                                <div class="mb-3 col-md-4">
-                                    <label for="courierName" class="form-label">Name</label>
-                                    <input type="text" id="courierName" class="form-control" name="couriername"
-                                        wire:model="couriername">
-                                    @error('couriername')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
                                 </div>
-                                <div class="mb-3 col-md-4">
-                                    <label for="couriercontact" class="form-label">Contact</label>
-                                    <input type="text" id="couriercontact" class="form-control"
-                                        wire:model="couriercontact">
-                                    @error('couriercontact')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
+                                <!-- end row-->
+                                <div class="modal-footer">
+                                    <x-button>{{ __('Save') }}</x-button>
+                                    <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                        data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                                 </div>
-                                <div class="mb-3 col-md-4">
-                                    <label for="courierEmail" class="form-label">Email</label>
-                                    <input type="email" id="courierEmail" class="form-control"
-                                        wire:model="courieremail">
-                                    @error('courieremail')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3 col-md-5">
-                                    <label for="facility" class="form-label">Facility</label>
-                                    <select class="form-select" id="facility" wire:model="courierfacility"
-                                        wire:change="getStudies">
-                                        <option selected value="">Select</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                    @error('courierfacility')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 col-md-5">
-                                    <label for="study_id" class="form-label">Study/project</label>
-                                    <select class="form-select" id="study_id" wire:model="courierstudy">
-                                        @if ($courierfacility && !$studies->isEmpty())
-                                            <option selected value="">Select/None</option>
-                                            @foreach ($studies as $study)
-                                                <option value='{{ $study->id }}'>{{ $study->name }}</option>
-                                            @endforeach
-                                        @else
-                                            <option selected value="">None</option>
-                                        @endif
-                                    </select>
-                                    @error('courierstudy')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3 col-md-2">
-                                    <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" wire:model="courierstatus">
-                                        <option selected value="">Select</option>
-                                        <option value='1'>Active</option>
-                                        <option value='0'>Inactive</option>
-                                    </select>
-                                    @error('courierstatus')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <!-- end row-->
-                            <div class="modal-footer">
-                                <x-button>{{ __('Save') }}</x-button>
-                                <x-button type="button" class="btn btn-danger" wire:click="close()"
-                                    data-bs-dismiss="modal">{{ __('Close') }}</x-button>
-                            </div>
-                        </form>
-                    </div>
-                </div> <!-- end modal content-->
-            </div> <!-- end modal dialog-->
-        </div> <!-- end modal-->
-
+                            </form>
+                        </div>
+                    </div> <!-- end modal content-->
+                </div> <!-- end modal dialog-->
+            </div> <!-- end modal-->
+        @endif
 
         @push('scripts')
             <script>
@@ -534,7 +549,6 @@
                 window.addEventListener('show-modal', event => {
                     $('#show-data').modal('show');
                 });
-
             </script>
         @endpush
     </div>

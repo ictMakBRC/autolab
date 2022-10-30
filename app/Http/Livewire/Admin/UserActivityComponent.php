@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
 use App\Models\User;
-use Livewire\Component;
-use Illuminate\Support\Facades\Route;
+use Exception;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
 class UserActivityComponent extends Component
@@ -21,9 +21,13 @@ class UserActivityComponent extends Component
 
     public $to_date = '';
 
-    public function mount(){
-        if (Route::is('myactivity')){
-            $this->causer=auth()->user()->id;
+    public $checkroute = false;
+
+    public function mount()
+    {
+        $this->checkroute = Route::is('myactivity');
+        if ($this->checkroute) {
+            $this->causer = auth()->user()->id;
         }
     }
 
@@ -87,12 +91,12 @@ class UserActivityComponent extends Component
         $log_names = Activity::select('log_name')->distinct()->get();
         $events = Activity::select('event')->distinct()->get();
 
-        if (!Route::is('myactivity')){
-            $users = User::all();
-        }else{
+        if ($this->checkroute) {
             $users = collect([]);
+        } else {
+            $users = User::all();
         }
 
-        return view('livewire.admin.user-activity-component', compact('logs','events','users', 'log_names'))->layout('layouts.app');
+        return view('livewire.admin.user-activity-component', compact('logs', 'events', 'users', 'log_names'))->layout('layouts.app');
     }
 }

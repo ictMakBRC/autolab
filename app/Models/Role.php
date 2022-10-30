@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
 use Laratrust\Models\LaratrustRole;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Role extends LaratrustRole
@@ -21,5 +21,6 @@ class Role extends LaratrustRole
         ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     public $guarded = [];
 }

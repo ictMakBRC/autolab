@@ -168,7 +168,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'laboratory_id', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
+        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
