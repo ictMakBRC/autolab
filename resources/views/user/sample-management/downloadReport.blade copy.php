@@ -55,11 +55,66 @@
             padding-bottom: 5px;
             border-block-start-style: outset;
         }
+
+        .wrapper {
+        width: 70%;
+        height: auto;
+        margin: 10px auto;
+        border: 1px solid #cbcbcb;
+        background: white;
+      }
+
+      @media print {
+        footer {
+          position: fixed;
+          bottom: 0;
+        }
+        .text_centered {
+        position: absolute;
+        top: 69%;
+        left: 19%;
+        /* transform: translate(-50%, -50%); */
+        color: red
+        }
+      .wrapper{
+         width: 100%;
+        height: auto;
+        margin: 2px auto;
+        margin-top: -12px;
+        border: 0px ;
+        background: white;
+        }
+        .button {
+          display: none;
+        }
+      header {
+          position: fixed;
+          top: 0;
+           text-align: right;
+        }
+
+        .doc {
+        writing-mode: vertical-rl;
+         position:  fixed;
+        left: -15px;
+        bottom: 16px;
+        z-index: 1;
+      }
+        .content-block, p {
+          page-break-inside: avoid;
+        }
+
+        html, body {
+          width: 210mm;
+          height: 297mm;
+        }
+      }
     </style>
 </head>
 
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
+    <section class="wrapper" id="content">
     <div class="row" style="line-height:0.9">
         <h2 style="text-align:center; font-family:times;">MAKERERE <img src="{{ asset('storage/' . $facilityInfo->logo) }}"
                 alt="Makerere University Logo" width="150px" style="vertical-align:middle;"
@@ -115,7 +170,7 @@
                     <td class="btop"><strong>Collection Date:</strong> <br>
                         {{ date('d-m-Y', strtotime($testResult->sample->date_collected)) }}</td>
                     <td class="btop"><strong>Date received:</strong> <br>
-                        {{ date('d-m-Y H:i', strtotime($testResult->sample->participant->sampleReception->date_delivered)) }}
+                        {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                     </td>
                     <td class="btop"><strong>Result Date:</strong> <br>{{ $testResult->created_at }}</td>
                 </tr>
@@ -135,9 +190,12 @@
                     <td class="btop" style="width:40%">
                         <div style="float: right;">
                             <br>
-                            <img src="data:image/png;base64, {!! base64_encode(
-                                QrCode::format('svg')->size(60)->generate($testResult->sample->participant->identity.'|'.$testResult->sample->sample_identity),
-                            ) !!} ">
+                            {!! 
+                                QrCode::size(60)->generate('Make me into an QrCode!')
+                             !!}
+                            {{-- <img src="data:image/png;base64, {!! base64_encode(
+                                QrCode::size(60)->generate('Make me into an QrCode!'),
+                            ) !!} "> --}}
                         </div>
                     </td>
                 </tr>
@@ -214,7 +272,7 @@
                 </table> --}}
         </footer>
     </div>
-
+    </section>
     <script type='text/php'>
         if (isset($pdf)) 
         {               
