@@ -80,7 +80,7 @@
                                             <td class="action-ico">
                                                 <a href="{{route('result-report',$testResult->id)}}" type="button" data-bs-toggle="tooltip"
                                                 data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Result Report" target="_blank"
+                                                data-bs-original-title="Result Report"
                                                 class="action-ico btn btn-outline-info"><i class="bi bi-arrow-down-square"></i></a>
                                             </td> 
                                         </tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TestResult;
 use Illuminate\Support\Facades\Response;
+use PDF;
 
 class ResultReportController extends Controller
 {
@@ -17,8 +18,11 @@ class ResultReportController extends Controller
     {
         $testResult = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
 
-        // return $testResult;
-        return view('user.sample-management.downloadReport', compact('testResult'));
+        $pdf = PDF::loadView('user.sample-management.downloadReport', compact('testResult'));
+        $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
+        return $pdf->download(rand().'.pdf');
+
+        // return view('user.sample-management.downloadReport', compact('testResult'));
     }
 
     public function download($id)
