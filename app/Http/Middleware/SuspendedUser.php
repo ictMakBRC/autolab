@@ -16,11 +16,11 @@ class SuspendedUser
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()->is_active!=1) {
-
+        if ($request->user()->is_active != 1) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+
             return redirect('/');
         }
 

@@ -20,6 +20,7 @@ class ResultReportController extends Controller
 
         $pdf = PDF::loadView('user.sample-management.downloadReport', compact('testResult'));
         $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
+
         return $pdf->download(rand().'.pdf');
 
         // return view('user.sample-management.downloadReport', compact('testResult'));

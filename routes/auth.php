@@ -71,7 +71,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
     // })->name('settings.update');
 });
 
-Route::group(['middleware' => ['auth', 'password_expired','suspended_user']], function () {
+Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
     Route::get('dashboard', function () {
         $users = User::latest()->get();
         $designations = Designation::latest()->get();

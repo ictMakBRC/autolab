@@ -434,7 +434,7 @@ class SpecimenRequestComponent extends Component
         $sample->participant_id = $this->participant_id;
         $sample->sample_type_id = $this->sample_type_id;
         $sample->sample_no = Generate::sampleNo();
-        $sample->lab_no = Generate::sampleNo();
+        $sample->lab_no = Generate::labNo();
         $sample->requested_by = $this->requested_by;
         $sample->date_requested = $this->date_requested;
         $sample->collected_by = $this->collected_by;
