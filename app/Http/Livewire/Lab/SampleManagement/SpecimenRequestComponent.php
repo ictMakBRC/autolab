@@ -400,6 +400,7 @@ class SpecimenRequestComponent extends Component
             } elseif (! $this->same_participant && $this->participant_id) {
                 //just save sample information but return to participant tab
                 $this->saveSampleInformation();
+                $this->resetParticipantInputs();
                 $this->resetSampleInformationInputs();
                 $this->tests = collect([]);
                 $this->reset(['same_participant_id', 'same_participant', 'same_requested_by', 'same_study_id', 'same_collected_by']);
