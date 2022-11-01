@@ -266,7 +266,7 @@
                     </div>
                 @endif
                 @if (Auth::user()->hasPermission(['access-settings']))
-                    <div class="tab-pane fade" id="pills-management">
+                    <div class="tab-pane fade" class="tab-pane fade {{ request()->segment(2) == 'globalmgt' ? 'active show' : '' }}" id="pills-management">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">

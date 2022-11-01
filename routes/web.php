@@ -46,7 +46,7 @@ Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('gu
 
 Route::group(['middleware' => ['auth', 'password_expired']], function () {
     Route::group(['prefix' => 'admin'], function () {
-        Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'usermgt'], function () {
+        Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'globalmgt'], function () {
             Route::get('test-categories', TestCategoryComponent::class)->name('categories');
             Route::get('sample-types', SampleTypeComponent::class)->name('sampletypes');
             Route::get('test', TestComponent::class)->name('tests');
