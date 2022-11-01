@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use PhpParser\Node\Stmt\Catch_;
 
 class UserPermissionsController
 {
@@ -36,11 +35,11 @@ class UserPermissionsController
             'display_name' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
-        try{
-        $permission = $this->permissionModel::create($data);
+        try {
+            $permission = $this->permissionModel::create($data);
 
-        return to_route('user-permissions.index')->with('success', 'Permission created successfully!');
-        }catch (\exception $error){
+            return to_route('user-permissions.index')->with('success', 'Permission created successfully!');
+        } catch (\exception $error) {
             return redirect()->back()->with('error', 'Permission already exists!');
         }
     }
@@ -63,12 +62,12 @@ class UserPermissionsController
             'display_name' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
-    try{
-        $permission->update($data);
+        try {
+            $permission->update($data);
 
-        return to_route('user-permissions.index')->with('success', 'Permission updated successfully!');
-    }catch (\exception $error){
-        return redirect()->back()->with('error', 'Permission name already taken!');
-    }
+            return to_route('user-permissions.index')->with('success', 'Permission updated successfully!');
+        } catch (\exception $error) {
+            return redirect()->back()->with('error', 'Permission name already taken!');
+        }
     }
 }
