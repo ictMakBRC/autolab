@@ -240,7 +240,7 @@
                 <tr>
                     <td colspan="2" style="width: 80%; text-alighn:center">
                         <h6 style="color:green;  ">
-                            The Laboratory is Certified by the Ministry of Health Uganda to test for COVID-19
+                            The Laboratory is Certified by the Ministry of Health Uganda
                         </h6>
                     </td>
                     <td style="width: 20%">
