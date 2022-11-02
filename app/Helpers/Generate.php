@@ -48,8 +48,6 @@ class Generate
                 $participant_no = 'BRC'.$yearStart->year.'-100P';
             }
         } else {
-            // $dig= str_pad($dig, 3, '0', STR_PAD_LEFT);
-            // str_pad($value, 8, '0', STR_PAD_LEFT);
             $participant_no = 'BRC'.$yearStart->year.'-100P';
         }
 
@@ -76,5 +74,68 @@ class Generate
         }
 
         return $sample_no;
+    }
+
+    public static function labNo()
+    {
+          //NAIVE APPROACH
+          $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          $lettersLength = strlen($letters);
+          $labno='';
+          $latestLabNo= Sample::select('lab_no')->orderBy('id', 'desc')->first();
+         
+          if ($latestLabNo) {
+              $letterPart = substr($latestLabNo->lab_no, 0, 3);
+              $numPart = (int) substr($latestLabNo->lab_no, 3);
+  
+              $letter1 = $letterPart[0];
+              $letter2 = $letterPart[1];
+              $letter3 = $letterPart[2];
+  
+              if ($letter3 != $letters[$lettersLength - 1]) {
+                  if ($numPart == 999) {
+                      $letter3 = $letters[strpos($letters, $letter3) + 1];
+                  } else {
+                      $letter3 = $letter3;
+                      $letter2 = $letter2;
+                      $letter1 = $letter1;
+                  }
+              } else {
+                  if ($letter2 != $letters[$lettersLength - 1]) {
+                      if ($numPart == 999) {
+                          $letter2 = $letters[strpos($letters, $letter2) + 1];
+                          $letter3 = $letters[0];
+                      } else {
+                          $letter2 = $letter2;
+                          $letter1 = $letter1;
+                      }
+                  } else {
+                      if ($letter1 != $letters[$lettersLength - 1]) {
+                          if ($numPart == 999) {
+                              $letter1 = $letters[strpos($letters, $letter1) + 1];
+                              $letter2 = $letters[0];
+                              $letter3 = $letters[0];
+                          } else {
+                              $letter1 = $letter1;
+                          }
+                      } else {
+                          if ($numPart == 999) {
+                              return $labno;
+                          } else {
+                              $letter1 = $letter1;
+                              $letter2 = $letter2;
+                              $letter3 = $letter3;
+                          }
+                      }
+                  }
+              }
+  
+              $numPart == 999 ? $numPart = 1 : $numPart++;
+              $numPart < 10 || $numPart < 100 ? $numPart = str_pad($numPart, 3, '0', STR_PAD_LEFT) : $numPart;
+              $labno = $letter1.$letter2.$letter3.$numPart;
+          } else {
+              $labno = 'AAA001';
+          }
+          return $labno;
     }
 }
