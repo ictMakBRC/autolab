@@ -35,10 +35,13 @@ class UserPermissionsController
             'display_name' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
+        try {
+            $permission = $this->permissionModel::create($data);
 
-        $permission = $this->permissionModel::create($data);
-
-        return redirect(route('user-permissions.index'))->with('success', 'Permission created successfully!');
+            return to_route('user-permissions.index')->with('success', 'Permission created successfully!');
+        } catch (\exception $error) {
+            return redirect()->back()->with('error', 'Permission already exists!');
+        }
     }
 
     public function edit($id)
@@ -59,9 +62,12 @@ class UserPermissionsController
             'display_name' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
+        try {
+            $permission->update($data);
 
-        $permission->update($data);
-
-        return redirect(route('user-permissions.index'))->with('success', 'Permission updated successfully!');
+            return to_route('user-permissions.index')->with('success', 'Permission updated successfully!');
+        } catch (\exception $error) {
+            return redirect()->back()->with('error', 'Permission name already taken!');
+        }
     }
 }
