@@ -61,12 +61,8 @@
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
     <div class="row" style="line-height:0.9">
-        <h2 style="text-align:center; font-family:times;">MAKERERE <img src="{{ asset('storage/' . $facilityInfo->logo) }}"
-                alt="Makerere University Logo" width="150px" style="vertical-align:middle;"
-                onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';"> UNIVERSITY</h2>
-        <h4 style="text-align:center; font-family:times;">COLLEGE OF HEALTH SCIENCES<br>
-            <h4 style="text-align:center; font-family:times;">SCHOOL OF BIOMEDICAL SCIENCES<br>
-                DEPARTMENT OF IMMUNOLOGY AND MOLECULAR BIOLOGY</h4>
+        <img src="{{ asset('autolab-assets/images/headers/mblheader.svg') }}"  alt="Makerere University Logo" width="100%" style="vertical-align:middle;"
+        onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';">
             <h5 style="text-align:center; font-family:times;">{{Str::upper(auth()->user()->laboratory->laboratory_name)}}</h5>
             <hr style="height:1px; width:100%; color:#6C757D;">
             <h6 style="text-align:center; font-family:times; color:red"><b>RESULT REPORT</b></h6>
