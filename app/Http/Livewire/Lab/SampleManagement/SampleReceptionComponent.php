@@ -26,7 +26,7 @@ class SampleReceptionComponent extends Component
 
     public $samples_rejected;
 
-    public $rejection_reason;
+    public $comment;
 
     public $courier_signed;
 
@@ -69,8 +69,6 @@ class SampleReceptionComponent extends Component
 
     public $review_date;
 
-    public $comment;
-
     public $batch_status;
 
     //NEW FACILITY FIELDS
@@ -108,7 +106,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required|integer|min:0|lte:samples_delivered',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
 
         ]);
     }
@@ -122,7 +120,7 @@ class SampleReceptionComponent extends Component
             if ($sampleDifference > 0) {
                 $this->samples_rejected = $sampleDifference;
                 $this->validate([
-                    'rejection_reason' => 'required',
+                    'comment' => 'required',
                 ]);
             } elseif ($sampleDifference <= 0) {
                 $this->samples_rejected = 0;
@@ -181,7 +179,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
         ]);
 
         $sampleReception = new SampleReception();
@@ -194,7 +192,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->samples_rejected > 0 ? $this->rejection_reason : null;
+        $sampleReception->comment = $this->comment ?? null;
         $sampleReception->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
         $this->resetInputs();
@@ -202,7 +200,6 @@ class SampleReceptionComponent extends Component
 
     public function editdata(SampleReception $sampleReception)
     {
-        // $sampleReception = SampleReception::where('id', $id)->first();
         $this->edit_id = $sampleReception->id;
         $this->batch_no = $sampleReception->batch_no;
         $this->date_delivered = $sampleReception->date_delivered;
@@ -213,18 +210,16 @@ class SampleReceptionComponent extends Component
         $this->courier_signed = $sampleReception->courier_signed;
         $this->facility_id = $sampleReception->facility_id;
         $this->courier_id = $sampleReception->courier_id;
-        $this->rejection_reason = $sampleReception->rejection_reason;
+        $this->comment = $sampleReception->comment;
 
         $this->couriers = Courier::where('facility_id', $sampleReception->facility_id)->latest()->get();
 
         $this->toggleForm = true;
-        // $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function showData(SampleReception $sampleReception)
     {
         $sampleReception->load('facility', 'courier', 'receiver', 'reviewer');
-        // $sampleReception = SampleReception::with('facility','courier','receiver','reviewer')->where('id', $id)->first();
         $this->batch_no = $sampleReception->batch_no;
         $this->delivery_date = $sampleReception->date_delivered;
         $this->delivered_samples = $sampleReception->samples_delivered;
@@ -240,7 +235,6 @@ class SampleReceptionComponent extends Component
         $this->facility_name = $sampleReception->facility->name;
         $this->courier_contact = $sampleReception->courier->contact;
         $this->courier_email = $sampleReception->courier->email;
-        $this->reason_for_rejection = $sampleReception->rejection_reason;
         $this->handled = $sampleReception->samples_handled;
         $this->batch_status = $sampleReception->status;
 
@@ -249,7 +243,7 @@ class SampleReceptionComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'rejection_reason', 'courier_signed']);
+        $this->reset(['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'comment', 'courier_signed']);
         $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
         $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
     }
@@ -265,7 +259,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
         ]);
         $sampleReception = SampleReception::find($this->edit_id);
 
@@ -277,7 +271,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->samples_rejected > 0 ? $this->rejection_reason : null;
+        $sampleReception->comment = $this->comment?? null;
         $sampleReception->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
 

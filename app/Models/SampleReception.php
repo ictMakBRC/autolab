@@ -72,6 +72,8 @@ class SampleReception extends Model
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
+                $model->reviewed_by = auth()->id();
+                $model->date_reviewed = now();
             });
 
             // self::updating(function ($model) {
