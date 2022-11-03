@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label for="userEmail" class="form-label">Email</label>
-                                        <input type="email" id="userEmail" class="form-control" wire:model="email">
+                                        <input type="email" id="userEmail" class="form-control" wire:model="email" readonly>
                                         @error('email')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror

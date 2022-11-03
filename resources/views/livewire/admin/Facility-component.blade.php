@@ -9,9 +9,11 @@
                                 Facilities
                             </h5>
                             <div class="ms-auto">
-                                <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                <a type="button" class="btn btn-outline-info mx-1" wire:click="refresh()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                     data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
+                                    data-bs-target="#associate">Associate</a>
 
                                 <a type="button" class="btn btn-info" data-bs-toggle="modal"
                                     data-bs-target="#addFacility">Add Facility</a>
@@ -37,9 +39,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($facilities as $key => $facility)
+                                @foreach ($facilities->only($associated_facilities) as $key => $facility)
                                     <tr>
-                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $key+1 }}</td>
                                         <td>{{ $facility->name }}</td>
                                         <td>{{ $facility->type }}</td>
                                         <td>{{ $facility->parent ? $facility->parent->name : 'N/A' }}</td>
@@ -50,12 +52,14 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);"
+                                                class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $facility->id }})"
                                                     data-bs-target="#editfacility"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})" class="action-ico btn btn-outline-danger mx-1">
+                                                wire:click="deleteConfirmation({{ $facility->id }})"
+                                                class="action-ico btn btn-outline-danger mx-1">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -80,7 +84,6 @@
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="storeData">
-                        {{-- @csrf --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -134,14 +137,12 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
+
 
     {{-- //DELETE CONFIRMATION MODAL --}}
     <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
@@ -246,12 +247,50 @@
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
 
+    {{-- ASSOCIATE FACILITIES TO LAB --}}
+    <div wire:ignore.self class="modal fade" id="associate" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Associate Facilities to Lab</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body">
+                    <form wire:submit.prevent="associateFacility">
+                        <div class="row">
+                            @forelse ($facilities as $facility)
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ $facility->id }}"
+                                            id="associated_facilities" checked wire:model="associated_facilities">
+                                        <label class="form-check-label"
+                                            for="associated_facilities">{{ $facility->name }}</label>
+                                    </div>
+                                </div>
+
+                            @empty
+                            @endforelse
+                        </div>
+                        <!-- end row-->
+                        <div class="modal-footer">
+                            <x-button class="btn-success">{{ __('Save') }}</x-button>
+                            <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                data-bs-dismiss="modal">{{ __('Close') }}</x-button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div> <!-- end modal-->
+
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
                 $('#addFacility').modal('hide');
                 $('#editfacility').modal('hide');
                 $('#delete_modal').modal('hide');
+                $('#associate').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 

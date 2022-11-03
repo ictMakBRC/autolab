@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('short_code', 6)->nullable();
             $table->integer('autonumber')->nullable();
+            $table->text('associated_facilities')->nullable();
+            $table->text('associated_studies')->nullable();
             $table->integer('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();

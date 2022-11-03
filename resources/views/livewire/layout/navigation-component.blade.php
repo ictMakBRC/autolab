@@ -243,6 +243,9 @@
                             <a href="{{ route('usermanagement') }}" class="list-group-item"><i
                                     class="bi bi-person"></i>Users<x-count-badge>{{ $usersCount }}</x-count-badge>
                             </a>
+                            <a href="{{ route('laboratories') }}" class="list-group-item"><i
+                                class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
+                            </x-count-badge></a>
                             <a href="{{ route('user-roles.index') }}"
                                 class="list-group-item {{ request()->segment(3) == 'user-roles' ? 'active' : '' }}"><i
                                     class="bi bi-person-check"></i>Roles<x-count-badge>{{ $rolesCount }}
@@ -273,9 +276,7 @@
                                     <h5 class="mb-0">Settings</h5>
                                 </div>
                             </div>
-                            <a href="{{ route('laboratories') }}" class="list-group-item"><i
-                                    class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
-                                </x-count-badge></a>
+                          
                             <a href="{{ route('designations') }}" class="list-group-item"><i
                                     class="bi bi-person-square"></i>Designations<x-count-badge>{{ $designationCount }}
                                 </x-count-badge></a>

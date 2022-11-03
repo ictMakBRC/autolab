@@ -94,7 +94,7 @@ class UserActivityComponent extends Component
         if ($this->checkroute) {
             $users = collect([]);
         } else {
-            $users = User::all();
+            $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->get();
         }
 
         return view('livewire.admin.user-activity-component', compact('logs', 'events', 'users', 'log_names'))->layout('layouts.app');

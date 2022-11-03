@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Facility;
 use Exception;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Laboratory;
 
 class FacilityComponent extends Component
 {
@@ -16,9 +17,12 @@ class FacilityComponent extends Component
 
     public $description;
 
+    public $associated_facilities;
+
     public $is_active;
 
     public $delete_id;
+    // public $count=0;
 
     public function updated($fields)
     {
@@ -28,6 +32,12 @@ class FacilityComponent extends Component
             'is_active' => 'required',
 
         ]);
+    }
+
+    
+    public function mount()
+    { 
+        $this->associated_facilities=auth()->user()->laboratory->associated_facilities??[];
     }
 
     public function storeData()
@@ -47,6 +57,19 @@ class FacilityComponent extends Component
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
+    }
+
+    public function associateFacility()
+    {
+        $this->validate([
+            'associated_facilities' => 'required',
+        ]);
+        $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+        $laboratory->associated_facilities = $this->associated_facilities;
+        $laboratory->update();
+
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
     }
 
     public function refresh()
@@ -119,7 +142,7 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::where('creator_lab', auth()->user()->laboratory_id)->with('parent')->latest()->get();
+        $facilities = Facility::with('parent')->latest()->get();
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

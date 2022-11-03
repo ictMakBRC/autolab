@@ -179,7 +179,7 @@ class SpecimenRequestComponent extends Component
 
     public function updatedIdentity()
     {
-        $participant = Participant::where(['identity' => $this->identity, 'creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->first();
+        $participant = Participant::where(['identity' => $this->identity,'facility_id' => $this->facility_id])->whereIn('study_id',auth()->user()->laboratory->associated_studies)->first();
         if ($participant) {
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
@@ -361,8 +361,8 @@ class SpecimenRequestComponent extends Component
     public function setParticipantId(Participant $participant)
     {
         $this->participant_id = $participant->id;
-        $this->study_id = $participant->study_id;
-        $this->requested_by = $participant->study->requester->id;
+        $this->study_id = $participant->study_id??'';
+        $this->requested_by = $participant->study?$participant->study->requester->id:'';
         $this->activeParticipantTab = false;
     }
 
@@ -585,10 +585,10 @@ class SpecimenRequestComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
-        $requesters = Requester::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
-        $studies = Study::where(['creator_lab' => auth()->user()->laboratory_id, 'facility_id' => $this->facility_id])->with('requester:id,name')->orderBy('name', 'asc')->get();
-        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $collectors = Collector::where(['facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
+        $requesters = Requester::where(['facility_id' => $this->facility_id])->whereIn('study_id',auth()->user()->laboratory->associated_studies)->orderBy('name', 'asc')->get();
+        $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id',auth()->user()->laboratory->associated_studies)->with('requester:id,name')->orderBy('name', 'asc')->get();
+        $sampleTypes = SampleType::orderBy('type', 'asc')->get();
         $samples = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_reception_id' => $this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
 
         return view('livewire.lab.sample-management.specimen-request-component', compact('sampleTypes', 'collectors', 'studies', 'requesters', 'samples'))->layout('layouts.app');

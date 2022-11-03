@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Facility;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Laboratory;
 
 class StudyComponent extends Component
 {
@@ -14,6 +15,7 @@ class StudyComponent extends Component
     public $description;
 
     public $facility_id;
+    public $associated_studies;
 
     public $is_active;
 
@@ -30,7 +32,10 @@ class StudyComponent extends Component
 
         ]);
     }
-
+    public function mount()
+    { 
+        $this->associated_studies=auth()->user()->laboratory->associated_studies??[];
+    }
     public function storeData()
     {
         $this->validate([
@@ -83,6 +88,19 @@ class StudyComponent extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+    public function associateStudy()
+    {
+        $this->validate([
+            'associated_studies' => 'required',
+        ]);
+        $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+        $laboratory->associated_studies = $this->associated_studies;
+        $laboratory->update();
+
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+    }
+    
     public function refresh()
     {
         return redirect(request()->header('Referer'));
@@ -120,8 +138,8 @@ class StudyComponent extends Component
 
     public function render()
     {
-        $studies = Study::where('creator_lab', auth()->user()->laboratory_id)->with('facility')->latest()->get();
-        $facilities = Facility::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        $studies = Study::with('facility')->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
     }

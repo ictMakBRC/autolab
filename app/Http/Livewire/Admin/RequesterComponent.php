@@ -155,8 +155,8 @@ class RequesterComponent extends Component
 
     public function render()
     {
-        $requesters = Requester::where('creator_lab', auth()->user()->laboratory_id)->with('facility', 'study')->latest()->get();
-        $facilities = Facility::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        $requesters = Requester::whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }
