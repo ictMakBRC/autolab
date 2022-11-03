@@ -138,9 +138,9 @@
                                         @enderror
                                     </div>
                                     <div class="mb-1 col-md-4">
-                                        <label for="rejection_reason" class="form-label">Reason for Rejection</label>
-                                        <textarea type="text" id="rejection_reason" class="form-control" wire:model="rejection_reason"></textarea>
-                                        @error('rejection_reason')
+                                        <label for="comment" class="form-label">Comment</label>
+                                        <textarea type="text" id="comment" class="form-control" wire:model="comment"></textarea>
+                                        @error('comment')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -206,13 +206,9 @@
                                                 <td>{{ $sampleReception->receiver->fullName }}</td>
                                                 <td>{{ $sampleReception->created_at }}</td>
                                                 <td>{{ $sampleReception->samples_handled }}</td>
-                                                @if ($sampleReception->status == 'Pending Review')
+                                                @if ($sampleReception->status == 'Reviewed')
                                                     <td><span
-                                                            class="badge bg-warning">{{ $sampleReception->status }}</span>
-                                                    </td>
-                                                @elseif($sampleReception->status == 'Reviewd')
-                                                    <td><span
-                                                            class="badge bg-success">{{ $sampleReception->status }}</span>
+                                                            class="badge bg-info">{{ $sampleReception->status }}</span>
                                                     </td>
                                                 @endif
                                                 <td class="table-action">
@@ -299,18 +295,11 @@
                                             {{ $reviewer }}</p>
                                         <p class="mb-1"><strong>Date Reviewed</strong> :
                                             {{ $review_date }}</p>
-                                        @if ($reason_for_rejection)
-                                            <p class="mb-1">
-                                            <div class="spinner-grow spinner-grow-sm text-danger" role="status">
-                                            </div>{{ $reason_for_rejection }}</p>
-                                        @endif
-                                        @if ($comment)
-                                            <div>
-                                                <h6 class="text-success">Reviewer Comment</h6>
-                                                <p>{{ $comment }}</p>
-                                            </div>
-                                        @endif
-                                    </div>
+                                        <div>
+                                            <h6 class="text-success">Comment</h6>
+                                            <p>{{ $comment??'N/A' }}</p>
+                                        </div>
+                                </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
