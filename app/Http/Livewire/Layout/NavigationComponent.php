@@ -37,29 +37,29 @@ class NavigationComponent extends Component
 
     public function render()
     {
-        $batchesCount = SampleReception::whereRaw('samples_accepted>samples_handled')->count();
-        $participantCount = Participant::count();
-        $testRequestsCount = Sample::whereIn('status', ['Accessioned', 'Processing'])->count();
-        $testsPendindReviewCount = TestResult::where('status', 'Pending Review')->count();
-        $testsPendindApprovalCount = TestResult::where('status', 'Reviewed')->count();
-        $testReportsCount = TestResult::where('status', 'Approved')->count();
+        $batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
+        $participantCount = Participant::count();//depends
+        $testRequestsCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->whereIn('status', ['Accessioned', 'Processing'])->count();
+        $testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
+        $testsPendindApprovalCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Reviewed')->count();
+        $testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
 
-        $usersCount = User::where('is_active', 1)->count();
+        $usersCount = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->count();
         $rolesCount = Role::count();
         $permissionsCount = Permission::count();
 
         $laboratoryCount = Laboratory::where('is_active', 1)->count();
         $designationCount = Designation::where('is_active', 1)->count();
-        $facilityCount = Facility::where('is_active', 1)->count();
-        $studyCount = Study::where('is_active', 1)->count();
-        $requesterCount = Requester::where('is_active', 1)->count();
-        $collectorCount = Collector::where('is_active', 1)->count();
-        $courierCount = Courier::where('is_active', 1)->count();
-        $platformCount = Platform::where('is_active', 1)->count();
-        $kitCount = Kit::where('is_active', 1)->count();
-        $sampleTypeCount = SampleType::where('status', 1)->count();
-        $testCategoryCount = TestCategory::count();
-        $testCount = Test::where('status', 1)->count();
+        $facilityCount = Facility::where('is_active', 1)->count();//depends
+        $studyCount = Study::where('is_active', 1)->count();//depends
+        $requesterCount = Requester::where('is_active', 1)->count();//depends
+        $collectorCount = Collector::where('is_active', 1)->count();//depends
+        $courierCount = Courier::where('is_active', 1)->count();//depends
+        $platformCount = Platform::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
+        $kitCount = Kit::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
+        $sampleTypeCount = SampleType::where('creator_lab', auth()->user()->laboratory_id)->where('status', 1)->count();
+        $testCategoryCount = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->count();
+        $testCount = Test::where('creator_lab', auth()->user()->laboratory_id)->where('status', 1)->count();
 
         return view('livewire.layout.navigation-component',
             compact(

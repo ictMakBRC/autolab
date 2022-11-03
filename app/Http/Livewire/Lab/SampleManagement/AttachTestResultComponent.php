@@ -122,7 +122,7 @@ class AttachTestResultComponent extends Component
 
     public function render()
     {
-        $users = User::where('creator_lab', auth()->user()->laboratory_id)->get();
+        $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->get();
         $testsRequested = $this->requestedTests ?? collect();
 
         return view('livewire.lab.sample-management.attach-test-result-component', compact('users', 'testsRequested'));
