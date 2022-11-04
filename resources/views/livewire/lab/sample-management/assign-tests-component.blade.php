@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Test Requests
+                                    Assign Test Requests (@json($assignedTests))
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
@@ -57,10 +57,8 @@
                                                 {{ $sample->sample_identity }}
                                             </td>
                                             <td>
-                                                <a href="javascript: void(0);"
-                                                    wire:click="viewTests({{ $sample->id }})" class="action-ico">
-                                                    <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                                </a>
+                                                <strong class="text-success">{{ $sample->lab_no }}</strong>
+
                                             </td>
                                             <td>
                                                 {{ $sample->study->name }}
@@ -85,23 +83,16 @@
                                                 <span class="badge bg-success">{{ $sample->status }}</span>
                                             </td>
                                             <td class="table-action">
-                                                @if ($sample->request_acknowledged_by)
-                                                    <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-info"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title="Attach Results"><i
-                                                            class="bi bi-file-earmark-medical"></i></a>
-                                                @else
-                                                    <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Acknowledge Request"
-                                                        wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico btn btn-outline-info">
-                                                        <i class="bi bi-hand-thumbs-up"></i></a>
-                                                @endif
+                                                <a href="javascript: void(0);"
+                                                    wire:click="viewTests({{ $sample->id }})" type="button"
+                                                    class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Assign"><i class="bi bi-check-square"></i>
+                                                </a>
 
                                             </td>
                                         </tr>
+
                                     @empty
                                     @endforelse
                                 </tbody>
@@ -124,15 +115,61 @@
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->
                     <div class="row">
-                        <div class="col-md-12">
-                            <ul class="list-group">
-                                @forelse ($tests_requested as $test)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ $test->name }}
-                                    </li>
-                                @empty
-                                @endforelse
-                            </ul>
+                        <div class="mb-0">
+                            <div class="table-responsiv">
+                                <table class="table table-striped mb-0 w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Test Requested (@json($assignedTests))</th>
+                                            <th>Assignment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($tests as $key => $test)
+                                            <tr>
+                                                <td>
+                                                    <strong class="text-danger">Test-{{ $key + 1 }}</strong>
+                                                    <a href="javascript: void(0);" class="action-ico"
+                                                        wire:click="activateTest({{ $test->id }})"><strong
+                                                            class="text-success">{{ $test->name }}
+                                                        </strong></a>
+                                                </td>
+                                                <td>
+                                                    @if ($test->id === $test_id)
+                                                        <form wire:submit.prevent="assignTest">
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                    <div class="mb-2">
+                                                                        <label class="form-label">Assignee</label>
+                                                                        <select class="form-select"
+                                                                            wire:model="assignee">
+                                                                            <option selected value="">Select
+                                                                            </option>
+                                                                            @foreach ($users as $user)
+                                                                                <option value='{{ $user->id }}'>
+                                                                                    {{ $user->fullName }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        @error('assignee')
+                                                                            <div class="text-danger text-small">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 mt-4 text-start">
+                                                                    <x-button>{{ __('assign') }}</x-button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    @else
+                                                        <p>Please click Test to assign</p>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div> <!-- end preview-->
                         </div>
                         @if ($clinical_notes)
                             <div class="col-md-12">
@@ -144,14 +181,8 @@
                                 </div>
                             </div>
                         @endif
-
                     </div>
-
                     <div class="modal-footer">
-                        @if ($request_acknowledged_by)
-                            <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
-                                class="btn btn-success radius-30 px-3">Process</a>
-                        @endif
 
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
                             aria-label="Close">Close</button>

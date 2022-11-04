@@ -129,7 +129,11 @@
                                 class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
                                     class="bi bi-receipt"></i>Accessioning</a>
                         @endif
-
+                        @if (Auth::user()->hasPermission(['assign-test-requests']))
+                        <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
+                                class="bi bi-file-medical"></i>Assign
+                            Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
+                        @endif
                         @if (Auth::user()->hasPermission(['acknowledge-test-request']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Test

@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
 use App\Models\Sample;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\TestAssignment;
+use Illuminate\Support\Facades\Auth;
 
 class TestRequestComponent extends Component
 {
@@ -33,9 +34,10 @@ class TestRequestComponent extends Component
 
     public function viewTests(Sample $sample)
     {
-        $this->reset(['tests_requested']);
-
-        $tests = Test::whereIn('id', $sample->tests_requested)->get();
+        // $this->reset(['tests_requested']);
+        // $sample=Sample::where('id',$this->sample_id )->first();
+        $assignedTests=TestAssignment::where(['sample_id'=>$this->sample_id,'assignee'=>auth()->user()->id])->get()->pluck('test_id')->toArray();
+        $tests=Test::whereIn('id',$assignedTests)->get();
         $this->tests_requested = $tests;
         $this->sample_identity = $sample->sample_identity;
         $this->lab_no = $sample->lab_no;
@@ -63,7 +65,7 @@ class TestRequestComponent extends Component
 
     public function render()
     {
-        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])->get();
+        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Assigned', 'Processing'])->get();
 
         return view('livewire.lab.sample-management.test-request-component', compact('samples'));
     }

@@ -22,10 +22,6 @@
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            {{-- @if ($tabToggleBtn)
-                                                <a class="dropdown-item" href="javascript:;"
-                                                    wire:click="toggleTab()">Toggle Tabs</a>
-                                            @endif --}}
                                             <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
                                                 form</a>
                                         </div>
@@ -162,7 +158,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-1 mt-4 text-end">
+                                                                    <div class="col-md-1 mt-4 text-start">
                                                                         <x-button>{{ __('Save') }}</x-button>
                                                                     </div>
                                                                 </div>
