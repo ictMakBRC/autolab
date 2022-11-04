@@ -360,7 +360,9 @@ class SampleReceptionComponent extends Component
     public function render()
     {
         $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->latest()->get();
+
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+
         $sampleReceptions = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.lab.sample-management.sample-reception-component', compact('sampleReceptions', 'users', 'facilities'))->layout('layouts.app');

@@ -50,11 +50,13 @@ class NavigationComponent extends Component
 
         $laboratoryCount = Laboratory::where('is_active', 1)->count();
         $designationCount = Designation::where('is_active', 1)->count();
+
         $facilityCount = Facility::where('is_active', 1)->whereIn('id',auth()->user()->laboratory->associated_facilities)->count();//depends
         $studyCount = Study::where('is_active', 1)->whereIn('id',auth()->user()->laboratory->associated_facilities)->count();//depends
         $requesterCount = Requester::where('is_active', 1)->whereIn('study_id',auth()->user()->laboratory->associated_studies)->count();//depends
         $collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count();//depends
         $courierCount = Courier::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count();//depends
+
         $platformCount = Platform::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
         $kitCount = Kit::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
         $sampleTypeCount = SampleType::where('creator_lab', auth()->user()->laboratory_id)->where('status', 1)->count();
