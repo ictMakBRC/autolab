@@ -11,7 +11,7 @@
                                             class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
                                             class="text-info">{{ $lab_no }}</span></h6>
                                 </h5>
-                                result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }}
+                                {{-- result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }} --}}
                                 <div class="ms-auto">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-info">More...</button>
@@ -55,7 +55,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($test->id === $test_id)
-                                                            <form wire:submit.prevent="storeTestResults()">
+                                                            <form wire:submit.prevent="storeTestResults()" class="me-2">
                                                                 <div class="row">
                                                                     <div class="col-md-5">
                                                                         @if ($test->result_type == 'Absolute')
@@ -158,7 +158,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-1 mt-4 text-start">
+                                                                    <div class="col-md-1 mt-4">
                                                                         <x-button>{{ __('Save') }}</x-button>
                                                                     </div>
                                                                 </div>

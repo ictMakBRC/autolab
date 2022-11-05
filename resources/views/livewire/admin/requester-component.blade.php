@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($requesters->only() as $key => $requester)
+                                @foreach ($requesters as $key => $requester)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $requester->name }}</td>

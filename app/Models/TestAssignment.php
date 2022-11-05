@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Sample;
 use App\Models\Admin\Test;
-use App\Models\Laboratory;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class TestAssignment extends Model
 {
     use HasFactory,LogsActivity;
-    protected $fillable = ['sample_id', 'test_id', 'assignee', 'assigned_by','creator_lab','status'];
+
+    protected $fillable = ['sample_id', 'test_id', 'assignee', 'assigned_by', 'creator_lab', 'status'];
 
     public function getActivitylogOptions(): LogOptions
     {

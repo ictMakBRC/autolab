@@ -24,14 +24,14 @@ class Laboratory extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['laboratory_name', 'short_code', 'description','associated_facilities','associated_studies', 'status', 'created_by'];
+    protected $fillable = ['laboratory_name', 'short_code', 'description', 'associated_facilities', 'associated_studies', 'status', 'created_by'];
 
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
-        /**
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>

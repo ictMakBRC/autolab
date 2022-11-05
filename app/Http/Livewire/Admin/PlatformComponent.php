@@ -19,7 +19,7 @@ class PlatformComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'name' =>  'required|unique:platforms',
+            'name' => 'required|unique:platforms',
             'is_active' => 'required',
         ]);
     }
@@ -60,7 +60,7 @@ class PlatformComponent extends Component
     public function updateData()
     {
         $this->validate([
-            'name' =>'required|unique:platforms,name,'.$this->edit_id.'',
+            'name' => 'required|unique:platforms,name,'.$this->edit_id.'',
             'is_active' => 'required',
         ]);
         $platform = Platform::find($this->edit_id);

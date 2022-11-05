@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Laboratory;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
 
 class StudyComponent extends Component
 {
@@ -15,6 +15,7 @@ class StudyComponent extends Component
     public $description;
 
     public $facility_id;
+
     public $associated_studies;
 
     public $is_active;
@@ -32,10 +33,12 @@ class StudyComponent extends Component
 
         ]);
     }
+
     public function mount()
-    { 
-        $this->associated_studies=auth()->user()->laboratory->associated_studies??[];
+    {
+        $this->associated_studies = auth()->user()->laboratory->associated_studies ?? [];
     }
+
     public function storeData()
     {
         $this->validate([
@@ -100,7 +103,7 @@ class StudyComponent extends Component
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
     }
-    
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));

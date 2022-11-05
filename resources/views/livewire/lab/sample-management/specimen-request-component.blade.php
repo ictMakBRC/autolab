@@ -8,7 +8,8 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     {{ $participant_id }}
-                                    <span class="text-info">{{$source_facility}}</span> Specimen Request for Batch <strong class="text-success">{{ $batch_no }}</strong>
+                                    <span class="text-info">{{ $source_facility }}</span> Specimen Request for Batch
+                                    <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
                                         class="text-danger">{{ $batch_sample_count }}</strong>)
                                 </h5>
@@ -81,93 +82,126 @@
                                     @else
                                     wire:submit.prevent="updateParticipant" @endif>
                                         <div class="row mx-auto">
-                                            <div class="mb-3 col-md-3">
-                                                <label for="identity" class="form-label">Participant ID<span   class="text-danger">*</span>
-                                                    @if ($participantMatch)
-                                                    <span class="text-success">Matched</span>
-                                                    @endif
-                                                
-                                                </label>
-                                                <input type="text" id="identity" class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();" size="14"
-                                                    wire:model.lazy="identity">
-                                                @error('identity')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
                                             <div class="mb-3 col-md-2">
-                                                <label for="age" class="form-label">Age<span
-                                                        class="text-danger">*</span></label>
-                                                <input type="number" id="age" class="form-control"
-                                                    wire:model="age">
-                                                @error('age')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-2">
-                                                <label for="gender" class="form-label">Gender<span
-                                                        class="text-danger">*</span></label>
-                                                <select class="form-select select2" data-toggle="select2" id="gender"
-                                                    wire:model="gender">
-                                                    <option selected value="">Select</option>
-                                                    <option value='Male'>Male</option>
-                                                    <option value='Female'>Female</option>
+                                                <label for="entry_type" class="form-label">Entry Type</label>
+                                                <select class="form-select" id="entry_type" wire:model="entry_type">
+                                                    <option selected value="Participant">Participant</option>
+                                                    <option value="Client">Client</option>
+                                                    <option value="Other">Other</option>
                                                 </select>
-                                                @error('gender')
+                                                @error('entry_type')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="mb-3 col-md-3">
-                                                <label for="address" class="form-label">Address<span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" id="address" class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="address">
-                                                @error('address')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-2">
-                                                <label for="contact" class="form-label">Contact<span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" id="contact"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="contact">
-                                                @error('contact')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-3">
-                                                <label for="nok_contact" class="form-label">Next of Kin Contact<span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" id="nok_contact"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="nok_contact">
-                                                @error('nok_contact')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-3">
-                                                <label for="nok_address" class="form-label">Next of Kin
-                                                    Address</label>
-                                                <input type="text" id="nok_address"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="nok_address">
-                                                @error('nok_address')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                            @if ($entry_type =='Participant'||$entry_type =='Client')
 
-                                            <div class="mb-1 col-md-6">
-                                                <label for="clinical_notes" class="form-label">Clinical Notes</label>
-                                                <textarea type="text" id="clinical_notes" class="form-control" wire:model="clinical_notes"></textarea>
-                                                @error('clinical_notes')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                            @if ($entry_type =='Participant')
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="identity" class="form-label">Participant ID<span
+                                                            class="text-danger">*</span>
+                                                        @if ($participantMatch)
+                                                            <span class="text-success">Matched</span>
+                                                        @endif
+
+                                                    </label>
+                                                    <input type="text" id="identity"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();" size="14"
+                                                        wire:model.lazy="identity">
+                                                    @error('identity')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                @endif
+                                                @if ($entry_type =='Client')
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="patient_id" class="form-label">Patient ID<span
+                                                            class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" id="patient_id"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();" size="14"
+                                                        wire:model.lazy="patient_id">
+                                                    @error('patient_id')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                @endif
+                                                <div class="mb-3 col-md-1">
+                                                    <label for="age" class="form-label">Age<span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="number" id="age" class="form-control"
+                                                        wire:model="age">
+                                                    @error('age')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="gender" class="form-label">Gender<span
+                                                            class="text-danger">*</span></label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="gender" wire:model="gender">
+                                                        <option selected value="">Select</option>
+                                                        <option value='Male'>Male</option>
+                                                        <option value='Female'>Female</option>
+                                                    </select>
+                                                    @error('gender')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="address" class="form-label">Address<span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="address"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="address">
+                                                    @error('address')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="contact" class="form-label">Contact<span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="contact"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="contact">
+                                                    @error('contact')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="nok_contact" class="form-label">Next of Kin
+                                                        Contact<span class="text-danger">*</span></label>
+                                                    <input type="text" id="nok_contact"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="nok_contact">
+                                                    @error('nok_contact')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="nok_address" class="form-label">Next of Kin
+                                                        Address</label>
+                                                    <input type="text" id="nok_address"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="nok_address">
+                                                    @error('nok_address')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-1 col-md-6">
+                                                    <label for="clinical_notes" class="form-label">Clinical
+                                                        Notes</label>
+                                                    <textarea type="text" id="clinical_notes" class="form-control" wire:model="clinical_notes"></textarea>
+                                                    @error('clinical_notes')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 
                                         </div>
                                         <div class="row mx-auto">
@@ -346,17 +380,18 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
+                                            
                                         </div>
+                                        @endif
                                         <div class="modal-footer">
 
                                             @if (!$toggleForm)
                                                 @if ($participantMatch)
-                                                <a wire:click.prevent="setParticipantId({{$matched_participant_id}})" class="btn btn-success">{{ __('Load') }}</a>
+                                                    <a wire:click.prevent="setParticipantId({{ $matched_participant_id }})"
+                                                        class="btn btn-success">{{ __('Load') }}</a>
                                                 @else
-                                                <x-button class="btn-success">{{ __('Save') }}</x-button>
+                                                    <x-button class="btn-success">{{ __('Save') }}</x-button>
                                                 @endif
-                                                {{-- <x-button class="btn-success">{{ __('Save') }}</x-button> --}}
                                             @else
                                                 <x-button class="btn-success">{{ __('Update') }}</x-button>
                                             @endif
@@ -379,7 +414,8 @@
                                                     wire:model="requested_by">
                                                     <option selected value="">Select</option>
                                                     @forelse ($requesters as $requester)
-                                                        <option value='{{ $requester->id }}'>{{ $requester->name.'('.$requester->study->name.')' }}
+                                                        <option value='{{ $requester->id }}'>
+                                                            {{ $requester->name . '(' . $requester->study->name . ')' }}
                                                         </option>
                                                     @empty
                                                     @endforelse
@@ -472,7 +508,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        
+
                                         <div class="row mx-auto">
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
@@ -582,17 +618,17 @@
                                                     {{ $batch_no }}
                                                 </td>
                                                 <td>
-                                                @if ($sample->participant)
-                                                    @if ($sample->request_acknowledged_by)
-                                                    {{ $sample->participant->identity }}
+                                                    @if ($sample->participant)
+                                                        @if ($sample->request_acknowledged_by)
+                                                            {{ $sample->participant->identity }}
+                                                        @else
+                                                            <a href="javascript: void(0);" class="action-ico"
+                                                                wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
+                                                        @endif
                                                     @else
                                                         <a href="javascript: void(0);" class="action-ico"
                                                             wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
                                                     @endif
-                                                @else
-                                                    <a href="javascript: void(0);" class="action-ico"
-                                                    wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
-                                                @endif
                                                 </td>
 
                                                 <td>{{ $sample->participant->age }}</td>
@@ -604,8 +640,8 @@
                                                         @if ($sample->request_acknowledged_by)
                                                             {{ $sample->sampleType->type }}
                                                         @else
-                                                        <a href="javascript: void(0);" class="action-ico"
-                                                        wire:click="editSampleInformation({{ $sample->id }})">{{ $sample->sampleType ? $sample->sampleType->type : 'N/A' }}</a>
+                                                            <a href="javascript: void(0);" class="action-ico"
+                                                                wire:click="editSampleInformation({{ $sample->id }})">{{ $sample->sampleType ? $sample->sampleType->type : 'N/A' }}</a>
                                                         @endif
                                                     @else
                                                         {{ __('N/A') }}
@@ -622,8 +658,7 @@
                                                 </td>
                                                 <td>
                                                     @if ($sample)
-                                                        <strong
-                                                            class="text-success">{{ $sample->lab_no }}</strong>
+                                                        <strong class="text-success">{{ $sample->lab_no }}</strong>
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif

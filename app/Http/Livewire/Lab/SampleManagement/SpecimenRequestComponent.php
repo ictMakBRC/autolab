@@ -30,6 +30,7 @@ class SpecimenRequestComponent extends Component
     public $sample_reception_id;
 
     public $participant_id;
+    public $entry_type;
 
     public $sample_id;
 
@@ -57,6 +58,7 @@ class SpecimenRequestComponent extends Component
 
     //PARTICIPANT INFORMATION
     public $identity;
+    public $patient_id;
 
     public $age;
 
@@ -146,7 +148,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->reset(['tests_requested', 'tests']);
         $sampleType = SampleType::where('id', $this->sample_type_id)->first();
-        sleep(2);
+        sleep(1);
         $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
     }
 
@@ -179,7 +181,7 @@ class SpecimenRequestComponent extends Component
 
     public function updatedIdentity()
     {
-        $participant = Participant::where(['identity' => $this->identity,'facility_id' => $this->facility_id])->whereIn('study_id',auth()->user()->laboratory->associated_studies)->first();
+        $participant = Participant::where(['identity' => $this->identity, 'facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies)->first();
         if ($participant) {
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
@@ -216,6 +218,7 @@ class SpecimenRequestComponent extends Component
         $this->source_facility = $sampleReception->facility->name;
 
         $this->tests = collect([]);
+        $this->entry_type = 'Other';
 
         if ($this->batch_sample_count == $this->batch_samples_handled) {
             $this->activeParticipantTab = true;
@@ -361,8 +364,8 @@ class SpecimenRequestComponent extends Component
     public function setParticipantId(Participant $participant)
     {
         $this->participant_id = $participant->id;
-        $this->study_id = $participant->study_id??'';
-        $this->requested_by = $participant->study?$participant->study->requester->id:'';
+        $this->study_id = $participant->study_id ?? '';
+        $this->requested_by = $participant->study ? $participant->study->requester->id : '';
         $this->activeParticipantTab = false;
     }
 
@@ -586,8 +589,8 @@ class SpecimenRequestComponent extends Component
     public function render()
     {
         $collectors = Collector::where(['facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
-        $requesters = Requester::where(['facility_id' => $this->facility_id])->whereIn('study_id',auth()->user()->laboratory->associated_studies)->orderBy('name', 'asc')->get();
-        $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id',auth()->user()->laboratory->associated_studies)->with('requester:id,name')->orderBy('name', 'asc')->get();
+        $requesters = Requester::where(['facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies)->orderBy('name', 'asc')->get();
+        $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies)->with('requester:id,name')->orderBy('name', 'asc')->get();
         $sampleTypes = SampleType::orderBy('type', 'asc')->get();
         $samples = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_reception_id' => $this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
 

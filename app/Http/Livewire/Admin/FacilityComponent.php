@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Laboratory;
+use Exception;
+use Livewire\Component;
 
 class FacilityComponent extends Component
 {
@@ -34,10 +34,9 @@ class FacilityComponent extends Component
         ]);
     }
 
-    
     public function mount()
-    { 
-        $this->associated_facilities=auth()->user()->laboratory->associated_facilities??[];
+    {
+        $this->associated_facilities = auth()->user()->laboratory->associated_facilities ?? [];
     }
 
     public function storeData()

@@ -271,7 +271,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->comment = $this->comment?? null;
+        $sampleReception->comment = $this->comment ?? null;
         $sampleReception->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
 
@@ -359,7 +359,7 @@ class SampleReceptionComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->latest()->get();
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
 
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
