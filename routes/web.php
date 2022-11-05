@@ -1,37 +1,37 @@
 <?php
 
 use App\Helpers\LoginActivity;
-use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\TestComponent;
-use App\Http\Livewire\Admin\UserComponent;
-use App\Http\Livewire\Admin\StudyComponent;
-use App\Http\Livewire\Admin\CourierComponent;
-use App\Http\Livewire\Admin\FacilityComponent;
-use App\Http\Livewire\Admin\PlatformComponent;
-use App\Http\Livewire\Admin\CollectorComponent;
-use App\Http\Livewire\Admin\RequesterComponent;
-use App\Http\Controllers\ResultReportController;
-use App\Http\Livewire\Admin\LaboratoryComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Livewire\Admin\DesignationComponent;
-use App\Http\Livewire\Admin\UserProfileComponent;
-use App\Http\Controllers\Auth\UserRolesController;
-use App\Http\Livewire\Admin\TestCategoryComponent;
-use App\Http\Livewire\Admin\UserActivityComponent;
-use App\Http\Controllers\FacilityInformationController;
-use App\Http\Controllers\Auth\UserPermissionsController;
-use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
-use App\Http\Controllers\Auth\UserRolesAssignmentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
+use App\Http\Controllers\Auth\UserPermissionsController;
+use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Http\Controllers\Auth\UserRolesController;
+use App\Http\Controllers\FacilityInformationController;
+use App\Http\Controllers\ResultReportController;
+use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\CourierComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
+use App\Http\Livewire\Admin\TestComponent;
+use App\Http\Livewire\Admin\UserActivityComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\UserProfileComponent;
+use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
+use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
-use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

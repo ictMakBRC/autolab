@@ -137,7 +137,7 @@
                         @if (Auth::user()->hasPermission(['acknowledge-test-request']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Test
-                                Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
+                                Requests<x-count-badge>{{ $testAssignedCount }}</x-count-badge></a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))

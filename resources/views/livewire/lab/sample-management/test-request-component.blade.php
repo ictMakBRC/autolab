@@ -82,24 +82,19 @@
                                                 </td>
                                             @endif
                                             <td>
-                                                <span class="badge bg-success">{{ $sample->status }}</span>
-                                            </td>
-                                            <td class="table-action">
-                                                @if ($sample->request_acknowledged_by)
-                                                    <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-info"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title="Attach Results"><i
-                                                            class="bi bi-file-earmark-medical"></i></a>
+                                                @if ($sample->status == 'Assigned')
+                                                    <span class="badge bg-warning">{{ $sample->status }}</span>
                                                 @else
-                                                    <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Acknowledge Request"
-                                                        wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico btn btn-outline-info">
-                                                        <i class="bi bi-hand-thumbs-up"></i></a>
+                                                    <span class="badge bg-info">{{ $sample->status }}</span>
                                                 @endif
 
+                                            </td>
+                                            <td class="table-action">
+                                                <a href="{{ route('attach-test-results', $sample->id) }}"
+                                                    type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Attach Results"><i
+                                                        class="bi bi-file-earmark-medical"></i></a>
                                             </td>
                                         </tr>
                                     @empty

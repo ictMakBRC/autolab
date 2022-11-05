@@ -18,6 +18,7 @@ use App\Models\Sample;
 use App\Models\SampleReception;
 use App\Models\SampleType;
 use App\Models\Study;
+use App\Models\TestAssignment;
 use App\Models\TestCategory;
 use App\Models\TestResult;
 use App\Models\User;
@@ -38,24 +39,25 @@ class NavigationComponent extends Component
     public function render()
     {
         $batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
-        $participantCount = Participant::count();//depends
+        $participantCount = Participant::count(); //depends
+        $testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
         $testRequestsCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->whereIn('status', ['Accessioned', 'Processing'])->count();
         $testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
         $testsPendindApprovalCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Reviewed')->count();
         $testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
 
-        $usersCount = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->count();
+        $usersCount = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->count();
         $rolesCount = Role::count();
         $permissionsCount = Permission::count();
 
         $laboratoryCount = Laboratory::where('is_active', 1)->count();
         $designationCount = Designation::where('is_active', 1)->count();
 
-        $facilityCount = Facility::where('is_active', 1)->whereIn('id',auth()->user()->laboratory->associated_facilities)->count();//depends
-        $studyCount = Study::where('is_active', 1)->whereIn('id',auth()->user()->laboratory->associated_facilities)->count();//depends
-        $requesterCount = Requester::where('is_active', 1)->whereIn('study_id',auth()->user()->laboratory->associated_studies)->count();//depends
-        $collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count();//depends
-        $courierCount = Courier::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count();//depends
+        $facilityCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities)->count(); //depends
+        $studyCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities)->count(); //depends
+        $requesterCount = Requester::where('is_active', 1)->whereIn('study_id', auth()->user()->laboratory->associated_studies)->count(); //depends
+        $collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count(); //depends
+        $courierCount = Courier::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->count(); //depends
 
         $platformCount = Platform::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
         $kitCount = Kit::where('creator_lab', auth()->user()->laboratory_id)->where('is_active', 1)->count();
@@ -67,7 +69,7 @@ class NavigationComponent extends Component
             compact(
                 'batchesCount', 'rolesCount', 'permissionsCount', 'usersCount',
                 'participantCount', 'testsPendindReviewCount',
-                'testsPendindApprovalCount', 'testReportsCount',
+                'testsPendindApprovalCount', 'testReportsCount', 'testAssignedCount',
                 'testRequestsCount', 'laboratoryCount', 'designationCount',
                 'facilityCount', 'studyCount', 'requesterCount', 'collectorCount',
                 'courierCount', 'platformCount', 'kitCount', 'sampleTypeCount',

@@ -68,6 +68,11 @@ class Sample extends Model
         return $this->belongsTo(Collector::class, 'collected_by', 'id');
     }
 
+    public function testAssignment()
+    {
+        return $this->hasMany(TestAssignment::class, 'sample_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

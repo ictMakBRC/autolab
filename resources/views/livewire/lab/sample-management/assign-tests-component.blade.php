@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Assign Test Requests (@json($assignedTests))
+                                    Assign Test Requests
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
@@ -80,7 +80,11 @@
                                                 </td>
                                             @endif
                                             <td>
-                                                <span class="badge bg-success">{{ $sample->status }}</span>
+                                                @if ($sample->status == 'Accessioned')
+                                                    <span class="badge bg-warning">{{ $sample->status }}</span>
+                                                @elseif($sample->status == 'Processing')
+                                                    <span class="badge bg-success">{{ $sample->status }}</span>
+                                                @endif
                                             </td>
                                             <td class="table-action">
                                                 <a href="javascript: void(0);"
@@ -135,34 +139,39 @@
                                                         </strong></a>
                                                 </td>
                                                 <td>
-                                                    @if ($test->id === $test_id)
-                                                        <form wire:submit.prevent="assignTest">
-                                                            <div class="row">
-                                                                <div class="col-md-8">
-                                                                    <div class="mb-2">
-                                                                        <label class="form-label">Assignee</label>
-                                                                        <select class="form-select"
-                                                                            wire:model="assignee">
-                                                                            <option selected value="">Select
-                                                                            </option>
-                                                                            @foreach ($users as $user)
-                                                                                <option value='{{ $user->id }}'>
-                                                                                    {{ $user->fullName }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                        @error('assignee')
-                                                                            <div class="text-danger text-small">
-                                                                                {{ $message }}</div>
-                                                                        @enderror
+                                                    @if ($request_acknowledged_by)
+                                                        @if ($test->id === $test_id)
+                                                            <form wire:submit.prevent="assignTest">
+                                                                <div class="row">
+                                                                    <div class="col-md-8">
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label">Assignee</label>
+                                                                            <select class="form-select"
+                                                                                wire:model="assignee">
+                                                                                <option selected value="">Select
+                                                                                </option>
+                                                                                @foreach ($users as $user)
+                                                                                    <option
+                                                                                        value='{{ $user->id }}'>
+                                                                                        {{ $user->fullName }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                            @error('assignee')
+                                                                                <div class="text-danger text-small">
+                                                                                    {{ $message }}</div>
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 mt-4 text-start">
+                                                                        <x-button>{{ __('assign') }}</x-button>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4 mt-4 text-start">
-                                                                    <x-button>{{ __('assign') }}</x-button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
+                                                            </form>
+                                                        @else
+                                                            <p>Please click Test to assign</p>
+                                                        @endif
                                                     @else
-                                                        <p>Please click Test to assign</p>
+                                                        <p>Acknowledge to Assign</p>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -171,7 +180,7 @@
                                 </table>
                             </div> <!-- end preview-->
                         </div>
-                        @if ($clinical_notes)
+                        @if ($clinical_notes && $request_acknowledged_by)
                             <div class="col-md-12">
                                 <div class="card-body text-center">
                                     <div>
@@ -183,7 +192,11 @@
                         @endif
                     </div>
                     <div class="modal-footer">
-
+                        @if (!$request_acknowledged_by)
+                            <a href="javascript: void(0);" wire:click="acknowledgeRequest({{ $sample_id }})"
+                                class="action-ico btn btn-success radius-30 px-3">
+                                <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
+                        @endif
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
                             aria-label="Close">Close</button>
                     </div>

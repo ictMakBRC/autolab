@@ -286,7 +286,7 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->with('laboratory', 'designation')->latest()->get();
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')->latest()->get();
         $designations = Designation::where('is_active', 1)->latest()->get();
         $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 

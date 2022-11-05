@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Admin\Test;
 use App\Models\Sample;
+use App\Models\TestAssignment;
 use App\Models\TestResult;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -31,9 +33,9 @@ class AttachTestResultComponent extends Component
 
     public $performed_by;
 
-    public $reviewed_by;
+    // public $reviewed_by;
 
-    public $approved_by;
+    // public $approved_by;
 
     public $comment;
 
@@ -53,14 +55,19 @@ class AttachTestResultComponent extends Component
         $testsPendingResults = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
         if (count($testsPendingResults) > 0) {
-            $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)->orderBy('name', 'asc')->get();
-            $this->test_id = $this->requestedTests[0]->id;
+            $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)
+            ->whereHas('testAssignment', function (Builder $query) {
+                $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
+            })
+            ->orderBy('name', 'asc')->get();
+            $this->test_id = $this->requestedTests[0]->id ?? null;
         } else {
             $this->requestedTests = collect([]);
             $this->reset('test_id');
         }
 
         $this->tests_performed = (array) $sample->tests_performed;
+        $this->performed_by = auth()->user()->id;
     }
 
     public function storeTestResults()
@@ -92,10 +99,16 @@ class AttachTestResultComponent extends Component
 
         array_push($this->tests_performed, "{$testResult->test_id}");
         $associatedSample = Sample::findOrfail($this->sample_id);
+        $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
         $associatedSample->update(['tests_performed' => $this->tests_performed]);
+        $testAssignment->update(['status' => 'Test Done']);
 
         if (count(array_diff($associatedSample->tests_requested, $associatedSample->tests_performed)) == 0) {
             $associatedSample->update(['status' => 'Tests Done']);
+            redirect()->route('test-request');
+        }
+
+        if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
             redirect()->route('test-request');
         }
 
@@ -122,7 +135,7 @@ class AttachTestResultComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active'=>1,'laboratory_id'=>auth()->user()->laboratory_id])->get();
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $testsRequested = $this->requestedTests ?? collect();
 
         return view('livewire.lab.sample-management.attach-test-result-component', compact('users', 'testsRequested'));
