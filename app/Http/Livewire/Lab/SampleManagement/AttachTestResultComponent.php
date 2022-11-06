@@ -119,7 +119,7 @@ class AttachTestResultComponent extends Component
 
     public function activateResultInput($id)
     {
-        $this->reset(['result', 'attachment','comment']);
+        $this->reset(['result', 'attachment', 'comment']);
         $this->test_id = $id;
     }
 

@@ -78,9 +78,9 @@
                         <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample ID:</b>
                         {{ $testResult->sample->sample_identity }}<br>
                         <b>Name:</b> {{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
-                        <b>Age:</b> {{ $testResult->sample->participant->age }} <b>Gender:</b>
-                        {{ $testResult->sample->participant->gender }}<br>
-                        <b>Study Name:</b> {{ $testResult->sample->study->name }}<br>
+                        <b>Age:</b> {{ $testResult->sample->participant->age??'N/A' }} <b>Gender:</b>
+                        {{ $testResult->sample->participant->gender??'N/A' }}<br>
+                        <b>Study Name:</b> {{ $testResult->sample->study->name??'N/A' }}<br>
                     </div>
                 </td>
                 <td style="width:5%"></td>

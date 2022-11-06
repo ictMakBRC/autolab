@@ -48,27 +48,27 @@
                                                 {{ $participant->identity }}
                                             </td>
                                             <td>
-                                                {{ $participant->age }}
+                                                {{ $participant->age??'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $participant->gender }}
+                                                {{ $participant->gender??'N/A' }}
                                             </td>
                                            
                                             <td>
-                                                {{ $participant->contact }}
+                                                {{ $participant->contact??'N/A' }}
                                             </td>
                                             
                                             <td>
-                                                {{ $participant->address }}
+                                                {{ $participant->address??'N/A' }}
                                             </td>
                                             <td>
                                          
-                                                {{ $participant->nok_contact }}
+                                                {{ $participant->nok_contact??'N/A' }}
                                             </td>
                                              
                                            
                                             <td>
-                                                {{ $participant->nok_address }}
+                                                {{ $participant->nok_address??'N/A' }}
                                                 
                                             </td>
                                         

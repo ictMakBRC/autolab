@@ -33,7 +33,8 @@
                         </strong>{{ $testResults->sample->participant->surname ?? 'N/A' }}<br>
                         <strong class="text-inverse">Age: </strong>{{ $testResults->sample->participant->age }}<b>
                             Gender: </b>{{ $testResults->sample->participant->gender }}<br>
-                        <strong class="text-inverse">Study Name: </strong>{{ $testResults->sample->study->name }}<br>
+                        <strong class="text-inverse">Study Name:
+                        </strong>{{ $testResults->sample->study->name ?? 'N/A' }}<br>
                     </div>
                 </div>
             </div>

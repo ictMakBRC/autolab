@@ -93,9 +93,8 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            @if ($entry_type =='Participant'||$entry_type =='Client')
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Client')
 
-                                            @if ($entry_type =='Participant')
                                                 <div class="mb-3 col-md-2">
                                                     <label for="identity" class="form-label">Participant ID<span
                                                             class="text-danger">*</span>
@@ -107,26 +106,13 @@
                                                     <input type="text" id="identity"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();" size="14"
-                                                        wire:model.lazy="identity">
+                                                        wire:model.lazy="identity"
+                                                        @if ($entry_type != 'Participant') disabled @endif>
                                                     @error('identity')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                @endif
-                                                @if ($entry_type =='Client')
-                                                <div class="mb-3 col-md-2">
-                                                    <label for="patient_id" class="form-label">Patient ID<span
-                                                            class="text-danger">*</span>
-                                                    </label>
-                                                    <input type="text" id="patient_id"
-                                                        class="form-control text-uppercase"
-                                                        onkeyup="this.value = this.value.toUpperCase();" size="14"
-                                                        wire:model.lazy="patient_id">
-                                                    @error('patient_id')
-                                                        <div class="text-danger text-small">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                                @endif
+
                                                 <div class="mb-3 col-md-1">
                                                     <label for="age" class="form-label">Age<span
                                                             class="text-danger">*</span></label>
@@ -202,186 +188,189 @@
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
+                                            @endif
                                         </div>
-                                        <div class="row mx-auto">
-                                            <h6> <strong class="text-success">Optional Participant Information</strong>
-                                            </h6>
-                                            <hr>
-                                            <div class="mb-3 col-md-1">
-                                                <label for="title" class="form-label">Title</label>
-                                                <select class="form-select select2" data-toggle="select2"
-                                                    id="title" wire:model="title">
-                                                    <option selected value="">Select</option>
-                                                    <option value="Mr.">Mr.</option>
-                                                    <option value="Ms.">Ms.</option>
-                                                    <option value="Miss.">Miss.</option>
-                                                    <option value="Dr.">Dr.</option>
-                                                    <option value="Eng.">Eng.</option>
-                                                    <option value="Prof.">Prof.</option>
-                                                </select>
-                                                @error('title')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-3">
-                                                <label for="nin_number" class="form-label">NIN Number</label>
-                                                <input type="text" id="nin_number"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();" size="14"
-                                                    wire:model="nin_number">
-                                                @error('nin_number')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                        @if ($entry_type == 'Participant' || $entry_type == 'Client')
+                                            <div class="row mx-auto">
+                                                <h6> <strong class="text-success">Optional Participant
+                                                        Information</strong>
+                                                </h6>
+                                                <hr>
+                                                <div class="mb-3 col-md-1">
+                                                    <label for="title" class="form-label">Title</label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="title" wire:model="title">
+                                                        <option selected value="">Select</option>
+                                                        <option value="Mr.">Mr.</option>
+                                                        <option value="Ms.">Ms.</option>
+                                                        <option value="Miss.">Miss.</option>
+                                                        <option value="Dr.">Dr.</option>
+                                                        <option value="Eng.">Eng.</option>
+                                                        <option value="Prof.">Prof.</option>
+                                                    </select>
+                                                    @error('title')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="nin_number" class="form-label">NIN Number</label>
+                                                    <input type="text" id="nin_number"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        size="14" wire:model="nin_number">
+                                                    @error('nin_number')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 
-                                            <div class="mb-3 col-md-3">
-                                                <label for="surname" class="form-label">Surname</label>
-                                                <input type="text" id="surname"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="surname">
-                                                @error('surname')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-3">
-                                                <label for="first_name" class="form-label">First Name</label>
-                                                <input type="text" id="last_name"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="first_name">
-                                                @error('first_name')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-2">
-                                                <label for="other_name" class="form-label">Other Name</label>
-                                                <input type="text" id="other_name"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="other_name">
-                                                @error('other_name')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="surname" class="form-label">Surname</label>
+                                                    <input type="text" id="surname"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="surname">
+                                                    @error('surname')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="first_name" class="form-label">First Name</label>
+                                                    <input type="text" id="last_name"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="first_name">
+                                                    @error('first_name')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="other_name" class="form-label">Other Name</label>
+                                                    <input type="text" id="other_name"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="other_name">
+                                                    @error('other_name')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 
-                                            <div class="mb-3 col-md-2">
-                                                <label for="dob" class="form-label">DoB</label>
-                                                <input type="date" id="dob" class="form-control"
-                                                    wire:model="dob">
-                                                @error('dob')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="dob" class="form-label">DoB</label>
+                                                    <input type="date" id="dob" class="form-control"
+                                                        wire:model="dob">
+                                                    @error('dob')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+
+                                                </div>
+
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="nationality" class="form-label">Nationality</label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="nationality" wire:model="nationality">
+                                                        <option selected value="">Select</option>
+                                                        @include('layouts.countries')
+                                                    </select>
+                                                    @error('nationality')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="district" class="form-label">District</label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="district" wire:model="district">
+                                                        <option value="" selected>Select</option>
+                                                        @include('layouts.districts')
+                                                    </select>
+                                                    @error('district')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" id="email" class="form-control"
+                                                        wire:model="email">
+                                                    @error('email')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="birth_place" class="form-label">Birth Place</label>
+                                                    <input type="text" id="birth_place"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="birth_place">
+                                                    @error('birth_place')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="religious-affiliation" class="form-label">Religious
+                                                        Affiliation</label>
+                                                    <input type="text" id="religious-affiliation"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="religious_affiliation">
+                                                    @error('religious_affiliation')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="occupation" class="form-label">Occupation</label>
+                                                    <input type="text" id="occupation"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="occupation">
+                                                    @error('occupation')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="civil_status" class="form-label">Civil Status</label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="civil_status" wire:model="civil_status">
+                                                        <option selected value="">Select</option>
+                                                        <option value='Single'>Single</option>
+                                                        <option value='Married'>Married</option>
+                                                        <option value='Unmarried'>Unmarried</option>
+                                                        <option value='Divorced'>Divorced</option>
+                                                        <option value='Widowed'>Widowed</option>
+                                                    </select>
+                                                    @error('civil_status')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+
+                                                </div>
+
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="nok" class="form-label">Next of Kin</label>
+                                                    <input type="text" id="nok"
+                                                        class="form-control text-uppercase"
+                                                        onkeyup="this.value = this.value.toUpperCase();"
+                                                        wire:model="nok">
+                                                    @error('nok')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="nok_relationship" class="form-label">NoK
+                                                        Relationship</label>
+                                                    <select class="form-select select2" data-toggle="select2"
+                                                        id="nok_relationship" wire:model="nok_relationship">
+                                                        <option selected value="">Select</option>
+                                                        @include('layouts.nokRelationships')
+                                                    </select>
+                                                    @error('nok_relationship')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
 
                                             </div>
-
-                                            <div class="mb-3 col-md-2">
-                                                <label for="nationality" class="form-label">Nationality</label>
-                                                <select class="form-select select2" data-toggle="select2"
-                                                    id="nationality" wire:model="nationality">
-                                                    <option selected value="">Select</option>
-                                                    @include('layouts.countries')
-                                                </select>
-                                                @error('nationality')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-2">
-                                                <label for="district" class="form-label">District</label>
-                                                <select class="form-select select2" data-toggle="select2"
-                                                    id="district" wire:model="district">
-                                                    <option value="" selected>Select</option>
-                                                    @include('layouts.districts')
-                                                </select>
-                                                @error('district')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="mb-3 col-md-2">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input type="email" id="email" class="form-control"
-                                                    wire:model="email">
-                                                @error('email')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="mb-3 col-md-2">
-                                                <label for="birth_place" class="form-label">Birth Place</label>
-                                                <input type="text" id="birth_place"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="birth_place">
-                                                @error('birth_place')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="mb-3 col-md-2">
-                                                <label for="religious-affiliation" class="form-label">Religious
-                                                    Affiliation</label>
-                                                <input type="text" id="religious-affiliation"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="religious_affiliation">
-                                                @error('religious_affiliation')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="mb-3 col-md-3">
-                                                <label for="occupation" class="form-label">Occupation</label>
-                                                <input type="text" id="occupation"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();"
-                                                    wire:model="occupation">
-                                                @error('occupation')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="mb-3 col-md-3">
-                                                <label for="civil_status" class="form-label">Civil Status</label>
-                                                <select class="form-select select2" data-toggle="select2"
-                                                    id="civil_status" wire:model="civil_status">
-                                                    <option selected value="">Select</option>
-                                                    <option value='Single'>Single</option>
-                                                    <option value='Married'>Married</option>
-                                                    <option value='Unmarried'>Unmarried</option>
-                                                    <option value='Divorced'>Divorced</option>
-                                                    <option value='Widowed'>Widowed</option>
-                                                </select>
-                                                @error('civil_status')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-
-                                            </div>
-
-                                            <div class="mb-3 col-md-3">
-                                                <label for="nok" class="form-label">Next of Kin</label>
-                                                <input type="text" id="nok"
-                                                    class="form-control text-uppercase"
-                                                    onkeyup="this.value = this.value.toUpperCase();" wire:model="nok">
-                                                @error('nok')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="mb-3 col-md-3">
-                                                <label for="nok_relationship" class="form-label">NoK
-                                                    Relationship</label>
-                                                <select class="form-select select2" data-toggle="select2"
-                                                    id="nok_relationship" wire:model="nok_relationship">
-                                                    <option selected value="">Select</option>
-                                                    @include('layouts.nokRelationships')
-                                                </select>
-                                                @error('nok_relationship')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            
-                                        </div>
                                         @endif
                                         <div class="modal-footer">
 
@@ -405,8 +394,8 @@
                                     id="sample-tests" role="tabpanel">
                                     <form
                                         @if (!$toggleForm) wire:submit.prevent="storeSampleInformation"
-                            @else
-                            wire:submit.prevent="updateSampleInformation" @endif>
+                                        @else
+                                        wire:submit.prevent="updateSampleInformation" @endif>
                                         <div class="row mx-auto">
                                             <div class="mb-3 col-md-3">
                                                 <label for="requested_by" class="form-label">Requested By</label>
@@ -457,21 +446,25 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Other')
 
-                                            <div class="mb-3 col-md-3">
-                                                <label for="study_id" class="form-label">Study</label>
-                                                <select class="form-select" id="study_id" wire:model="study_id">
-                                                    <option selected value="">Select</option>
-                                                    @forelse ($studies as $study)
-                                                        <option value='{{ $study->id }}'>{{ $study->name }}
-                                                        </option>
-                                                    @empty
-                                                    @endforelse
-                                                </select>
-                                                @error('study_id')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                                <div class="mb-3 col-md-3">
+                                                    <label for="study_id" class="form-label">Study</label>
+                                                    <select class="form-select" id="study_id" wire:model="study_id">
+                                                        <option selected value="">Select</option>
+                                                        @forelse ($studies as $study)
+                                                            <option value='{{ $study->id }}'>{{ $study->name }}
+                                                            </option>
+                                                        @empty
+                                                        @endforelse
+                                                    </select>
+                                                    @error('study_id')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                            @endif
+
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_identity" class="form-label">Sample ID</label>
                                                 <input id="sample_identity" type="text" class="form-control"
@@ -568,12 +561,17 @@
 
                                         <div class="modal-footer">
                                             @if (!$toggleForm)
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="1"
-                                                        id="same_participant" checked wire:model="same_participant">
-                                                    <label class="form-check-label" for="same_participant">Multiple
-                                                        sample entry for the same participant?</label>
-                                                </div>
+                                                @if ($entry_type == 'Participant')
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            value="1" id="same_participant" checked
+                                                            wire:model="same_participant">
+                                                        <label class="form-check-label"
+                                                            for="same_participant">Multiple
+                                                            sample entry for the same participant?</label>
+                                                    </div>
+                                                @endif
+
                                                 <x-button class="btn-success">{{ __('Save') }}</x-button>
                                             @else
                                                 <x-button class="btn-success">{{ __('Update') }}</x-button>
@@ -596,7 +594,8 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Batch No</th>
-                                            <th>Participant ID</th>
+                                            <th>Entry Type</th>
+                                            <th>Part ID</th>
                                             <th>Age</th>
                                             <th>Gender</th>
                                             <th>Contact</th>
@@ -618,8 +617,11 @@
                                                     {{ $batch_no }}
                                                 </td>
                                                 <td>
+                                                    {{ $sample->participant->entry_type }}
+                                                </td>
+                                                <td>
                                                     @if ($sample->participant)
-                                                        @if ($sample->request_acknowledged_by)
+                                                        @if ($sample->request_acknowledged_by || $sample->participant->entry_type == 'Other')
                                                             {{ $sample->participant->identity }}
                                                         @else
                                                             <a href="javascript: void(0);" class="action-ico"
@@ -631,10 +633,10 @@
                                                     @endif
                                                 </td>
 
-                                                <td>{{ $sample->participant->age }}</td>
-                                                <td>{{ $sample->participant->gender }}</td>
-                                                <td>{{ $sample->participant->contact }}</td>
-                                                <td>{{ $sample->participant->address }}</td>
+                                                <td>{{ $sample->participant->age ?? 'N/A' }}</td>
+                                                <td>{{ $sample->participant->gender ?? 'N/A' }}</td>
+                                                <td>{{ $sample->participant->contact ?? 'N/A' }}</td>
+                                                <td>{{ $sample->participant->address ?? 'N/A' }}</td>
                                                 <td>
                                                     @if ($sample)
                                                         @if ($sample->request_acknowledged_by)
@@ -656,6 +658,7 @@
                                                         {{ __('N/A') }}
                                                     @endif
                                                 </td>
+
                                                 <td>
                                                     @if ($sample)
                                                         <strong class="text-success">{{ $sample->lab_no }}</strong>
@@ -740,9 +743,6 @@
                     $('#delete_modal').modal('show');
                 });
 
-                // window.addEventListener('maximum-reached', event => {
-                //     alert('Maximum number of participants in this batch already Recorded.');
-                // });
             </script>
         @endpush
     </div>

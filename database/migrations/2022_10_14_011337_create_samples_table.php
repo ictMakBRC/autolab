@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('date_requested');
             $table->unsignedBigInteger('collected_by');
             $table->dateTime('date_collected');
-            $table->unsignedBigInteger('study_id');
+            $table->unsignedBigInteger('study_id')->nullable();
             $table->string('sample_is_for')->nullable();
             $table->string('priority')->nullable();
             $table->text('tests_requested')->nullable();
@@ -35,6 +35,7 @@ return new class extends Migration
             $table->dateTime('date_acknowledged')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
+            // $table->string('entry_type')->default('Participant');
             $table->string('status')->default('Accessioned');
             $table->timestamps();
         });

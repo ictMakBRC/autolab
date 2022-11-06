@@ -48,7 +48,7 @@
                                                 {{ $testResult->sample->sampleReception->batch_no }}
                                             </td>
                                             <td>
-                                                {{ $testResult->sample->study->name }}
+                                                {{ $testResult->sample->study->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $testResult->sample->participant->identity }}

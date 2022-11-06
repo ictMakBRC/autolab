@@ -63,7 +63,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $sample->study->name }}
+                                                {{ $sample->study->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->requester->name }}

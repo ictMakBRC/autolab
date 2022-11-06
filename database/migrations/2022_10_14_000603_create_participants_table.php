@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
             $table->string('participant_no')->unique();
-            $table->string('identity')->unique();
-            $table->integer('age');
-            $table->string('gender', 6);
-            $table->string('address', 40);
-            $table->string('contact', 20);
-            $table->string('nok_contact', 20);
-            $table->string('nok_address', 40);
+            $table->string('identity')->nullable()->unique();
+            $table->integer('age')->nullable();
+            $table->string('gender', 6)->nullable();
+            $table->string('address', 40)->nullable();
+            $table->string('contact', 20)->nullable();
+            $table->string('nok_contact', 20)->nullable();
+            $table->string('nok_address', 40)->nullable();
             $table->text('clinical_notes')->nullable();
 
             $table->string('title')->nullable();
@@ -44,6 +44,7 @@ return new class extends Migration
             $table->unsignedBigInteger('study_id')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
+            $table->string('entry_type')->default('Participant');
             $table->timestamps();
         });
     }
