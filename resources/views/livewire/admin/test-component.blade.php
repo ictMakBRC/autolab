@@ -41,7 +41,7 @@
                         @else
                         wire:submit.prevent="updateTest" @endif>
                             <div class="row">
-                                <div class="mb-2 col-md-3">
+                                <div class="mb-2 col-md-2">
                                     <label for="category" class="form-label">{{ __('Category') }}</label>
                                     <select wire:model='category_id' class="form-select" id="category"
                                         wire:model="category_id">
@@ -54,7 +54,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-2 col-md-5">
+                                <div class="mb-2 col-md-4">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" id="name" class="form-control" wire:model="name">
                                     @error('name')
@@ -65,6 +65,23 @@
                                     <label for="short_code" class="form-label">Short Code</label>
                                     <input type="text" id="short_code" class="form-control" wire:model="short_code">
                                     @error('short_code')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-2 col-md-2">
+                                    <div class="form-group">
+                                        <label for="tat" class="form-label">{{ __('TAT') }}</label>
+                                        <div class="input-group form-group mb-2">
+                                            <input type="number" step="any" class="form-control" id="tat"
+                                                wire:model='tat'>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    Hours
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('tat')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -142,6 +159,7 @@
                                                 <option value="File">File/Attachment</option>
                                                 <option value="Absolute">Absolute</option>
                                                 <option value="Measurable">Measurable</option>
+                                                <option value="Link">Link</option>
                                             </select>
                                         </div>
                                         @if ($result_type === 'Absolute')

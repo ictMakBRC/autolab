@@ -27,15 +27,13 @@ class AttachTestResultComponent extends Component
 
     public $result;
 
+    public $link;
+
     public $attachment;
 
     public $attachmentPath;
 
     public $performed_by;
-
-    // public $reviewed_by;
-
-    // public $approved_by;
 
     public $comment;
 
@@ -76,6 +74,12 @@ class AttachTestResultComponent extends Component
             'performed_by' => 'required|integer',
         ]);
 
+        if ($this->link != null) {
+            $this->validate([
+                'link' => 'required|url',
+            ]);
+        }
+
         if ($this->attachment != null) {
             $this->validate([
                 'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
@@ -89,7 +93,12 @@ class AttachTestResultComponent extends Component
         $testResult = new TestResult();
         $testResult->sample_id = $this->sample_id;
         $testResult->test_id = $this->test_id;
-        $testResult->result = $this->result;
+        if ($this->link != null) {
+            $testResult->result = $this->link;
+        } else {
+            $testResult->result = $this->result;
+        }
+
         $testResult->attachment = $this->attachmentPath;
         $testResult->performed_by = $this->performed_by;
         $testResult->comment = $this->comment;
@@ -125,7 +134,7 @@ class AttachTestResultComponent extends Component
 
     public function resetResultInputs()
     {
-        $this->reset(['result', 'attachment', 'performed_by', 'comment', 'attachmentPath']);
+        $this->reset(['result', 'link', 'attachment', 'performed_by', 'comment', 'attachmentPath']);
     }
 
     public function close()

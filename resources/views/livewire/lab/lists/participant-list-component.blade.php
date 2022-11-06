@@ -76,7 +76,7 @@
                                                 {{ $participant->facility->name }}
                                             </td>
                                             <td>
-                                                {{ $participant->study->name }}
+                                                {{ $participant->study->name??'N/A' }}
                                             </td>
                                             {{-- <td>
                                                 {{ $participant->sample->name }}

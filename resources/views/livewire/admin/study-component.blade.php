@@ -40,7 +40,7 @@
                             <tbody>
                                 @foreach ($studies->only($associated_studies) as $key => $study)
                                     <tr>
-                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $key + 1 }}</td>
                                         <td>{{ $study->name }}</td>
                                         <td>{{ $study->description ? $study->description : 'N/A' }}</td>
                                         <td>{{ $study->facility ? $study->facility->name : 'N/A' }}</td>
@@ -51,9 +51,8 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($study->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);"
-                                                class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $study->id }})"
                                                     data-bs-target="#editstudy"></i></a>
                                             <a href="javascript: void(0);"
@@ -258,9 +257,11 @@
                                 <div class="col-md-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="{{ $study->id }}"
-                                            id="associated_studies" checked wire:model="associated_studies">
+                                            id="associated_studies{{ $study->id }}" checked
+                                            wire:model="associated_studies">
                                         <label class="form-check-label"
-                                            for="associated_studies">{{ $study->name }}</label>
+                                            for="associated_studies{{ $study->id }}"><strong
+                                                class="text-info">{{ $study->name }}</strong>{{ ' (' . $study->facility->name . ')' }}</label>
                                     </div>
                                 </div>
 

@@ -110,6 +110,19 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+                                                                        @elseif($test->result_type == 'Link')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result
+                                                                                    Link(URL)</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    wire:model="link"
+                                                                                    placeholder="Enter valid link">
+                                                                                @error('link')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
                                                                         @endif
                                                                     </div>
 

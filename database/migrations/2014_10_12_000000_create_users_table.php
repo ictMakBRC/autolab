@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('laboratory_name', 50)->unique();
             $table->string('description')->nullable();
-            $table->string('short_code', 6)->nullable();
+            $table->string('short_code', 6)->nullable()->unique();
             $table->integer('autonumber')->nullable();
             $table->text('associated_facilities')->nullable();
             $table->text('associated_studies')->nullable();

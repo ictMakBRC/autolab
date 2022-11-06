@@ -41,7 +41,7 @@
                             <tbody>
                                 @foreach ($facilities->only($associated_facilities) as $key => $facility)
                                     <tr>
-                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $key + 1 }}</td>
                                         <td>{{ $facility->name }}</td>
                                         <td>{{ $facility->type }}</td>
                                         <td>{{ $facility->parent ? $facility->parent->name : 'N/A' }}</td>
@@ -52,8 +52,7 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);"
-                                                class="action-ico btn btn-outline-info mx-1">
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
                                                 <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $facility->id }})"
                                                     data-bs-target="#editfacility"></i></a>
@@ -263,9 +262,10 @@
                                 <div class="col-md-4 mb-2">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="{{ $facility->id }}"
-                                            id="associated_facilities" checked wire:model="associated_facilities">
+                                            id="associated_facilities{{ $facility->id }}" checked
+                                            wire:model="associated_facilities">
                                         <label class="form-check-label"
-                                            for="associated_facilities">{{ $facility->name }}</label>
+                                            for="associated_facilities{{ $facility->id }}">{{ $facility->name }}</label>
                                     </div>
                                 </div>
 

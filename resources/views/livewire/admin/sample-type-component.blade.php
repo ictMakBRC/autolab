@@ -28,6 +28,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <td>Sample</td>
+                                    <td>Possible Tests</td>
                                     <td>Status</td>
                                     <td>Action</td>
                                 </tr>
@@ -36,6 +37,7 @@
                                 @foreach ($sampleType as $item)
                                     <tr>
                                         <td>{{ $item->type }}</td>
+                                        <td>{{ count($item->possible_tests??[]) }}</td>
                                         <td>
                                             @if ($item->status == 1)
                                                 <span class="badge bg-success">Active</span>

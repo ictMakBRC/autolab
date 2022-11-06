@@ -141,7 +141,7 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
+        $facilities = Facility::with('parent')->where('is_active', 1)->latest()->get();
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

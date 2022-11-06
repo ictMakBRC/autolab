@@ -17,6 +17,7 @@ class Test extends Model
         'name',
         'short_code',
         'price',
+        'tat',
         'reference_range_min',
         'reference_range_max',
         'precautions',
