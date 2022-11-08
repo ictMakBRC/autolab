@@ -11,7 +11,7 @@
                                     <span class="text-info">{{ $source_facility }}</span> Specimen Request for Batch
                                     <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>)
+                                        class="text-danger">{{ $batch_sample_count }}</strong>) delivered: {{$date_delivered}} date_req:{{\Carbon\Carbon::parse($date_requested)->format('Y-m-d H:i:s')}} 
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
@@ -45,7 +45,7 @@
                             <ul class="nav nav-tabs nav-primary" role="tablist">
 
                                 @if ($activeParticipantTab)
-                                    <li class="nav-item" role="presentation">
+                                    <li class="nav-item" role="tab">
                                         <a class="nav-link {{ $activeParticipantTab ? 'active' : '' }}"
                                             data-bs-toggle="tab" href="#participant" role="tab"
                                             aria-selected="true">
@@ -59,7 +59,7 @@
                                 @endif
 
                                 @if (!$activeParticipantTab)
-                                    <li class="nav-item" role="presentation">
+                                    <li class="nav-item" role="tab">
                                         <a class="nav-link {{ !$activeParticipantTab ? 'active' : '' }}"
                                             data-bs-toggle="tab" href="#sample-tests" role="tab"
                                             aria-selected="false">
@@ -71,8 +71,6 @@
                                         </a>
                                     </li>
                                 @endif
-
-
                             </ul>
                             <div class="tab-content py-3">
                                 <div class="tab-pane fade {{ $activeParticipantTab ? 'show active' : '' }}"
@@ -87,13 +85,14 @@
                                                 <select class="form-select" id="entry_type" wire:model="entry_type">
                                                     <option selected value="Participant">Participant</option>
                                                     <option value="Client">Client</option>
+                                                    <option value="Isolate">Isolate</option>
                                                     <option value="Other">Other</option>
                                                 </select>
                                                 @error('entry_type')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            @if ($entry_type == 'Participant' || $entry_type == 'Client')
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'Isolate')
 
                                                 <div class="mb-3 col-md-2">
                                                     <label for="identity" class="form-label">Participant ID<span
@@ -107,12 +106,13 @@
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();" size="14"
                                                         wire:model.lazy="identity"
-                                                        @if ($entry_type != 'Participant') disabled @endif>
+                                                        @if ($entry_type == 'Client') disabled @endif>
                                                     @error('identity')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
+                                            @endif
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Client')
                                                 <div class="mb-3 col-md-1">
                                                     <label for="age" class="form-label">Age<span
                                                             class="text-danger">*</span></label>
@@ -369,7 +369,6 @@
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
                                             </div>
                                         @endif
                                         <div class="modal-footer">
@@ -416,7 +415,7 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="date_requested" class="form-label">Date Requested</label>
                                                 <input id="date_requested" type="date" class="form-control"
-                                                    wire:model="date_requested">
+                                                    wire:model.lazy="date_requested">
                                                 @error('date_requested')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
@@ -424,7 +423,8 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="collected_by" class="form-label">Collected By</label>
                                                 <select class="form-select" id="collected_by"
-                                                    wire:model="collected_by">
+                                                    wire:model="collected_by"
+                                                    @if ($entry_type == 'Isolate') disabled @endif>
                                                     <option selected value="">Select</option>
                                                     @forelse ($collectors as $collector)
                                                         <option value='{{ $collector->id }}'>{{ $collector->name }}
@@ -441,12 +441,13 @@
                                                 <label for="date_collected" class="form-label">Collection
                                                     Date/Time</label>
                                                 <input id="date_collected" type="datetime-local" class="form-control"
-                                                    wire:model="date_collected">
+                                                    wire:model="date_collected"
+                                                    @if ($entry_type == 'Isolate') disabled @endif>
                                                 @error('date_collected')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            @if ($entry_type == 'Participant' || $entry_type == 'Other')
+                                            @if ($entry_type != 'Client')
 
                                                 <div class="mb-3 col-md-3">
                                                     <label for="study_id" class="form-label">Study</label>
@@ -682,7 +683,7 @@
                                                 </td>
                                                 <td>
                                                     @if ($sample && $sample->collector)
-                                                        {{ $sample->collector->name }}
+                                                        {{ $sample->collector->name??'N/A' }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
@@ -712,7 +713,7 @@
         {{-- //DELETE CONFIRMATION MODAL --}}
         <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
             data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="confirm-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Delete Participant</h5>
@@ -742,7 +743,6 @@
                 window.addEventListener('delete-modal', event => {
                     $('#delete_modal').modal('show');
                 });
-
             </script>
         @endpush
     </div>

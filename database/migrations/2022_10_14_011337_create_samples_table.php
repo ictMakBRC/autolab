@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('lab_no')->nullable();
             $table->unsignedBigInteger('requested_by');
             $table->date('date_requested');
-            $table->unsignedBigInteger('collected_by');
-            $table->dateTime('date_collected');
+            $table->unsignedBigInteger('collected_by')->nullable();;
+            $table->dateTime('date_collected')->nullable();;
             $table->unsignedBigInteger('study_id')->nullable();
             $table->string('sample_is_for')->nullable();
             $table->string('priority')->nullable();

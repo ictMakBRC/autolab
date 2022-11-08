@@ -55,7 +55,8 @@
                                                     </td>
                                                     <td>
                                                         @if ($test->id === $test_id)
-                                                            <form wire:submit.prevent="storeTestResults()" class="me-2">
+                                                            <form wire:submit.prevent="storeTestResults()"
+                                                                class="me-2">
                                                                 <div class="row">
                                                                     <div class="col-md-5">
                                                                         @if ($test->result_type == 'Absolute')
@@ -87,11 +88,24 @@
                                                                             </div>
                                                                         @elseif($test->result_type == 'Measurable')
                                                                             <div class="mb-2">
-                                                                                <label class="form-label">Result</label>
-                                                                                <input type="text"
-                                                                                    class="form-control"
-                                                                                    wire:model="result"
-                                                                                    placeholder="Include units in {{ $test->measurable_result_uom }}">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="form-label">Result</label>
+                                                                                    <div
+                                                                                        class="input-group form-group mb-2">
+                                                                                        <input type="number"
+                                                                                            step="0.001"
+                                                                                            class="form-control"
+                                                                                            id="result"
+                                                                                            wire:model='result'>
+                                                                                        <div class="input-group-append">
+                                                                                            <span
+                                                                                                class="input-group-text">
+                                                                                                {{ $test->measurable_result_uom }}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                                 @error('result')
                                                                                     <div class="text-danger text-small">
                                                                                         {{ $message }}</div>
@@ -189,31 +203,7 @@
                             <hr>
                         </div>
                     @else
-
                     @endif
-                    {{-- <div class="tab-content">
-                        <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 ">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
-                                        <th>Sample</th>
-                                        <th>Sample ID</th>
-                                        <th>Lab No</th>
-                                        <th>Study</th>
-                                        <th>Test</th>
-                                        <th>Status</th>
-                                        <th>Preliminary Report</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </div> <!-- end preview-->
-                    </div> <!-- end tab-content--> --}}
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

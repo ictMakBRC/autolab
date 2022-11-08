@@ -158,7 +158,7 @@
             }
         });
 
-        window.addEventListener('study-mismatch', event => {
+        window.addEventListener('mismatch', event => {
             if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');
             }

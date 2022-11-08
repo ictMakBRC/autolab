@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Helpers\Generate;
-use App\Models\Admin\Test;
-use App\Models\Collector;
-use App\Models\Participant;
-use App\Models\Requester;
-use App\Models\Sample;
-use App\Models\SampleReception;
-use App\Models\SampleType;
-use App\Models\Study;
 use Exception;
+use Carbon\Carbon;
+use App\Models\Study;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Helpers\Generate;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
+use App\Models\Participant;
+use App\Models\SampleReception;
 
 class SpecimenRequestComponent extends Component
 {
@@ -28,6 +29,7 @@ class SpecimenRequestComponent extends Component
     public $batch_samples_handled;
 
     public $sample_reception_id;
+    public $date_delivered;
 
     public $participant_id;
 
@@ -165,13 +167,19 @@ class SpecimenRequestComponent extends Component
         $this->reset(['study_id']);
         $this->study_id = $requester->study_id;
     }
-
+    // public function updatedDateRequested()
+    // {
+    //     if ($this->date_requested>$this->date_delivered) {
+    //         $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! Date requested can not be greater than date received for this batch!']);
+    //     }
+       
+    // }
     public function updatedStudyId()
     {
         $participant = Participant::where('id', $this->participant_id)->orWhere('id', $this->same_participant_id)->first();
         // dd($participant);
         if ($participant->study_id != null && $this->study_id != $participant->study_id) {
-            $this->dispatchBrowserEvent('study-mismatch', ['type' => 'error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
+            $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You have supplied a study to which the participant does not belong!']);
         }
     }
 
@@ -194,6 +202,7 @@ class SpecimenRequestComponent extends Component
         if ($participant) {
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
+            $this->entry_type = $participant->entry_type;
             $this->identity = $participant->identity;
             $this->age = $participant->age;
             $this->address = $participant->address;
@@ -225,6 +234,7 @@ class SpecimenRequestComponent extends Component
         $this->batch_samples_handled = $sampleReception->samples_handled;
         $this->facility_id = $sampleReception->facility_id;
         $this->source_facility = $sampleReception->facility->name;
+        $this->date_delivered=$sampleReception->date_delivered;
 
         $this->tests = collect([]);
         $this->entry_type = 'Participant';
@@ -244,18 +254,21 @@ class SpecimenRequestComponent extends Component
             $this->resetParticipantInputs();
             $this->dispatchBrowserEvent('maximum-reached', ['type' => 'warning',  'message' => 'Oops! Sample maximum already reached for this batch!']);
         } else {
-            if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
-                $this->validate([
-                    'entry_type' => 'required|string',
-                    'age' => 'required|integer|min:1',
-                    'address' => 'required|string|max:40',
-                    'gender' => 'required|string|max:6',
-                    'contact' => 'required|string',
-                    'nok_contact' => 'required|string',
-                    'nok_address' => 'required|string|max:40',
-                    'clinical_notes' => 'required|max:1000',
-                ]);
-                if ($this->entry_type == 'Participant') {
+            if ($this->entry_type != 'Other') {
+                if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
+                    $this->validate([
+                        'entry_type' => 'required|string',
+                        'age' => 'required|integer|min:1',
+                        'address' => 'required|string|max:40',
+                        'gender' => 'required|string|max:6',
+                        'contact' => 'required|string',
+                        'nok_contact' => 'required|string',
+                        'nok_address' => 'required|string|max:40',
+                        'clinical_notes' => 'required|max:1000',
+                    ]);
+                }
+             
+                if ($this->entry_type == 'Participant'|| $this->entry_type == 'Isolate') {
                     $this->validate([
                         'identity' => 'required|string|unique:participants',
                     ]);
@@ -340,18 +353,21 @@ class SpecimenRequestComponent extends Component
 
     public function updateParticipant()
     {
-        if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
-            $this->validate([
-                'entry_type' => 'required|string',
-                'age' => 'required|integer|min:1',
-                'address' => 'required|string|max:40',
-                'gender' => 'required|string|max:6',
-                'contact' => 'required|string',
-                'nok_contact' => 'required|string',
-                'nok_address' => 'required|string|max:40',
-                'clinical_notes' => 'required|max:1000',
-            ]);
-            if ($this->entry_type == 'Participant') {
+        if ($this->entry_type != 'Other') {
+            if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
+                $this->validate([
+                    'entry_type' => 'required|string',
+                    'age' => 'required|integer|min:1',
+                    'address' => 'required|string|max:40',
+                    'gender' => 'required|string|max:6',
+                    'contact' => 'required|string',
+                    'nok_contact' => 'required|string',
+                    'nok_address' => 'required|string|max:40',
+                    'clinical_notes' => 'required|max:1000',
+                ]);
+            }
+         
+            if ($this->entry_type == 'Participant'|| $this->entry_type == 'Isolate') {
                 $this->validate([
                     'identity' => 'required|string',
                 ]);
@@ -393,8 +409,9 @@ class SpecimenRequestComponent extends Component
 
     public function setParticipantId(Participant $participant)
     {
-        if ($participant->entry_type == 'Participant') {
+        if ($participant->entry_type == 'Participant'|| $participant->entry_type == 'Isolate') {
             $this->participant_id = $participant->id;
+            $this->entry_type = $participant->entry_type;
             $this->study_id = $participant->study_id ?? '';
             $this->requested_by = $participant->study ? $participant->study->requester->id : '';
             $this->activeParticipantTab = false;
@@ -454,17 +471,22 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date|before_or_equal:today',
-            'collected_by' => 'required|integer',
-            'date_collected' => 'required|date|before_or_equal:now',
+            'date_requested' => 'required|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
             'sample_identity' => 'required|string|unique:samples',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
             'sample_type_id' => 'integer|required',
             'tests_requested' => 'array|required',
         ]);
-
-        if ($this->entry_type == 'Participant' || $this->entry_type == 'Other') {
+        
+        // Carbon::parse($this->date_delivered)->format('Y-m-d h:i:s')
+        if ($this->entry_type != 'Isolate') {
+            $this->validate([
+                'collected_by' => 'required|integer',
+                'date_collected' => 'required|date|lte:date_requested|before_or_equal:now',
+            ]);
+        }
+        if ($this->entry_type != 'Client') {
             $this->validate([
                 'study_id' => 'required|integer',
             ]);
@@ -545,15 +567,20 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date|after_or_equal:date_collected',
-            'collected_by' => 'required|integer',
-            'date_collected' => 'required|date|before_or_equal:date_requested',
-            'sample_identity' => 'required',
+            'date_requested' => 'required|date|before_or_equal:now',
+            'sample_identity' => 'required|string',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
             'sample_type_id' => 'integer|required',
             'tests_requested' => 'array|required',
         ]);
+
+        if ($this->entry_type != 'Isolate') {
+            $this->validate([
+                'collected_by' => 'required|integer',
+                'date_collected' => 'required|date|lte:date_requested|before_or_equal:now',
+            ]);
+        }
         if ($this->entry_type != 'Client') {
             $this->validate([
                 'study_id' => 'required|integer',

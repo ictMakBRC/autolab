@@ -96,7 +96,12 @@ class AttachTestResultComponent extends Component
         if ($this->link != null) {
             $testResult->result = $this->link;
         } else {
-            $testResult->result = $this->result;
+            $test = Test::findOrfail($this->test_id);
+            if ($test->result_type=='Measurable') {
+                $testResult->result = $this->result.''.$test->measurable_result_uom;
+            } else {
+                $testResult->result = $this->result;
+            }
         }
 
         $testResult->attachment = $this->attachmentPath;
