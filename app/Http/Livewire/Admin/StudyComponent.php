@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Facility;
 use App\Models\Laboratory;
+use App\Models\Sample;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
@@ -96,12 +97,28 @@ class StudyComponent extends Component
         $this->validate([
             'associated_studies' => 'required',
         ]);
-        $laboratory = Laboratory::find(auth()->user()->laboratory_id);
-        $laboratory->associated_studies = $this->associated_studies;
-        $laboratory->update();
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        $associatedStudies = auth()->user()->laboratory->associated_studies;
+        $disassociatedStudies = array_diff($associatedStudies, $this->associated_studies ?? []);
+
+        $studyData = [];
+        foreach ($disassociatedStudies as $study) {
+            if (Sample::where(['study_id' => $study, 'creator_lab' => auth()->user()->laboratory_id])->first()) {
+                array_push($studyData, $study);
+            }
+        }
+        if (count($studyData)) {
+            $this->associated_studies = $associatedStudies;
+            $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from studies that already have sample information recorded!']);
+        } else {
+            $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+            $laboratory->associated_studies = $this->associated_studies;
+            $laboratory->update();
+            $this->render();
+
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        }
     }
 
     public function refresh()

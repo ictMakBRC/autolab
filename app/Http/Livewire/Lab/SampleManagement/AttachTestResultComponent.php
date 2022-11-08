@@ -97,7 +97,7 @@ class AttachTestResultComponent extends Component
             $testResult->result = $this->link;
         } else {
             $test = Test::findOrfail($this->test_id);
-            if ($test->result_type=='Measurable') {
+            if ($test->result_type == 'Measurable') {
                 $testResult->result = $this->result.''.$test->measurable_result_uom;
             } else {
                 $testResult->result = $this->result;
