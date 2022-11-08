@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Facility;
-use App\Models\Laboratory;
 use Exception;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Laboratory;
+use App\Models\SampleReception;
 
 class FacilityComponent extends Component
 {
@@ -63,12 +64,28 @@ class FacilityComponent extends Component
         $this->validate([
             'associated_facilities' => 'required',
         ]);
-        $laboratory = Laboratory::find(auth()->user()->laboratory_id);
-        $laboratory->associated_facilities = $this->associated_facilities;
-        $laboratory->update();
+        $associatedFacilites=auth()->user()->laboratory->associated_facilities;
+        $disassociatedFacilities=array_diff($associatedFacilites, $this->associated_facilities??[]);
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        $facilityData=[];
+        foreach($disassociatedFacilities as $facility){
+            if(SampleReception::where(['facility_id'=>$facility,'creator_lab'=>auth()->user()->laboratory_id])->first()){
+                array_push($facilityData,$facility);
+            }
+        }
+        if(count($facilityData)){
+            $this->associated_facilities=$associatedFacilites;
+            $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from facilities that already have sample information recorded!']);
+        }else{         
+            $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+            $laboratory->associated_facilities = $this->associated_facilities;
+            $laboratory->update();
+            $this->render();
+            
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        }
+        
     }
 
     public function refresh()

@@ -153,14 +153,14 @@ class UserComponent extends Component
       $insertedUser = User::findOrFail($user->id);
         try{
             Notification::send($insertedUser, new SendPasswordNotification($details));
-            $emailSent = 'True';
+            $emailSent = 'Email sent';
 
         }catch (\Exception $error){
-            $emailSent = 'False, Password is: '.$this->password;
+            $emailSent = 'Email Not sent, Password is: '.$this->password;
         }
             $this->resetInputs();
             $this->dispatchBrowserEvent('close-modal');
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully, Email sent: '.$emailSent]);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully,'.$emailSent]);
     }
 
     public function editdata($id)

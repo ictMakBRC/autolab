@@ -79,6 +79,7 @@ class AssignTestsComponent extends Component
         $test_assignment->test_id = $this->test_id;
         $test_assignment->assignee = $this->assignee;
         $test_assignment->save();
+        // $this->emit('refresh-nav');
 
         $sample = Sample::where('id', $this->sample_id)->first();
         $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
