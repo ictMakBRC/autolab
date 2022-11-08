@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Helpers\Generate;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use Livewire\Component;
+use App\Helpers\Generate;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Livewire\Component;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendPasswordNotification;
 
 class UserComponent extends Component
 {
@@ -138,12 +140,27 @@ class UserComponent extends Component
         $user->avatar = $this->avatarPath;
         $user->password = Hash::make($this->password);
         $user->signature = $this->signaturePath;
-
         $user->save();
+        $greeting = 'Hello'.' '.$this->first_name.' '.$this->surname;
+        $body = 'Your password is'.' '.$this->password;
+        $actiontext = 'Click here to Login';
+        $details = [
+            'greeting' => $greeting,
+            'body' => $body,
+            'actiontext' => $actiontext,
+            'actionurl' => url('/'),
+        ];
+      $insertedUser = User::findOrFail($user->id);
+        try{
+            Notification::send($insertedUser, new SendPasswordNotification($details));
+            $emailSent = 'True';
 
-        $this->resetInputs();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully!']);
+        }catch (\Exception $error){
+            $emailSent = 'False, Password is: '.$this->password;
+        }
+            $this->resetInputs();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully, Email sent: '.$emailSent]);
     }
 
     public function editdata($id)
