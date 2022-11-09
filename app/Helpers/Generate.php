@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Participant;
 use App\Models\Sample;
+use App\Models\SampleReception;
 use Carbon\Carbon;
 
 class Generate
@@ -14,22 +15,35 @@ class Generate
         $symbols = '!@#$%^&*()';
         $lowercase = 'abcdefghijklmnopqrstuvwxyz';
         $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $numberLength = strlen($numbers);
-        $symbolLength = strlen($symbols);
-        $uppercaseLength = strlen($uppercase);
-        $lowercaseLength = strlen($lowercase);
         $randomNumber = '';
         $randomSymbol = '';
         $randomUppercase = '';
         $randomLowercase = '';
         for ($i = 0; $i < $length; $i++) {
-            $randomNumber .= $numbers[rand(0, $numberLength - 1)];
-            $randomSymbol .= $symbols[rand(0, $symbolLength - 1)];
-            $randomUppercase .= $uppercase[rand(0, $uppercaseLength - 1)];
-            $randomLowercase .= $lowercase[rand(0, $lowercaseLength - 1)];
+            $randomNumber .= $numbers[rand(0, strlen($numbers) - 1)];
+            $randomSymbol .= $symbols[rand(0, strlen($symbols) - 1)];
+            $randomUppercase .= $uppercase[rand(0, strlen($uppercase) - 1)];
+            $randomLowercase .= $lowercase[rand(0, strlen($lowercase) - 1)];
         }
 
         return str_shuffle($randomNumber.$randomSymbol.$randomUppercase.$randomLowercase);
+    }
+
+    public static function batchNo()
+    {
+        $date = date('dmY');
+        $batch_no = '';
+        $latestBatchNo = SampleReception::select('batch_no')->orderBy('id', 'desc')->first();
+
+        if ($latestBatchNo) {
+            $batchNumberSplit = explode('-', $latestBatchNo->batch_no);
+            $number = ((int) filter_var($batchNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1);
+            $batch_no = $date.'SB-'.$number;
+        } else {
+            $batch_no = $date.'SB-1';
+        }
+
+        return $batch_no;
     }
 
     public static function participantNo()

@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::share('facilityInfo', FacilityInformation::first());
+        if ((new \App\Models\FacilityInformation)->getTable()) {
+            View::share('facilityInfo', FacilityInformation::first());
+        }
     }
 }

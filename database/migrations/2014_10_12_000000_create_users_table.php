@@ -72,10 +72,10 @@ return new class extends Migration
         });
 
         // Seed admin user
-        Artisan::call('db:seed', [
-            '--class' => 'UserSeeder',
-            '--force' => true, // <--- add this line
-        ]);
+        // Artisan::call('db:seed', [
+        //     '--class' => 'UserSeeder',
+        //     '--force' => true, // <--- add this line
+        // ]);
     }
 
     /**

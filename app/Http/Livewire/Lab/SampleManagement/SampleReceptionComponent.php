@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Courier;
-use App\Models\Facility;
-use App\Models\SampleReception;
-use App\Models\Study;
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use App\Models\Study;
+use App\Models\Courier;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Helpers\Generate;
+use App\Models\SampleReception;
 
 class SampleReceptionComponent extends Component
 {
@@ -98,7 +99,7 @@ class SampleReceptionComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'date_delivered' => 'required',
+            'date_delivered' => 'required|date|before_or_equal:now',
             'samples_delivered' => 'required|integer|min:1',
             'facility_id' => 'required',
             'courier_id' => 'required',
@@ -135,23 +136,6 @@ class SampleReceptionComponent extends Component
         return redirect(request()->header('Referer'));
     }
 
-    public function generateBatchNo()
-    {
-        $date = date('dmY');
-        $batch_no = '';
-        $latestBatchNo = SampleReception::select('batch_no')->orderBy('id', 'desc')->first();
-
-        if ($latestBatchNo) {
-            $batchNumberSplit = explode('-', $latestBatchNo->batch_no);
-            $number = ((int) filter_var($batchNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1);
-            $batch_no = $date.'SB-'.$number;
-        } else {
-            $batch_no = $date.'SB-1';
-        }
-
-        return $batch_no;
-    }
-
     public function getStudies()
     {
         $this->studies = Study::where('facility_id', $this->courierfacility)->latest()->get();
@@ -183,7 +167,7 @@ class SampleReceptionComponent extends Component
         ]);
 
         $sampleReception = new SampleReception();
-        $sampleReception->batch_no = $this->generateBatchNo();
+        $sampleReception->batch_no = Generate::batchNo();
         $sampleReception->date_delivered = $this->date_delivered;
         $sampleReception->samples_delivered = $this->samples_delivered;
         $sampleReception->samples_accepted = $this->samples_accepted;
@@ -251,7 +235,7 @@ class SampleReceptionComponent extends Component
     public function updateData()
     {
         $this->validate([
-            'date_delivered' => 'required',
+            'date_delivered' => 'required|date|before_or_equal:now',
             'samples_delivered' => 'required',
             'facility_id' => 'required',
             'courier_id' => 'required',
