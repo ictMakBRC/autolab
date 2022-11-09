@@ -212,7 +212,7 @@
         @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
-                    $('#view_tests').modal('hide');
+                    $('#view-tests').modal('hide');
                 });
 
                 window.addEventListener('view-tests', event => {
