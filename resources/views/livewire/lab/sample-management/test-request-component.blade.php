@@ -69,7 +69,7 @@
                                                 {{ $sample->requester->name }}
                                             </td>
                                             <td>
-                                                {{ $sample->collector->name }}
+                                                {{ $sample->collector->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->test_count }}

@@ -18,6 +18,7 @@ class TestApprovalComponent extends Component
         $testResult->approved_at = now();
         $testResult->status = 'Approved';
         $testResult->update();
+        $this->emit('updateNav', 'testsPendindApprovalCount');
 
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);

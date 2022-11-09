@@ -18,6 +18,7 @@ class TestReviewComponent extends Component
         $testResult->reviewed_at = now();
         $testResult->status = 'Reviewed';
         $testResult->update();
+        $this->emit('updateNav', 'testsPendindReviewCount');
 
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);

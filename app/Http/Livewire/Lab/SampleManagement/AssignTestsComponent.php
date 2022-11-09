@@ -29,6 +29,8 @@ class AssignTestsComponent extends Component
 
     public $assignedTests;
 
+    public $backlog;
+
     public function mount()
     {
         $this->tests_requested = collect([]);
@@ -38,6 +40,11 @@ class AssignTestsComponent extends Component
     public function activateTest($id)
     {
         $this->test_id = $id;
+    }
+
+    public function UpdatedAssignee()
+    {
+        $this->backlog = TestAssignment::where(['assignee' => $this->assignee, 'status' => 'Assigned'])->count();
     }
 
     public function refresh()
@@ -72,6 +79,7 @@ class AssignTestsComponent extends Component
         $test_assignment->test_id = $this->test_id;
         $test_assignment->assignee = $this->assignee;
         $test_assignment->save();
+        // $this->emit('refresh-nav','samplemgt');
 
         $sample = Sample::where('id', $this->sample_id)->first();
         $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
@@ -81,7 +89,7 @@ class AssignTestsComponent extends Component
         } else {
             $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
             $this->test_id = $this->tests_requested[0]->id;
-            $this->reset(['assignee']);
+            $this->reset(['assignee', 'backlog']);
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
         }
     }

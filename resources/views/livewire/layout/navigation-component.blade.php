@@ -11,7 +11,7 @@
                             class="bi bi-house-door-fill"></i></button>
                 </li>
 
-                <li class="nav-item {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}"
+                <li class="nav-item {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
                     data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
                             class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
@@ -110,7 +110,7 @@
                 </div>
             </div> --}}
 
-                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' ? 'active show' : '' }}"
+                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
                     id="pills-samples">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
@@ -130,17 +130,15 @@
                                     class="bi bi-receipt"></i>Accessioning</a>
                         @endif
                         @if (Auth::user()->hasPermission(['assign-test-requests']))
-                        <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
-                                class="bi bi-file-medical"></i>Assign
-                            Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
+                            <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
+                                    class="bi bi-file-medical"></i>Assign
+                                Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
                         @endif
-                        @if (Auth::user()->hasPermission(['acknowledge-test-request']))
+                        @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Test
                                 Requests<x-count-badge>{{ $testAssignedCount }}</x-count-badge></a>
-                        @endif
 
-                        @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
                                     class="bi bi-file-earmark-medical"></i>Attach Results</a>
@@ -148,13 +146,19 @@
 
 
                         @if (Auth::user()->hasPermission(['review-results']))
-                            <a href="{{ route('test-review') }}" class="list-group-item"><i
+                            <a href="{{ route('test-review') }}"
+                                class="list-group-item
+                            {{ request()->segment(2) == 'test-result-review' || $link == 'review' ? 'active' : '' }}
+                            "><i
                                     class="bi bi-check-square"></i>Result
                                 Review<x-count-badge>{{ $testsPendindReviewCount }}</x-count-badge></a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['approve-results']))
-                            <a href="{{ route('test-approval') }}" class="list-group-item"><i
+                            <a href="{{ route('test-approval') }}"
+                                class="list-group-item 
+                            {{ request()->segment(2) == 'test-result-approval' || $link == 'approve' ? 'active' : '' }}
+                            "><i
                                     class="bi bi-check2-square"></i>Result
                                 Approval<x-count-badge>{{ $testsPendindApprovalCount }}</x-count-badge></a>
                         @endif
@@ -248,8 +252,8 @@
                                     class="bi bi-person"></i>Users<x-count-badge>{{ $usersCount }}</x-count-badge>
                             </a>
                             <a href="{{ route('laboratories') }}" class="list-group-item"><i
-                                class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
-                            </x-count-badge></a>
+                                    class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
+                                </x-count-badge></a>
                             <a href="{{ route('user-roles.index') }}"
                                 class="list-group-item {{ request()->segment(3) == 'user-roles' ? 'active' : '' }}"><i
                                     class="bi bi-person-check"></i>Roles<x-count-badge>{{ $rolesCount }}
@@ -273,14 +277,16 @@
                     </div>
                 @endif
                 @if (Auth::user()->hasPermission(['access-settings']))
-                    <div class="tab-pane fade" class="tab-pane fade {{ request()->segment(2) == 'settings' ? 'active show' : '' }}" id="pills-management">
+                    <div class="tab-pane fade"
+                        class="tab-pane fade {{ request()->segment(2) == 'settings' ? 'active show' : '' }}"
+                        id="pills-management">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-0">Settings</h5>
                                 </div>
                             </div>
-                          
+
                             <a href="{{ route('designations') }}" class="list-group-item"><i
                                     class="bi bi-person-square"></i>Designations<x-count-badge>{{ $designationCount }}
                                 </x-count-badge></a>
