@@ -73,36 +73,37 @@ class AssignTestsComponent extends Component
         $this->validate([
             'assignee' => 'required|integer',
         ]);
-        $isExist =  TestAssignment::select("*")
+        $isExist = TestAssignment::select('*')
         ->where('sample_id', $this->sample_id)
         ->where('test_id', $this->test_id)
         ->exists();
-    if ($isExist) {
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test already Assigned to someone!']);
-    }else{
-        $test_assignment = new TestAssignment();
-        $test_assignment->sample_id = $this->sample_id;
-        $test_assignment->test_id = $this->test_id;
-        $test_assignment->assignee = $this->assignee;
-        $test_assignment->save();
-        // $this->emit('refresh-nav','samplemgt');
 
-        $sample = Sample::where('id', $this->sample_id)->first();
-        $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
-        if (array_diff($sample->tests_requested, $this->assignedTests) == []) {
-            $sample->update(['status' => 'Assigned']);
-            // $this->refresh();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Congs! Test Assignment completed successfully!']);
+        if ($isExist) 
+        {
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test already Assigned to someone!']);
         } else {
-            $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
-            $this->test_id = $this->tests_requested[0]->id;
-            $this->reset(['assignee', 'backlog']);
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
+                $test_assignment = new TestAssignment();
+            $test_assignment->sample_id = $this->sample_id;
+            $test_assignment->test_id = $this->test_id;
+            $test_assignment->assignee = $this->assignee;
+            $test_assignment->save();
+
+            $sample = Sample::where('id', $this->sample_id)->first();
+            $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
+            if (array_diff($sample->tests_requested, $this->assignedTests) == []) {
+                $sample->update(['status' => 'Assigned']);
+                // $this->refresh();
+                $this->dispatchBrowserEvent('close-modal');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
+            } else {
+                $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
+                $this->test_id = $this->tests_requested[0]->id;
+                $this->reset(['assignee', 'backlog']);
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
+            }
         }
     }
-}
 
     public function acknowledgeRequest(Sample $sample)
     {
