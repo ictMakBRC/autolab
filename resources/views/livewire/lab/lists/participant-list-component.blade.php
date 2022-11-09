@@ -27,6 +27,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Participant ID</th>
+                                        <th>Entry Type</th>
                                         <th>Age</th>
                                         <th>Gender</th>
                                         <th>Contact</th>
@@ -46,6 +47,9 @@
                                            
                                             <td>
                                                 {{ $participant->identity }}
+                                            </td>
+                                            <td>
+                                                {{ $participant->entry_type }}
                                             </td>
                                             <td>
                                                 {{ $participant->age??'N/A' }}
