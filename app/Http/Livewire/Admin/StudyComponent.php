@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Facility;
+use App\Models\Laboratory;
+use App\Models\Sample;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
@@ -14,6 +16,8 @@ class StudyComponent extends Component
     public $description;
 
     public $facility_id;
+
+    public $associated_studies;
 
     public $is_active;
 
@@ -31,6 +35,11 @@ class StudyComponent extends Component
         ]);
     }
 
+    public function mount()
+    {
+        $this->associated_studies = auth()->user()->laboratory->associated_studies ?? [];
+    }
+
     public function storeData()
     {
         $this->validate([
@@ -44,9 +53,10 @@ class StudyComponent extends Component
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
         $study->save();
-        session()->flash('success', 'Study/Project created successfully.');
+
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project created successfully!']);
     }
 
     public function editdata($id)
@@ -76,9 +86,44 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->is_active = $this->is_active;
         $study->update();
-        session()->flash('success', 'Study/project updated successfully.');
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+    }
+
+    public function associateStudy()
+    {
+        $this->validate([
+            'associated_studies' => 'required',
+        ]);
+
+        $associatedStudies = auth()->user()->laboratory->associated_studies;
+        $disassociatedStudies = array_diff($associatedStudies, $this->associated_studies ?? []);
+
+        $studyData = [];
+        foreach ($disassociatedStudies as $study) {
+            if (Sample::where(['study_id' => $study, 'creator_lab' => auth()->user()->laboratory_id])->first()) {
+                array_push($studyData, $study);
+            }
+        }
+        if (count($studyData)) {
+            $this->associated_studies = $associatedStudies;
+            $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from studies that already have sample information recorded!']);
+        } else {
+            $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+            $laboratory->associated_studies = $this->associated_studies;
+            $laboratory->update();
+            $this->render();
+
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        }
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -91,7 +136,7 @@ class StudyComponent extends Component
     public function deleteData()
     {
         try {
-            $study = Study::where('id', $this->delete_id)->first();
+            $study = Study::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $study->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -113,8 +158,8 @@ class StudyComponent extends Component
 
     public function render()
     {
-        $studies = Study::with('facility')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $studies = Study::with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)->latest()->get();
 
         return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
     }

@@ -5,23 +5,47 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sample extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['participant_id', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('samples')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
-        'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count','tests_performed', 'date_acknowledged', 'request_acknowledged_by','status', 'created_by', 'creator_lab', ];
+    protected $fillable = ['sample_reception_id', 'participant_id', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
+
+        'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count', 'tests_performed', 'date_acknowledged', 'request_acknowledged_by', 'status', 'created_by', 'creator_lab', ];
 
     protected $casts = [
         'tests_requested' => 'array',
-        'tests_performed' =>'array',
+        'tests_performed' => 'array',
     ];
+
+    public function sampleReception()
+    {
+        return $this->belongsTo(SampleReception::class, 'sample_reception_id', 'id');
+    }
 
     public function participant()
     {
         return $this->belongsTo(Participant::class, 'participant_id', 'id');
+    }
+
+    public function testResult()
+    {
+        return $this->hasMany(TestResult::class, 'sample_id', 'id');
     }
 
     public function sampleType()
@@ -42,6 +66,11 @@ class Sample extends Model
     public function collector()
     {
         return $this->belongsTo(Collector::class, 'collected_by', 'id');
+    }
+
+    public function testAssignment()
+    {
+        return $this->hasMany(TestAssignment::class, 'sample_id', 'id');
     }
 
     public static function boot()

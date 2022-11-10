@@ -66,10 +66,9 @@ class CollectorComponent extends Component
         $collector->study_id = $this->study_id == '' ? null : $this->study_id;
 
         $collector->save();
-
-        session()->flash('success', 'Collector created successfully.');
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Collector created successfully!']);
     }
 
     public function editdata($id)
@@ -111,9 +110,14 @@ class CollectorComponent extends Component
         $collector->is_active = $this->is_active;
         $collector->update();
 
-        session()->flash('success', 'Collector updated successfully.');
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Collector updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -126,7 +130,7 @@ class CollectorComponent extends Component
     public function deleteData()
     {
         try {
-            $collector = Collector::where('id', $this->delete_id)->first();
+            $collector = Collector::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $collector->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
@@ -148,8 +152,8 @@ class CollectorComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::with('facility', 'study')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $collectors = Collector::whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.collector-component', compact('collectors', 'facilities'))->layout('layouts.app');
     }

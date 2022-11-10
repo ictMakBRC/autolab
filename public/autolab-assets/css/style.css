@@ -1447,8 +1447,25 @@ a {
 
   }
 
-
-
+  .btn.btn-rounded {  
+    border-radius: 1.25rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.25rem;
+    text-align: center;
+    /* vertical-align: middle; */
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+} 
+.sharp.btn-xs {
+    padding: 3px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+}
   /* Authentication */
 
 .authentication-card {

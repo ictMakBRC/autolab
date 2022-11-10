@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('short_code')->nullable()->unique();
             $table->double('price', 8, 2)->default(0);
+            $table->integer('tat')->nullable();
             $table->string('reference_range_min')->nullable();
             $table->string('reference_range_max')->nullable();
             $table->longText('precautions')->nullable();

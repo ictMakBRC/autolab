@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\LogActivity;
+use App\Helpers\LoginActivity;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -30,6 +30,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         //return $request;
+
         $request->authenticate();
 
         $request->session()->regenerate();
@@ -45,7 +46,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        LogActivity::addToLog('logged Out', Auth::user()->email, $request->ip());
+        LoginActivity::addToLog('logged Out', Auth::user()->email, $request->ip());
 
         Auth::guard('web')->logout();
 

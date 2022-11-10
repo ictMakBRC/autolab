@@ -34,11 +34,12 @@ class SampleTypeComponent extends Component
         $sampleType->type = $this->type;
         $sampleType->possible_tests = $this->possible_tests;
         $sampleType->save();
-        session()->flash('success', 'Sample Type created successfully.');
+
         $this->status = '';
         $this->type = '';
         $this->possible_tests = [];
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type created successfully!']);
     }
 
     public function editdata($id)
@@ -50,6 +51,11 @@ class SampleTypeComponent extends Component
         $this->possible_tests = $sampleType->possible_tests ?? [];
 
         $this->dispatchBrowserEvent('edit-modal');
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function resetInputs()
@@ -71,9 +77,9 @@ class SampleTypeComponent extends Component
         $sampleType->possible_tests = $this->possible_tests;
         $sampleType->update();
 
-        session()->flash('success', 'Sample Type updated successfully');
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -86,13 +92,13 @@ class SampleTypeComponent extends Component
     public function deleteData()
     {
         try {
-            $value = SampleType::where('id', $this->delete_id)->first();
+            $value = SampleType::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $value->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Record deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Record deleted successfully!']);
         } catch(\Exception $error) {
-            session()->flash('erorr', 'Record can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Record can not be deleted!']);
         }
     }
 
@@ -108,8 +114,8 @@ class SampleTypeComponent extends Component
 
     public function render()
     {
-        $sampleType = SampleType::all();
-        $tests = Test::select('id', 'name')->get();
+        $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
+        $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->select('id', 'name')->get();
 
         return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');
     }

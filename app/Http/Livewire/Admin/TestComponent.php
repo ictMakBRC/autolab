@@ -18,6 +18,8 @@ class TestComponent extends Component
 
     public $price;
 
+    public $tat;
+
     public $reference_range_min;
 
     public $reference_range_max;
@@ -41,7 +43,6 @@ class TestComponent extends Component
     public $toggleForm = false;
 
     public $edit_id;
-    // public $delete_id;
 
     public function updated($fields)
     {
@@ -61,10 +62,6 @@ class TestComponent extends Component
         ];
 
         $this->dynamicComments = [
-            ['comment' => 'comment'],
-            ['comment' => 'comment'],
-            ['comment' => 'comment'],
-            ['comment' => 'comment'],
             ['comment' => 'comment'],
         ];
     }
@@ -135,6 +132,7 @@ class TestComponent extends Component
         $test->name = $this->name;
         $test->short_code = $this->short_code;
         $test->price = $this->price;
+        $test->tat = $this->tat;
         $test->reference_range_min = $this->reference_range_min;
         $test->reference_range_max = $this->reference_range_max;
         $test->status = $this->status;
@@ -146,7 +144,7 @@ class TestComponent extends Component
         $test->save();
 
         $this->resetTestInputs();
-        session()->flash('success', 'Test created successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test created successfully!']);
     }
 
     public function editTest(Test $test)
@@ -156,6 +154,7 @@ class TestComponent extends Component
         $this->name = $test->name;
         $this->short_code = $test->short_code;
         $this->price = $test->price;
+        $this->tat = $test->tat;
         $this->reference_range_min = $test->reference_range_min;
         $this->reference_range_max = $test->reference_range_max;
         $this->status = $test->status;
@@ -197,6 +196,7 @@ class TestComponent extends Component
         $test->name = $this->name;
         $test->short_code = $this->short_code;
         $test->price = $this->price;
+        $test->tat = $this->tat;
         $test->reference_range_min = $this->reference_range_min;
         $test->reference_range_max = $this->reference_range_max;
         $test->status = $this->status;
@@ -209,12 +209,12 @@ class TestComponent extends Component
 
         $this->toggleForm = false;
         $this->resetTestInputs();
-        session()->flash('success', 'Test updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test updated successfully!']);
     }
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments']);
     }
 
     public function deleteConfirmation(Test $test)
@@ -232,9 +232,15 @@ class TestComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'Test deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test deleted successfully!']);
         } catch(\Exception $error) {
-            session()->flash('erorr', 'Test can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test can not be deleted!']);
         }
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function cancel()
@@ -250,10 +256,9 @@ class TestComponent extends Component
 
     public function render()
     {
-        $tests = Test::latest()->get();
-        $testCategories = TestCategory::latest()->get();
-        // $this->absolute_results=$this->pushResults();
-        // $this->comments=$this->pushComments();
+        $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        $testCategories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+
         return view('livewire.admin.test-component', compact('tests', 'testCategories'));
     }
 }

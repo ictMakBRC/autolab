@@ -22,6 +22,7 @@ class LaboratoryComponent extends Component
     {
         $this->validateOnly($fields, [
             'laboratory_name' => 'required|unique:laboratories',
+            'short_code' => 'required',
             'is_active' => 'required',
 
         ]);
@@ -31,7 +32,7 @@ class LaboratoryComponent extends Component
     {
         $this->validate([
             'laboratory_name' => 'required|unique:laboratories',
-            'short_code' => 'unique:laboratories',
+            'short_code' => 'required|unique:laboratories',
         ]);
 
         $laboratory = new Laboratory();
@@ -39,11 +40,12 @@ class LaboratoryComponent extends Component
         $laboratory->short_code = $this->short_code;
         $laboratory->description = $this->description;
         $laboratory->save();
-        session()->flash('success', 'Laboratory created successfully.');
+
         $this->description = '';
         $this->laboratory_name = '';
         $this->short_code = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory created successfully!']);
     }
 
     public function editdata($id)
@@ -67,6 +69,7 @@ class LaboratoryComponent extends Component
     {
         $this->validate([
             'laboratory_name' => 'required',
+            'short_code' => 'required',
         ]);
         $laboratory = Laboratory::find($this->edit_id);
         $laboratory->laboratory_name = $this->laboratory_name;
@@ -74,12 +77,18 @@ class LaboratoryComponent extends Component
         $laboratory->description = $this->description;
         $laboratory->is_active = $this->is_active;
         $laboratory->update();
-        session()->flash('success', 'Laboratory updated successfully.');
+
         $this->description = '';
         $this->laboratory_name = '';
         $this->short_code = '';
         $this->is_active = '';
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -96,9 +105,9 @@ class LaboratoryComponent extends Component
             $laboratory->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Laboratory deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Laboratory can not be deleted !!.');
+            $this->dispatchBrowserEvent('error', ['type' => 'success',  'message' => 'Laboratory can not be deleted!']);
         }
     }
 

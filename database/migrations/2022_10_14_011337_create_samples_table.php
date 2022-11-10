@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('samples', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sample_reception_id');
             $table->unsignedBigInteger('participant_id');
             $table->unsignedBigInteger('sample_type_id');
             $table->string('sample_no');
@@ -22,9 +23,9 @@ return new class extends Migration
             $table->string('lab_no')->nullable();
             $table->unsignedBigInteger('requested_by');
             $table->date('date_requested');
-            $table->unsignedBigInteger('collected_by');
-            $table->dateTime('date_collected');
-            $table->unsignedBigInteger('study_id');
+            $table->unsignedBigInteger('collected_by')->nullable();
+            $table->dateTime('date_collected')->nullable();
+            $table->unsignedBigInteger('study_id')->nullable();
             $table->string('sample_is_for')->nullable();
             $table->string('priority')->nullable();
             $table->text('tests_requested')->nullable();
@@ -34,7 +35,8 @@ return new class extends Migration
             $table->dateTime('date_acknowledged')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
-            $table->string('status');
+            // $table->string('entry_type')->default('Participant');
+            $table->string('status')->default('Accessioned');
             $table->timestamps();
         });
     }

@@ -38,9 +38,10 @@ class KitComponent extends Component
         $kit->platform_id = $this->platform_id;
         $kit->is_active = $this->is_active;
         $kit->save();
-        session()->flash('success', 'Kit created successfully.');
+
         $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit created successfully!']);
     }
 
     public function editdata($id)
@@ -69,9 +70,15 @@ class KitComponent extends Component
         $kit->platform_id = $this->platform_id;
         $kit->is_active = $this->is_active;
         $kit->update();
-        session()->flash('success', 'Kit updated successfully.');
+
         $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -84,13 +91,13 @@ class KitComponent extends Component
     public function deleteData()
     {
         try {
-            $kit = Kit::where('id', $this->delete_id)->first();
+            $kit = Kit::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $kit->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Kit deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Kit can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Kit can not be deleted!']);
         }
     }
 
@@ -106,8 +113,8 @@ class KitComponent extends Component
 
     public function render()
     {
-        $kits = Kit::with('platform')->latest()->get();
-        $platforms = Platform::latest()->get();
+        $kits = Kit::where('creator_lab', auth()->user()->laboratory_id)->with('platform')->latest()->get();
+        $platforms = Platform::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.kit-component', compact('kits', 'platforms'))->layout('layouts.app');
     }

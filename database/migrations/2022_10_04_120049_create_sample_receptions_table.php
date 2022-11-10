@@ -25,13 +25,12 @@ return new class extends Migration
             $table->integer('samples_handled')->default(0);
             $table->unsignedBigInteger('received_by')->nullable();
             $table->boolean('courier_signed')->default(0);
-            $table->longText('rejection_reason')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->unsignedBigInteger('reviewed_by')->nullable();
             $table->dateTime('date_reviewed')->nullable();
             $table->longText('comment')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
-            $table->string('status')->default('Pending');
+            $table->string('status')->default('Reviewed');
             $table->timestamps();
         });
     }

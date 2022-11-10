@@ -33,6 +33,7 @@ class RequesterComponent extends Component
             'contact' => 'required',
             'email' => 'required|email:filter',
             'facility_id' => 'required',
+            'study_id' => 'required|unique:requesters',
             'is_active' => 'required',
 
         ]);
@@ -40,7 +41,7 @@ class RequesterComponent extends Component
 
     public function getStudies()
     {
-        $this->studies = Study::where('facility_id', $this->facility_id)->latest()->get();
+        $this->studies = Study::where('creator_lab', auth()->user()->laboratory_id)->where('facility_id', $this->facility_id)->latest()->get();
     }
 
     public function mount()
@@ -53,8 +54,10 @@ class RequesterComponent extends Component
         $this->validate([
             'name' => 'required',
             'contact' => 'required',
-            'email' => 'required|unique:requesters|email:filter',
+            // 'email' => 'required|unique:requesters|email:filter',
+            'email' => 'required|email:filter',
             'facility_id' => 'required',
+            'study_id' => 'required|unique:requesters',
             'is_active' => 'required',
         ]);
 
@@ -65,11 +68,10 @@ class RequesterComponent extends Component
         $requester->facility_id = $this->facility_id;
         $requester->study_id = $this->study_id == '' ? null : $this->study_id;
         $requester->save();
-        session()->flash('success', 'Requester created successfully.');
 
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester created successfully!']);
     }
 
     public function editdata($id)
@@ -111,11 +113,14 @@ class RequesterComponent extends Component
         $requester->is_active = $this->is_active;
         $requester->update();
 
-        session()->flash('success', 'Requester updated successfully.');
-
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -128,13 +133,13 @@ class RequesterComponent extends Component
     public function deleteData()
     {
         try {
-            $requester = Requester::where('id', $this->delete_id)->first();
+            $requester = Requester::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $requester->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Requester deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Requester can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Requester can not be deleted!']);
         }
     }
 
@@ -150,8 +155,8 @@ class RequesterComponent extends Component
 
     public function render()
     {
-        $requesters = Requester::with('facility', 'study')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $requesters = Requester::whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }

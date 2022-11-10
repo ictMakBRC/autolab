@@ -1,13 +1,7 @@
 <x-app-layout>
-    {{-- <x-page-title>
-        <h6 class="page-title-left">
-            @if (!$profile)
-                Create
-            @endif Facility Profile
-        </h6>
-    </x-page-title> --}}
     <div class="row ">
         <div class="col-12">
+            @include('layouts.messages')
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">

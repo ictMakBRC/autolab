@@ -65,11 +65,10 @@ class CourierComponent extends Component
         $courier->facility_id = $this->facility_id;
         $courier->study_id = $this->study_id == '' ? null : $this->study_id;
         $courier->save();
-        session()->flash('success', 'Courier created successfully.');
 
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
     }
 
     public function editdata($id)
@@ -111,11 +110,14 @@ class CourierComponent extends Component
         $courier->is_active = $this->is_active;
         $courier->update();
 
-        session()->flash('success', 'Courier updated successfully.');
-
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
-
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -128,13 +130,13 @@ class CourierComponent extends Component
     public function deleteData()
     {
         try {
-            $courier = Courier::where('id', $this->delete_id)->first();
+            $courier = Courier::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $courier->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Courier deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Courier can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Courier can not be deleted!']);
         }
     }
 
@@ -150,8 +152,8 @@ class CourierComponent extends Component
 
     public function render()
     {
-        $couriers = Courier::with('facility', 'study')->latest()->get();
-        $facilities = Facility::latest()->get();
+        $couriers = Courier::whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.courier-component', compact('couriers', 'facilities'))->layout('layouts.app');
     }

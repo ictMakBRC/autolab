@@ -3,23 +3,30 @@
         <div class="card">
             <div class="card-header pt-0">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Facilities</h4>
+                    <div class="col-sm-12 mt-3">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                Facilities
+                            </h5>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-outline-info mx-1" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
+                                    data-bs-target="#associate">Associate</a>
+
+                                <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#addFacility">Add Facility</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end mt-3">
-                            <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addFacility">Add Facility</a>
-                        </div>
-                    </div><!-- end col-->
                 </div>
             </div>
+
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive">
-                        <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -32,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($facilities as $key => $facility)
+                                @foreach ($facilities->only($associated_facilities) as $key => $facility)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $facility->name }}</td>
@@ -45,12 +52,13 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $facility->id }})"
                                                     data-bs-target="#editfacility"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})" class="action-ico">
+                                                wire:click="deleteConfirmation({{ $facility->id }})"
+                                                class="action-ico btn btn-outline-danger mx-1">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -75,7 +83,6 @@
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="storeData">
-                        {{-- @csrf --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -129,14 +136,12 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
+
 
     {{-- //DELETE CONFIRMATION MODAL --}}
     <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
@@ -167,7 +172,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Facility</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
@@ -240,12 +246,51 @@
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
 
+    {{-- ASSOCIATE FACILITIES TO LAB --}}
+    <div wire:ignore.self class="modal fade" id="associate" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Associate Facilities to Lab</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body">
+                    <form wire:submit.prevent="associateFacility">
+                        <div class="row">
+                            @forelse ($facilities as $facility)
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ $facility->id }}"
+                                            id="associated_facilities{{ $facility->id }}" checked
+                                            wire:model="associated_facilities">
+                                        <label class="form-check-label"
+                                            for="associated_facilities{{ $facility->id }}">{{ $facility->name }}</label>
+                                    </div>
+                                </div>
+
+                            @empty
+                            @endforelse
+                        </div>
+                        <!-- end row-->
+                        <div class="modal-footer">
+                            <x-button class="btn-success">{{ __('Save') }}</x-button>
+                            <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                data-bs-dismiss="modal">{{ __('Close') }}</x-button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div> <!-- end modal-->
+
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
                 $('#addFacility').modal('hide');
                 $('#editfacility').modal('hide');
                 $('#delete_modal').modal('hide');
+                $('#associate').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 

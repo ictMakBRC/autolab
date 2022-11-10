@@ -19,8 +19,10 @@ return new class extends Migration
             $table->id();
             $table->string('laboratory_name', 50)->unique();
             $table->string('description')->nullable();
-            $table->string('short_code', 6)->nullable();
+            $table->string('short_code', 6)->nullable()->unique();
             $table->integer('autonumber')->nullable();
+            $table->text('associated_facilities')->nullable();
+            $table->text('associated_studies')->nullable();
             $table->integer('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();
@@ -57,6 +59,7 @@ return new class extends Migration
             $table->string('email', 30)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('password_updated_at')->default(now());
             $table->string('contact', 20)->nullable();
             $table->string('title', 6)->nullable();
             $table->string('avatar')->nullable();

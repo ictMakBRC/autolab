@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Facility;
+use App\Models\Laboratory;
+use App\Models\SampleReception;
 use Exception;
 use Livewire\Component;
 
@@ -16,9 +18,12 @@ class FacilityComponent extends Component
 
     public $description;
 
+    public $associated_facilities;
+
     public $is_active;
 
     public $delete_id;
+    // public $count=0;
 
     public function updated($fields)
     {
@@ -28,6 +33,11 @@ class FacilityComponent extends Component
             'is_active' => 'required',
 
         ]);
+    }
+
+    public function mount()
+    {
+        $this->associated_facilities = auth()->user()->laboratory->associated_facilities ?? [];
     }
 
     public function storeData()
@@ -43,10 +53,43 @@ class FacilityComponent extends Component
         $facility->type = $this->type;
         $facility->parent_id = $this->parent_id;
         $facility->save();
-        session()->flash('success', 'Facility created successfully.');
-        $this->reset(['name', 'type', 'parent_id', 'is_active']);
 
+        $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
+    }
+
+    public function associateFacility()
+    {
+        $this->validate([
+            'associated_facilities' => 'required',
+        ]);
+        $associatedFacilites = auth()->user()->laboratory->associated_facilities;
+        $disassociatedFacilities = array_diff($associatedFacilites, $this->associated_facilities ?? []);
+
+        $facilityData = [];
+        foreach ($disassociatedFacilities as $facility) {
+            if (SampleReception::where(['facility_id' => $facility, 'creator_lab' => auth()->user()->laboratory_id])->first()) {
+                array_push($facilityData, $facility);
+            }
+        }
+        if (count($facilityData)) {
+            $this->associated_facilities = $associatedFacilites;
+            $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from facilities that already have sample information recorded!']);
+        } else {
+            $laboratory = Laboratory::find(auth()->user()->laboratory_id);
+            $laboratory->associated_facilities = $this->associated_facilities;
+            $laboratory->update();
+            $this->render();
+
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Laboratory Information successfully updated!']);
+        }
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function editdata($id)
@@ -76,9 +119,10 @@ class FacilityComponent extends Component
         $facility->parent_id = $this->parent_id != '' ? $this->parent_id : null;
         $facility->is_active = $this->is_active;
         $facility->update();
-        session()->flash('success', 'Facility updated successfully.');
+
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility updated successfully!']);
     }
 
     public function deleteConfirmation($id)
@@ -91,13 +135,13 @@ class FacilityComponent extends Component
     public function deleteData()
     {
         try {
-            $facility = Facility::where('id', $this->delete_id)->first();
+            $facility = Facility::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $facility->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'Facility deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'Facility can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Facility can not be deleted!']);
         }
     }
 
@@ -113,7 +157,7 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::with('parent')->latest()->get();
+        $facilities = Facility::with('parent')->where('is_active', 1)->latest()->get();
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Helpers\Generate;
 use App\Models\Designation;
 use App\Models\Laboratory;
 use App\Models\User;
+use App\Notifications\SendPasswordNotification;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -64,32 +67,14 @@ class UserComponent extends Component
         ]);
     }
 
-    public function updatedTitle()
+    public function mount()
     {
-        $this->generatePassword();
+        $this->laboratory_id = auth()->user()->laboratory_id;
     }
 
-    public function generatePassword($length = 2)
+    public function updatedTitle()
     {
-        $numbers = '0123456789';
-        $symbols = '!@#$%^&*()';
-        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
-        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $numberLength = strlen($numbers);
-        $symbolLength = strlen($symbols);
-        $uppercaseLength = strlen($uppercase);
-        $lowercaseLength = strlen($lowercase);
-        $randomNumber = '';
-        $randomSymbol = '';
-        $randomUppercase = '';
-        $randomLowercase = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomNumber .= $numbers[rand(0, $numberLength - 1)];
-            $randomSymbol .= $symbols[rand(0, $symbolLength - 1)];
-            $randomUppercase .= $uppercase[rand(0, $uppercaseLength - 1)];
-            $randomLowercase .= $lowercase[rand(0, $lowercaseLength - 1)];
-        }
-        $this->password = str_shuffle($randomNumber.$randomSymbol.$randomUppercase.$randomLowercase);
+        $this->password = Generate::password();
     }
 
     public function storeData()
@@ -155,12 +140,26 @@ class UserComponent extends Component
         $user->avatar = $this->avatarPath;
         $user->password = Hash::make($this->password);
         $user->signature = $this->signaturePath;
-
         $user->save();
-
-        session()->flash('success', 'User created successfully.');
-        $this->resetInputs();
+        $greeting = 'Hello'.' '.$this->first_name.' '.$this->surname;
+        $body = 'Your password is'.' '.$this->password;
+        $actiontext = 'Click here to Login';
+        $details = [
+            'greeting' => $greeting,
+            'body' => $body,
+            'actiontext' => $actiontext,
+            'actionurl' => url('/'),
+        ];
+        $insertedUser = User::findOrFail($user->id);
+        try {
+            Notification::send($insertedUser, new SendPasswordNotification($details));
+            $emailSent = 'Email sent';
+        } catch (\Exception $error) {
+            $emailSent = 'Email Not sent, Password is: '.$this->password;
+        }
+            $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created successfully,'.$emailSent]);
     }
 
     public function editdata($id)
@@ -185,7 +184,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'laboratory_id', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
+        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
@@ -261,9 +260,14 @@ class UserComponent extends Component
         $user->signature = $this->signaturePath;
         $user->update();
 
-        session()->flash('success', 'User updated successfully.');
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function deleteConfirmation($id)
@@ -276,13 +280,13 @@ class UserComponent extends Component
     public function deleteData()
     {
         try {
-            $user = User::where('id', $this->delete_id)->first();
+            $user = User::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->delete_id)->first();
             $user->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            session()->flash('success', 'User deleted successfully.');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User deleted successfully!']);
         } catch(Exception $error) {
-            session()->flash('erorr', 'User can not be deleted!.');
+            $this->dispatchBrowserEvent('alert', ['error' => 'success',  'message' => 'User can not be deleted!']);
         }
     }
 
@@ -298,7 +302,7 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::with('laboratory', 'designation')->latest()->get();
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')->latest()->get();
         $designations = Designation::where('is_active', 1)->latest()->get();
         $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 

@@ -3,23 +3,29 @@
         <div class="card">
             <div class="card-header pt-0">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Projects/Studies</h4>
+                    <div class="col-sm-12 mt-3">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                Projects/Studies
+                            </h5>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
+                                    data-bs-target="#associate">Associate</a>
+                                <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#addStudy">Add Study</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end mt-3">
-                            <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addStudy">Add Study</a>
-                        </div>
-                    </div><!-- end col-->
                 </div>
             </div>
+
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive">
-                        <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -32,11 +38,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($studies as $key => $study)
+                                @foreach ($studies->only($associated_studies) as $key => $study)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $study->name }}</td>
-                                        <td>{{ $study->description? $study->description : 'N/A' }}</td>
+                                        <td>{{ $study->description ? $study->description : 'N/A' }}</td>
                                         <td>{{ $study->facility ? $study->facility->name : 'N/A' }}</td>
                                         @if ($study->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
@@ -45,12 +51,13 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($study->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $study->id }})"
                                                     data-bs-target="#editstudy"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $study->id }})" class="action-ico">
+                                                wire:click="deleteConfirmation({{ $study->id }})"
+                                                class="action-ico btn btn-outline-danger mx-1">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -75,7 +82,6 @@
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="storeData">
-                        {{-- @csrf --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
@@ -89,8 +95,7 @@
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea type="text" id="description" class="form-control" name="description"
-                                        wire:model="description"></textarea>
+                                    <textarea type="text" id="description" class="form-control" name="description" wire:model="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -128,9 +133,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
@@ -166,11 +168,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Study</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
-                              <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="studyName2" class="form-label">Study/Project Name(Acronym)</label>
@@ -183,29 +186,28 @@
 
                                 <div class="mb-3">
                                     <label for="description2" class="form-label">Description</label>
-                                    <textarea type="text" id="description2" class="form-control" name="description"
-                                        wire:model="description"></textarea>
+                                    <textarea type="text" id="description2" class="form-control" name="description" wire:model="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="facility2" class="form-label">Facility</label>
                                     <select class="form-select" id="facility2" wire:model="facility_id">
                                         @if ($facility_id == '')
-                                        <option selected value="">None</option>
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    @else
-                                        @forelse ($facilities as $facility)
-                                            <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                        @empty
                                             <option selected value="">None</option>
-                                        @endforelse
-                                    @endif
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                            @endforelse
+                                        @else
+                                            @forelse ($facilities as $facility)
+                                                <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                            @empty
+                                                <option selected value="">None</option>
+                                            @endforelse
+                                        @endif
                                     </select>
                                     @error('facility_id')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -213,7 +215,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="isActive2" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive2" name="is_active" wire:model="is_active">
+                                    <select class="form-select" id="isActive2" name="is_active"
+                                        wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -237,12 +240,52 @@
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
 
+
+    {{-- ASSOCIATE STUDIES TO LAB --}}
+    <div wire:ignore.self class="modal fade" id="associate" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Associate Studies to Lab</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body">
+                    <form wire:submit.prevent="associateStudy">
+                        <div class="row">
+                            @forelse ($studies as $study)
+                                <div class="col-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ $study->id }}"
+                                            id="associated_studies{{ $study->id }}" checked
+                                            wire:model="associated_studies">
+                                        <label class="form-check-label"
+                                            for="associated_studies{{ $study->id }}"><strong
+                                                class="text-info">{{ $study->name }}</strong>{{ ' (' . $study->facility->name . ')' }}</label>
+                                    </div>
+                                </div>
+
+                            @empty
+                            @endforelse
+                        </div>
+                        <!-- end row-->
+                        <div class="modal-footer">
+                            <x-button class="btn-success">{{ __('Save') }}</x-button>
+                            <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                data-bs-dismiss="modal">{{ __('Close') }}</x-button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div> <!-- end modal-->
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
                 $('#addStudy').modal('hide');
                 $('#editstudy').modal('hide');
                 $('#delete_modal').modal('hide');
+                $('#associate').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 

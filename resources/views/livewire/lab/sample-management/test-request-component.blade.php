@@ -7,43 +7,22 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-
                                     Test Requests
-                                    {{-- <strong class="text-success">{{ $batch_no }}</strong>
-                                    (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>) --}}
                                 </h5>
                                 <div class="ms-auto">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary">More...</button>
-
-
-                                        <button type="button"
-                                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
-                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
-                                                Dropdown</span>
-                                        </button>
-
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            {{-- @if ($tabToggleBtn)
-                                                <a class="dropdown-item" href="javascript:;"
-                                                    wire:click="toggleTab()">Toggle Tabs</a>
-                                            @endif
-                                            <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
-                                                form</a> --}}
-                                        </div>
-                                    </div>
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- @if (!$samples->isEmpty()) --}}
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                            <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -66,7 +45,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
-                                                {{ $sample->participant->sampleReception->batch_no }}
+                                                {{ $sample->sampleReception->batch_no }}
                                             </td>
                                             <td>
                                                 {{ $sample->participant->identity }}
@@ -84,13 +63,13 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $sample->study->name }}
+                                                {{ $sample->study->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->requester->name }}
                                             </td>
                                             <td>
-                                                {{ $sample->collector->name }}
+                                                {{ $sample->collector->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->test_count }}
@@ -103,24 +82,19 @@
                                                 </td>
                                             @endif
                                             <td>
-                                                <span class="badge bg-success">{{$sample->status }}</span>
-                                            </td>
-                                            <td class="table-action">
-                                                @if ($sample->request_acknowledged_by)
-                                                    <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-success radius-30 px-3"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title=""
-                                                        data-bs-original-title="Attach Results">Process</a>
+                                                @if ($sample->status == 'Assigned')
+                                                    <span class="badge bg-warning">{{ $sample->status }}</span>
                                                 @else
-                                                    <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Acknowledge Request"
-                                                        wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                        class="action-ico">
-                                                        <i class="bi bi-hand-thumbs-up"></i></a>
+                                                    <span class="badge bg-info">{{ $sample->status }}</span>
                                                 @endif
 
+                                            </td>
+                                            <td class="table-action">
+                                                <a href="{{ route('attach-test-results', $sample->id) }}"
+                                                    type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Attach Results"><i
+                                                        class="bi bi-file-earmark-medical"></i></a>
                                             </td>
                                         </tr>
                                     @empty
@@ -130,7 +104,6 @@
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
-                {{-- @endif --}}
             </div> <!-- end card -->
         </div><!-- end col-->
 
@@ -171,7 +144,8 @@
 
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
-                            <a type="button" class="btn btn-success radius-30 px-3">Process</a>
+                            <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
+                                class="btn btn-success radius-30 px-3">Process</a>
                         @endif
 
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"

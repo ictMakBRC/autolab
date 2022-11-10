@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin;
 
+use App\Models\TestAssignment;
 use App\Models\TestCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class Test extends Model
         'name',
         'short_code',
         'price',
+        'tat',
         'reference_range_min',
         'reference_range_max',
         'precautions',
@@ -33,6 +35,11 @@ class Test extends Model
     public function category()
     {
         return $this->belongsTo(TestCategory::class, 'category_id', 'id');
+    }
+
+    public function testAssignment()
+    {
+        return $this->hasMany(TestAssignment::class, 'test_id', 'id');
     }
 
     public $guarded = [];

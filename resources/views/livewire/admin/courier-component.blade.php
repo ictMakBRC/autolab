@@ -3,23 +3,28 @@
         <div class="card">
             <div class="card-header pt-0">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Couriers</h4>
+                    <div class="col-sm-12 mt-3">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                Couriers
+                            </h5>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
+                                <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#addCourier">Add Courier</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end mt-3">
-                            <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addCourier">Add Courier</a>
-                        </div>
-                    </div><!-- end col-->
                 </div>
             </div>
+
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive">
-                        <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -49,13 +54,12 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($courier->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $courier->id }})"
                                                     data-bs-target="#editcourier"></i></a>
                                             <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $courier->id }})"
-                                                class="action-ico">
+                                                wire:click="deleteConfirmation({{ $courier->id }})" class="action-ico btn btn-outline-danger mx-1">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -69,7 +73,7 @@
         </div> <!-- end card -->
     </div><!-- end col-->
 
-    {{-- ADD COURIER--}}
+    {{-- ADD COURIER --}}
     <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -192,7 +196,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Update Courier</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" wire:click="close()"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                        wire:click="close()"></button>
                 </div> <!-- end modal header -->
                 <div class="modal-body">
                     <form wire:submit.prevent="updateData">
@@ -301,4 +306,3 @@
         </script>
     @endpush
 </div>
-

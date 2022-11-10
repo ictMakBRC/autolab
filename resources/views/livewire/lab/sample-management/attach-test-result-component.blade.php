@@ -11,21 +11,17 @@
                                             class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
                                             class="text-info">{{ $lab_no }}</span></h6>
                                 </h5>
-                                result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }}
+                                {{-- result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }} --}}
                                 <div class="ms-auto">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary">More...</button>
+                                        <button type="button" class="btn btn-outline-info">More...</button>
                                         <button type="button"
-                                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
                                                 Dropdown</span>
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            {{-- @if ($tabToggleBtn)
-                                                <a class="dropdown-item" href="javascript:;"
-                                                    wire:click="toggleTab()">Toggle Tabs</a>
-                                            @endif --}}
                                             <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
                                                 form</a>
                                         </div>
@@ -59,7 +55,8 @@
                                                     </td>
                                                     <td>
                                                         @if ($test->id === $test_id)
-                                                            <form wire:submit.prevent="storeTestResults()">
+                                                            <form wire:submit.prevent="storeTestResults()"
+                                                                class="me-2">
                                                                 <div class="row">
                                                                     <div class="col-md-5">
                                                                         @if ($test->result_type == 'Absolute')
@@ -91,11 +88,24 @@
                                                                             </div>
                                                                         @elseif($test->result_type == 'Measurable')
                                                                             <div class="mb-2">
-                                                                                <label class="form-label">Result</label>
-                                                                                <input type="text"
-                                                                                    class="form-control"
-                                                                                    wire:model="result"
-                                                                                    placeholder="Include units in {{ $test->measurable_result_uom }}">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="form-label">Result</label>
+                                                                                    <div
+                                                                                        class="input-group form-group mb-2">
+                                                                                        <input type="number"
+                                                                                            step="0.001"
+                                                                                            class="form-control"
+                                                                                            id="result"
+                                                                                            wire:model='result'>
+                                                                                        <div class="input-group-append">
+                                                                                            <span
+                                                                                                class="input-group-text">
+                                                                                                {{ $test->measurable_result_uom }}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                                 @error('result')
                                                                                     <div class="text-danger text-small">
                                                                                         {{ $message }}</div>
@@ -110,6 +120,19 @@
                                                                                     wire:model="attachment"
                                                                                     placeholder="Attach file">
                                                                                 @error('attachment')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        @elseif($test->result_type == 'Link')
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Result
+                                                                                    Link(URL)</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    wire:model="link"
+                                                                                    placeholder="Enter valid link">
+                                                                                @error('link')
                                                                                     <div class="text-danger text-small">
                                                                                         {{ $message }}</div>
                                                                                 @enderror
@@ -162,7 +185,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-1 mt-4 text-end">
+                                                                    <div class="col-md-1 mt-4">
                                                                         <x-button>{{ __('Save') }}</x-button>
                                                                     </div>
                                                                 </div>
@@ -180,107 +203,10 @@
                             <hr>
                         </div>
                     @else
-                        {{-- <tr class="text-center">
-                            <td colspan="2">
-                                <h3>No Data Available</h3>
-                            </td>
-                        </tr> --}}
                     @endif
-                    <div class="tab-content">
-                        <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 ">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
-                                        <th>Sample</th>
-                                        <th>Sample ID</th>
-                                        <th>Lab No</th>
-                                        <th>Study</th>
-                                        <th>Test</th>
-                                        <th>Status</th>
-                                        <th>Preliminary Report</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- @forelse ($samples as $key => $sample)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>
-                                                {{ $sample->participant->sampleReception->batch_no }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->participant->identity }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->sampleType->type }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->sample_identity }}
-                                            </td>
-
-                                            <td>
-                                                <a href="javascript: void(0);"
-                                                    wire:click="viewTests({{ $sample->id }})" class="action-ico">
-                                                    <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                                </a>
-
-                                            </td>
-                                            <td>
-                                                {{ $sample->study->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->requester->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->collector->name }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->test_count }}
-                                            </td>
-                                            @if ($sample->priority == 'Normal')
-                                                <td><span class="badge bg-info">{{ $sample->priority }}</span>
-                                                </td>
-                                            @else
-                                                <td><span class="badge bg-danger">{{ $sample->priority }}</span>
-                                                </td>
-                                            @endif
-                                            <td class="table-action">attach-test-results
-                                                @if ($sample->request_acknowledged_by)
-                                                <a href="{{route('attach-test-results',$sample->id )}}" type="button" class="btn btn-outline-success radius-30 px-3" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Attach Results">Process</a>
-                                                @else
-                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Acknowledge Request"
-                                                    wire:click="acknowledgeRequest({{ $sample->id }})"
-                                                    class="action-ico">
-                                                    <i class="bi bi-hand-thumbs-up"></i></a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @empty
-                                    @endforelse --}}
-                                </tbody>
-                            </table>
-                        </div> <!-- end preview-->
-                    </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
 
-        @push('scripts')
-            <script>
-                // window.addEventListener('close-modal', event => {
-                //     $('#view_tests').modal('hide');
-                // });
-
-                // window.addEventListener('view-tests', event => {
-                //     $('#view-tests').modal('show');
-                // });
-            </script>
-        @endpush
     </div>
 </div>

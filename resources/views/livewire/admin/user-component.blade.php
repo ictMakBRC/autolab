@@ -3,23 +3,27 @@
         <div class="card">
             <div class="card-header pt-0">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">System Users</h4>
+                    <div class="col-sm-12 mt-3">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                System Users
+                            </h5>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
+                                <a type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#addUser">Add User</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end mt-3">
-                            <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
-                                data-bs-target="#addUser">Add User</a>
-                        </div>
-                    </div><!-- end col-->
                 </div>
             </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="table-responsive">
-                        <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                        <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -51,12 +55,14 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico"> <i
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
                                                     class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $user->id }})"
                                                     data-bs-target="#edituser"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $user->id }})" class="action-ico">
+                                            <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="" data-bs-original-title="Delete"
+                                                wire:click="deleteConfirmation({{ $user->id }})"
+                                                class="action-ico btn btn-outline-danger">
                                                 <i class="bi bi-trash"></i></a>
                                         </td>
                                     </tr>
@@ -214,9 +220,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
@@ -403,20 +406,6 @@
             window.addEventListener('delete-modal', event => {
                 $('#delete_modal').modal('show');
             });
-
-            function generatePass() {
-                var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                var passwordLength = 12;
-                var password = "";
-                var passwordInput = document.getElementById("password");
-                for (var i = 0; i <= passwordLength; i++) {
-                    var randomNumber = Math.floor(Math.random() * chars.length);
-                    password += chars.substring(randomNumber, randomNumber + 1);
-                };
-                passwordInput.value = password;
-                passwordInput.select();
-                document.execCommand("copy");
-            }
         </script>
     @endpush
 </div>

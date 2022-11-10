@@ -1,25 +1,23 @@
 <x-app-layout>
-    <!-- start page title -->
-    {{-- <x-page-title>
-        Edit Roles Assignment
-    </x-page-title> --}}
-
     <!-- end row-->
     <div class="row">
+        
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
                     <div class="row mb-2">
-                        <div class="col-sm-4">
-                            <div class="text-sm-end mt-3">
-                                <h4 class="header-title mb-3  text-center">Edit Roles Assignment</h4>
+                        <div class="col-sm-12 mt-3">
+                            <div class="d-sm-flex align-items-center">
+                                <h5 class="mb-2 mb-sm-0">
+                                    Edit Roles Assignment
+                                </h5>
                             </div>
                         </div>
-                        <div class="col-sm-8">
-                        </div><!-- end col-->
                     </div>
                 </div>
+
                 <div class="card-body">
+                   
                     <form method="POST" action="{{ route('user-roles-assignment.update', $user->id) }}">
                         @csrf
                         @method('PUT')
@@ -33,7 +31,7 @@
                         </div>
                         @if (!$roles->isEmpty())
                             <div class="row mb-3">
-                                <h3 class="text-success">Roles</h3>
+                                <h6 class="text-success">Roles</h6>
                                 @foreach ($roles as $role)
                                     <div class="mb-3 col-md-2">
                                         <div class="form-check form-check-inline">
@@ -50,7 +48,7 @@
                         @endif
                         @if (!$permissions->isEmpty())
                             <div class="row">
-                                <h3 class="text-success">Permissions</h3>
+                                <h6 class="text-success">Permissions</h6>
                                 @foreach ($permissions as $permission)
                                     <div class="mb-3 col-md-2">
                                         <div class="form-check form-check-inline">

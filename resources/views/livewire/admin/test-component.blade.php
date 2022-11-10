@@ -7,19 +7,21 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    
+
                                     @if (!$toggleForm)
-                                    Tests
+                                        Tests
                                     @else
                                         Update Test Information
-                                    
                                     @endif
                                 </h5>
                                 <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-primary">More...</button>
+                                        <button type="button" class="btn btn-outline-info">More...</button>
                                         <button type="button"
-                                            class="btn btn-outline-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
                                                 Dropdown</span>
                                         </button>
@@ -34,13 +36,15 @@
                     </div>
                     <hr>
                     <div class="row mb-0">
-                        <form @if (!$toggleForm) wire:submit.prevent="storeTest"
+                        <form
+                            @if (!$toggleForm) wire:submit.prevent="storeTest"
                         @else
                         wire:submit.prevent="updateTest" @endif>
                             <div class="row">
-                                <div class="mb-2 col-md-3">
+                                <div class="mb-2 col-md-2">
                                     <label for="category" class="form-label">{{ __('Category') }}</label>
-                                    <select wire:model='category_id' class="form-select" id="category" wire:model="category_id">
+                                    <select wire:model='category_id' class="form-select" id="category"
+                                        wire:model="category_id">
                                         <option selected value="">Select</option>
                                         @foreach ($testCategories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -50,7 +54,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-2 col-md-5">
+                                <div class="mb-2 col-md-4">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" id="name" class="form-control" wire:model="name">
                                     @error('name')
@@ -61,6 +65,23 @@
                                     <label for="short_code" class="form-label">Short Code</label>
                                     <input type="text" id="short_code" class="form-control" wire:model="short_code">
                                     @error('short_code')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-2 col-md-2">
+                                    <div class="form-group">
+                                        <label for="tat" class="form-label">{{ __('TAT') }}</label>
+                                        <div class="input-group form-group mb-2">
+                                            <input type="number" step="any" class="form-control" id="tat"
+                                                wire:model='tat'>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    Hours
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('tat')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -99,7 +120,7 @@
                                 </div>
                                 <div class="mb-3 col-md-2">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive"  wire:model="status">
+                                    <select class="form-select" id="isActive" wire:model="status">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -120,7 +141,7 @@
 
                                 <div class="col-md-6">
                                     <h6>
-                                        {{ __('Attach Result Type') }} 
+                                        {{ __('Attach Result Type') }}
                                         {{-- Absolute results:{{ var_export($absolute_results) }} --}}
                                     </h6>
                                     <div class="row">
@@ -138,12 +159,12 @@
                                                 <option value="File">File/Attachment</option>
                                                 <option value="Absolute">Absolute</option>
                                                 <option value="Measurable">Measurable</option>
+                                                <option value="Link">Link</option>
                                             </select>
                                         </div>
                                         @if ($result_type === 'Absolute')
                                             <div id="resultoption" class="col-md-8 mb-2">
-                                                <label for="results"
-                                                    class="form-label">{{ __('Results') }}</label>
+                                                <label for="results" class="form-label">{{ __('Results') }}</label>
                                                 <button class="btn btn-outline-success mb-1" type="button"
                                                     id="button-addon2" wire:click.prevent="addResult">+</button>
                                                 @foreach ($dynamicResults as $index => $result)
@@ -180,7 +201,7 @@
 
                                 <div class="col-md-6">
                                     <h6>
-                                        {{ __('Test Comments') }} 
+                                        {{ __('Test Comments') }}
                                         {{-- Comments:{{ var_export($comments) }} --}}
                                     </h6>
                                     <div class="row">
@@ -206,9 +227,9 @@
 
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
-                                    <x-button>{{__('Save')}}</x-button>
+                                        <x-button>{{ __('Save') }}</x-button>
                                     @else
-                                    <x-button>{{__('Update')}}</x-button>
+                                        <x-button>{{ __('Update') }}</x-button>
                                     @endif
                                 </div>
 
@@ -221,7 +242,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                            <table id="datableButtons" class="table table-striped mb-0 w-100 ">
                                 <thead>
                                     <tr>
                                     <tr>
@@ -247,11 +268,11 @@
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @endif
                                             <td class="table-action">
-                                                <a href="javascript: void(0);" class="action-ico"
-                                                wire:click="editTest({{ $test->id }})"data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Edit Test" class="action-ico"> <i
-                                                    class="bi bi-pencil-square"></i></a>
+                                                <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"
+                                                    wire:click="editTest({{ $test->id }})"data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Edit Test" class="action-ico btn btn-outline-danger mx-1"> <i
+                                                        class="bi bi-pencil-square"></i></a>
                                             </td>
                                         </tr>
                                     @empty

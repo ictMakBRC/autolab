@@ -6,24 +6,48 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Participant extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['sample_reception_id', 'participant_no', 'identity', 'age', 'gender', 'contact', 'address', 'nok_contact', 'nok_address',
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logFillable()
+        ->useLogName('participants')
+        ->dontLogIfAttributesChangedOnly(['updated_at'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $fillable = ['participant_no', 'identity', 'age', 'gender', 'contact', 'address', 'nok_contact', 'nok_address',
 
         'clinical_notes', 'title', 'nin_number', 'surname', 'first_name', 'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation', 'occupation', 'civil_status', 'nok', 'nok_relationship',
-        'created_by', 'creator_lab', ];
-
-    public function sampleReception()
-    {
-        return $this->belongsTo(SampleReception::class, 'sample_reception_id', 'id');
-    }
+        'facility_id', 'study_id', 'created_by', 'creator_lab', ];
 
     public function sample()
     {
-        return $this->hasOne(Sample::class, 'participant_id', 'id');
+        return $this->hasMany(Sample::class, 'participant_id', 'id');
+    }
+
+    public function testResult()
+    {
+        return $this->hasManyThrough(TestResult::class, Sample::class);
+    }
+
+    public function facility()
+    {
+        return $this->belongsTo(Facility::class, 'facility_id', 'id');
+    }
+
+    public function study()
+    {
+        return $this->belongsTo(Study::class, 'study_id', 'id');
     }
 
     protected function fullName(): Attribute

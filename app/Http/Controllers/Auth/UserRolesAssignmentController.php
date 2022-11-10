@@ -94,9 +94,25 @@ class UserRolesAssignmentController
         }
 
         $user = $userModel::findOrFail($modelId);
+        $authUser = $userModel::findOrFail(auth()->user()->id);
         $user->syncRoles($request->get('roles') ?? []);
+        activity()
+            ->causedBy($authUser)
+            ->performedOn($user)
+            ->useLog('users')
+            ->event('Assigned Role')
+            ->withProperties(['roles' => $request->get('roles') ?? []])
+            ->log('Assigned Role');
+
         if ($this->assignPermissions) {
             $user->syncPermissions($request->get('permissions') ?? []);
+            activity()
+            ->causedBy($authUser)
+            ->performedOn($user)
+            ->useLog('users')
+            ->event('Assigned Permission')
+            ->withProperties(['permissions' => $request->get('permissions') ?? []])
+            ->log('Assigned Permission');
         }
 
         return redirect(route('user-roles-assignment.index', ['model' => $modelKey]))->with('success', 'Roles and permissions assigned successfully');

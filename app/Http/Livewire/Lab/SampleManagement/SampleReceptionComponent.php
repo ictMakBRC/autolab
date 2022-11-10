@@ -26,7 +26,7 @@ class SampleReceptionComponent extends Component
 
     public $samples_rejected;
 
-    public $rejection_reason;
+    public $comment;
 
     public $courier_signed;
 
@@ -69,8 +69,6 @@ class SampleReceptionComponent extends Component
 
     public $review_date;
 
-    public $comment;
-
     public $batch_status;
 
     //NEW FACILITY FIELDS
@@ -108,7 +106,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required|integer|min:0|lte:samples_delivered',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
 
         ]);
     }
@@ -122,7 +120,7 @@ class SampleReceptionComponent extends Component
             if ($sampleDifference > 0) {
                 $this->samples_rejected = $sampleDifference;
                 $this->validate([
-                    'rejection_reason' => 'required',
+                    'comment' => 'required',
                 ]);
             } elseif ($sampleDifference <= 0) {
                 $this->samples_rejected = 0;
@@ -130,6 +128,11 @@ class SampleReceptionComponent extends Component
         } elseif ($this->samples_accepted > $this->samples_delivered) {
             $this->reset(['samples_accepted', 'samples_rejected']);
         }
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
     }
 
     public function generateBatchNo()
@@ -168,7 +171,7 @@ class SampleReceptionComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'date_delivered' => 'required',
+            'date_delivered' => 'required|date|before_or_equal:now',
             'samples_delivered' => 'required',
             'facility_id' => 'required',
             'courier_id' => 'required',
@@ -176,7 +179,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
         ]);
 
         $sampleReception = new SampleReception();
@@ -189,16 +192,14 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->rejection_reason;
+        $sampleReception->comment = $this->comment ?? null;
         $sampleReception->save();
-        session()->flash('success', 'Sample Reception Data created successfully.');
-
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
         $this->resetInputs();
     }
 
     public function editdata(SampleReception $sampleReception)
     {
-        // $sampleReception = SampleReception::where('id', $id)->first();
         $this->edit_id = $sampleReception->id;
         $this->batch_no = $sampleReception->batch_no;
         $this->date_delivered = $sampleReception->date_delivered;
@@ -209,18 +210,16 @@ class SampleReceptionComponent extends Component
         $this->courier_signed = $sampleReception->courier_signed;
         $this->facility_id = $sampleReception->facility_id;
         $this->courier_id = $sampleReception->courier_id;
-        $this->rejection_reason = $sampleReception->rejection_reason;
+        $this->comment = $sampleReception->comment;
 
         $this->couriers = Courier::where('facility_id', $sampleReception->facility_id)->latest()->get();
 
         $this->toggleForm = true;
-        // $this->dispatchBrowserEvent('edit-modal');
     }
 
     public function showData(SampleReception $sampleReception)
     {
         $sampleReception->load('facility', 'courier', 'receiver', 'reviewer');
-        // $sampleReception = SampleReception::with('facility','courier','receiver','reviewer')->where('id', $id)->first();
         $this->batch_no = $sampleReception->batch_no;
         $this->delivery_date = $sampleReception->date_delivered;
         $this->delivered_samples = $sampleReception->samples_delivered;
@@ -236,7 +235,6 @@ class SampleReceptionComponent extends Component
         $this->facility_name = $sampleReception->facility->name;
         $this->courier_contact = $sampleReception->courier->contact;
         $this->courier_email = $sampleReception->courier->email;
-        $this->reason_for_rejection = $sampleReception->rejection_reason;
         $this->handled = $sampleReception->samples_handled;
         $this->batch_status = $sampleReception->status;
 
@@ -245,7 +243,7 @@ class SampleReceptionComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'rejection_reason', 'courier_signed']);
+        $this->reset(['batch_no', 'date_delivered', 'samples_delivered', 'courier_id', 'facility_id', 'received_by', 'samples_accepted', 'samples_rejected', 'comment', 'courier_signed']);
         $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
         $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
     }
@@ -261,7 +259,7 @@ class SampleReceptionComponent extends Component
             'samples_rejected' => 'required',
             'received_by' => 'required',
             'courier_signed' => 'required',
-            'rejection_reason' => 'required_if:rejected,>,0',
+            'comment' => 'required_if:rejected,>,0',
         ]);
         $sampleReception = SampleReception::find($this->edit_id);
 
@@ -273,10 +271,9 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
-        $sampleReception->rejection_reason = $this->rejection_reason;
+        $sampleReception->comment = $this->comment ?? null;
         $sampleReception->update();
-
-        session()->flash('success', 'Sample Reception Data updated successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
 
         $this->resetInputs();
         $this->toggleForm = false;
@@ -297,7 +294,7 @@ class SampleReceptionComponent extends Component
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'SampleReception deleted successfully.');
         } catch(Exception $error) {
-            session()->flash('erorr', 'SampleReception can not be deleted !!.');
+            $this->dispatchBrowserEvent('alert', ['error' => 'success',  'message' => 'SampleReception can not be deleted!']);
         }
     }
 
@@ -315,7 +312,7 @@ class SampleReceptionComponent extends Component
         $facility->parent_id = $this->facility_parent_id;
         $facility->is_active = $this->facility_status;
         $facility->save();
-        session()->flash('success', 'Facility created successfully.');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
         $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -341,7 +338,8 @@ class SampleReceptionComponent extends Component
         $courier->is_active = $this->courierstatus;
 
         $courier->save();
-        session()->flash('success', 'Courier created successfully.');
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
         $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -361,9 +359,11 @@ class SampleReceptionComponent extends Component
 
     public function render()
     {
-        $users = User::latest()->get();
-        $facilities = Facility::latest()->get();
-        $sampleReceptions = SampleReception::latest()->get();
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
+
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+
+        $sampleReceptions = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.lab.sample-management.sample-reception-component', compact('sampleReceptions', 'users', 'facilities'))->layout('layouts.app');
     }
