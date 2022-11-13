@@ -23,9 +23,21 @@
             </div>
 
             <div class="card-body">
+                <x-table-utilities>
+                    <div>
+                        <div class="d-flex align-items-center ml-4 me-2">
+                            <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
+                            <select wire:model="orderBy" class="form-select">
+                                <option value="name">Name</option>
+                                <option value="id">Latest</option>
+                                <option value="is_active">Status</option>
+                            </select>
+                        </div>
+                    </div>
+                </x-table-utilities>
                 <div class="tab-content">
                     <div class="table-responsive">
-                        <table id="datableButtons" class="table table-striped mb-0 w-100 ">
+                        <table id="datableButton" class="table table-striped mb-0 w-100 ">
                             <thead>
                                 <tr>
                                     <th>No.</th>

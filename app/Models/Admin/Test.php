@@ -52,10 +52,20 @@ class Test extends Model
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
             });
-
-            self::updating(function ($model) {
-                $model->creator_lab = auth()->user()->laboratory_id;
-            });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('creator_lab', auth()->user()->laboratory_id)
+            ->where('name', 'like', '%'.$search.'%')
+            ->orWhere('short_code', 'like', '%'.$search.'%')
+            ->orWhere('price', 'like', '%'.$search.'%')
+            ->orWhere('result_type', 'like', '%'.$search.'%')
+            ->orWhereHas('category', function ($query) use ($search) {
+                $query->where('category_name', 'like', '%'.$search.'%');
+            });
     }
 }

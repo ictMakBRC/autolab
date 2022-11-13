@@ -2,17 +2,28 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use Exception;
-use App\Models\User;
-use App\Models\Study;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
 use App\Helpers\Generate;
+use App\Models\Courier;
+use App\Models\Facility;
 use App\Models\SampleReception;
+use App\Models\Study;
+use App\Models\User;
+use Exception;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class SampleReceptionComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'batch_no';
+
+    public $orderAsc = true;
+
     public $batch_no;
 
     public $date_delivered;
@@ -347,7 +358,10 @@ class SampleReceptionComponent extends Component
 
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
-        $sampleReceptions = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        $sampleReceptions = SampleReception::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
 
         return view('livewire.lab.sample-management.sample-reception-component', compact('sampleReceptions', 'users', 'facilities'))->layout('layouts.app');
     }

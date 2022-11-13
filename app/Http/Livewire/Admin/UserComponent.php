@@ -13,10 +13,20 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
     use WithFileUploads;
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
 
     public $title;
 
@@ -302,7 +312,10 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')->latest()->get();
+        $users = User::search($this->search)
+        ->where(['laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
         $designations = Designation::where('is_active', 1)->latest()->get();
         $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 

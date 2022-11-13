@@ -7,9 +7,20 @@ use App\Models\Requester;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class RequesterComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $email;
@@ -155,7 +166,10 @@ class RequesterComponent extends Component
 
     public function render()
     {
-        $requesters = Requester::whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')->latest()->get();
+        $requesters = Requester::search($this->search)
+        ->whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');

@@ -66,7 +66,7 @@ class UserActivityComponent extends Component
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Logs deleted successfully!']);
         } catch(Exception $error) {
-            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Something went wrong! Logs could not be clears!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Something went wrong! Logs could not be cleared!']);
         }
     }
 

@@ -7,9 +7,20 @@ use App\Models\Facility;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class CollectorComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $email;
@@ -152,7 +163,10 @@ class CollectorComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')->latest()->get();
+        $collectors = Collector::search($this->search)
+        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.collector-component', compact('collectors', 'facilities'))->layout('layouts.app');

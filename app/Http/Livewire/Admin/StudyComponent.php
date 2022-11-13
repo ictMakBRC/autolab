@@ -2,15 +2,27 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\StudiesExport;
 use App\Models\Facility;
 use App\Models\Laboratory;
 use App\Models\Sample;
 use App\Models\Study;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class StudyComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $description;
@@ -121,6 +133,11 @@ class StudyComponent extends Component
         }
     }
 
+    public function export()
+    {
+        return (new StudiesExport())->download('studies.xlsx');
+    }
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));
@@ -158,7 +175,10 @@ class StudyComponent extends Component
 
     public function render()
     {
-        $studies = Study::with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)->latest()->get();
+        $studies = Study::search($this->search)
+        ->with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)->latest()->get();
 
         return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');

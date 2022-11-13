@@ -1,7 +1,5 @@
 <?php
 
-use function Ramsey\Uuid\v1;
-
 return [
     /**
      * Control if the seeder should create a user per role while seeding the data.

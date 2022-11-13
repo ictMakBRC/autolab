@@ -6,9 +6,20 @@ use App\Models\Kit;
 use App\Models\Platform;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class KitComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $platform_id;
@@ -113,7 +124,11 @@ class KitComponent extends Component
 
     public function render()
     {
-        $kits = Kit::where('creator_lab', auth()->user()->laboratory_id)->with('platform')->latest()->get();
+        $kits = Kit::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)->with('platform')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
+
         $platforms = Platform::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.kit-component', compact('kits', 'platforms'))->layout('layouts.app');

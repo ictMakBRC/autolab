@@ -29,7 +29,6 @@ class LaratrustSeeder extends Seeder
         }
 
         foreach ($config as $key => $modules) {
-
             // Create a new role
             $role = \App\Models\Role::firstOrCreate([
                 'name' => $key,
