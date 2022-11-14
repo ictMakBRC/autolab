@@ -30,6 +30,7 @@ class SampleTypeComponent extends Component
     public $delete_id;
 
     public $possible_tests = [];
+    protected $paginationTheme = 'bootstrap';
 
     public function updated($fields)
     {
@@ -38,6 +39,11 @@ class SampleTypeComponent extends Component
         ]);
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    
     public function export()
     {
         return (new SampleTypesExport())->download('sample_types.xlsx');
@@ -135,7 +141,7 @@ class SampleTypeComponent extends Component
         // $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
         $sampleType = SampleType::search($this->search)->where('creator_lab', auth()->user()->laboratory_id)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
         $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->select('id', 'name')->get();
 
         return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');
