@@ -18,6 +18,13 @@ class TestReportsComponent extends Component
 
     public $orderAsc = true;
 
+     protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));
