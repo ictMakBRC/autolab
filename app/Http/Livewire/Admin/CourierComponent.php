@@ -2,14 +2,26 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Courier;
-use App\Models\Facility;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
+use App\Models\Courier;
 use Livewire\Component;
+use App\Models\Facility;
+use Livewire\WithPagination;
+use App\Exports\CouriersExport;
 
 class CourierComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $email;
@@ -25,6 +37,17 @@ class CourierComponent extends Component
     public $studies;
 
     public $study_id;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public function export()
+    {
+        return (new CouriersExport())->download('couriers.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -152,7 +175,10 @@ class CourierComponent extends Component
 
     public function render()
     {
-        $couriers = Courier::whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')->latest()->get();
+        $couriers = Courier::search($this->search)
+        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.courier-component', compact('couriers', 'facilities'))->layout('layouts.app');

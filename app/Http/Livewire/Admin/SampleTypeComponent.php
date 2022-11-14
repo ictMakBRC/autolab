@@ -2,12 +2,25 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\SampleTypesExport;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class SampleTypeComponent extends Component
 {
+    use WithPagination;
+
+    // public $paginate = 10;
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'type';
+
+    public $orderAsc = true;
+
     public $type;
 
     public $status;
@@ -17,12 +30,24 @@ class SampleTypeComponent extends Component
     public $delete_id;
 
     public $possible_tests = [];
+    
+    protected $paginationTheme = 'bootstrap';
 
     public function updated($fields)
     {
         $this->validateOnly($fields, [
             'type' => 'required|unique:sample_types',
         ]);
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    
+    public function export()
+    {
+        return (new SampleTypesExport())->download('sample_types.xlsx');
     }
 
     public function storeData()
@@ -114,7 +139,10 @@ class SampleTypeComponent extends Component
 
     public function render()
     {
-        $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
+        // $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
+        $sampleType = SampleType::search($this->search)->where('creator_lab', auth()->user()->laboratory_id)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
         $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->select('id', 'name')->get();
 
         return view('livewire.admin.sample-type-component', compact('sampleType', 'tests'))->layout('layouts.app');

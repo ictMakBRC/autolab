@@ -62,4 +62,20 @@ class TestAssignment extends Model
             });
         }
     }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->orWhereHas('test', function ($query) use ($search) {
+                    $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->orWhereHas('sample', function ($query) use ($search) {
+                    $query->where('sample_identity', 'like', '%'.$search.'%');
+                })
+                ->orWhereHas('assignee', function ($query) use ($search) {
+                    $query->where('surname', 'like', '%'.$search.'%');
+                });
+    }
 }

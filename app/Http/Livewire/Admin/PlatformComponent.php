@@ -2,12 +2,24 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Platform;
 use Exception;
 use Livewire\Component;
+use App\Models\Platform;
+use Livewire\WithPagination;
+use App\Exports\PlatformsExport;
 
 class PlatformComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $range;
@@ -15,6 +27,16 @@ class PlatformComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new PlatformsExport())->download('platforms.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -111,7 +133,10 @@ class PlatformComponent extends Component
 
     public function render()
     {
-        $platforms = Platform::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        $platforms = Platform::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
 
         return view('livewire.admin.platform-component', compact('platforms'))->layout('layouts.app');
     }

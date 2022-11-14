@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\FacilityInformation;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::share('facilityInfo', FacilityInformation::first());
+        if ((new \App\Models\FacilityInformation)->getTable()) {
+            View::share('facilityInfo', FacilityInformation::first());
+        }
+        Paginator::useBootstrapFive();
     }
 }

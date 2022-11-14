@@ -69,4 +69,21 @@ class SampleReception extends Model
             });
         }
     }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('creator_lab', auth()->user()->laboratory_id)
+            ->where('batch_no', 'like', '%'.$search.'%')
+            ->orWhereHas('courier', function ($query) use ($search) {
+                $query->where('name', 'like', '%'.$search.'%');
+            })
+            ->orWhereHas('facility', function ($query) use ($search) {
+                $query->where('name', 'like', '%'.$search.'%');
+            })
+            ->orWhereHas('receiver', function ($query) use ($search) {
+                $query->where('surname', 'like', '%'.$search.'%');
+            });
+    }
 }

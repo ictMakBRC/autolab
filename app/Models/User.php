@@ -59,16 +59,6 @@ class User extends Authenticatable
         'creator_lab',
     ];
 
-    public function laboratory()
-    {
-        return $this->belongsTo(Laboratory::class, 'laboratory_id', 'id');
-    }
-
-    public function designation()
-    {
-        return $this->belongsTo(Designation::class, 'designation_id', 'id');
-    }
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -87,6 +77,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class, 'laboratory_id', 'id');
+    }
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class, 'designation_id', 'id');
+    }
 
     protected function fullName(): Attribute
     {
@@ -116,5 +116,23 @@ class User extends Authenticatable
                 $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('creator_lab', auth()->user()->laboratory_id)
+            ->where('surname', 'like', '%'.$search.'%')
+            ->orWhere('first_name', 'like', '%'.$search.'%')
+            ->orWhere('other_name', 'like', '%'.$search.'%')
+            ->orWhere('contact', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%')
+            ->orWhereHas('laboratory', function ($query) use ($search) {
+                $query->where('laboratory_name', 'like', '%'.$search.'%');
+            })
+            ->orWhereHas('designation', function ($query) use ($search) {
+                $query->where('name', 'like', '%'.$search.'%');
+            });
     }
 }

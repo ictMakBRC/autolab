@@ -11,7 +11,6 @@ use App\Models\Sample;
 use App\Models\SampleReception;
 use App\Models\SampleType;
 use App\Models\Study;
-use Carbon\Carbon;
 use Exception;
 use Livewire\Component;
 
@@ -168,13 +167,7 @@ class SpecimenRequestComponent extends Component
         $this->reset(['study_id']);
         $this->study_id = $requester->study_id;
     }
-    // public function updatedDateRequested()
-    // {
-    //     if ($this->date_requested>$this->date_delivered) {
-    //         $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! Date requested can not be greater than date received for this batch!']);
-    //     }
 
-    // }
     public function updatedStudyId()
     {
         $participant = Participant::where('id', $this->participant_id)->orWhere('id', $this->same_participant_id)->first();
@@ -228,21 +221,25 @@ class SpecimenRequestComponent extends Component
 
     public function mount($batch)
     {
-        $sampleReception = SampleReception::where('batch_no', $batch)->with('facility')->first();
-        $this->batch_no = $sampleReception->batch_no;
-        $this->sample_reception_id = $sampleReception->id;
-        $this->batch_sample_count = $sampleReception->samples_accepted;
-        $this->batch_samples_handled = $sampleReception->samples_handled;
-        $this->facility_id = $sampleReception->facility_id;
-        $this->source_facility = $sampleReception->facility->name;
-        $this->date_delivered = $sampleReception->date_delivered;
+        $sampleReception = SampleReception::where(['batch_no' => $batch, 'creator_lab' => auth()->user()->laboratory_id])->with('facility')->first();
+        if ($sampleReception) {
+            $this->batch_no = $sampleReception->batch_no;
+            $this->sample_reception_id = $sampleReception->id;
+            $this->batch_sample_count = $sampleReception->samples_accepted;
+            $this->batch_samples_handled = $sampleReception->samples_handled;
+            $this->facility_id = $sampleReception->facility_id;
+            $this->source_facility = $sampleReception->facility->name;
+            $this->date_delivered = $sampleReception->date_delivered;
 
-        $this->tests = collect([]);
-        $this->entry_type = 'Participant';
+            $this->tests = collect([]);
+            $this->entry_type = 'Participant';
 
-        if ($this->batch_sample_count == $this->batch_samples_handled) {
-            $this->activeParticipantTab = true;
-            $this->tabToggleBtn = true;
+            if ($this->batch_sample_count == $this->batch_samples_handled) {
+                $this->activeParticipantTab = true;
+                $this->tabToggleBtn = true;
+            }
+        } else {
+            redirect()->route('samplereception');
         }
     }
 
@@ -402,7 +399,7 @@ class SpecimenRequestComponent extends Component
         $participant->nok_relationship = $this->nok_relationship;
         $participant->update();
 
-        $this->participant_id = $participant->id; //variable needs more review/
+        $this->participant_id = $participant->id;
         $this->toggleForm = false;
         $this->resetParticipantInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
@@ -472,7 +469,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
+            'date_requested' => 'required|date|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
             'sample_identity' => 'required|string|unique:samples',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
@@ -480,11 +477,10 @@ class SpecimenRequestComponent extends Component
             'tests_requested' => 'array|required',
         ]);
 
-        // Carbon::parse($this->date_delivered)->format('Y-m-d h:i:s')
         if ($this->entry_type != 'Isolate') {
             $this->validate([
                 'collected_by' => 'required|integer',
-                'date_collected' => 'required|date|lte:date_requested|before_or_equal:now',
+                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
             ]);
         }
         if ($this->entry_type != 'Client') {
@@ -579,7 +575,7 @@ class SpecimenRequestComponent extends Component
         if ($this->entry_type != 'Isolate') {
             $this->validate([
                 'collected_by' => 'required|integer',
-                'date_collected' => 'required|date|lte:date_requested|before_or_equal:now',
+                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
             ]);
         }
         if ($this->entry_type != 'Client') {

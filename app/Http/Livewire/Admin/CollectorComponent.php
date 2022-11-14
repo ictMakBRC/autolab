@@ -2,14 +2,26 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Collector;
-use App\Models\Facility;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Collector;
+use Livewire\WithPagination;
+use App\Exports\CollectorsExport;
 
 class CollectorComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $email;
@@ -25,6 +37,16 @@ class CollectorComponent extends Component
     public $studies;
 
     public $study_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new CollectorsExport())->download('sample_collectors.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -152,7 +174,10 @@ class CollectorComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')->latest()->get();
+        $collectors = Collector::search($this->search)
+        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.collector-component', compact('collectors', 'facilities'))->layout('layouts.app');

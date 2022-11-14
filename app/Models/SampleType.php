@@ -43,10 +43,12 @@ class SampleType extends Model
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
             });
-
-            self::updating(function ($model) {
-                $model->creator_lab = auth()->user()->laboratory_id;
-            });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()->where('type', 'like', '%'.$search.'%');
     }
 }

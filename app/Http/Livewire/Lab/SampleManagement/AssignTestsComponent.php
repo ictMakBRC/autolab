@@ -8,9 +8,20 @@ use App\Models\TestAssignment;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AssignTestsComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'lab_no';
+
+    public $orderAsc = true;
+
     public $tests_requested;
 
     public $request_acknowledged_by;
@@ -78,12 +89,11 @@ class AssignTestsComponent extends Component
         ->where('test_id', $this->test_id)
         ->exists();
 
-        if ($isExist) 
-        {
+        if ($isExist) {
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test already Assigned to someone!']);
         } else {
-                $test_assignment = new TestAssignment();
+            $test_assignment = new TestAssignment();
             $test_assignment->sample_id = $this->sample_id;
             $test_assignment->test_id = $this->test_id;
             $test_assignment->assignee = $this->assignee;
@@ -123,8 +133,11 @@ class AssignTestsComponent extends Component
 
     public function render()
     {
-        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])->get();
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
+        $samples = Sample::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id]);
         $tests = $this->tests_requested;
 
         return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests'));

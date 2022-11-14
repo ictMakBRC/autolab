@@ -4,11 +4,23 @@ namespace App\Http\Livewire\Admin;
 
 //use App\Models\TestCategory;
 
-use App\Models\TestCategory;
 use Livewire\Component;
+use App\Models\TestCategory;
+use Livewire\WithPagination;
+use App\Exports\TestCategoriesExport;
 
 class TestCategoryComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'category_name';
+
+    public $orderAsc = true;
+
     public $category_name;
 
     public $description;
@@ -16,6 +28,16 @@ class TestCategoryComponent extends Component
     public $edit_id;
 
     public $delete_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new TestCategoriesExport())->download('Test_categories.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -112,7 +134,10 @@ class TestCategoryComponent extends Component
 
     public function render()
     {
-        $categories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->get();
+        $categories = TestCategory::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
 
         return view('livewire.admin.test-category', compact('categories'))->layout('layouts.app');
     }

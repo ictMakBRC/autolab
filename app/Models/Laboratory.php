@@ -50,4 +50,12 @@ class Laboratory extends Model
             });
         }
     }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('laboratory_name', 'like', '%'.$search.'%')
+                ->orWhere('short_code', 'like', '%'.$search.'%');
+    }
 }
