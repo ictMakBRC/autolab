@@ -3,12 +3,13 @@
 namespace App\Exports;
 
 use App\Models\SampleType;
+use App\Models\TestCategory;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
-class SampleTypesExport implements FromCollection, WithMapping, WithHeadings
+class TestCategoriesExport implements FromCollection, WithMapping, WithHeadings
 {
     use Exportable;
 
@@ -22,16 +23,16 @@ class SampleTypesExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        return SampleType::all();
+        return TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
     }
 
-    public function map($sampleType): array
+    public function map($category): array
     {
         $this->count++;
 
         return [
             $this->count,
-            $sampleType->type,
+            $category->category_name,
         ];
     }
 
@@ -39,7 +40,7 @@ class SampleTypesExport implements FromCollection, WithMapping, WithHeadings
     {
         return [
             '#',
-            'Sample Type',
+            'Category',
         ];
     }
 }

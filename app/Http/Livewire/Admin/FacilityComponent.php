@@ -37,6 +37,13 @@ class FacilityComponent extends Component
     public $delete_id;
     // public $count=0;
 
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -176,11 +183,11 @@ class FacilityComponent extends Component
     {
         $facilities = Facility::search($this->search)->with('parent')->where('is_active', 1)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
         // return view('livewire.users-table', [
         //     'users' => User::search($this->search)
         //         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        //         ->simplePaginate($this->perPage),
+        //         ->paginate($this->perPage),
         // ]);
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');

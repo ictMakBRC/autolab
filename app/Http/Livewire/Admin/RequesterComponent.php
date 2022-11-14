@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Exception;
+use App\Models\Study;
+use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Requester;
-use App\Models\Study;
-use Exception;
-use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\RequestersExport;
 
 class RequesterComponent extends Component
 {
@@ -36,6 +37,16 @@ class RequesterComponent extends Component
     public $studies;
 
     public $study_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new RequestersExport())->download('requesters.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -169,7 +180,7 @@ class RequesterComponent extends Component
         $requesters = Requester::search($this->search)
         ->whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');

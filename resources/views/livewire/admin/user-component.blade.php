@@ -84,6 +84,13 @@
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="btn-group float-end">
+                                {{ $users->links('vendor.livewire.bootstrap') }}
+                            </div>
+                        </div>
+                    </div>
                 </div> <!-- end tab-content-->
 
             </div> <!-- end card body-->
