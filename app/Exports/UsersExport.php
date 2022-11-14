@@ -39,7 +39,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings
             $user->designation->name,
             $user->email,
             $user->contact,
-            $user->status === 1 ? 'Active' : 'Suspended',
+            $user->is_active === 1 ? 'Active' : 'Suspended',
         ];
     }
 

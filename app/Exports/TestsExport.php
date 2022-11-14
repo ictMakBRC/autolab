@@ -2,13 +2,14 @@
 
 namespace App\Exports;
 
+use App\Models\Admin\Test;
 use App\Models\TestCategory;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
-class TestCategoriesExport implements FromCollection, WithMapping, WithHeadings
+class TestsExport implements FromCollection, WithMapping, WithHeadings
 {
     use Exportable;
 
@@ -24,17 +25,20 @@ class TestCategoriesExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        return TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        return Test::with('category')->where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
     }
 
-    public function map($category): array
+    public function map($test): array
     {
         $this->count++;
 
         return [
             $this->count,
-            $category->category_name,
-            $category->description ?? 'N/A',
+
+            $test->name,
+            $test->category->category_name,
+            $test->short_code,
+            $test->price ?? 'N/A',
         ];
     }
 
@@ -43,7 +47,9 @@ class TestCategoriesExport implements FromCollection, WithMapping, WithHeadings
         return [
             '#',
             'Name',
-            'Description',
+            'Category',
+            'Short Code',
+            'Price'
         ];
     }
 }

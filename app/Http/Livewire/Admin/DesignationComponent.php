@@ -28,6 +28,13 @@ class DesignationComponent extends Component
 
     public $delete_id;
 
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -131,7 +138,7 @@ class DesignationComponent extends Component
     {
         $designations = Designation::search($this->search)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
 
         return view('livewire.admin.designation-component', compact('designations'))->layout('layouts.app');
     }

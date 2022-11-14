@@ -52,9 +52,9 @@ class TestReviewComponent extends Component
             $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
             $testResults = TestResult::search($this->search)
-            ->where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Reviewed')
+            ->where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-            ->simplePaginate($this->perPage);
+            ->paginate($this->perPage);
         }
 
         return view('livewire.lab.sample-management.test-review-component', compact('testResults'));

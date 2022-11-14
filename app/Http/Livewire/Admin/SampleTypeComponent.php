@@ -30,6 +30,7 @@ class SampleTypeComponent extends Component
     public $delete_id;
 
     public $possible_tests = [];
+    
     protected $paginationTheme = 'bootstrap';
 
     public function updated($fields)

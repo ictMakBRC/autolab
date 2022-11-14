@@ -20,6 +20,17 @@ class ParticipantListComponent extends Component
 
     public $activeRow;
 
+    protected $paginationTheme = 'bootstrap';
+    // public function export()
+    // {
+    //     return (new CollectorsExport())->download('sample_collectors.xlsx');
+    // }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));
@@ -30,7 +41,7 @@ class ParticipantListComponent extends Component
         $participants = Participant::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)->withCount(['sample', 'testResult'])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
 
         return view('livewire.lab.lists.participant-list-component', compact('participants'));
     }

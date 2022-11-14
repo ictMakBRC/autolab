@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Kit;
-use App\Models\Platform;
 use Exception;
+use App\Models\Kit;
 use Livewire\Component;
+use App\Models\Platform;
+use App\Exports\KitsExport;
 use Livewire\WithPagination;
 
 class KitComponent extends Component
@@ -27,6 +28,16 @@ class KitComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new KitsExport())->download('kits.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -127,7 +138,7 @@ class KitComponent extends Component
         $kits = Kit::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)->with('platform')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
 
         $platforms = Platform::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 

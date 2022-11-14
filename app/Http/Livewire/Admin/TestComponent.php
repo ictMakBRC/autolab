@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Admin\Test;
-use App\Models\TestCategory;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Exports\TestsExport;
+use App\Models\TestCategory;
 use Livewire\WithPagination;
 
 class TestComponent extends Component
@@ -54,6 +55,16 @@ class TestComponent extends Component
     public $toggleForm = false;
 
     public $edit_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new TestsExport())->download('Tests.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -270,7 +281,7 @@ class TestComponent extends Component
         $tests = Test::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
         $testCategories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.test-component', compact('tests', 'testCategories'));
