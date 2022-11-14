@@ -2,12 +2,24 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\DesignationsExport;
 use App\Models\Designation;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class DesignationComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $description;
@@ -15,6 +27,13 @@ class DesignationComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -33,7 +52,7 @@ class DesignationComponent extends Component
 
         $designation = new Designation();
         $designation->name = $this->name;
-        $designation->description = $this->description;
+        $designation->description = $this->description ?? null;
         $designation->save();
         $this->description = '';
         $this->name = '';
@@ -64,7 +83,7 @@ class DesignationComponent extends Component
         ]);
         $designation = Designation::find($this->edit_id);
         $designation->name = $this->name;
-        $designation->description = $this->description;
+        $designation->description = $this->description ?? null;
         $designation->is_active = $this->is_active;
         $designation->update();
 
@@ -73,6 +92,11 @@ class DesignationComponent extends Component
         $this->is_active = '';
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation updated  successfully!']);
+    }
+
+    public function export()
+    {
+        return (new DesignationsExport())->download('Designations.xlsx');
     }
 
     public function refresh()
@@ -112,7 +136,9 @@ class DesignationComponent extends Component
 
     public function render()
     {
-        $designations = Designation::all();
+        $designations = Designation::search($this->search)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
 
         return view('livewire.admin.designation-component', compact('designations'))->layout('layouts.app');
     }

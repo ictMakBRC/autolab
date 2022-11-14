@@ -34,6 +34,11 @@ class TestCategory extends Model
 
     protected $table = 'test_categories';
 
+    public function tests()
+    {
+        return $this->hasMany(Test::class, 'category_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();
@@ -49,8 +54,11 @@ class TestCategory extends Model
         }
     }
 
-    public function tests()
+    public static function search($search)
     {
-        return $this->hasMany(Test::class, 'category_id', 'id');
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->where('category_name', 'like', '%'.$search.'%');
     }
 }

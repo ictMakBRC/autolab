@@ -2,12 +2,24 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Laboratory;
 use Exception;
 use Livewire\Component;
+use App\Models\Laboratory;
+use Livewire\WithPagination;
+use App\Exports\LaboratoriesExport;
 
 class LaboratoryComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'laboratory_name';
+
+    public $orderAsc = true;
+
     public $laboratory_name;
 
     public $short_code;
@@ -17,6 +29,16 @@ class LaboratoryComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new LaboratoriesExport())->download('laboratories.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -123,7 +145,9 @@ class LaboratoryComponent extends Component
 
     public function render()
     {
-        $laboratories = Laboratory::latest()->get();
+        $laboratories = Laboratory::search($this->search)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
 
         return view('livewire.admin.laboratory-component', compact('laboratories'))->layout('layouts.app');
     }

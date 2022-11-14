@@ -2,21 +2,32 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Helpers\Generate;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
-use App\Notifications\SendPasswordNotification;
 use Exception;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\Password;
+use App\Models\User;
 use Livewire\Component;
+use App\Helpers\Generate;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use App\Exports\UsersExport;
+use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendPasswordNotification;
 
 class UserComponent extends Component
 {
     use WithFileUploads;
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
 
     public $title;
 
@@ -49,6 +60,16 @@ class UserComponent extends Component
     public $avatarPath = '';
 
     public $signaturePath = '';
+
+    protected $paginationTheme = 'bootstrap';
+    public function export()
+    {
+        return (new UsersExport())->download('Users.xlsx');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -302,7 +323,10 @@ class UserComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')->latest()->get();
+        $users = User::search($this->search)
+        ->where(['laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
         $designations = Designation::where('is_active', 1)->latest()->get();
         $laboratories = Laboratory::where('is_active', 1)->latest()->get();
 

@@ -2,14 +2,26 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\FacilitiesExport;
 use App\Models\Facility;
 use App\Models\Laboratory;
 use App\Models\SampleReception;
 use Exception;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class FacilityComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'name';
+
+    public $orderAsc = true;
+
     public $name;
 
     public $type;
@@ -24,6 +36,13 @@ class FacilityComponent extends Component
 
     public $delete_id;
     // public $count=0;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function updated($fields)
     {
@@ -125,6 +144,11 @@ class FacilityComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility updated successfully!']);
     }
 
+    public function export()
+    {
+        return (new FacilitiesExport())->download('facilities.xlsx');
+    }
+
     public function deleteConfirmation($id)
     {
         $this->delete_id = $id;
@@ -157,7 +181,14 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::with('parent')->where('is_active', 1)->latest()->get();
+        $facilities = Facility::search($this->search)->with('parent')->where('is_active', 1)
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
+        // return view('livewire.users-table', [
+        //     'users' => User::search($this->search)
+        //         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        //         ->paginate($this->perPage),
+        // ]);
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

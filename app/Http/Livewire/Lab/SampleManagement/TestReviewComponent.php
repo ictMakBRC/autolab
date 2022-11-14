@@ -5,12 +5,30 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 use App\Models\TestResult;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestReviewComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'id';
+
+    public $orderAsc = true;
+
     public $viewReport = false;
 
     public $resultId;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function markAsReviewed(TestResult $testResult)
     {
@@ -40,7 +58,11 @@ class TestReviewComponent extends Component
         if ($this->viewReport) {
             $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
-            $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')->get();
+            $testResults = TestResult::reviewsearch($this->search)
+            ->where('status', 'Pending Review')
+            ->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         }
 
         return view('livewire.lab.sample-management.test-review-component', compact('testResults'));

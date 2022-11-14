@@ -11,7 +11,7 @@
                                     <span class="text-info">{{ $source_facility }}</span> Specimen Request for Batch
                                     <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>) delivered: {{$date_delivered}} date_req:{{\Carbon\Carbon::parse($date_requested)->format('Y-m-d H:i:s')}} 
+                                        class="text-danger">{{ $batch_sample_count }}</strong>) 
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"

@@ -8,9 +8,20 @@ use App\Models\TestAssignment;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AssignTestsComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'lab_no';
+
+    public $orderAsc = true;
+
     public $tests_requested;
 
     public $request_acknowledged_by;
@@ -30,6 +41,13 @@ class AssignTestsComponent extends Component
     public $assignedTests;
 
     public $backlog;
+
+    protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function mount()
     {
@@ -73,36 +91,36 @@ class AssignTestsComponent extends Component
         $this->validate([
             'assignee' => 'required|integer',
         ]);
-        $isExist =  TestAssignment::select("*")
+        $isExist = TestAssignment::select('*')
         ->where('sample_id', $this->sample_id)
         ->where('test_id', $this->test_id)
         ->exists();
-    if ($isExist) {
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test already Assigned to someone!']);
-    }else{
-        $test_assignment = new TestAssignment();
-        $test_assignment->sample_id = $this->sample_id;
-        $test_assignment->test_id = $this->test_id;
-        $test_assignment->assignee = $this->assignee;
-        $test_assignment->save();
-        // $this->emit('refresh-nav','samplemgt');
 
-        $sample = Sample::where('id', $this->sample_id)->first();
-        $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
-        if (array_diff($sample->tests_requested, $this->assignedTests) == []) {
-            $sample->update(['status' => 'Assigned']);
-            // $this->refresh();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Congs! Test Assignment completed successfully!']);
+        if ($isExist) {
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test already Assigned to someone!']);
         } else {
-            $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
-            $this->test_id = $this->tests_requested[0]->id;
-            $this->reset(['assignee', 'backlog']);
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
+            $test_assignment = new TestAssignment();
+            $test_assignment->sample_id = $this->sample_id;
+            $test_assignment->test_id = $this->test_id;
+            $test_assignment->assignee = $this->assignee;
+            $test_assignment->save();
+
+            $sample = Sample::where('id', $this->sample_id)->first();
+            $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
+            if (array_diff($sample->tests_requested, $this->assignedTests) == []) {
+                $sample->update(['status' => 'Assigned']);
+                // $this->refresh();
+                $this->dispatchBrowserEvent('close-modal');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
+            } else {
+                $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
+                $this->test_id = $this->tests_requested[0]->id;
+                $this->reset(['assignee', 'backlog']);
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
+            }
         }
     }
-}
 
     public function acknowledgeRequest(Sample $sample)
     {
@@ -122,8 +140,11 @@ class AssignTestsComponent extends Component
 
     public function render()
     {
-        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])->get();
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
+        $samples = Sample::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id]);
         $tests = $this->tests_requested;
 
         return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests'));

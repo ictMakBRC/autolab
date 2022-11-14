@@ -8,9 +8,20 @@ use App\Models\TestAssignment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestRequestComponent extends Component
 {
+    use WithPagination;
+
+    public $perPage = 10;
+
+    public $search = '';
+
+    public $orderBy = 'lab_no';
+
+    public $orderAsc = true;
+
     public $tests_requested;
 
     public $request_acknowledged_by;
@@ -22,6 +33,13 @@ class TestRequestComponent extends Component
     public $lab_no;
 
     public $sample_id;
+
+    protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function mount()
     {
@@ -64,11 +82,14 @@ class TestRequestComponent extends Component
 
     public function render()
     {
-        $samples = Sample::where('creator_lab', auth()->user()->laboratory_id)
+        $samples = Sample::search($this->search)
+        ->where('creator_lab', auth()->user()->laboratory_id)
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->whereHas('testAssignment', function (Builder $query) {
             $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
-        })->get();
+        })
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->simplePaginate($this->perPage);
 
         return view('livewire.lab.sample-management.test-request-component', compact('samples'));
     }

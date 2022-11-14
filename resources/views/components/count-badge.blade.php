@@ -1,1 +1,1 @@
-<span class="badge bg-info pill">{{$slot}}</span>
+<span class="badge bg-info pill float-end">{{$slot}}</span>

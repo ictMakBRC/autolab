@@ -23,10 +23,23 @@
                 </div>
 
                 <div class="card-body">
+                    <x-table-utilities>
+                        <div>
+                            <div class="d-flex align-items-center ml-4 me-2">
+                                <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
+                                <select wire:model="orderBy" class="form-select">
+                                    <option value="type">Type</option>
+                                    <option value="id">Latest</option>
+                                    <option value="status">Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </x-table-utilities>
                     <div class="table-responsive">
-                        <table class="table align-middle" id="datableButtons">
-                            <thead class="table-light">
+                        <table class="table table-striped mb-0 w-100" id="datableButton">
+                            <thead>
                                 <tr>
+                                    <td>No.</td>
                                     <td>Sample</td>
                                     <td>Possible Tests</td>
                                     <td>Status</td>
@@ -34,8 +47,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sampleType as $item)
+                                @foreach ($sampleType as $key=> $item)
                                     <tr>
+                                        <td>{{ $key+1 }}</td>
                                         <td>{{ $item->type }}</td>
                                         <td>{{ count($item->possible_tests??[]) }}</td>
                                         <td>
@@ -58,6 +72,13 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="btn-group float-end">
+                                {{ $sampleType->links('vendor.livewire.bootstrap') }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
