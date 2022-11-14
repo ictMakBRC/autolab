@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Kit;
-use Livewire\Component;
-use App\Models\Platform;
 use App\Exports\KitsExport;
+use App\Models\Kit;
+use App\Models\Platform;
+use Exception;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class KitComponent extends Component
@@ -30,10 +30,12 @@ class KitComponent extends Component
     public $delete_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new KitsExport())->download('kits.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

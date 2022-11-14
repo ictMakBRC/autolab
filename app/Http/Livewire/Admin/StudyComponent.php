@@ -38,7 +38,7 @@ class StudyComponent extends Component
     public $edit_id;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();

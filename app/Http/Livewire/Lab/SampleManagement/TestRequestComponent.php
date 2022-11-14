@@ -35,7 +35,7 @@ class TestRequestComponent extends Component
     public $sample_id;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -82,14 +82,14 @@ class TestRequestComponent extends Component
 
     public function render()
     {
-        $samples = Sample::search($this->search)
+        $samples = Sample::search($this->search, ['Assigned'])
         ->where('creator_lab', auth()->user()->laboratory_id)
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->whereHas('testAssignment', function (Builder $query) {
             $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+        ->paginate($this->perPage);
 
         return view('livewire.lab.sample-management.test-request-component', compact('samples'));
     }

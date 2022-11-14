@@ -58,7 +58,7 @@ class TestReviewComponent extends Component
         if ($this->viewReport) {
             $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
-            $testResults = TestResult::reviewsearch($this->search)
+            $testResults = TestResult::resultSearch($this->search, 'Pending Review')
             ->where('status', 'Pending Review')
             ->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')

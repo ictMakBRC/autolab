@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
-use Livewire\WithPagination;
 use App\Exports\CouriersExport;
+use App\Models\Courier;
+use App\Models\Facility;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class CourierComponent extends Component
 {
@@ -44,6 +44,7 @@ class CourierComponent extends Component
     {
         return (new CouriersExport())->download('couriers.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

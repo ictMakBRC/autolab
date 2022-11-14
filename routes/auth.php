@@ -71,14 +71,14 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
     // })->name('settings.update');
 });
 
-Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
-    Route::get('dashboard', function () {
-        $users = User::latest()->get();
-        $designations = Designation::latest()->get();
-        $laboratories = Laboratory::latest()->get();
+// Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
+//     Route::get('dashboard', function () {
+//         $users = User::latest()->get();
+//         $designations = Designation::latest()->get();
+//         $laboratories = Laboratory::latest()->get();
 
-        return view('super-admin.dashboard', compact('users', 'designations', 'laboratories'));
-    })->name('super.dashboard');
+//         return view('super-admin.dashboard', compact('users', 'designations', 'laboratories'));
+//     })->name('super.dashboard');
 
-    // ->only(['index', 'create', 'store', 'edit', 'update'])
-});
+//     // ->only(['index', 'create', 'store', 'edit', 'update'])
+// });

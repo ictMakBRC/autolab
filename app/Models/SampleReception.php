@@ -75,15 +75,6 @@ class SampleReception extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('creator_lab', auth()->user()->laboratory_id)
-            ->where('batch_no', 'like', '%'.$search.'%')
-            ->orWhereHas('courier', function ($query) use ($search) {
-                $query->where('name', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('facility', function ($query) use ($search) {
-                $query->where('name', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('receiver', function ($query) use ($search) {
-                $query->where('surname', 'like', '%'.$search.'%');
-            });
+            ->where('batch_no', 'like', '%'.$search.'%');
     }
 }

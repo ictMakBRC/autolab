@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Livewire\Component;
-use App\Models\Admin\Test;
 use App\Exports\TestsExport;
+use App\Models\Admin\Test;
 use App\Models\TestCategory;
+use Livewire\Component;
 use Livewire\WithPagination;
 
 class TestComponent extends Component
@@ -57,10 +57,12 @@ class TestComponent extends Component
     public $edit_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new TestsExport())->download('Tests.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

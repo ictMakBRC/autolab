@@ -30,7 +30,7 @@ class SampleTypeComponent extends Component
     public $delete_id;
 
     public $possible_tests = [];
-    
+
     protected $paginationTheme = 'bootstrap';
 
     public function updated($fields)
@@ -44,7 +44,7 @@ class SampleTypeComponent extends Component
     {
         $this->resetPage();
     }
-    
+
     public function export()
     {
         return (new SampleTypesExport())->download('sample_types.xlsx');

@@ -2,19 +2,19 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\User;
-use Livewire\Component;
-use App\Helpers\Generate;
-use App\Models\Laboratory;
-use App\Models\Designation;
 use App\Exports\UsersExport;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Notification;
+use App\Helpers\Generate;
+use App\Models\Designation;
+use App\Models\Laboratory;
+use App\Models\User;
 use App\Notifications\SendPasswordNotification;
+use Exception;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rules\Password;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
@@ -62,10 +62,12 @@ class UserComponent extends Component
     public $signaturePath = '';
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new UsersExport())->download('Users.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();
