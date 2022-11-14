@@ -13,6 +13,7 @@ use App\Models\SampleReception;
 use App\Models\Study;
 use App\Models\TestResult;
 use App\Models\User;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class MainDashboardComponent extends Component
@@ -23,7 +24,23 @@ class MainDashboardComponent extends Component
 
     public $samplesCount;
 
+    public $samplesTodayCount;
+
+    public $samplesThisWeekCount;
+
+    public $samplesThisMonthCount;
+
+    public $samplesThisYearCount;
+
     public $testsPerformedCount;
+
+    public $testsTodayCount;
+
+    public $testsThisWeekCount;
+
+    public $testsThisMonthCount;
+
+    public $testsThisYearCount;
 
     public $usersActiveCount;
 
@@ -53,29 +70,46 @@ class MainDashboardComponent extends Component
 
     public function mount()
     {
+        //SAMPLES
+        $this->participantCount = Participant::count();
         $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
+        $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
+        $this->samplesTodayCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereDay('updated_at', '=', date('d'))->count();
+        $this->samplesThisWeekCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereBetween('updated_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $this->samplesThisMonthCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereMonth('updated_at', '=', date('m'))->count();
+        $this->samplesThisYearCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereYear('updated_at', '=', date('Y'))->count();
 
-        $this->participantCount = Participant::count(); //depends
-        $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count(); //depends
+        //TESTS
         $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
+        $this->testsTodayCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->whereDay('created_at', '=', date('d'))->count();
+        $this->testsThisWeekCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $this->testsThisMonthCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->whereMonth('created_at', '=', date('m'))->count();
+        $this->testsThisYearCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->whereYear('created_at', '=', date('Y'))->count();
 
+        //USERS
         $this->usersActiveCount = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->count();
         $this->usersSuspendedCount = User::where(['is_active' => 0, 'laboratory_id' => auth()->user()->laboratory_id])->count();
-
+        
+        //LABS
         $this->laboratoryCount = Laboratory::where('is_active', 1)->count();
 
+        //FACILITIES
         $this->facilityActiveCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
         $this->facilitySuspendedCount = Facility::where('is_active', 0)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
 
+        //STUDIES
         $this->studyActiveCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
         $this->studySuspendedCount = Study::where('is_active', 0)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
 
+        //REQUESTERS
         $this->requesterActiveCount = Requester::where('is_active', 1)->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->count();
         $this->requesterSuspendedCount = Requester::where('is_active', 0)->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->count();
 
+        //PHLEBOTOMISTS
         $this->collectorActiveCount = Collector::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
         $this->collectorSuspendedCount = Collector::where('is_active', 0)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
 
+        //COURIERS
         $this->courierActiveCount = Courier::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
         $this->courierSuspendedCount = Courier::where('is_active', 0)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
     }

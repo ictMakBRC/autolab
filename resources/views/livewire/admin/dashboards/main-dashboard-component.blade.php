@@ -113,12 +113,49 @@
                                                 class="text-danger">{{ $courierSuspendedCount }}</strong></div>
                                     </div>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
                 </div>
-
+                <div class="col-12 col-lg-4 col-xl-4 d-flex">
+                    <div class="card mb-0 radius-10 border shadow-none w-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Samples</h5>
+                            <ul class="list-group list-group-flush mt-3">
+                                <li class="list-group-item border-top">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div>Today</div>
+                                        <div class="ms-auto"><strong
+                                                class="text-success">{{ $samplesTodayCount}}</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div>This Week</div>
+                                        <div class="ms-auto"><strong
+                                                class="text-success">{{ $samplesThisWeekCount }}</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div>This Month</div>
+                                        <div class="ms-auto"><strong
+                                                class="text-success">{{ $samplesThisMonthCount }}</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div>This Year</div>
+                                        <div class="ms-auto"><strong
+                                                class="text-success">{{ $samplesThisYearCount }}</strong></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-secondary">Total Sample Batches :
+                                    {{ $batchesCount }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 col-lg-4 col-xl-4 d-flex">
                     <div class="card mb-0 radius-10 border shadow-none w-100">
                         <div class="card-body">
@@ -128,28 +165,28 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Today</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $facilityActiveCount }}</strong></div>
+                                                class="text-success">{{ $testsTodayCount}}</strong></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <div class="d-flex align-items-center gap-2">
                                         <div>This Week</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $studyActiveCount }}</strong></div>
+                                                class="text-success">{{ $testsThisWeekCount }}</strong></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <div class="d-flex align-items-center gap-2">
                                         <div>This Month</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $requesterActiveCount }}</strong></div>
+                                                class="text-success">{{ $testsThisMonthCount }}</strong></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
                                     <div class="d-flex align-items-center gap-2">
                                         <div>This Year</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $collectorActiveCount }}</strong></div>
+                                                class="text-success">{{ $testsThisYearCount }}</strong></div>
                                     </div>
                                 </li>
                             </ul>
