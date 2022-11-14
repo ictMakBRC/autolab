@@ -42,6 +42,13 @@ class AssignTestsComponent extends Component
 
     public $backlog;
 
+    protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function mount()
     {
         $this->tests_requested = collect([]);

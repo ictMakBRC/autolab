@@ -34,6 +34,13 @@ class TestRequestComponent extends Component
 
     public $sample_id;
 
+    protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function mount()
     {
         $this->tests_requested = collect([]);

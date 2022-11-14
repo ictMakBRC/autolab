@@ -23,6 +23,13 @@ class TestReviewComponent extends Component
 
     public $resultId;
 
+    protected $paginationTheme = 'bootstrap';
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function markAsReviewed(TestResult $testResult)
     {
         $testResult->reviewed_by = Auth::id();
@@ -51,8 +58,9 @@ class TestReviewComponent extends Component
         if ($this->viewReport) {
             $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Pending Review'])->first();
         } else {
-            $testResults = TestResult::search($this->search)
-            ->where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Pending Review')
+            $testResults = TestResult::reviewsearch($this->search)
+            ->where('status', 'Pending Review')
+            ->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         }
