@@ -28,6 +28,8 @@ class DesignationComponent extends Component
 
     public $delete_id;
 
+    public $export;
+
     protected $paginationTheme = 'bootstrap';
 
     public function updatingSearch()
@@ -139,7 +141,7 @@ class DesignationComponent extends Component
         $designations = Designation::search($this->search)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-
+        // $export=true;
         return view('livewire.admin.designation-component', compact('designations'))->layout('layouts.app');
     }
 }
