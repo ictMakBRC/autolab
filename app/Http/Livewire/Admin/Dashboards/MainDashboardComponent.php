@@ -89,7 +89,7 @@ class MainDashboardComponent extends Component
         //USERS
         $this->usersActiveCount = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->count();
         $this->usersSuspendedCount = User::where(['is_active' => 0, 'laboratory_id' => auth()->user()->laboratory_id])->count();
-        
+
         //LABS
         $this->laboratoryCount = Laboratory::where('is_active', 1)->count();
 

@@ -95,7 +95,7 @@ class Generate
         $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $lettersLength = strlen($letters);
         $labno = '';
-        $year=date('y');
+        $year = date('y');
 
         $latestLabNo = Sample::select('lab_no')->orderBy('id', 'desc')->first();
 
@@ -104,8 +104,7 @@ class Generate
             $letterPart = substr($latestLabNo->lab_no, 2, 5);
             $numPart = (int) substr($latestLabNo->lab_no, 5);
 
-            if ($yearPart==$year) {
-
+            if ($yearPart == $year) {
                 $letter1 = $letterPart[0];
                 $letter2 = $letterPart[1];
                 $letter3 = $letterPart[2];
@@ -154,7 +153,7 @@ class Generate
             } else {
                 $labno = $year.'AAA001';
             }
-        }else{
+        } else {
             $labno = $year.'AAA001';
         }
 

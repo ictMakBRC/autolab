@@ -85,7 +85,7 @@ class TestResult extends Model
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
-                $model->tracker ='#'.time().rand(10, 99);
+                $model->tracker = '#'.time().rand(10, 99);
             });
 
             self::updating(function ($model) {
