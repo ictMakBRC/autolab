@@ -127,4 +127,15 @@ class TestResult extends Model
                 $query->where('surname', 'like', '%'.$search.'%');
             });
     }
+
+    public static function reviewsearch($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('creator_lab', auth()->user()->laboratory_id)
+            ->where('status', 'Pending Review')
+            ->whereHas('sample.sampleReception', function ($query) use ($search) {
+                $query->where('batch_no', 'like', '%'.$search.'%');
+            });
+    }
 }

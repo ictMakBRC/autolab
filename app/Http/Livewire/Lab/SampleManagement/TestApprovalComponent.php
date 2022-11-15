@@ -23,6 +23,13 @@ class TestApprovalComponent extends Component
 
     public $resultId;
 
+    protected $paginationTheme = 'bootstrap';
+    
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function markAsApproved(TestResult $testResult)
     {
         $testResult->approved_by = Auth::id();

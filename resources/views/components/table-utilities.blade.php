@@ -1,10 +1,9 @@
 @props(['display'=>''])
 <div class="d-flex align-items-center">
     <div>
-        {{-- @if ($export)  --}}
+
         <a href="javascript:;" wire:click='export' class="btn {{$display}} btn-secondary me-2"><i class="bi bi-file-earmark-fill"></i> Export</a>
-        {{-- @endif --}}
-        
+
 
     </div>
     <div>
