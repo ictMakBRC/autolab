@@ -55,15 +55,16 @@
             padding-bottom: 5px;
             border-block-start-style: outset;
         }
+     
     </style>
 </head>
 
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
     <div class="row" style="line-height:0.9">
-        <img src="{{ asset('autolab-assets/images/headers/mblheader.svg') }}"  alt="Makerere University Logo" width="100%" style="vertical-align:middle;"
+        <img src="{{ asset('autolab-assets/images/headers/header.png') }}"  alt="Makerere University Logo" width="100%" style="vertical-align:middle;"
         onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';">
-            <h5 style="text-align:center; font-family:times;">{{Str::upper(auth()->user()->laboratory->laboratory_name)}}</h5>
+            {{-- <h5 style="text-align:center; font-family:times;">{{Str::upper(auth()->user()->laboratory->laboratory_name)}}</h5> --}}
             <hr style="height:1px; width:100%; color:#6C757D;">
             <h6 style="text-align:center; font-family:times; color:red"><b>RESULT REPORT</b></h6>
     </div>
@@ -98,26 +99,34 @@
             </tr>
         </table>
     </div>
-    <div class="col-12 table-responsive" style="font-size:15px; margin-top:20px;">
-        <table class="table dt-responsive nowrap">
+    <div class="col-12 table-responsive" style="font-size:15px; margin-top:20px; text-align: center">
+        <table class="table dt-responsive nowrap" width="100%">
             <tbody>
                 {{-- SAMPLE AND TEST DETAILS --}}
-                <tr class="btop" style="width:50%">
+                <tr class="btop">
                     <td class="btop"><strong>Test requested:</strong>{{ $testResult->test->name }}</td>
-                    <td style="width:5%"></td>
-                    <td class="btop" style="width:45%"><strong>Sample Type:</strong>{{ $testResult->sample->sampleType->type }}</td>
+                    <td class="btop" style="text-align: right"><strong>Sample Type:</strong>{{ $testResult->sample->sampleType->type }}</td>
                 </tr>
+            </tbody>
+        </table>
+        <hr style="height:1px; width:100%; color:#6C757D;">
+        <table class="table dt-responsive nowrap" width="100%">
+            <tbody>
                 <tr>
                     <td class="btop"><strong>Collection Date:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) }}</td>
-                    <td class="btop"><strong>Date received:</strong> <br>
+                    <td class="btop" style="text-align: center"><strong>Date received:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                     </td>
-                    <td class="btop"><strong>Result Date:</strong> <br>{{ $testResult->created_at }}</td>
+                    <td class="btop" style="text-align: right"><strong>Result Date:</strong> <br>{{ $testResult->created_at }}</td>
                 </tr>
+            </tbody>
+        </table>
+        <table class="table dt-responsive nowrap" width="100%">
+            <tbody>
                 {{-- RESULT AND BARCODE --}}
                 <tr>
-                    <td class="btop" style="width:60%">
+                    <td class="btop" style="width:100%">
                         <b>Results:</b>
                         @if ($testResult->result)
                             {{$testResult->result}}
@@ -126,21 +135,15 @@
                         @endif
                       
                     </td>
-                    <td class="btop" style="width:10%">
-                    </td>
-                    <td class="btop" style="width:40%">
-                        <div style="float: right;">
-                            <br>
-                            <img src="data:image/png;base64, {!! base64_encode(
-                                QrCode::format('svg')->size(60)->generate($testResult->sample->participant->identity.'|'.$testResult->sample->sample_identity),
-                            ) !!} ">
-                        </div>
-                    </td>
                 </tr>
                 <br>
+            </tbody>
+        </table>
+        <table class="table dt-responsive nowrap" width="100%">
+            <tbody>
                 {{-- COMMENT --}}
                 <tr style="border-bottom: 1px solid rgb(f, f, f); margin-top: 20px">
-                    <td colspan="3" class="btop">
+                    <td colspan="3" class="btop" style="width:80%">
                         <div
                             style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
                             <h3><u>Comments:</u></h3>
@@ -149,7 +152,21 @@
                             <br>
                         </div>
                     </td>
+                    <td class="btop" style="width:20%">
+                        <div style="float: right;">
+                            <br>
+                            <img src="data:image/png;base64, {!! base64_encode(
+                                QrCode::format('svg')->size(84)->generate($testResult->sample->participant->identity.'|'.$testResult->sample->sample_identity),
+                            ) !!} ">
+                        </div>
+                    </td>
                 </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+        <table class="table dt-responsive nowrap" width="100%" style="text-align: center">
+            <tbody>
                 {{-- SIGNATORIES --}}
                 <tr>
                     <td class="btop">
@@ -174,17 +191,8 @@
             </tbody>
         </table>
         <footer>
-            <table width="100%">
-                <tr>
-                    <td colspan="2" style="width: 80%; text-alighn:center">
-                        <h6 style="color:green;  ">
-                            The Laboratory is Certified by the Ministry of Health Uganda to test for COVID-19
-                        </h6>
-                    </td>
-                    <td style="width: 20%">
-                        Completed
-                    </td>
-                </tr>
+            <table width="100%" style=" position: fixed; bottom: 0;">
+           
                 <tr>
                     <td>
                         <p style="text-align:center; font-size:10px; color:#4CAF50">Printed By: <font>
