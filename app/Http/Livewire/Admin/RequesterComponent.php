@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use Livewire\Component;
+use App\Exports\RequestersExport;
 use App\Models\Facility;
 use App\Models\Requester;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
 use Livewire\WithPagination;
-use App\Exports\RequestersExport;
 
 class RequesterComponent extends Component
 {
@@ -39,10 +39,12 @@ class RequesterComponent extends Component
     public $study_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new RequestersExport())->download('requesters.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

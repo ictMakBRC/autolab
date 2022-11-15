@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\LaboratoriesExport;
+use App\Models\Laboratory;
 use Exception;
 use Livewire\Component;
-use App\Models\Laboratory;
 use Livewire\WithPagination;
-use App\Exports\LaboratoriesExport;
 
 class LaboratoryComponent extends Component
 {
@@ -31,10 +31,12 @@ class LaboratoryComponent extends Component
     public $delete_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new LaboratoriesExport())->download('laboratories.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

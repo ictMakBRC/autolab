@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Collector;
-use Livewire\WithPagination;
 use App\Exports\CollectorsExport;
+use App\Models\Collector;
+use App\Models\Facility;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class CollectorComponent extends Component
 {
@@ -39,10 +39,12 @@ class CollectorComponent extends Component
     public $study_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new CollectorsExport())->download('sample_collectors.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

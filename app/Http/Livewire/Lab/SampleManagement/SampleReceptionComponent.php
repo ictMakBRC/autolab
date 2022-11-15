@@ -108,7 +108,7 @@ class SampleReceptionComponent extends Component
     public $studies;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
