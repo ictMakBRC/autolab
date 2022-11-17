@@ -71,7 +71,7 @@ class UserProfileComponent extends Component
             'email' => 'required|email:filter',
             'contact' => 'required',
         ]);
-        $user = User::findOrFail(auth()->user()->id)->first();
+        $user = User::findOrFail(auth()->user()->id);
         if ($this->avatar != null) {
             $this->validate([
                 'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
@@ -103,7 +103,7 @@ class UserProfileComponent extends Component
 
     public function changePassword()
     {
-        $currentUser = User::findOrFail(auth()->user()->id)->first();
+        $currentUser = User::findOrFail(auth()->user()->id);
         if (Hash::check($this->current_password, auth()->user()->password)) {
             if (Hash::check($this->password, Hash::make($this->current_password))) {
                 $this->dispatchBrowserEvent('current-password-mismatch', ['type' => 'error',  'message' => 'Oops! You can not use your current password as your new password!']);
