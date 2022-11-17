@@ -80,7 +80,7 @@
 
                                     <div class="mb-3 col-md-4">
                                         <label for="surname" class="form-label">Surname</label>
-                                        <input type="text" id="surname" class="form-control" wire:model="surname">
+                                        <input type="text" id="surname" class="form-control" wire:model.lazy="surname">
                                         @error('surname')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -88,7 +88,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="first_name" class="form-label">First Name</label>
                                         <input type="text" id="first_name" class="form-control"
-                                            wire:model="first_name">
+                                            wire:model.lazy="first_name">
                                         @error('first_name')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -96,7 +96,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="other_name" class="form-label">Other Name</label>
                                         <input type="text" id="other_name" class="form-control"
-                                            wire:model="other_name">
+                                            wire:model.lazy="other_name">
                                         @error('other_name')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -104,7 +104,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="usercontact" class="form-label">Contact</label>
                                         <input type="text" id="usercontact" class="form-control"
-                                            wire:model="contact">
+                                            wire:model.lazy="contact">
                                         @error('contact')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -143,7 +143,7 @@
                                         <div class="mb-3">
                                             <label for="current_password" class="form-label">Current Password</label>
                                             <input type="text" id="current_password" class="form-control"
-                                                wire:model="current_password">
+                                                wire:model.lazy="current_password">
                                             @error('current_password')
                                                 <div class="text-danger text-small">{{ $message }}</div>
                                             @enderror
@@ -151,7 +151,7 @@
                                         <div class="mb-3">
                                             <label for="password" class="form-label">New Password</label>
                                             <input type="password" id="password" class="form-control"
-                                                wire:model="password">
+                                                wire:model.lazy="password">
                                             @error('password')
                                                 <div class="text-danger text-small">{{ $message }}</div>
                                             @enderror

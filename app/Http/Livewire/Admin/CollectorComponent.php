@@ -177,10 +177,10 @@ class CollectorComponent extends Component
     public function render()
     {
         $collectors = Collector::search($this->search)
-        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')
+        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities??[])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
 
         return view('livewire.admin.collector-component', compact('collectors', 'facilities'))->layout('layouts.app');
     }

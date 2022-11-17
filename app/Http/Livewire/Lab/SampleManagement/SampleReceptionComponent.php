@@ -363,7 +363,7 @@ class SampleReceptionComponent extends Component
     {
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
 
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
 
         $sampleReceptions = SampleReception::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)

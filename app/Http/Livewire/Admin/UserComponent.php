@@ -194,6 +194,7 @@ class UserComponent extends Component
         $this->first_name = $user->first_name;
         $this->other_name = $user->other_name;
         $this->name = $user->name;
+        $this->emp_no = $user->emp_no;
         $this->contact = $user->contact;
         $this->email = $user->email;
         $this->laboratory_id = $user->laboratory_id;
