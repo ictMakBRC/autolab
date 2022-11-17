@@ -103,14 +103,14 @@
                                 <div class="mb-3">
                                     <label for="platformName" class="form-label">Platform</label>
                                     <input type="text" id="platformName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="platformRange" class="form-label">Range</label>
-                                    <input type="text" id="platformRange" class="form-control" wire:model="range">
+                                    <input type="text" id="platformRange" class="form-control" wire:model.lazy="range">
                                     @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -134,9 +134,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
@@ -182,7 +179,7 @@
                                 <div class="mb-3">
                                     <label for="platformName2" class="form-label">Platform</label>
                                     <input type="text" id="platformName2" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -191,7 +188,7 @@
                                 <div class="mb-3">
                                     <label for="platformRange2" class="form-label">Range</label>
                                     <input type="text" id="platformRange2" class="form-control"
-                                        wire:model="range">
+                                        wire:model.lazy="range">
                                     @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

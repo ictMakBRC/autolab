@@ -55,7 +55,7 @@
                                     <div class="mb-3 col-md-2">
                                         <label for="date_delivered" class="form-label">Date/Time Delivered</label>
                                         <input id="date_delivered" type="datetime-local" class="form-control"
-                                            wire:model="date_delivered">
+                                            wire:model.lazy="date_delivered">
                                         @error('date_delivered')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -63,7 +63,7 @@
                                     <div class="mb-3 col-md-2">
                                         <label for="delivered" class="form-label">Samples Delivered</label>
                                         <input type="number" id="delivered" class="form-control"
-                                            wire:model="samples_delivered">
+                                            wire:model.lazy="samples_delivered">
                                         @error('samples_delivered')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="mb-1 col-md-4">
                                         <label for="comment" class="form-label">Comment</label>
-                                        <textarea type="text" id="comment" class="form-control" wire:model="comment"></textarea>
+                                        <textarea type="text" id="comment" class="form-control" wire:model.lazy="comment"></textarea>
                                         @error('comment')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -392,7 +392,7 @@
                                         <div class="mb-3">
                                             <label for="facilityName" class="form-label">Facility Name</label>
                                             <input type="text" id="facilityName" class="form-control"
-                                                name="facilityname" wire:model="facilityname">
+                                                name="facilityname" wire:model.lazy="facilityname">
                                             @error('facilityname')
                                                 <div class="text-danger text-small">{{ $message }}</div>
                                             @enderror
@@ -464,7 +464,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="courierName" class="form-label">Name</label>
                                         <input type="text" id="courierName" class="form-control"
-                                            name="couriername" wire:model="couriername">
+                                            name="couriername" wire:model.lazy="couriername">
                                         @error('couriername')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -472,7 +472,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="couriercontact" class="form-label">Contact</label>
                                         <input type="text" id="couriercontact" class="form-control"
-                                            wire:model="couriercontact">
+                                            wire:model.lazy="couriercontact">
                                         @error('couriercontact')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -480,7 +480,7 @@
                                     <div class="mb-3 col-md-4">
                                         <label for="courierEmail" class="form-label">Email</label>
                                         <input type="email" id="courierEmail" class="form-control"
-                                            wire:model="courieremail">
+                                            wire:model.lazy="courieremail">
                                         @error('courieremail')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror

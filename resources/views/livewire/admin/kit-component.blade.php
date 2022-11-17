@@ -103,7 +103,7 @@
                                 <div class="mb-3">
                                     <label for="kitName" class="form-label">Kit</label>
                                     <input type="text" id="kitName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -189,7 +189,7 @@
                                 <div class="mb-3">
                                     <label for="kitName" class="form-label">Kit</label>
                                     <input type="text" id="kitName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

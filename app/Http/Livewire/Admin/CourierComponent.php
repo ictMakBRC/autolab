@@ -50,6 +50,11 @@ class CourierComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'is_active' => 'status'
+    ];
+    
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -177,10 +182,10 @@ class CourierComponent extends Component
     public function render()
     {
         $couriers = Courier::search($this->search)
-        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->with('facility', 'study')
+        ->whereIn('facility_id', auth()->user()->laboratory->associated_facilities??[])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
 
         return view('livewire.admin.courier-component', compact('couriers', 'facilities'))->layout('layouts.app');
     }

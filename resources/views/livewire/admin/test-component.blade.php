@@ -56,14 +56,14 @@
                                 </div>
                                 <div class="mb-2 col-md-4">
                                     <label for="name" class="form-label">Name</label>
-                                    <input type="text" id="name" class="form-control" wire:model="name">
+                                    <input type="text" id="name" class="form-control" wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-2 col-md-2">
                                     <label for="short_code" class="form-label">Short Code</label>
-                                    <input type="text" id="short_code" class="form-control" wire:model="short_code">
+                                    <input type="text" id="short_code" class="form-control" wire:model.lazy="short_code">
                                     @error('short_code')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -73,7 +73,7 @@
                                         <label for="tat" class="form-label">{{ __('TAT') }}</label>
                                         <div class="input-group form-group mb-2">
                                             <input type="number" step="any" class="form-control" id="tat"
-                                                wire:model='tat'>
+                                                wire:model.lazy='tat'>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     Hours
@@ -90,7 +90,7 @@
                                         <label for="price" class="form-label">{{ __('Price') }}</label>
                                         <div class="input-group form-group mb-2">
                                             <input type="number" step="any" class="form-control" id="price"
-                                                wire:model='price'>
+                                                wire:model.lazy='price'>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     UGX
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="mb-2 col-md-2">
                                     <label for="reference_range_min" class="form-label">Min-Ref range</label>
-                                    <input type="number" step="any" wire:model='reference_range_min'
+                                    <input type="number" step="any" wire:model.lazy='reference_range_min'
                                         class="form-control" id="reference_range_min">
                                     @error('reference_range_min')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="mb-2 col-md-2">
                                     <label for="reference_range_max" class="form-label">Max-Ref range</label>
-                                    <input type="number" step="any" wire:model='reference_range_max'
+                                    <input type="number" step="any" wire:model.lazy='reference_range_max'
                                         class="form-control" id="reference_range_max">
                                     @error('reference_range_max')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="precautions" class="form-label">{{ __('Precautions') }}</label>
-                                    <textarea name="precautions" id="precautions" rows="2" wire:model='precautions' class="form-control"
+                                    <textarea name="precautions" id="precautions" rows="2" wire:model.lazy='precautions' class="form-control"
                                         placeholder="{{ __('Precautions') }}"></textarea>
                                     @error('precautions')
                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -192,7 +192,7 @@
                                                         </span>
                                                     </div>
                                                     <input type="text" class="form-control"
-                                                        id="measurable_result_uom" wire:model="measurable_result_uom">
+                                                        id="measurable_result_uom" wire:model.lazy="measurable_result_uom">
                                                 </div>
                                             </div>
                                         @endif

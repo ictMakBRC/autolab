@@ -42,6 +42,10 @@ class LaboratoryComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'is_active' => 'status'
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [

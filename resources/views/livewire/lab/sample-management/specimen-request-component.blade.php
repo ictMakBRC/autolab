@@ -117,7 +117,7 @@
                                                     <label for="age" class="form-label">Age<span
                                                             class="text-danger">*</span></label>
                                                     <input type="number" id="age" class="form-control"
-                                                        wire:model="age">
+                                                        wire:model.lazy="age">
                                                     @error('age')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -141,7 +141,7 @@
                                                     <input type="text" id="address"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="address">
+                                                        wire:model.lazy="address">
                                                     @error('address')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -152,7 +152,7 @@
                                                     <input type="text" id="contact"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="contact">
+                                                        wire:model.lazy="contact">
                                                     @error('contact')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -163,7 +163,7 @@
                                                     <input type="text" id="nok_contact"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="nok_contact">
+                                                        wire:model.lazy="nok_contact">
                                                     @error('nok_contact')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -174,7 +174,7 @@
                                                     <input type="text" id="nok_address"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="nok_address">
+                                                        wire:model.lazy="nok_address">
                                                     @error('nok_address')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -183,7 +183,7 @@
                                                 <div class="mb-1 col-md-6">
                                                     <label for="clinical_notes" class="form-label">Clinical
                                                         Notes</label>
-                                                    <textarea type="text" id="clinical_notes" class="form-control" wire:model="clinical_notes"></textarea>
+                                                    <textarea type="text" id="clinical_notes" class="form-control" wire:model.lazy="clinical_notes"></textarea>
                                                     @error('clinical_notes')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -217,7 +217,7 @@
                                                     <input type="text" id="nin_number"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        size="14" wire:model="nin_number">
+                                                        size="14" wire:model.lazy="nin_number">
                                                     @error('nin_number')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -228,7 +228,7 @@
                                                     <input type="text" id="surname"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="surname">
+                                                        wire:model.lazy="surname">
                                                     @error('surname')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -238,7 +238,7 @@
                                                     <input type="text" id="last_name"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="first_name">
+                                                        wire:model.lazy="first_name">
                                                     @error('first_name')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -248,7 +248,7 @@
                                                     <input type="text" id="other_name"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="other_name">
+                                                        wire:model.lazy="other_name">
                                                     @error('other_name')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -257,7 +257,7 @@
                                                 <div class="mb-3 col-md-2">
                                                     <label for="dob" class="form-label">DoB</label>
                                                     <input type="date" id="dob" class="form-control"
-                                                        wire:model="dob">
+                                                        wire:model.lazy="dob">
                                                     @error('dob')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -290,7 +290,7 @@
                                                 <div class="mb-3 col-md-2">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" id="email" class="form-control"
-                                                        wire:model="email">
+                                                        wire:model.lazy="email">
                                                     @error('email')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -301,7 +301,7 @@
                                                     <input type="text" id="birth_place"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="birth_place">
+                                                        wire:model.lazy="birth_place">
                                                     @error('birth_place')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -312,7 +312,7 @@
                                                     <input type="text" id="religious-affiliation"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="religious_affiliation">
+                                                        wire:model.lazy="religious_affiliation">
                                                     @error('religious_affiliation')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -323,7 +323,7 @@
                                                     <input type="text" id="occupation"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="occupation">
+                                                        wire:model.lazy="occupation">
                                                     @error('occupation')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -351,7 +351,7 @@
                                                     <input type="text" id="nok"
                                                         class="form-control text-uppercase"
                                                         onkeyup="this.value = this.value.toUpperCase();"
-                                                        wire:model="nok">
+                                                        wire:model.lazy="nok">
                                                     @error('nok')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
@@ -361,7 +361,7 @@
                                                     <label for="nok_relationship" class="form-label">NoK
                                                         Relationship</label>
                                                     <select class="form-select select2" data-toggle="select2"
-                                                        id="nok_relationship" wire:model="nok_relationship">
+                                                        id="nok_relationship" wire:model.lazy="nok_relationship">
                                                         <option selected value="">Select</option>
                                                         @include('layouts.nokRelationships')
                                                     </select>
@@ -441,7 +441,7 @@
                                                 <label for="date_collected" class="form-label">Collection
                                                     Date/Time</label>
                                                 <input id="date_collected" type="datetime-local" class="form-control"
-                                                    wire:model="date_collected"
+                                                    wire:model.lazy="date_collected"
                                                     @if ($entry_type == 'Isolate') disabled @endif>
                                                 @error('date_collected')
                                                     <div class="text-danger text-small">{{ $message }}</div>
@@ -469,7 +469,7 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_identity" class="form-label">Sample ID</label>
                                                 <input id="sample_identity" type="text" class="form-control"
-                                                    wire:model="sample_identity">
+                                                    wire:model.lazy="sample_identity">
                                                 @error('sample_identity')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror

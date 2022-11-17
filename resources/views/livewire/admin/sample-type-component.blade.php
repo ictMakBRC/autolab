@@ -102,7 +102,7 @@
                         <div class="row">
                             <div class="col-md-12 form-group mb-3">
                                 <label for="name" class="form-label">Sample Type</label>
-                                <input type="text" id="type" wire:model="type" class="form-control">
+                                <input type="text" id="type" wire:model.lazy="type" class="form-control">
                                 @error('type')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -155,7 +155,7 @@
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <label for="type" class="form-label">Sample Type</label>
-                                <input type="text" id="type" wire:model="type" class="form-control">
+                                <input type="text" id="type" wire:model.lazy="type" class="form-control">
                                 @error('type')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
