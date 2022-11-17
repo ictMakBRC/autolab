@@ -50,6 +50,12 @@ class RequesterComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'study_id'=>'study',
+        'is_active' => 'status'
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [

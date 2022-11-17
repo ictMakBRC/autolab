@@ -133,6 +133,12 @@ class SpecimenRequestComponent extends Component
 
     public $tests;
 
+    protected $validationAttributes = [
+        'study_id' => 'study',
+        'sample_type_id'=>'sample_type'
+
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [

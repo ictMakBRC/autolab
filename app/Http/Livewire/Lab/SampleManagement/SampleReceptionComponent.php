@@ -114,6 +114,11 @@ class SampleReceptionComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'courier_id'=>'courier'
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [

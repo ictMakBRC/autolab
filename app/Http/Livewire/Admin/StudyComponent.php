@@ -44,6 +44,11 @@ class StudyComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'is_active' => 'status'
+    ];
+    
     public function updated($fields)
     {
         $this->validateOnly($fields, [

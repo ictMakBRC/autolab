@@ -73,6 +73,12 @@ class UserComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'laboratory_id' => 'laboratory',
+        'designation_id'=>'designation',
+        'is_active' => 'status'
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
