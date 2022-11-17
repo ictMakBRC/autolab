@@ -3,11 +3,10 @@
 namespace App\Exports;
 
 use App\Models\Admin\Test;
-use App\Models\TestCategory;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class TestsExport implements FromCollection, WithMapping, WithHeadings
 {
@@ -49,7 +48,7 @@ class TestsExport implements FromCollection, WithMapping, WithHeadings
             'Name',
             'Category',
             'Short Code',
-            'Price'
+            'Price',
         ];
     }
 }

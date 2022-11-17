@@ -38,12 +38,17 @@ class StudyComponent extends Component
     public $edit_id;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'is_active' => 'status'
+    ];
+    
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -183,10 +188,10 @@ class StudyComponent extends Component
     public function render()
     {
         $studies = Study::search($this->search)
-        ->with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)
+        ->with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities??[])->where('is_active', 1)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->where('is_active', 1)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->where('is_active', 1)->latest()->get();
 
         return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
     }

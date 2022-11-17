@@ -24,7 +24,7 @@ class TestApprovalComponent extends Component
     public $resultId;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -58,10 +58,10 @@ class TestApprovalComponent extends Component
         if ($this->viewReport) {
             $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Reviewed'])->first();
         } else {
-            $testResults = TestResult::search($this->search)
+            $testResults = TestResult::resultSearch($this->search, 'Reviewed')
             ->where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Reviewed')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-            ->simplePaginate($this->perPage);
+            ->paginate($this->perPage);
         }
 
         return view('livewire.lab.sample-management.test-approval-component', compact('testResults'));

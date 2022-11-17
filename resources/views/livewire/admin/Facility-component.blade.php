@@ -80,7 +80,7 @@
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
-                    <  <div class="row mt-4">
+                    <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="btn-group float-end">
                                 {{ $facilities->links('vendor.livewire.bootstrap') }}
@@ -109,7 +109,7 @@
                                 <div class="mb-3">
                                     <label for="facilityName" class="form-label">Facility Name</label>
                                     <input type="text" id="facilityName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -203,7 +203,7 @@
                                 <div class="mb-3">
                                     <label for="facilityName2" class="form-label">Facility Name</label>
                                     <input type="text" id="facilityName2" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

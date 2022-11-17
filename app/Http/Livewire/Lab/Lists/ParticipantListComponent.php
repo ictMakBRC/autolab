@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
+use App\Exports\ParticipantsExport;
 use App\Models\Participant;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -20,11 +21,18 @@ class ParticipantListComponent extends Component
 
     public $activeRow;
 
+    public $export;
+
     protected $paginationTheme = 'bootstrap';
     // public function export()
     // {
     //     return (new CollectorsExport())->download('sample_collectors.xlsx');
     // }
+
+    public function export()
+    {
+        return (new ParticipantsExport())->download('Participants.xlsx');
+    }
 
     public function updatingSearch()
     {

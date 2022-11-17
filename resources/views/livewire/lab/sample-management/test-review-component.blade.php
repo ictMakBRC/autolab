@@ -72,7 +72,6 @@
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Preliminary Result Report"
-                                                        target="_blank"
                                                         class="text-info">{{ $testResult->test->name }}</a>
                                                 </td>
                                                 <td>

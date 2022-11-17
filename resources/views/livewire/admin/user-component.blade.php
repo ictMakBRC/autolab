@@ -129,42 +129,42 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="emp_no" class="form-label">Employee No</label>
-                                <input type="text" id="emp_no" class="form-control" wire:model="emp_no">
+                                <input type="text" id="emp_no" class="form-control" wire:model.lazy="emp_no">
                                 @error('emp_no')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="surname" class="form-label">Surname</label>
-                                <input type="text" id="surname" class="form-control" wire:model="surname">
+                                <input type="text" id="surname" class="form-control" wire:model.lazy="surname">
                                 @error('surname')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" id="first_name" class="form-control" wire:model="first_name">
+                                <input type="text" id="first_name" class="form-control" wire:model.lazy="first_name">
                                 @error('first_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="other_name" class="form-label">Other Name</label>
-                                <input type="text" id="other_name" class="form-control" wire:model="other_name">
+                                <input type="text" id="other_name" class="form-control" wire:model.lazy="other_name">
                                 @error('other_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="usercontact" class="form-label">Contact</label>
-                                <input type="text" id="usercontact" class="form-control" wire:model="contact">
+                                <input type="text" id="usercontact" class="form-control" wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="userEmail" class="form-label">Email</label>
-                                <input type="email" id="userEmail" class="form-control" wire:model="email">
+                                <input type="email" id="userEmail" class="form-control" wire:model.lazy="email">
                                 @error('email')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -300,42 +300,42 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="emp_no" class="form-label">Employee No</label>
-                                <input type="text" id="emp_no" class="form-control" wire:model="emp_no">
+                                <input type="text" id="emp_no" class="form-control" wire:model.lazy="emp_no">
                                 @error('emp_no')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="surname" class="form-label">Surname</label>
-                                <input type="text" id="surname" class="form-control" wire:model="surname">
+                                <input type="text" id="surname" class="form-control" wire:model-.lazy="surname">
                                 @error('surname')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" id="first_name" class="form-control" wire:model="first_name">
+                                <input type="text" id="first_name" class="form-control" wire:model.lazy="first_name">
                                 @error('first_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="other_name" class="form-label">Other Name</label>
-                                <input type="text" id="other_name" class="form-control" wire:model="other_name">
+                                <input type="text" id="other_name" class="form-control" wire:model.lazy="other_name">
                                 @error('other_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="usercontact" class="form-label">Contact</label>
-                                <input type="text" id="usercontact" class="form-control" wire:model="contact">
+                                <input type="text" id="usercontact" class="form-control" wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="userEmail" class="form-label">Email</label>
-                                <input type="email" id="userEmail" class="form-control" wire:model="email">
+                                <input type="email" id="userEmail" class="form-control" wire:model.lazy="email">
                                 @error('email')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

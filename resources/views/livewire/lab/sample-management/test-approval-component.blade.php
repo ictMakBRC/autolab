@@ -74,7 +74,6 @@
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Preliminary Result Report"
-                                                        target="_blank"
                                                         class="
                                                         @if ($testResult->test->tat==48)
                                                         text-danger

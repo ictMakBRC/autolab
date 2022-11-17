@@ -106,14 +106,14 @@
                                 <div class="mb-3">
                                     <label for="laboratoryName" class="form-label">Laboratory Name</label>
                                     <input type="text" id="laboratoryName" class="form-control" name="name"
-                                        wire:model="laboratory_name">
+                                        wire:model.lazy="laboratory_name">
                                     @error('laboratory_name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="shortcod" class="form-label">Short Code</label>
-                                    <input type="text" id="shortcod" class="form-control" wire:model="short_code">
+                                    <input type="text" id="shortcod" class="form-control" wire:model.lazy="short_code">
                                     @error('short_code')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" name="description" wire:model="description"></textarea>
+                                    <textarea class="form-control" id="description" rows="3" name="description" wire:model.lazy="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -144,9 +144,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
@@ -191,7 +188,7 @@
                                 <div class="mb-3">
                                     <label for="laboratoryName2" class="form-label">Laboratory Name</label>
                                     <input type="text" id="laboratoryName2" class="form-control"
-                                        wire:model="laboratory_name">
+                                        wire:model.lazy="laboratory_name">
                                     @error('laboratory_name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -199,7 +196,7 @@
                                 <div class="mb-3">
                                     <label for="shortcode" class="form-label">Short Code</label>
                                     <input type="text" id="shortcode" class="form-control"
-                                        wire:model="short_code">
+                                        wire:model.lazy="short_code">
                                     @error('short_code')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

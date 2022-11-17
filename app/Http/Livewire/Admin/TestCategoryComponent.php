@@ -4,10 +4,10 @@ namespace App\Http\Livewire\Admin;
 
 //use App\Models\TestCategory;
 
-use Livewire\Component;
-use App\Models\TestCategory;
-use Livewire\WithPagination;
 use App\Exports\TestCategoriesExport;
+use App\Models\TestCategory;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestCategoryComponent extends Component
 {
@@ -30,10 +30,12 @@ class TestCategoryComponent extends Component
     public $delete_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new TestCategoriesExport())->download('Test_categories.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();

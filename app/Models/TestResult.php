@@ -39,6 +39,8 @@ class TestResult extends Model
         'reviewed_at',
         'approved_at',
         'status',
+        'tracker',
+        'download_count',
         'created_by',
         'creator_lab',
     ];
@@ -83,6 +85,7 @@ class TestResult extends Model
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
+                $model->tracker = '#'.time().rand(10, 99);
             });
 
             self::updating(function ($model) {
@@ -91,51 +94,93 @@ class TestResult extends Model
         }
     }
 
-    public static function search($search)
-    {
-        return empty($search) ? static::query()
-        : static::query()
-            ->where('creator_lab', auth()->user()->laboratory_id)
-            ->where('result', 'like', '%'.$search.'%')
-            ->orWhereDate('created_at', date('Y-m-d', strtotime($search)))
-            ->orWhereHas('sample', function ($query) use ($search) {
-                $query->where('sample_identity', 'like', '%'.$search.'%')
-                ->orWhere('lab_no', 'like', '%'.$search.'%')
-                ->orWhereHas('requester', function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                });
-            })
-            ->orWhereHas('sample.participant', function ($query) use ($search) {
-                $query->where('identity', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('sample.sampleReception', function ($query) use ($search) {
-                $query->where('batch_no', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('sample.sampleType', function ($query) use ($search) {
-                $query->where('type', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('test', function ($query) use ($search) {
-                $query->where('name', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('performer', function ($query) use ($search) {
-                $query->where('surname', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('reviewer', function ($query) use ($search) {
-                $query->where('surname', 'like', '%'.$search.'%');
-            })
-            ->orWhereHas('approver', function ($query) use ($search) {
-                $query->where('surname', 'like', '%'.$search.'%');
-            });
-    }
+    // public static function search($search)
+    // {
+    //     return empty($search) ? static::query()
+    //     : static::query()
+    //         ->where('creator_lab', auth()->user()->laboratory_id)
+    //         ->where('result', 'like', '%'.$search.'%')
+    //         ->orWhereDate('created_at', date('Y-m-d', strtotime($search)))
+    //         ->orWhereHas('sample', function ($query) use ($search) {
+    //             $query->where('sample_identity', 'like', '%'.$search.'%')
+    //             ->orWhere('lab_no', 'like', '%'.$search.'%')
+    //             ->orWhereHas('requester', function ($query) use ($search) {
+    //                 $query->where('name', 'like', '%'.$search.'%');
+    //             });
+    //         })
+    //         ->orWhereHas('sample.participant', function ($query) use ($search) {
+    //             $query->where('identity', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('sample.sampleReception', function ($query) use ($search) {
+    //             $query->where('batch_no', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('sample.sampleType', function ($query) use ($search) {
+    //             $query->where('type', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('test', function ($query) use ($search) {
+    //             $query->where('name', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('performer', function ($query) use ($search) {
+    //             $query->where('surname', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('reviewer', function ($query) use ($search) {
+    //             $query->where('surname', 'like', '%'.$search.'%');
+    //         })
+    //         ->orWhereHas('approver', function ($query) use ($search) {
+    //             $query->where('surname', 'like', '%'.$search.'%');
+    //         });
+    // }
 
-    public static function reviewsearch($search)
+    public static function resultSearch($search, $status)
     {
         return empty($search) ? static::query()
         : static::query()
             ->where('creator_lab', auth()->user()->laboratory_id)
-            ->where('status', 'Pending Review')
-            ->whereHas('sample.sampleReception', function ($query) use ($search) {
-                $query->where('batch_no', 'like', '%'.$search.'%');
-            });
+            ->where(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample.participant', function ($query) use ($search) {
+                        $query->where('identity', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereDate('created_at', date('Y-m-d', strtotime($search)));
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample.study', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample.sampleReception', function ($query) use ($search) {
+                        $query->where('batch_no', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample.requester', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('test', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%');
+                    });
+                }
+            );
     }
 }

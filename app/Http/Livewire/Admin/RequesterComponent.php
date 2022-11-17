@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use Livewire\Component;
+use App\Exports\RequestersExport;
 use App\Models\Facility;
 use App\Models\Requester;
+use App\Models\Study;
+use Exception;
+use Livewire\Component;
 use Livewire\WithPagination;
-use App\Exports\RequestersExport;
 
 class RequesterComponent extends Component
 {
@@ -39,14 +39,22 @@ class RequesterComponent extends Component
     public $study_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new RequestersExport())->download('requesters.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'study_id'=>'study',
+        'is_active' => 'status'
+    ];
 
     public function updated($fields)
     {
@@ -181,7 +189,7 @@ class RequesterComponent extends Component
         ->whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }

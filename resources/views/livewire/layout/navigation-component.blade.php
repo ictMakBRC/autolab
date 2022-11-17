@@ -87,7 +87,7 @@
                                 <h5 class="mb-0">Home</h5>
                             </div>
                         </div>
-                        <a href="{{ route('super.dashboard') }}" class="list-group-item"><i
+                        <a href="{{ route('dashboard') }}" class="list-group-item"><i
                                 class="bi bi-house-door-fill"></i>Dashboard</a>
                     </div>
                 </div>

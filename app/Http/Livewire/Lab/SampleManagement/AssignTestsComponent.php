@@ -43,7 +43,7 @@ class AssignTestsComponent extends Component
     public $backlog;
 
     protected $paginationTheme = 'bootstrap';
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -140,11 +140,13 @@ class AssignTestsComponent extends Component
 
     public function render()
     {
-        $samples = Sample::search($this->search)
-        ->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])->whereIn('status', ['Accessioned', 'Processing'])
+        $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
+        ->whereIn('status', ['Accessioned', 'Processing'])
+        ->where('creator_lab', auth()->user()->laboratory_id)
+        ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id]);
+        ->paginate($this->perPage);
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
 
         return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests'));

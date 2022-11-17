@@ -26,6 +26,8 @@ return new class extends Migration
             $table->dateTime('reviewed_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->string('status')->nullable();
+            $table->string('tracker', 40)->nullable();
+            $table->integer('download_count')->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();
             $table->timestamps();

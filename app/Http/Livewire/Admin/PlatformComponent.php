@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Exports\PlatformsExport;
+use App\Models\Platform;
 use Exception;
 use Livewire\Component;
-use App\Models\Platform;
 use Livewire\WithPagination;
-use App\Exports\PlatformsExport;
 
 class PlatformComponent extends Component
 {
@@ -29,14 +29,20 @@ class PlatformComponent extends Component
     public $delete_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public function export()
     {
         return (new PlatformsExport())->download('platforms.xlsx');
     }
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
+    protected $validationAttributes = [
+        'is_active' => 'status'
+    ];
 
     public function updated($fields)
     {

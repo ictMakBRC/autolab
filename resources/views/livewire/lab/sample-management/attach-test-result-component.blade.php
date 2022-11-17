@@ -63,7 +63,7 @@
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result</label>
                                                                                 <select class="form-select"
-                                                                                    id="result" wire:model="result">
+                                                                                    id="result" wire:model.lazy="result">
                                                                                     <option selected value="">
                                                                                         Select</option>
                                                                                     @foreach ($test->absolute_results as $result)
@@ -80,7 +80,7 @@
                                                                         @elseif($test->result_type == 'Text')
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result</label>
-                                                                                <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}" wire:model="result"></textarea>
+                                                                                <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}" wire:model.lazy="result"></textarea>
                                                                                 @error('result')
                                                                                     <div class="text-danger text-small">
                                                                                         {{ $message }}</div>
@@ -97,7 +97,7 @@
                                                                                             step="0.001"
                                                                                             class="form-control"
                                                                                             id="result"
-                                                                                            wire:model='result'>
+                                                                                            wire:model.lazy='result'>
                                                                                         <div class="input-group-append">
                                                                                             <span
                                                                                                 class="input-group-text">
@@ -130,7 +130,7 @@
                                                                                     Link(URL)</label>
                                                                                 <input type="text"
                                                                                     class="form-control"
-                                                                                    wire:model="link"
+                                                                                    wire:model.lazy="link"
                                                                                     placeholder="Enter valid link">
                                                                                 @error('link')
                                                                                     <div class="text-danger text-small">
@@ -157,7 +157,7 @@
                                                                                     @endforeach
                                                                                 </select>
                                                                             @else
-                                                                                <textarea wire:model="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}"></textarea>
+                                                                                <textarea wire:model.lazy="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}"></textarea>
                                                                             @endif
                                                                             @error('comment')
                                                                                 <div class="text-danger text-small">

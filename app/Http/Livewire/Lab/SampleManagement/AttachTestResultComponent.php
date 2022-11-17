@@ -87,7 +87,14 @@ class AttachTestResultComponent extends Component
             $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
             $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
         } else {
-            $this->attachmentPath = null;
+            $test = Test::findOrfail($this->test_id);
+            if ($test->result_type == 'File') {
+                $this->validate([
+                    'attachment' => ['required'],
+                ]);
+            } else {
+                $this->attachmentPath = null;
+            }
         }
 
         $testResult = new TestResult();
