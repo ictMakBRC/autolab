@@ -103,7 +103,7 @@
                                 <div class="mb-3">
                                     <label for="designationName" class="form-label">Designation Name</label>
                                     <input type="text" id="designationName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" rows="3" name="description" wire:model="description"></textarea>
+                                    <textarea class="form-control" id="description" rows="3" name="description" wire:model.lazy="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -181,7 +181,7 @@
                                 <div class="mb-3">
                                     <label for="designation_name2" class="form-label">Designation Name</label>
                                     <input type="text" id="designation_name2" class="form-control"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description2" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description2" rows="3" wire:model="description"></textarea>
+                                    <textarea class="form-control" id="description2" rows="3" wire:model.lazy="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

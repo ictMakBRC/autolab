@@ -111,14 +111,14 @@
                             <div class="mb-3 col-md-4">
                                 <label for="requesterName" class="form-label">Name</label>
                                 <input type="text" id="requesterName" class="form-control" name="name"
-                                    wire:model="name">
+                                    wire:model.lazy="name">
                                 @error('name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="requestercontact" class="form-label">Contact</label>
-                                <input type="text" id="requestercontact" class="form-control" wire:model="contact">
+                                <input type="text" id="requestercontact" class="form-control" wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -126,7 +126,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="requesterEmail" class="form-label">Email</label>
                                 <input type="email" id="requesterEmail" class="form-control" name="email"
-                                    wire:model="email">
+                                    wire:model.lazy="email">
                                 @error('email')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -181,9 +181,6 @@
                             <x-button type="button" class="btn btn-danger" wire:click="close()"
                                 data-bs-dismiss="modal">{{ __('Close') }}</x-button>
                         </div>
-                        {{-- <div class="d-grid mb-0 text-center">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div> --}}
                     </form>
                 </div>
             </div> <!-- end modal content-->
@@ -228,7 +225,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="requesterName2" class="form-label">Name</label>
                                 <input type="text" id="requesterName2" class="form-control" name="name"
-                                    wire:model="name">
+                                    wire:model.lazy="name">
                                 @error('name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -236,7 +233,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="requestercontact2" class="form-label">Contact</label>
                                 <input type="text" id="requestercontact2" class="form-control"
-                                    wire:model="contact">
+                                    wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -244,7 +241,7 @@
                             <div class="mb-3 col-md-4">
                                 <label for="requesterEmail2" class="form-label">Email</label>
                                 <input type="email" id="requesterEmail2" class="form-control" name="email"
-                                    wire:model="email">
+                                    wire:model.lazy="email">
                                 @error('email')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

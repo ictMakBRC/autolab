@@ -50,6 +50,12 @@ class RequesterComponent extends Component
         $this->resetPage();
     }
 
+    protected $validationAttributes = [
+        'facility_id' => 'facility',
+        'study_id'=>'study',
+        'is_active' => 'status'
+    ];
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -183,7 +189,7 @@ class RequesterComponent extends Component
         ->whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities)->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }

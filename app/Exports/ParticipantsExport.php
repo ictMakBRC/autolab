@@ -59,6 +59,7 @@ class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
             $participant->nok_relationship ?? 'N/A',
             $participant->facility->name ?? 'N/A',
             $participant->study->name ?? 'N/A',
+            $participant->entry_type ?? 'N/A',
         ];
     }
 
@@ -92,6 +93,7 @@ class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
             'NOK relationship',
             'Facility',
             'Study Name',
+            'Entry Type',
         ];
     }
 }

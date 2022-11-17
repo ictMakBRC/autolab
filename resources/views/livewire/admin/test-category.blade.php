@@ -88,7 +88,7 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="name" class="form-label">Category name</label>
-                            <input type="text" name="category_name" id="category_name" wire:model="category_name"
+                            <input type="text" name="category_name" id="category_name" wire:model.lazy="category_name"
                                 class="form-control">
                             @error('category_name')
                                 <div class="text-danger text-small">{{ $message }}</div>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="email" class="form-label">Description</label>
-                            <input type="text" name="description" id="description" wire:model="description"
+                            <input type="text" name="description" id="description" wire:model.lazy="description"
                                 class="form-control">
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>
@@ -127,7 +127,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name" class="form-label">Category name</label>
-                            <input type="text" name="category_name" id="category_name" wire:model="category_name"
+                            <input type="text" name="category_name" id="category_name" wire:model.lazy="category_name"
                                 class="form-control">
                             @error('category_name')
                                 <div class="text-danger text-small">{{ $message }}</div>
@@ -135,7 +135,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email" class="form-label">Description</label>
-                            <input type="text" name="description" id="description" wire:model="description"
+                            <input type="text" name="description" id="description" wire:model.lazy="description"
                                 class="form-control">
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>

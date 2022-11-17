@@ -106,7 +106,7 @@
                                 <div class="mb-3">
                                     <label for="studyName" class="form-label">Study/Project Name(Acronym)</label>
                                     <input type="text" id="studyName" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -114,7 +114,7 @@
 
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea type="text" id="description" class="form-control" name="description" wire:model="description"></textarea>
+                                    <textarea type="text" id="description" class="form-control" name="description" wire:model.lazy="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -197,7 +197,7 @@
                                 <div class="mb-3">
                                     <label for="studyName2" class="form-label">Study/Project Name(Acronym)</label>
                                     <input type="text" id="studyName2" class="form-control" name="name"
-                                        wire:model="name">
+                                        wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -205,7 +205,7 @@
 
                                 <div class="mb-3">
                                     <label for="description2" class="form-label">Description</label>
-                                    <textarea type="text" id="description2" class="form-control" name="description" wire:model="description"></textarea>
+                                    <textarea type="text" id="description2" class="form-control" name="description" wire:model.lazy="description"></textarea>
                                     @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -254,7 +254,6 @@
                         </div>
                     </form>
                 </div>
-
             </div> <!-- end modal content-->
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
