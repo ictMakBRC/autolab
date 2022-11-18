@@ -33,7 +33,7 @@ class UserActivityComponent extends Component
 
     public function filterLogs()
     {
-        $logs = Activity::select('*')->with('causer')
+        $logs = Activity::select('*')->whereNotNull('causer_id')->with('causer')
                     ->when($this->causer != 0, function ($query) {
                         $query->where('causer_id', $this->causer);
                     }, function ($query) {

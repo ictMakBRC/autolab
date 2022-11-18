@@ -115,7 +115,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-3 cursor-pointer">
-                                                    <img src="{{ $log->causer!=null? asset('storage/' . $log->causer->avatar) : asset('autolab-assets/images/avatars/avatar-1.png') }}"
+                                                    <img src="{{ $log->causer->avatar? asset('storage/' . $log->causer->avatar) : asset('autolab-assets/images/avatars/avatar-1.png') }}"
                                                         class="rounded-circle" width="44" height="44"
                                                         alt="">
                                                     <div class="">
