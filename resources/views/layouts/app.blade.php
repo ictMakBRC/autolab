@@ -158,6 +158,12 @@
             }
         });
 
+        window.addEventListener('cant-delete', event => {
+            if (event.detail.type == 'warning') {
+                swal('Warning', `${event.detail.message}`, 'warning');
+            }
+        });
+
         window.addEventListener('mismatch', event => {
             if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');

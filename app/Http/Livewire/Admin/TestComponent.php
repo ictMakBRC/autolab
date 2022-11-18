@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\TestsExport;
-use App\Models\Admin\Test;
-use App\Models\TestCategory;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Exports\TestsExport;
+use App\Models\TestCategory;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class TestComponent extends Component
 {
@@ -241,11 +242,15 @@ class TestComponent extends Component
         $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments']);
     }
 
-    public function deleteConfirmation(Test $test)
+    public function deleteConfirmation($id)
     {
-        $this->delete_id = $test->id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

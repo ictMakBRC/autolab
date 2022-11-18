@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\RequestersExport;
+use Exception;
+use App\Models\Study;
+use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Requester;
-use App\Models\Study;
-use Exception;
-use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\RequestersExport;
+use Illuminate\Support\Facades\Auth;
 
 class RequesterComponent extends Component
 {
@@ -155,9 +156,13 @@ class RequesterComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()
@@ -186,7 +191,7 @@ class RequesterComponent extends Component
     public function render()
     {
         $requesters = Requester::search($this->search)
-        ->whereIn('study_id', auth()->user()->laboratory->associated_studies)->with('facility', 'study')
+        ->whereIn('study_id', auth()->user()->laboratory->associated_studies??[])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();

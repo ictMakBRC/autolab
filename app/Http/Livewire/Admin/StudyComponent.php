@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\StudiesExport;
+use Exception;
+use App\Models\Study;
+use App\Models\Sample;
+use Livewire\Component;
 use App\Models\Facility;
 use App\Models\Laboratory;
-use App\Models\Sample;
-use App\Models\Study;
-use Exception;
-use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\StudiesExport;
+use Illuminate\Support\Facades\Auth;
 
 class StudyComponent extends Component
 {
@@ -122,7 +123,7 @@ class StudyComponent extends Component
             'associated_studies' => 'required',
         ]);
 
-        $associatedStudies = auth()->user()->laboratory->associated_studies;
+        $associatedStudies = auth()->user()->laboratory->associated_studies??[];
         $disassociatedStudies = array_diff($associatedStudies, $this->associated_studies ?? []);
 
         $studyData = [];
@@ -136,7 +137,7 @@ class StudyComponent extends Component
             $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from studies that already have sample information recorded!']);
         } else {
             $laboratory = Laboratory::find(auth()->user()->laboratory_id);
-            $laboratory->associated_studies = $this->associated_studies;
+            $laboratory->associated_studies = $this->associated_studies??[];
             $laboratory->update();
             $this->render();
 
@@ -157,9 +158,13 @@ class StudyComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

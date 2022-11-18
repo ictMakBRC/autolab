@@ -2,19 +2,20 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\UsersExport;
-use App\Helpers\Generate;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
-use App\Notifications\SendPasswordNotification;
 use Exception;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\Password;
+use App\Models\User;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use App\Helpers\Generate;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use App\Exports\UsersExport;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendPasswordNotification;
 
 class UserComponent extends Component
 {
@@ -56,6 +57,8 @@ class UserComponent extends Component
     public $password;
 
     public $delete_id;
+
+    public $edit_id;
 
     public $avatarPath = '';
 
@@ -193,7 +196,7 @@ class UserComponent extends Component
 
     public function editdata($id)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::findOrFail($id);
         $this->edit_id = $user->id;
         $this->title = $user->title;
         $this->surname = $user->surname;
@@ -214,7 +217,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
+        $this->reset(['edit_id','password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
@@ -230,7 +233,7 @@ class UserComponent extends Component
             'is_active' => ['required', 'integer', 'max:3'],
         ]);
 
-        $user = User::find($this->edit_id);
+        $user = User::findOrFail($this->edit_id);
 
         if ($this->avatar != null && $this->signature != null) {
             $this->validate([
@@ -302,9 +305,13 @@ class UserComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

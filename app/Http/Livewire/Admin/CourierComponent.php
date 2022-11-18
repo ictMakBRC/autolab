@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\CouriersExport;
-use App\Models\Courier;
-use App\Models\Facility;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
+use App\Models\Courier;
 use Livewire\Component;
+use App\Models\Facility;
 use Livewire\WithPagination;
+use App\Exports\CouriersExport;
+use Illuminate\Support\Facades\Auth;
 
 class CourierComponent extends Component
 {
@@ -151,9 +152,13 @@ class CourierComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

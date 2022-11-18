@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\FacilityInformation;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+use Spatie\Activitylog\Facades\CauserResolver;
 
 return new class extends Migration
 {
@@ -35,7 +36,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // CauserResolver::setCauser(1);
         $facilityInfo = new FacilityInformation();
+        $facilityInfo->disableLogging();
         $facilityInfo->facility_name = 'Makerere Biomedical Research Centre';
         $facilityInfo->slogan = 'For Effiecency and Productivity';
         $facilityInfo->about = 'Best in Lab practices';
@@ -51,6 +54,7 @@ return new class extends Migration
         $facilityInfo->tin = '101388383';
         $facilityInfo->logo = 'logo.png';
         $facilityInfo->logo2 = 'logo.png';
+        $facilityInfo->created_by = 1;
         $facilityInfo->save();
     }
 

@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\FacilitiesExport;
-use App\Models\Facility;
-use App\Models\Laboratory;
-use App\Models\SampleReception;
 use Exception;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Laboratory;
 use Livewire\WithPagination;
+use App\Models\SampleReception;
+use App\Exports\FacilitiesExport;
+use Illuminate\Support\Facades\Auth;
 
 class FacilityComponent extends Component
 {
@@ -87,7 +88,7 @@ class FacilityComponent extends Component
         $this->validate([
             'associated_facilities' => 'required',
         ]);
-        $associatedFacilites = auth()->user()->laboratory->associated_facilities;
+        $associatedFacilites = auth()->user()->laboratory->associated_facilities??[];
         $disassociatedFacilities = array_diff($associatedFacilites, $this->associated_facilities ?? []);
 
         $facilityData = [];
@@ -100,8 +101,8 @@ class FacilityComponent extends Component
             $this->associated_facilities = $associatedFacilites;
             $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from facilities that already have sample information recorded!']);
         } else {
-            $laboratory = Laboratory::find(auth()->user()->laboratory_id);
-            $laboratory->associated_facilities = $this->associated_facilities;
+            $laboratory = Laboratory::findorFail(auth()->user()->laboratory_id);
+            $laboratory->associated_facilities = $this->associated_facilities??[];
             $laboratory->update();
             $this->render();
 
@@ -155,9 +156,13 @@ class FacilityComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

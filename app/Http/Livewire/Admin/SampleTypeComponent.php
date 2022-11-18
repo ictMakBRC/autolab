@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\SampleTypesExport;
+use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
-use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\SampleTypesExport;
+use Illuminate\Support\Facades\Auth;
 
 class SampleTypeComponent extends Component
 {
@@ -109,9 +110,13 @@ class SampleTypeComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

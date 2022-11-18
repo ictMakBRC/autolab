@@ -7,11 +7,11 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    {{ $participant_id }}
+                                    {{-- {{ $participant_id }} --}}
                                     <span class="text-info">{{ $source_facility }}</span> Specimen Request for Batch
                                     <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
-                                        class="text-danger">{{ $batch_sample_count }}</strong>) 
+                                        class="text-danger">{{ $batch_sample_count }}</strong>)
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
@@ -507,23 +507,53 @@
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
                                             <hr>
-                                            <div class=" col-md-12 ">
-                                                <div class="mb-3 col-md-12">
-                                                    <label for="sampleType" class="form-label">Sample<span
-                                                            class="text-danger">*</span></label>
-                                                    <select class="form-select select2" data-toggle="select2"
-                                                        id="sampleType" wire:model='sample_type_id'>
-                                                        <option selected value="">Select</option>
-                                                        @foreach ($sampleTypes as $sampleType)
-                                                            <option value='{{ $sampleType->id }}'>
-                                                                {{ $sampleType->type }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('sample_type_id')
-                                                        <div class="text-danger text-small">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
+                                            <div class="mb-3 col-md-2">
+                                                <label for="visit" class="form-label">Participant Visit
+                                                    @if ($lastVisit)
+                                                        (<strong class="text-info"> last:
+                                                        </strong>{{ $lastVisit }})
+                                                    @endif
+                                                </label>
+                                                <input id="visit" type="number" class="form-control"
+                                                    wire:model.lazy="visit">
+                                                @error('visit')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
                                             </div>
+                                            <div class="mb-3 col-md-8">
+                                                <label for="sampleType" class="form-label">Sample<span
+                                                        class="text-danger">*</span></label>
+                                                <select class="form-select" id="sampleType"
+                                                    wire:model='sample_type_id'>
+                                                    <option selected value="">Select</option>
+                                                    @foreach ($sampleTypes as $sampleType)
+                                                        <option value='{{ $sampleType->id }}'>
+                                                            {{ $sampleType->type }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('sample_type_id')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-2 col-md-2">
+                                                <div class="form-group">
+                                                    <label for="volume"
+                                                        class="form-label">{{ __('Volume Collected') }}</label>
+                                                    <div class="input-group form-group mb-2">
+                                                        <input type="number" step="any" class="form-control"
+                                                            wire:model.lazy='volume'>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">
+                                                                ml
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @error('volume')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
                                         </div>
                                         <div wire:loading.delay>
                                             <div class="spinner-border text-info" role="status"> <span
@@ -683,7 +713,7 @@
                                                 </td>
                                                 <td>
                                                     @if ($sample && $sample->collector)
-                                                        {{ $sample->collector->name??'N/A' }}
+                                                        {{ $sample->collector->name ?? 'N/A' }}
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
