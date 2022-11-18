@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\CollectorsExport;
-use App\Models\Collector;
-use App\Models\Facility;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Collector;
 use Livewire\WithPagination;
+use App\Exports\CollectorsExport;
+use Illuminate\Support\Facades\Auth;
 
 class CollectorComponent extends Component
 {
@@ -151,9 +152,12 @@ class CollectorComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
     }
 
     public function deleteData()

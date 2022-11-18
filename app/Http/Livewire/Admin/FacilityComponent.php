@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\FacilitiesExport;
-use App\Models\Facility;
-use App\Models\Laboratory;
-use App\Models\SampleReception;
 use Exception;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Laboratory;
 use Livewire\WithPagination;
+use App\Models\SampleReception;
+use App\Exports\FacilitiesExport;
+use Illuminate\Support\Facades\Auth;
 
 class FacilityComponent extends Component
 {
@@ -155,9 +156,13 @@ class FacilityComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()

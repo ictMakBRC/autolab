@@ -2,19 +2,20 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Exports\UsersExport;
-use App\Helpers\Generate;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
-use App\Notifications\SendPasswordNotification;
 use Exception;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\Password;
+use App\Models\User;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use App\Helpers\Generate;
+use App\Models\Laboratory;
+use App\Models\Designation;
+use App\Exports\UsersExport;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendPasswordNotification;
 
 class UserComponent extends Component
 {
@@ -304,9 +305,13 @@ class UserComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        $this->delete_id = $id;
-
-        $this->dispatchBrowserEvent('delete-modal');
+        if (Auth::user()->hasPermission(['manage-users'])){
+            $this->delete_id = $id;
+            $this->dispatchBrowserEvent('delete-modal');
+        }else{
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+        }
+       
     }
 
     public function deleteData()
