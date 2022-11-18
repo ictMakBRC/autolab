@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sample_reception_id');
             $table->unsignedBigInteger('participant_id');
+            $table->integer('visit')->nullable();
             $table->unsignedBigInteger('sample_type_id');
             $table->string('sample_no');
             $table->string('sample_identity');
             $table->string('lab_no')->nullable();
+            $table->double('volume', 8, 3)->nullable();
             $table->unsignedBigInteger('requested_by');
             $table->date('date_requested');
             $table->unsignedBigInteger('collected_by')->nullable();
@@ -35,7 +37,6 @@ return new class extends Migration
             $table->dateTime('date_acknowledged')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
-            // $table->string('entry_type')->default('Participant');
             $table->string('status')->default('Accessioned');
             $table->timestamps();
         });

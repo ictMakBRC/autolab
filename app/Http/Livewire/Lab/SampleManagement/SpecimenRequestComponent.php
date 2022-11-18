@@ -59,6 +59,8 @@ class SpecimenRequestComponent extends Component
 
     public $matched_participant_id;
 
+    public $lastVisit;
+
     //PARTICIPANT INFORMATION
     public $identity;
 
@@ -128,6 +130,10 @@ class SpecimenRequestComponent extends Component
     public $priority;
 
     public $sample_type_id;
+
+    public $visit;
+
+    public $volume;
 
     public $tests_requested = [];
 
@@ -199,7 +205,10 @@ class SpecimenRequestComponent extends Component
         $participant = Participant::where(['identity' => $this->identity, 'facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies)->orWhere(function ($query) {
             $query->where(['identity' => $this->identity, 'facility_id' => $this->facility_id, 'creator_lab' => auth()->user()->laboratory_id]);
         })->first();
+
         if ($participant) {
+            $lastSampleEntry = Sample::where(['participant_id' => $participant->id,'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
+            $this->lastVisit = $lastSampleEntry->visit;
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
             $this->entry_type = $participant->entry_type;
@@ -498,9 +507,11 @@ class SpecimenRequestComponent extends Component
         $sample = new Sample();
         $sample->sample_reception_id = $this->sample_reception_id;
         $sample->participant_id = $this->participant_id;
+        $sample->visit = $this->visit;
         $sample->sample_type_id = $this->sample_type_id;
         $sample->sample_no = Generate::sampleNo();
         $sample->lab_no = Generate::labNo();
+        $sample->volume = $this->volume;
         $sample->requested_by = $this->requested_by;
         $sample->date_requested = $this->date_requested;
         $sample->collected_by = $this->collected_by;
@@ -547,6 +558,8 @@ class SpecimenRequestComponent extends Component
         }
         $this->sample_id = $sample->id;
         $this->sample_type_id = $sample->sample_type_id;
+        $this->visit = $sample->visit;
+        $this->volume = $sample->volume;
         $this->requested_by = $sample->requested_by;
         $this->date_requested = $sample->date_requested;
         $this->collected_by = $sample->collected_by;
@@ -592,6 +605,8 @@ class SpecimenRequestComponent extends Component
 
         $sample = Sample::find($this->sample_id);
         $sample->sample_type_id = $this->sample_type_id;
+        $sample->visit = $this->visit;
+        $sample->volume = $this->volume;
         $sample->requested_by = $this->requested_by;
         $sample->date_requested = $this->date_requested;
         $sample->collected_by = $this->collected_by;
@@ -621,7 +636,7 @@ class SpecimenRequestComponent extends Component
 
     public function resetSampleInformationInputs()
     {
-        $this->reset(['sample_id', 'participant_id', 'sample_type_id', 'sample_identity', 'requested_by',
+        $this->reset(['sample_id', 'participant_id','visit','volume','sample_type_id', 'sample_identity', 'requested_by',
             'date_requested', 'collected_by', 'date_collected', 'study_id', 'sample_is_for', 'priority', 'tests_requested', 'matched_participant_id', 'participantMatch', ]);
     }
 

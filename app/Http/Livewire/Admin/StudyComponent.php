@@ -123,7 +123,7 @@ class StudyComponent extends Component
             'associated_studies' => 'required',
         ]);
 
-        $associatedStudies = auth()->user()->laboratory->associated_studies;
+        $associatedStudies = auth()->user()->laboratory->associated_studies??[];
         $disassociatedStudies = array_diff($associatedStudies, $this->associated_studies ?? []);
 
         $studyData = [];
@@ -137,7 +137,7 @@ class StudyComponent extends Component
             $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from studies that already have sample information recorded!']);
         } else {
             $laboratory = Laboratory::find(auth()->user()->laboratory_id);
-            $laboratory->associated_studies = $this->associated_studies;
+            $laboratory->associated_studies = $this->associated_studies??[];
             $laboratory->update();
             $this->render();
 

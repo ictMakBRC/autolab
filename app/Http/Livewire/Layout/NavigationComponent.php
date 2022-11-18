@@ -110,7 +110,7 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['access-settings'])) {
             $this->designationCount = Designation::where('is_active', 1)->count();
             $this->facilityCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
-            $this->studyCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
+            $this->studyCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->count(); //depends
             $this->requesterCount = Requester::where('is_active', 1)->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->count(); //depends
             $this->collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
             $this->courierCount = Courier::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
