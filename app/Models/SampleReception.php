@@ -77,4 +77,12 @@ class SampleReception extends Model
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->where('batch_no', 'like', '%'.$search.'%');
     }
+
+    public static function targetSearch($search)
+    {
+        return empty(trim($search)) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->where('batch_no',trim($search));
+    }
 }

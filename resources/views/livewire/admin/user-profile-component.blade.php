@@ -9,9 +9,9 @@
                     </div>
                     <div class="text-center mt-4">
                         <h4 class="mb-1">{{ $user->name }}</h4>
-                        <p class="mb-0 text-secondary">{{ $user->designation->name }}</p>
+                        <p class="mb-0 text-secondary">{{ $user->designation->name??'N/A' }}</p>
                         <div class="mt-4"></div>
-                        <h6 class="mb-1">{{ $user->laboratory->laboratory_name }}</h6>
+                        <h6 class="mb-1">{{ $user->laboratory->laboratory_name??'N/A' }}</h6>
                     </div>
                     <hr>
                     <div class="text-start">
@@ -30,11 +30,11 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Contact
-                        <span class="badge bg-info rounded-pill">{{ $user->contact }}</span>
+                        <span class="badge bg-info rounded-pill">{{ $user->contact??'N/A' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Email
-                        <span class="badge bg-info rounded-pill">{{ $user->email }}</span>
+                        <span class="badge bg-info rounded-pill">{{ $user->email??'N/A' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Active

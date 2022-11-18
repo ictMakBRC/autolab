@@ -24,13 +24,47 @@
             </li>
         </ul>
         </div> --}}
+        {{-- <div class="input-group mb-3">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a>
+            </li>
+            <li><a class="dropdown-item" href="#">Another action</a>
+            </li>
+            <li><a class="dropdown-item" href="#">Something else here</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Separated link</a>
+            </li>
+          </ul>
+          <input type="text" class="form-control" aria-label="Text input with dropdown button">
+        </div> --}}
+
             <div class="search-toggle-icon d-xl-none ms-auto">
                 <i class="bi bi-search"></i>
             </div>
             <form class="searchbar d-none d-xl-flex ms-auto">
-                <div class="position-absolute top-50 translate-middle-y search-icon ms-3"><i class="bi bi-search"></i>
+              {{$search}}
+                <div class="input-group">
+                  <button class="btn btn-primary radius-30 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-search"></i></button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item {{$model==='SampleReception'? 'active':''}}" href="javascript: void(0);" wire:click="$set('model','SampleReception')">Batch</a>
+                    </li>
+                    <li><a class="dropdown-item {{$model==='Sample'? 'active':''}}" href="javascript: void(0);" wire:click="$set('model','Sample')">Sample</a>
+                    </li>
+                    <li><a class="dropdown-item {{$model==='Participant'? 'active':''}}" href="javascript: void(0);" wire:click="$set('model','Participant')">Participant</a>
+                    </li>
+                    <li><a class="dropdown-item {{$model==='TestResult'? 'active':''}}" href="javascript: void(0);" wire:click="$set('model','TestResult')">Test Result</a>
+                    </li>
+											<hr class="dropdown-divider">
+										<li><a class="dropdown-item" href="javascript: void(0);" wire:click="resetData()">Clear</a>
+                  </ul>
+                  <input class="form-control" aria-label="Text input search with with selectable target" type="text" placeholder="{{$placeHolder}}" @if (!$searchInputActive)
+                      readonly
+                  @endif wire:model.lazy="search">
                 </div>
-                <input class="form-control" type="text" placeholder="Type here to search">
                 <div class="position-absolute top-50 translate-middle-y d-block d-xl-none search-close-icon"><i
                         class="bi bi-x-lg"></i></div>
             </form>
