@@ -307,7 +307,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="surname" class="form-label">Surname</label>
-                                <input type="text" id="surname" class="form-control" wire:model-.lazy="surname">
+                                <input type="text" id="surname" class="form-control" wire:model.lazy="surname">
                                 @error('surname')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

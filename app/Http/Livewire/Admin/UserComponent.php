@@ -57,6 +57,8 @@ class UserComponent extends Component
 
     public $delete_id;
 
+    public $edit_id;
+
     public $avatarPath = '';
 
     public $signaturePath = '';
@@ -193,7 +195,7 @@ class UserComponent extends Component
 
     public function editdata($id)
     {
-        $user = User::where('id', $id)->first();
+        $user = User::findOrFail($id);
         $this->edit_id = $user->id;
         $this->title = $user->title;
         $this->surname = $user->surname;
@@ -214,7 +216,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
+        $this->reset(['edit_id','password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
@@ -230,7 +232,7 @@ class UserComponent extends Component
             'is_active' => ['required', 'integer', 'max:3'],
         ]);
 
-        $user = User::find($this->edit_id);
+        $user = User::findOrFail($this->edit_id);
 
         if ($this->avatar != null && $this->signature != null) {
             $this->validate([
