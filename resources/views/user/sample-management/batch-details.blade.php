@@ -102,7 +102,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
-                    <a class="navbar-brand" href="#"><img
+                    <a class="navbar-brand" href="{{ route('dashboard') }}"><img
                             src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140"
                             alt="" /></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -148,6 +148,10 @@
                                             class="text-info">{{ $sampleReception->batch_no }}</span> Details</h5>
                                 </div>
                                 <div class="col-12 col-lg-6 text-md-end no-print">
+                                    <a href="javascript:;" class="btn btn-sm btn-info me-2"><i
+                                        class="bi bi-list"></i>
+                                    Combined Test Report
+                                </a>
                                     <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
                                             class="bi bi-printer-fill"></i> Print</a>
                                 </div>

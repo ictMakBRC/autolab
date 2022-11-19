@@ -77,7 +77,9 @@
         </div>
         <div class="textmenu">
             <div class="brand-logo">
-                <img src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140" alt="" />
+                <a href="{{ route('dashboard') }}"><img
+                    src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140"
+                    alt="" /></a>
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade" id="pills-dashboards">
