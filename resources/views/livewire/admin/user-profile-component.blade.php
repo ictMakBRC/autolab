@@ -9,9 +9,9 @@
                     </div>
                     <div class="text-center mt-4">
                         <h4 class="mb-1">{{ $user->name }}</h4>
-                        <p class="mb-0 text-secondary">{{ $user->designation->name??'N/A' }}</p>
+                        <p class="mb-0 text-secondary">{{ $user->designation->name ?? 'N/A' }}</p>
                         <div class="mt-4"></div>
-                        <h6 class="mb-1">{{ $user->laboratory->laboratory_name??'N/A' }}</h6>
+                        <h6 class="mb-1">{{ $user->laboratory->laboratory_name ?? 'N/A' }}</h6>
                     </div>
                     <hr>
                     <div class="text-start">
@@ -30,11 +30,11 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Contact
-                        <span class="badge bg-info rounded-pill">{{ $user->contact??'N/A' }}</span>
+                        <span class="badge bg-info rounded-pill">{{ $user->contact ?? 'N/A' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Email
-                        <span class="badge bg-info rounded-pill">{{ $user->email??'N/A' }}</span>
+                        <span class="badge bg-info rounded-pill">{{ $user->email ?? 'N/A' }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                         Active
@@ -45,6 +45,18 @@
                         @endif
 
                     </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        Signature
+                        @if ($user->signature)
+                            <span>
+                                <img src="{{ asset('storage/' . $user->signature) }}" alt="" height="10%"
+                                    width="30%">
+                            </span>
+                        @else
+                            <span class="badge bg-warning rounded-pill">N/A</span>
+                        @endif
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -80,7 +92,8 @@
 
                                     <div class="mb-3 col-md-4">
                                         <label for="surname" class="form-label">Surname</label>
-                                        <input type="text" id="surname" class="form-control" wire:model.lazy="surname">
+                                        <input type="text" id="surname" class="form-control"
+                                            wire:model.lazy="surname">
                                         @error('surname')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -111,14 +124,16 @@
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label for="userEmail" class="form-label">Email</label>
-                                        <input type="email" id="userEmail" class="form-control" wire:model="email" readonly>
+                                        <input type="email" id="userEmail" class="form-control" wire:model="email"
+                                            readonly>
                                         @error('email')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label for="avatar" class="form-label">Photo/Avatar</label>
-                                        <input type="file" id="avatar" class="form-control" wire:model="avatar">
+                                        <input type="file" id="avatar" class="form-control"
+                                            wire:model="avatar">
                                         @error('avatar')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -182,10 +197,10 @@
     </div>
 
     @push('scripts')
-    <script>
-        @if (Session::has('password_change'))
-            swal('Warning', "{{ session('password_change') }}", 'warning');
-        @endif
-    </script>
+        <script>
+            @if (Session::has('password_change'))
+                swal('Warning', "{{ session('password_change') }}", 'warning');
+            @endif
+        </script>
     @endpush
 </div>

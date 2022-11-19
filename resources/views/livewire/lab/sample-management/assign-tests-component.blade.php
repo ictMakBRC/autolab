@@ -73,13 +73,13 @@
 
                                             </td>
                                             <td>
-                                                {{ $sample->study->name??'N/A'}}
+                                                {{ $sample->study->name ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $sample->requester->name??'N/A' }}
+                                                {{ $sample->requester->name ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $sample->collector->name??'N/A' }}
+                                                {{ $sample->collector->name ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->test_count }}
@@ -166,9 +166,10 @@
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Assignee
                                                                                 @if ($backlog)
-                                                                                (Backlog: <strong class="text-danger">{{$backlog}}</strong>)
+                                                                                    (Backlog: <strong
+                                                                                        class="text-danger">{{ $backlog }}</strong>)
                                                                                 @endif
-                                                                                </label>
+                                                                            </label>
                                                                             <select class="form-select"
                                                                                 wire:model="assignee">
                                                                                 <option selected value="">Select
@@ -215,7 +216,7 @@
                         @endif
                     </div>
                     <div class="modal-footer">
-                        
+
                         @if (!$request_acknowledged_by)
                             <a href="javascript: void(0);" wire:click="acknowledgeRequest({{ $sample_id }})"
                                 class="action-ico btn btn-success radius-30 px-3">

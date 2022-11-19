@@ -11,9 +11,10 @@
                                         Test Result Approvals
                                     </h5>
                                     <div class="ms-auto">
-                                        <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title=""
-                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                        <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                            data-bs-original-title="Refresh Table"><i
+                                                class="bi bi-arrow-clockwise"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -56,10 +57,13 @@
                                                 <td>{{ $key + 1 }}</td>
 
                                                 <td>
-                                                    {{ $testResult->sample->sampleReception->batch_no }}
+                                                    <a href="{{ route('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
+                                                        class="text-secondary"
+                                                        target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->sample->study->name??'N/A' }}
+                                                    {{ $testResult->sample->study->name ?? 'N/A' }}
                                                 </td>
                                                 <td>
                                                     {{ $testResult->sample->participant->identity }}
@@ -75,11 +79,9 @@
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Preliminary Result Report"
                                                         class="
-                                                        @if ($testResult->test->tat==48)
-                                                        text-danger
+                                                        @if ($testResult->test->tat == 48) text-danger
                                                         @else
-                                                        text-info 
-                                                        @endif
+                                                        text-info @endif
                                                         "><strong>{{ $testResult->test->name }}</strong></a>
                                                 </td>
 
@@ -104,7 +106,8 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="Approve Results"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-info"><i class="bi bi-check2-square"></i></a>
+                                                        class="action-ico btn btn-outline-info"><i
+                                                            class="bi bi-check2-square"></i></a>
                                                 </td>
                                             </tr>
                                         @empty

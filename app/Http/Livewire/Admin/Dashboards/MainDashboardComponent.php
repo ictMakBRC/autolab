@@ -72,7 +72,7 @@ class MainDashboardComponent extends Component
     {
         //SAMPLES
         $this->participantCount = Participant::count();
-        $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
+        $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted=samples_handled')->count();
         $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         $this->samplesTodayCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereDay('updated_at', '=', date('d'))->count();
         $this->samplesThisWeekCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereBetween('updated_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();

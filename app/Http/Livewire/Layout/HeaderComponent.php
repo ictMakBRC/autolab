@@ -33,34 +33,39 @@ class HeaderComponent extends Component
         
         if ($this->search!='') {
             if ($this->model==='SampleReception') {
+                
                 $sampleBatch = SampleReception::targetSearch($this->search)->first();
 
                 if ($sampleBatch) {
-                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Batch found successfully!']);
+                    redirect()->route('batch-search-results',['sampleReception'=>$sampleBatch->id]);
                 }else{
                     $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No Sample Batch matches your search!']);
                 }
 
             }elseif ($this->model==='Participant') {
+
                 $participant = Participant::targetSearch($this->search)->first();
                 if ($participant) {
-                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant found successfully!']);
+                    redirect()->route('participant-search-results',['participant'=>$participant->id]);
                 }else{
                     $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No participant matches your search!']);
                 }
                 
             } elseif($this->model==='Sample') {
+
                 $sample = Sample::targetSearch($this->search)->first();
                 if ($sample) {
-                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample found successfully!']);
+                    redirect()->route('sample-search-results',['sample'=>$sample->id]);
                 }else{
                     $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No sample matches your search!']);
                 }
 
             }elseif($this->model==='TestResult'){
+
                 $testResult = TestResult::targetSearch($this->search)->first();
                 if ($testResult) {
-                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result found successfully!']);
+                    $testResult->increment('download_count', 1);
+                    redirect()->route('result-report',$testResult->id);
                 }else{
                     $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No Test Result matches your search!']);
                 }
