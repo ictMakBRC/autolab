@@ -59,7 +59,11 @@
                                             <td>{{ $key + 1 }}</td>
                                            
                                             <td>
-                                                {{ $participant->identity }}
+                                                <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"
+                                                    class="text-secondary"
+                                                    target="_blank">{{ $participant->identity }}
+                                                </a>
+                                                
                                             </td>
                                             <td>
                                                 {{ $participant->entry_type }}

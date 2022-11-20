@@ -141,7 +141,7 @@ class SpecimenRequestComponent extends Component
 
     protected $validationAttributes = [
         'study_id' => 'study',
-        'sample_type_id'=>'sample_type'
+        'sample_type_id' => 'sample_type',
 
     ];
 
@@ -207,7 +207,7 @@ class SpecimenRequestComponent extends Component
         })->first();
 
         if ($participant) {
-            $lastSampleEntry = Sample::where(['participant_id' => $participant->id,'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
+            $lastSampleEntry = Sample::where(['participant_id' => $participant->id, 'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
             $this->lastVisit = $lastSampleEntry->visit;
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
@@ -636,7 +636,7 @@ class SpecimenRequestComponent extends Component
 
     public function resetSampleInformationInputs()
     {
-        $this->reset(['sample_id', 'participant_id','visit','volume','sample_type_id', 'sample_identity', 'requested_by',
+        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by',
             'date_requested', 'collected_by', 'date_collected', 'study_id', 'sample_is_for', 'priority', 'tests_requested', 'matched_participant_id', 'participantMatch', ]);
     }
 
@@ -681,8 +681,8 @@ class SpecimenRequestComponent extends Component
     public function render()
     {
         $collectors = Collector::where(['facility_id' => $this->facility_id])->orderBy('name', 'asc')->get();
-        $requesters = Requester::where(['facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies??[])->orderBy('name', 'asc')->get();
-        $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies??[])->with('requester:id,name')->orderBy('name', 'asc')->get();
+        $requesters = Requester::where(['facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
+        $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->with('requester:id,name')->orderBy('name', 'asc')->get();
         $sampleTypes = SampleType::orderBy('type', 'asc')->get();
         $samples = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_reception_id' => $this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
 

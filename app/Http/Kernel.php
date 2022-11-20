@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'password_expired' => \App\Http\Middleware\PasswordExpired::class,
         'suspended_user' => \App\Http\Middleware\SuspendedUser::class,
+
     ];
 }

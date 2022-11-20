@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
 use App\Models\User;
-use Livewire\Component;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Artisan;
+use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
 class UserActivityComponent extends Component
@@ -78,12 +78,11 @@ class UserActivityComponent extends Component
 
     public function deleteConfirmation()
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function cancel()

@@ -24,14 +24,18 @@ class Sample extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['sample_reception_id', 'participant_id','visit', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no','volume','requested_by', 'date_requested', 'collected_by', 'date_collected',
-
+    protected $fillable = ['sample_reception_id', 'participant_id', 'visit', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'volume', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
         'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count', 'tests_performed', 'date_acknowledged', 'request_acknowledged_by', 'status', 'created_by', 'creator_lab', ];
 
     protected $casts = [
         'tests_requested' => 'array',
         'tests_performed' => 'array',
     ];
+
+    public function accessioner()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 
     public function sampleReception()
     {
@@ -143,7 +147,7 @@ class Sample extends Model
         return empty(trim($search)) ? static::query()
             : static::query()
                 ->where('creator_lab', auth()->user()->laboratory_id)
-                ->where('sample_identity',trim($search))
-                ->orWhere('lab_no',trim($search));
+                ->where('sample_identity', trim($search))
+                ->orWhere('lab_no', trim($search));
     }
 }
