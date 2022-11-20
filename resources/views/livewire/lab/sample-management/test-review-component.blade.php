@@ -12,9 +12,10 @@
                                         Test Result Reviews
                                     </h5>
                                     <div class="ms-auto">
-                                        <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title=""
-                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                        <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                            data-bs-original-title="Refresh Table"><i
+                                                class="bi bi-arrow-clockwise"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -56,10 +57,13 @@
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
-                                                    {{ $testResult->sample->sampleReception->batch_no }}
+                                                    <a href="{{ route('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
+                                                        class="text-secondary"
+                                                        target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->sample->study->name??'N/A' }}
+                                                    {{ $testResult->sample->study->name ?? 'N/A' }}
                                                 </td>
                                                 <td>
                                                     {{ $testResult->sample->participant->identity }}
@@ -95,7 +99,8 @@
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="Review Results"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-info"><i class="bi bi-check-square"></i></a>
+                                                        class="action-ico btn btn-outline-info"><i
+                                                            class="bi bi-check-square"></i></a>
                                                 </td>
                                             </tr>
                                         @empty

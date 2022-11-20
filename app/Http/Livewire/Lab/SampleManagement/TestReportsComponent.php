@@ -24,7 +24,13 @@ class TestReportsComponent extends Component
     {
         $this->resetPage();
     }
-
+    public function incrementDownloadCount(TestResult $testResult)
+    {
+        if ($testResult->status == 'Approved') {
+            $testResult->increment('download_count', 1);
+        }
+    }
+   
     public function refresh()
     {
         return redirect(request()->header('Referer'));

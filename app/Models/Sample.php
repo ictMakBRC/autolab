@@ -87,36 +87,6 @@ class Sample extends Model
         }
     }
 
-    // public static function search($search)
-    // {
-    //     return empty($search) ? static::query()
-    //         : static::query()
-    //             ->where('creator_lab', auth()->user()->laboratory_id)
-    //             ->where('sample_identity', 'like', '%'.$search.'%')
-    //             ->orWhere('lab_no', 'like', '%'.$search.'%')
-    //             ->orWhere('email', 'like', '%'.$search.'%')
-    //             ->orWhere('sample_is_for', 'like', '%'.$search.'%')
-    //             ->orWhere('priority', 'like', '%'.$search.'%')
-    //             ->orWhereHas('participant', function ($query) use ($search) {
-    //                 $query->where('identity', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('study', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('sampleReception', function ($query) use ($search) {
-    //                 $query->where('batch_no', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('sampleType', function ($query) use ($search) {
-    //                 $query->where('type', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('requester', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('collector', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             });
-    // }
-
     public static function search($search, $status)
     {
         return empty($search) ? static::query()
@@ -166,5 +136,14 @@ class Sample extends Model
                     });
                 }
             );
+    }
+
+    public static function targetSearch($search)
+    {
+        return empty(trim($search)) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->where('sample_identity',trim($search))
+                ->orWhere('lab_no',trim($search));
     }
 }

@@ -620,7 +620,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="table-responsive">
-                                <table id="datableButtons" class="table table-striped mb-0 w-100 ">
+                                <table id="datableButton" class="table table-striped mb-0 w-100 ">
                                     <thead>
                                         <tr>
                                             <th>No.</th>

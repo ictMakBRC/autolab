@@ -39,7 +39,7 @@
 
         <!--end page main-->
         <footer class="bg-white border-top p-3 text-center fixed-bottom">
-            <p class="mb-0">Makerere University Biomedical Research Centre © 2022. All right reserved.</p>
+            <p class="mb-0">Makerere University Biomedical Research Centre © {{date('Y')}}. All right reserved.</p>
         </footer>
 
     </div>
