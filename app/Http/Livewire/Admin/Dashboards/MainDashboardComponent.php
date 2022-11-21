@@ -71,7 +71,7 @@ class MainDashboardComponent extends Component
     public function mount()
     {
         //SAMPLES
-        $this->participantCount = Participant::count();
+        $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
         $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted=samples_handled')->count();
         $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         $this->samplesTodayCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Tests Done')->whereDay('updated_at', '=', date('d'))->count();
