@@ -55,7 +55,7 @@ return [
     */
 
 
-    'asset_url' => null,
+    'asset_url' => 'http://10.218.7.245:8383/autolab/public',
 
 
     /*
