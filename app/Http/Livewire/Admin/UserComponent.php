@@ -2,20 +2,20 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\User;
-use Livewire\Component;
-use App\Helpers\Generate;
-use App\Models\Laboratory;
-use App\Models\Designation;
 use App\Exports\UsersExport;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
+use App\Helpers\Generate;
+use App\Models\Designation;
+use App\Models\Laboratory;
+use App\Models\User;
+use App\Notifications\SendPasswordNotification;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\SendPasswordNotification;
+use Illuminate\Validation\Rules\Password;
+use Livewire\Component;
+use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class UserComponent extends Component
 {
@@ -78,8 +78,8 @@ class UserComponent extends Component
 
     protected $validationAttributes = [
         'laboratory_id' => 'laboratory',
-        'designation_id'=>'designation',
-        'is_active' => 'status'
+        'designation_id' => 'designation',
+        'is_active' => 'status',
     ];
 
     public function updated($fields)
@@ -217,7 +217,7 @@ class UserComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['edit_id','password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
+        $this->reset(['edit_id', 'password', 'title', 'emp_no', 'surname', 'first_name', 'other_name', 'email', 'contact', 'designation_id', 'is_active', 'avatar', 'signature', 'avatarPath', 'signaturePath']);
     }
 
     public function updateData()
@@ -305,13 +305,12 @@ class UserComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function deleteData()

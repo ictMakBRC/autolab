@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
-                                                <a href="{{ route('batch-search-results', ['sampleReception' => $sample->sampleReception->id]) }}"
+                                                <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $sample->sampleReception->id]) }}"
                                                     class="text-secondary"
                                                     target="_blank">{{ $sample->sampleReception->batch_no }}
                                                 </a>

@@ -56,20 +56,25 @@
                                             <td>{{ $key + 1 }}</td>
 
                                             <td>
-                                                <a href="{{ route('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
+                                                <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
                                                     class="text-secondary"
                                                     target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
                                                 </a>
-
                                             </td>
                                             <td>
-                                                <strong class="text-info">{{ $testResult->tracker }}</strong>
+                                                <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
+                                                    target="_blank"><strong
+                                                        class="text-info">{{ $testResult->tracker }}</strong>
+                                                </a>
                                             </td>
                                             <td>
                                                 {{ $testResult->sample->study->name ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $testResult->sample->participant->identity }}
+                                                <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $testResult->sample->participant->id]) }}"
+                                                    class="text-secondary"
+                                                    target="_blank">{{ $testResult->sample->participant->identity }}
+                                                </a>
                                             </td>
 
                                             <td>

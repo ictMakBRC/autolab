@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Kit;
-use Livewire\Component;
-use App\Models\Platform;
 use App\Exports\KitsExport;
-use Livewire\WithPagination;
+use App\Models\Kit;
+use App\Models\Platform;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class KitComponent extends Component
 {
@@ -43,7 +43,7 @@ class KitComponent extends Component
     }
 
     protected $validationAttributes = [
-        'is_active' => 'status'
+        'is_active' => 'status',
     ];
 
     public function updated($fields)
@@ -112,13 +112,12 @@ class KitComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function deleteData()

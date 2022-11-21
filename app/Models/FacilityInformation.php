@@ -11,7 +11,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class FacilityInformation extends Model
 {
     use HasFactory,LogsActivity;
-    protected static $recordEvents = ['updated','deleted'];
+
+    protected static $recordEvents = ['updated', 'deleted'];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

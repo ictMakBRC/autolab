@@ -87,6 +87,6 @@ class Participant extends Model
     {
         return empty(trim($search)) ? static::query()
             : static::query()
-                ->where('identity',trim($search))->withCount(['sample', 'testResult'])->with('facility', 'study');
+                ->where('identity', trim($search))->withCount(['sample', 'testResult'])->with('facility', 'study');
     }
 }

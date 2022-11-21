@@ -148,10 +148,9 @@
                                             class="text-info">{{ $sampleReception->batch_no }}</span> Details</h5>
                                 </div>
                                 <div class="col-12 col-lg-6 text-md-end no-print">
-                                    <a href="javascript:;" class="btn btn-sm btn-info me-2"><i
-                                        class="bi bi-list"></i>
-                                    Combined Test Report
-                                </a>
+                                    <a href="javascript:;" class="btn btn-sm btn-info me-2"><i class="bi bi-list"></i>
+                                        Combined Test Report
+                                    </a>
                                     <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
                                             class="bi bi-printer-fill"></i> Print</a>
                                 </div>
@@ -159,12 +158,12 @@
                         </div>
                         <div class="card-header py-2 bg-light">
                             <div class="row">
-                                <div class="table-responsive col">
+                                <div class="table-responsiv col">
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                              <th>{{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</th>
-                                              <th>SOURCE FACILITY</th>
+                                                <th>{{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</th>
+                                                <th>SOURCE FACILITY</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -184,17 +183,17 @@
                                                     </strong>{{ date('d-m-Y', strtotime($sampleReception->created_at)) }}<br>
                                                 </td>
                                                 <td>
-                                                  <strong class="text-inverse">Name: </strong>
-                                                  {{ $sampleReception->facility->name }}<br>
-                                                  <strong class="text-inverse">Courier Name:
-                                                  </strong>{{ $sampleReception->courier->name ?? 'N/A' }}<br>
-                                                  <strong class="text-inverse">Courier Telephone:
-                                                  </strong>{{ $sampleReception->courier->contact ?? 'N/A' }}<br>
-                                                  <strong class="text-inverse">Courier Email:
-                                                  </strong>{{ $sampleReception->courier->email ?? 'N/A' }}<br>
-                                                  <strong class="text-inverse">Date Delivered:
-                                                  </strong>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}<br>
-                                              </td>
+                                                    <strong class="text-inverse">Name: </strong>
+                                                    {{ $sampleReception->facility->name }}<br>
+                                                    <strong class="text-inverse">Courier Name:
+                                                    </strong>{{ $sampleReception->courier->name ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Courier Telephone:
+                                                    </strong>{{ $sampleReception->courier->contact ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Courier Email:
+                                                    </strong>{{ $sampleReception->courier->email ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Date Delivered:
+                                                    </strong>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}<br>
+                                                </td>
                                             </tr>
 
                                         </tbody>
@@ -205,15 +204,19 @@
 
                         <div class="card-body">
                             @if (!$sampleReception->sample->isEmpty())
-                                <div class="table-responsive">
-                                    <table id="datableButton" class="table table-striped mb-0 w-100 ">
+                                <div>
+                                    <table class="table table-striped mb-0 w-100 ">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Participant ID</th>
                                                 <th>Sample</th>
                                                 <th>Study</th>
-                                                <th>Other Details</th>
+                                                <th>Sample ID</th>
+                                                <th>Lab_No</th>
+                                                <th>Test Count</th>
+                                                <th>Requested By</th>
+                                                <th>Collected By</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -221,7 +224,10 @@
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>
-                                                        {{ $sample->participant->identity }}
+                                                        <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $sample->participant->id]) }}"
+                                                            class="text-secondary"
+                                                            target="_blank">{{ $sample->participant->identity }}
+                                                        </a>
                                                     </td>
                                                     <td>
                                                         {{ $sample->sampleType->type }}
@@ -230,17 +236,23 @@
                                                         {{ $sample->study->name ?? 'N/A' }}
                                                     </td>
                                                     <td>
-                                                        <strong class="text-inverse">Sample ID: </strong>
-                                                        {{ $sample->sample_identity }}<br>
-                                                        <strong class="text-success">Lab_No:
-                                                        </strong>{{ $sample->lab_no ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Tests:
-                                                        </strong>{{ $sample->test_count ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Requested By: </strong>
-                                                        {{ $sample->requester->name }}<br>
-                                                        <strong class="text-inverse">Collected By:
-                                                        </strong>{{ $sample->collector->name ?? 'N/A' }}<br>
+                                                        <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
+                                                            class="text-secondary"
+                                                            target="_blank">{{ $sample->sample_identity }}
+                                                        </a>
 
+                                                    </td>
+                                                    <td>
+                                                        {{ $sample->lab_no ?? 'N/A' }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $sample->test_count ?? 'N/A' }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $sample->requester->name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $sample->collector->name ?? 'N/A' }}
                                                     </td>
                                                 </tr>
                                             @empty

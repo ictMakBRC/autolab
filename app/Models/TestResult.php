@@ -157,9 +157,9 @@ class TestResult extends Model
     {
         return empty(trim($search)) ? static::query()
             : static::query()
-                ->where(['creator_lab'=>auth()->user()->laboratory_id,
-                'status'=>'Approved',
-                'tracker'=>trim($search)
-        ]);
+                ->where(['creator_lab' => auth()->user()->laboratory_id,
+                    'status' => 'Approved',
+                    'tracker' => trim($search),
+                ]);
     }
 }

@@ -159,7 +159,7 @@
 
     <div class="card-footer py-3">
         <p class="text-center mb-2">
-            The Laboratory is Certified by the Ministry of Health Uganda to test for COVID-19
+            The Laboratory is Certified by the Ministry of Health Uganda
         </p>
     </div>
 </div>
