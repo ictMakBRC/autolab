@@ -6,8 +6,8 @@
                 <i class="bi bi-list"></i>
             </div>
 
-            <div class="search-toggle-icon d-xl-none ms-auto">
-                <i class="bi bi-search"></i>
+            <div class="search-toggle-ico d-xl-none ms-auto">
+                {{-- <i class="bi bi-search"></i> --}}
             </div>
             <form class="searchbar d-none d-xl-flex ms-auto">
                 <div class="input-group">
