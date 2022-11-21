@@ -122,7 +122,6 @@ class User extends Authenticatable
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('creator_lab', auth()->user()->laboratory_id)
             ->where('surname', 'like', '%'.$search.'%')
             ->orWhere('first_name', 'like', '%'.$search.'%')
             ->orWhere('other_name', 'like', '%'.$search.'%')

@@ -131,7 +131,7 @@
             </div><!-- end col-->
         @else
             <div class="col-12">
-                @include('user.sample-management.preliminary-report')
+                @include('reports.sample-management.preliminary-report')
             </div>
         @endif
     </div>

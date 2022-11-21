@@ -79,10 +79,10 @@
     </header>
     <!--end top header-->
     @push('scripts')
-    <script>
-        window.addEventListener('found', event => {
-            window.open(`${event.detail.url}`, '_blank').focus();
-        });
-    </script>
-@endpush
+        <script>
+            window.addEventListener('found', event => {
+                window.open(`${event.detail.url}`, '_blank').focus();
+            });
+        </script>
+    @endpush
 </div>

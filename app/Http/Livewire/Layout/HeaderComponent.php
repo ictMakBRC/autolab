@@ -63,8 +63,6 @@ class HeaderComponent extends Component
                 $testResult = TestResult::targetSearch($this->search)->first();
                 if ($testResult) {
                     $this->dispatchBrowserEvent('found', ['url' => URL::signedRoute('report-search-results', ['testResult' => $testResult->id])]);
-                // $testResult->increment('download_count', 1);
-                // redirect()->route('result-report',$testResult->id);
                 } else {
                     $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No Test Result matches your search!']);
                 }

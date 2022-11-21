@@ -201,7 +201,7 @@
 
                         <div class="card-body">
                             <div>
-                                <table class="table table-striped mb-0 w-100">
+                                <table class="table mb-0 w-100">
                                     <thead>
                                         <tr>
                                             <th>Test Requested</th>

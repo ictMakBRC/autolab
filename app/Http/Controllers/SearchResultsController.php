@@ -38,4 +38,14 @@ class SearchResultsController extends Controller
 
         return view('reports.sample-management.test-report', compact('testResult'));
     }
+
+    public function combinedTestReport($sampleIds)
+    {
+        $samples = Sample::with(['sampleReception', 'sampleReception.facility', 'sampleReception.courier', 'sampleReception.receiver', 'participant',
+        'sampleType', 'requester', 'collector', 'study', 'testResult', 'testResult.test', ])->whereIn('id',explode('-',$sampleIds))->get();
+
+        // return $testResults;
+
+        return view('reports.sample-management.combined-test-report',compact('samples'));
+    }
 }
