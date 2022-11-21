@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use Livewire\Component;
+use App\Exports\RequestersExport;
 use App\Models\Facility;
 use App\Models\Requester;
-use Livewire\WithPagination;
-use App\Exports\RequestersExport;
+use App\Models\Study;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class RequesterComponent extends Component
 {
@@ -53,8 +53,8 @@ class RequesterComponent extends Component
 
     protected $validationAttributes = [
         'facility_id' => 'facility',
-        'study_id'=>'study',
-        'is_active' => 'status'
+        'study_id' => 'study',
+        'is_active' => 'status',
     ];
 
     public function updated($fields)
@@ -156,13 +156,12 @@ class RequesterComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function deleteData()
@@ -191,10 +190,10 @@ class RequesterComponent extends Component
     public function render()
     {
         $requesters = Requester::search($this->search)
-        ->whereIn('study_id', auth()->user()->laboratory->associated_studies??[])->with('facility', 'study')
+        ->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities??[])->latest()->get();
+        $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->latest()->get();
 
         return view('livewire.admin.requester-component', compact('requesters', 'facilities'))->layout('layouts.app');
     }

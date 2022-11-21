@@ -71,13 +71,13 @@
                 <div class="col-12 col-lg-4 col-xl-4 d-flex">
                     <div class="card mb-0 radius-10 border shadow-none w-100">
                         <div class="card-body">
-                            <h5 class="card-title">Statistics</h5>
+                            <h5 class="card-title">General</h5>
                             <ul class="list-group list-group-flush mt-3">
                                 <li class="list-group-item border-top">
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Facilities</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $facilityActiveCount }}</strong>/<strong
+                                                class="text-success">{{ $facilityActiveCount }}</strong>|<strong
                                                 class="text-danger">{{ $facilitySuspendedCount }}</strong></div>
                                     </div>
                                 </li>
@@ -85,7 +85,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Studies</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $studyActiveCount }}</strong>/<strong
+                                                class="text-success">{{ $studyActiveCount }}</strong>|<strong
                                                 class="text-danger">{{ $studySuspendedCount }}</strong></div>
                                     </div>
                                 </li>
@@ -93,7 +93,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Requesters</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $requesterActiveCount }}</strong>/<strong
+                                                class="text-success">{{ $requesterActiveCount }}</strong>|<strong
                                                 class="text-danger">{{ $requesterSuspendedCount }}</strong></div>
                                     </div>
                                 </li>
@@ -101,7 +101,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Phlebotomists</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $collectorActiveCount }}</strong>/<strong
+                                                class="text-success">{{ $collectorActiveCount }}</strong>|<strong
                                                 class="text-danger">{{ $collectorSuspendedCount }}</strong></div>
                                     </div>
                                 </li>
@@ -109,7 +109,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Couriers</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $courierActiveCount }}</strong>/<strong
+                                                class="text-success">{{ $courierActiveCount }}</strong>|<strong
                                                 class="text-danger">{{ $courierSuspendedCount }}</strong></div>
                                     </div>
                                 </li>

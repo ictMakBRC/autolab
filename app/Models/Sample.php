@@ -24,14 +24,18 @@ class Sample extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['sample_reception_id', 'participant_id','visit', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no','volume','requested_by', 'date_requested', 'collected_by', 'date_collected',
-
+    protected $fillable = ['sample_reception_id', 'participant_id', 'visit', 'sample_type_id', 'sample_no', 'sample_identity', 'lab_no', 'volume', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
         'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count', 'tests_performed', 'date_acknowledged', 'request_acknowledged_by', 'status', 'created_by', 'creator_lab', ];
 
     protected $casts = [
         'tests_requested' => 'array',
         'tests_performed' => 'array',
     ];
+
+    public function accessioner()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 
     public function sampleReception()
     {
@@ -87,36 +91,6 @@ class Sample extends Model
         }
     }
 
-    // public static function search($search)
-    // {
-    //     return empty($search) ? static::query()
-    //         : static::query()
-    //             ->where('creator_lab', auth()->user()->laboratory_id)
-    //             ->where('sample_identity', 'like', '%'.$search.'%')
-    //             ->orWhere('lab_no', 'like', '%'.$search.'%')
-    //             ->orWhere('email', 'like', '%'.$search.'%')
-    //             ->orWhere('sample_is_for', 'like', '%'.$search.'%')
-    //             ->orWhere('priority', 'like', '%'.$search.'%')
-    //             ->orWhereHas('participant', function ($query) use ($search) {
-    //                 $query->where('identity', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('study', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('sampleReception', function ($query) use ($search) {
-    //                 $query->where('batch_no', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('sampleType', function ($query) use ($search) {
-    //                 $query->where('type', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('requester', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             })
-    //             ->orWhereHas('collector', function ($query) use ($search) {
-    //                 $query->where('name', 'like', '%'.$search.'%');
-    //             });
-    // }
-
     public static function search($search, $status)
     {
         return empty($search) ? static::query()
@@ -166,5 +140,14 @@ class Sample extends Model
                     });
                 }
             );
+    }
+
+    public static function targetSearch($search)
+    {
+        return empty(trim($search)) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->where('sample_identity', trim($search))
+                ->orWhere('lab_no', trim($search));
     }
 }

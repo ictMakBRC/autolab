@@ -170,6 +170,12 @@
             }
         });
         
+        window.addEventListener('not-found', event => {
+            if (event.detail.type == 'error') {
+                swal('Not Found', `${event.detail.message}`, 'error');
+            }
+        });
+        
         window.addEventListener('current-password-mismatch', event => {
             if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');

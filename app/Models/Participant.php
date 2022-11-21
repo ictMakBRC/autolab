@@ -82,4 +82,11 @@ class Participant extends Model
                     $query->where('name', 'like', '%'.$search.'%');
                 });
     }
+
+    public static function targetSearch($search)
+    {
+        return empty(trim($search)) ? static::query()
+            : static::query()
+                ->where('identity', trim($search))->withCount(['sample', 'testResult'])->with('facility', 'study');
+    }
 }

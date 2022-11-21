@@ -49,6 +49,11 @@ class SampleReception extends Model
         return $this->belongsTo(User::class, 'reviewed_by', 'id');
     }
 
+    public function sample()
+    {
+        return $this->hasMany(Sample::class, 'sample_reception_id', 'id');
+    }
+
     protected function createdAt(): Attribute
     {
         return new Attribute(
@@ -76,5 +81,13 @@ class SampleReception extends Model
         : static::query()
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->where('batch_no', 'like', '%'.$search.'%');
+    }
+
+    public static function targetSearch($search)
+    {
+        return empty(trim($search)) ? static::query()
+            : static::query()
+                ->where('creator_lab', auth()->user()->laboratory_id)
+                ->where('batch_no', trim($search));
     }
 }

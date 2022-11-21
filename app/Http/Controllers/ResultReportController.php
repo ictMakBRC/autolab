@@ -17,14 +17,12 @@ class ResultReportController extends Controller
     public function show($id)
     {
         $testResult = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
-        if ($testResult->status == 'Approved') {
-            $testResult->increment('download_count', 1);
-        }
-        $pdf = PDF::loadView('user.sample-management.downloadReport', compact('testResult'));
-        $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
+        $pdf = PDF::loadView('reports.sample-management.downloadReport', compact('testResult'));
+        $pdf->setPaper('a4', 'portrait');   //horizontal
+        return  $pdf->stream($testResult->sample->participant->identity.rand().'.pdf');
+        // $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
 
-        return $pdf->download($testResult->sample->participant->identity.rand().'.pdf');
-        // return view('user.sample-management.downloadReport', compact('testResult'));
+        // return $pdf->download($testResult->sample->participant->identity.rand().'.pdf');
     }
 
     public function download($id)

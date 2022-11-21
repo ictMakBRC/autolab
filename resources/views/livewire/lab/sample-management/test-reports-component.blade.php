@@ -10,9 +10,9 @@
                                     Test Result Reports
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title=""
-                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -37,6 +37,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Sample Batch</th>
+                                        <th>Tracker</th>
                                         <th>Study</th>
                                         <th>Participant ID</th>
                                         <th>Sample</th>
@@ -53,33 +54,45 @@
                                     @forelse ($testResults as $key => $testResult)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                           
+
                                             <td>
-                                                {{ $testResult->sample->sampleReception->batch_no }}
+                                                <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
+                                                    class="text-secondary"
+                                                    target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
+                                                </a>
                                             </td>
                                             <td>
-                                                {{ $testResult->sample->study->name??'N/A' }}
+                                                <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
+                                                    target="_blank"><strong
+                                                        class="text-info">{{ $testResult->tracker }}</strong>
+                                                </a>
                                             </td>
                                             <td>
-                                                {{ $testResult->sample->participant->identity }}
+                                                {{ $testResult->sample->study->name ?? 'N/A' }}
                                             </td>
-                                           
+                                            <td>
+                                                <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $testResult->sample->participant->id]) }}"
+                                                    class="text-secondary"
+                                                    target="_blank">{{ $testResult->sample->participant->identity }}
+                                                </a>
+                                            </td>
+
                                             <td>
                                                 {{ $testResult->sample->sampleType->type }}
                                             </td>
-                                            
+
                                             <td>
                                                 {{ $testResult->test->name }}
                                             </td>
-                                             
+
                                             <td>
                                                 {{ $testResult->sample->requester->name }}
                                             </td>
                                             <td>
-                                                {{date('d-m-Y', strtotime($testResult->sample->date_requested)) }}
+                                                {{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}
                                             </td>
                                             <td>
-                                                {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered))}}
+                                                {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                                             </td>
                                             <td>
                                                 {{ $testResult->created_at }}
@@ -88,11 +101,13 @@
                                                 <span class="badge bg-success">{{ $testResult->status }}</span>
                                             </td>
                                             <td class="action-ico">
-                                                <a href="{{route('result-report',$testResult->id)}}" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Result Report"
-                                                class="action-ico btn btn-outline-info"><i class="bi bi-arrow-down-square"></i></a>
-                                            </td> 
+                                                <a href="{{ route('result-report', $testResult->id) }}" type="button"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Result Report"
+                                                    class="action-ico btn btn-outline-info"
+                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                        class="bi bi-arrow-down-square"></i></a>
+                                            </td>
                                         </tr>
                                     @empty
                                     @endforelse

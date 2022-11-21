@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use Livewire\Component;
-use App\Models\Designation;
-use Livewire\WithPagination;
 use App\Exports\DesignationsExport;
+use App\Models\Designation;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class DesignationComponent extends Component
 {
@@ -37,8 +37,9 @@ class DesignationComponent extends Component
     {
         $this->resetPage();
     }
+
     protected $validationAttributes = [
-        'is_active' => 'status'
+        'is_active' => 'status',
     ];
 
     public function updated($fields)
@@ -112,13 +113,12 @@ class DesignationComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function deleteData()

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\UserRolesAssignmentController;
 use App\Http\Controllers\Auth\UserRolesController;
 use App\Http\Controllers\FacilityInformationController;
 use App\Http\Controllers\ResultReportController;
+use App\Http\Controllers\SearchResultsController;
 use App\Http\Livewire\Admin\CollectorComponent;
 use App\Http\Livewire\Admin\CourierComponent;
 use App\Http\Livewire\Admin\Dashboards\MainDashboardComponent;
@@ -95,6 +96,13 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('test-result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
         Route::get('test-result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
+
+        Route::group(['middleware' => 'signed'], function () {
+            Route::get('batch/{sampleReception}/searchresults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');
+            Route::get('participant/{participant}/searchresults', [SearchResultsController::class, 'participantSearchResults'])->name('participant-search-results');
+            Route::get('sample/{sample}/searchresults', [SearchResultsController::class, 'sampleSearchResults'])->name('sample-search-results');
+            Route::get('test-report/{testResult}/searchresults', [SearchResultsController::class, 'testReportSearchResults'])->name('report-search-results');
+        });
     });
 
     Route::group(['prefix' => 'Dashboard'], function () {

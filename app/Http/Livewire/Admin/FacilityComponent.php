@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use Livewire\Component;
+use App\Exports\FacilitiesExport;
 use App\Models\Facility;
 use App\Models\Laboratory;
-use Livewire\WithPagination;
 use App\Models\SampleReception;
-use App\Exports\FacilitiesExport;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class FacilityComponent extends Component
 {
@@ -46,9 +46,9 @@ class FacilityComponent extends Component
     }
 
     protected $validationAttributes = [
-        'is_active' => 'status'
+        'is_active' => 'status',
     ];
-    
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -88,7 +88,7 @@ class FacilityComponent extends Component
         $this->validate([
             'associated_facilities' => 'required',
         ]);
-        $associatedFacilites = auth()->user()->laboratory->associated_facilities??[];
+        $associatedFacilites = auth()->user()->laboratory->associated_facilities ?? [];
         $disassociatedFacilities = array_diff($associatedFacilites, $this->associated_facilities ?? []);
 
         $facilityData = [];
@@ -102,7 +102,7 @@ class FacilityComponent extends Component
             $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Oops! You can not disassociate from facilities that already have sample information recorded!']);
         } else {
             $laboratory = Laboratory::findorFail(auth()->user()->laboratory_id);
-            $laboratory->associated_facilities = $this->associated_facilities??[];
+            $laboratory->associated_facilities = $this->associated_facilities ?? [];
             $laboratory->update();
             $this->render();
 
@@ -156,13 +156,12 @@ class FacilityComponent extends Component
 
     public function deleteConfirmation($id)
     {
-        if (Auth::user()->hasPermission(['manage-users'])){
+        if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
-        }else{
+        } else {
             $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
-       
     }
 
     public function deleteData()
