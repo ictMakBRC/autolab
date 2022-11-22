@@ -148,9 +148,6 @@
                                             class="text-info">{{ $sampleReception->batch_no }}</span> Details</h5>
                                 </div>
                                 <div class="col-12 col-lg-6 text-md-end no-print">
-                                    <a href="javascript:;" class="btn btn-sm btn-info me-2"><i class="bi bi-list"></i>
-                                        Combined Test Report
-                                    </a>
                                     <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
                                             class="bi bi-printer-fill"></i> Print</a>
                                 </div>

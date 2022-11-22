@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\TestResult;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\URL;
 
 class TestReportsComponent extends Component
 {
@@ -18,7 +20,28 @@ class TestReportsComponent extends Component
 
     public $orderAsc = true;
 
+    public $combinedList=[];
+
     protected $paginationTheme = 'bootstrap';
+
+
+    public function combinedTestReport()
+    {
+        $sampleIds='';
+        if (count($this->combinedList)>=2) {
+           
+            $sameStudyCheck =Sample::whereIn('id',array_unique($this->combinedList))->get()->pluck('study_id')->toArray();
+
+            if (count(array_unique($sameStudyCheck))==1) {
+                $sampleIds=implode('-',array_unique($this->combinedList));
+                $this->dispatchBrowserEvent('loadCombinedReport', ['url' => URL::signedRoute('combined-test-report', ['sampleIds' => $sampleIds])]);
+                $this->combinedList=[];
+
+            } else {
+                $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Test Report is only possible for samples of the same study!']);
+            }
+        }
+    }
 
     public function updatingSearch()
     {

@@ -339,7 +339,7 @@ class UserComponent extends Component
     public function render()
     {
         $users = User::search($this->search)
-        ->where(['laboratory_id' => auth()->user()->laboratory_id])->with('laboratory', 'designation')
+        ->with('laboratory', 'designation')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $designations = Designation::where('is_active', 1)->latest()->get();

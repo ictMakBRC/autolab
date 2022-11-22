@@ -10,6 +10,12 @@
                                     Test Result Reports
                                 </h5>
                                 <div class="ms-auto">
+                                    @if (count($combinedList)>=2)
+                                    <a href="javascript:;" class="btn btn-sm btn-info me-2" wire:click='combinedTestReport'><i class="bi bi-list"></i>
+                                        Combined Test Report
+                                    </a>
+                                    @endif
+                                    
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
@@ -17,6 +23,9 @@
                             </div>
                         </div>
                     </div>
+                    @if (count($combinedList)>=2)
+                    You have selected <strong class="text-success">{{ count($combinedList) }}</strong> samples for the combined test report (<a href="javascript:;" class="text-info" wire:click="$set('combinedList',[])">Clear All</a>)
+                    @endif
                 </div>
 
                 <div class="card-body">
@@ -30,6 +39,7 @@
                             </div>
                         </div>
                     </x-table-utilities>
+                   
                     <div class="tab-content">
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 ">
@@ -79,6 +89,7 @@
 
                                             <td>
                                                 {{ $testResult->sample->sampleType->type }}
+                                                <input type="checkbox" value="{{$testResult->sample->id}}" class="me-2 float-end" wire:model="combinedList">
                                             </td>
 
                                             <td>
@@ -127,4 +138,12 @@
         </div><!-- end col-->
 
     </div>
+
+    @push('scripts')
+    <script>
+        window.addEventListener('loadCombinedReport', event => {
+            window.open(`${event.detail.url}`, '_blank').focus();
+        });
+    </script>
+@endpush
 </div>

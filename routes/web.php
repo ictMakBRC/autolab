@@ -52,14 +52,14 @@ Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate'])
 Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'settings'], function () {
-            Route::get('test-categories', TestCategoryComponent::class)->name('categories');
-            Route::get('sample-types', SampleTypeComponent::class)->name('sampletypes');
+            Route::get('testCategories', TestCategoryComponent::class)->name('categories');
+            Route::get('sampleTypes', SampleTypeComponent::class)->name('sampletypes');
             Route::get('test', TestComponent::class)->name('tests');
             Route::get('designations', DesignationComponent::class)->name('designations');
             Route::get('laboratories', LaboratoryComponent::class)->name('laboratories');
             Route::get('facilities', FacilityComponent::class)->name('facilities');
             Route::get('requesters', RequesterComponent::class)->name('requesters');
-            Route::get('sample-collectors', CollectorComponent::class)->name('collectors');
+            Route::get('sampleCollectors', CollectorComponent::class)->name('collectors');
             Route::get('kits', KitComponent::class)->name('kits');
             Route::get('platforms', PlatformComponent::class)->name('platforms');
             Route::get('studies', StudyComponent::class)->name('studies');
@@ -72,8 +72,8 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
             Route::resource('user-permissions', UserPermissionsController::class);
             Route::resource('user-roles-assignment', UserRolesAssignmentController::class);
             Route::resource('facilityInformation', FacilityInformationController::class);
-            Route::get('activity-trail', UserActivityComponent::class)->name('useractivity');
-            Route::get('login-activity', function () {
+            Route::get('activityTrail', UserActivityComponent::class)->name('useractivity');
+            Route::get('loginActivity', function () {
                 $logs = LoginActivity::logActivityLists();
 
                 return view('super-admin.logActivity', compact('logs'));
@@ -82,26 +82,27 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
     });
 
     Route::get('user/account', UserProfileComponent::class)->name('user.account');
-    Route::get('user/my-activity', UserActivityComponent::class)->name('myactivity');
+    Route::get('user/myActivity', UserActivityComponent::class)->name('myactivity');
 
     Route::group(['prefix' => 'samplemgt'], function () {
         Route::get('reception', SampleReceptionComponent::class)->middleware('permission:create-reception-info')->name('samplereception');
         Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->middleware('permission:accession-samples')->name('specimen-request');
-        Route::get('test-request-assignment', AssignTestsComponent::class)->middleware('permission:assign-test-requests')->name('test-request-assignment');
-        Route::get('test-requests', TestRequestComponent::class)->middleware('permission:acknowledge-test-request')->name('test-request');
-        Route::get('sample/{id}/test-results', AttachTestResultComponent::class)->middleware('permission:enter-results')->name('attach-test-results');
-        Route::get('test-result-review', TestReviewComponent::class)->middleware('permission:review-results')->name('test-review');
-        Route::get('test-result-approval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
-        Route::get('test-result-reports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');
-        Route::get('test-result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
-        Route::get('test-result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
+        Route::get('testAssignment', AssignTestsComponent::class)->middleware('permission:assign-test-requests')->name('test-request-assignment');
+        Route::get('testRequests', TestRequestComponent::class)->middleware('permission:acknowledge-test-request')->name('test-request');
+        Route::get('sample/{id}/testResults', AttachTestResultComponent::class)->middleware('permission:enter-results')->name('attach-test-results');
+        Route::get('resultReview', TestReviewComponent::class)->middleware('permission:review-results')->name('test-review');
+        Route::get('resultApproval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
+        Route::get('resultReports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');
+        Route::get('result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
+        Route::get('result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 
         Route::group(['middleware' => 'signed'], function () {
-            Route::get('batch/{sampleReception}/searchresults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');
-            Route::get('participant/{participant}/searchresults', [SearchResultsController::class, 'participantSearchResults'])->name('participant-search-results');
-            Route::get('sample/{sample}/searchresults', [SearchResultsController::class, 'sampleSearchResults'])->name('sample-search-results');
-            Route::get('test-report/{testResult}/searchresults', [SearchResultsController::class, 'testReportSearchResults'])->name('report-search-results');
+            Route::get('batch/{sampleReception}/searchResults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');
+            Route::get('participant/{participant}/searchResults', [SearchResultsController::class, 'participantSearchResults'])->name('participant-search-results');
+            Route::get('sample/{sample}/searchResults', [SearchResultsController::class, 'sampleSearchResults'])->name('sample-search-results');
+            Route::get('testRpt/{testResult}/searchResults', [SearchResultsController::class, 'testReportSearchResults'])->name('report-search-results');
+            Route::get('combinedRpt/{sampleIds?}', [SearchResultsController::class, 'combinedTestReport'])->name('combined-test-report');
         });
     });
 
