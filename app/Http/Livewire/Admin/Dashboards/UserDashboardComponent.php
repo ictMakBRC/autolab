@@ -107,7 +107,10 @@ class UserDashboardComponent extends Component
         ->when($this->view == 'week', function ($query) {$query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();})
         ->when($this->view == 'month', function ($query) {$query->whereMonth('created_at', '=', date('m'))->count();})
         ->when($this->view == 'year', function ($query) {$query->whereYear('created_at', '=', date('Y'))->count();})        
-        ->latest()->limit(5)->get();        
+        ->latest()->limit(5)->get();
+        
+        $data['testChart'] = TestAssignment::where('assignee', auth()->user()->id)
+        ->selectRaw("COUNT(id) as total, status")->groupBy('status')->get();
         
         $data['testAssignedCount'] = TestAssignment::where('assignee', auth()->user()->id)
         ->when($this->view == 'today', function ($query) {$query->whereDay('created_at', '=', date('d'));})
