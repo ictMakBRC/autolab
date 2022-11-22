@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="minimal-theme">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{auth()->user()->color_scheme??'minimal-theme'}}">
  
 
 <head>
@@ -180,6 +180,10 @@
             if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');
             }
+        });
+
+        window.addEventListener('switch-theme', event => {
+            $("html").attr("class", `${event.detail.theme}`)
         });
     </script>
     @stack('scripts')

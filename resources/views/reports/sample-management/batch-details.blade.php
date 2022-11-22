@@ -48,30 +48,6 @@
             #noprint1 {
                 visibility: hidden;
             }
-
-            /* #bcode {
-                position: fixed;
-                bottom: 0;
-            } */
-
-            /* table{
-              border-collapse:collapse;
-          } */
-            /* tr td{
-              page-break-inside: avoid;
-              white-space: nowrap;
-          } */
-            /* table tbody tr td:before,
-          table tbody tr td:after {
-              content: "";
-              height: 4px;
-              display: block;
-          } */
-
-            /* table.table-bordered tr td th {
-              page-break-inside: avoid;
-          } */
-
             table,
             table tr td,
             table tr th {
