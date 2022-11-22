@@ -167,7 +167,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div id="chart1"></div>
+                            <canvas id="test-pie-chart" class="test-pie-chart" width="400" height="400"></canvas>
                         </div>
                     </div>
                 </div>
@@ -292,4 +292,80 @@
             <!--end row-->
         </div>
     </div>
+
+
+
+    
+    <script src="{{ asset('autolab-assets/plugins/chartjs/js/Chart.min.js') }}"></script>
+    {{-- <script src="{{ asset('autolab-assets/plugins/chartjs/js/Chart.extension.js') }}"></script> --}}
+    <script>
+        /* -- Chartjs - Pie Chart -- */
+        var pieChartID = document.getElementById("test-pie-chart").getContext('2d');
+        var pieChart = new Chart(pieChartID, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        @foreach ($testChart as $chart)
+                            {{ $chart->total }},
+                        @endforeach
+                    ],
+                    borderColor: 'transparent',
+                    backgroundColor: planColors(),
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    @foreach ($testChart as $chart)
+                        '{{ $chart->status }}',
+                    @endforeach
+                ]
+            },
+            
+            options: {
+                responsive: true,
+                legend: {
+                    display: true
+                }
+                
+            }
+            
+        });
+
+        var planPoints = $('.planPoint');
+        planPoints.each(function(key, planPoint) {
+            var planPoint = $(planPoint)
+            planPoint.css('color', planColors()[key])
+        })
+
+        function planColors() {
+            return [
+                '#0DC043',
+                '#FF7A00',
+                '#ffa62b',
+                '#ffeaa7',
+                '#D980FA',
+                '#fccbcb',
+                '#45aaf2',
+                '#05dfd7',
+                '#FF00F6',
+                '#1e90ff',
+                '#2ed573',
+                '#eccc68',
+                '#ff5200',
+                '#cd84f1',
+                '#7efff5',
+                '#7158e2',
+                '#fff200',
+                '#ff9ff3',
+                '#08ffc8',
+                '#3742fa',
+                '#1089ff',
+                '#70FF61',
+                '#bf9fee',
+                '#574b90'
+            ]
+        }
+    </script>
+
+ 
 </div>
