@@ -150,7 +150,7 @@
                         @if (Auth::user()->hasPermission(['review-results']))
                             <a href="{{ route('test-review') }}"
                                 class="list-group-item
-                            {{ request()->segment(2) == 'test-result-review' || $link == 'review' ? 'active' : '' }}
+                            {{ request()->segment(2) == 'resultReview' || $link == 'review' ? 'active' : '' }}
                             "><i
                                     class="bi bi-check-square"></i>Result
                                 Review<x-count-badge>{{ $testsPendindReviewCount }}</x-count-badge></a>
@@ -159,7 +159,7 @@
                         @if (Auth::user()->hasPermission(['approve-results']))
                             <a href="{{ route('test-approval') }}"
                                 class="list-group-item 
-                            {{ request()->segment(2) == 'test-result-approval' || $link == 'approve' ? 'active' : '' }}
+                            {{ request()->segment(2) == 'resultApproval' || $link == 'approve' ? 'active' : '' }}
                             "><i
                                     class="bi bi-check2-square"></i>Result
                                 Approval<x-count-badge>{{ $testsPendindApprovalCount }}</x-count-badge></a>

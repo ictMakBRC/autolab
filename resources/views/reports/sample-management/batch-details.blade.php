@@ -48,30 +48,6 @@
             #noprint1 {
                 visibility: hidden;
             }
-
-            /* #bcode {
-                position: fixed;
-                bottom: 0;
-            } */
-
-            /* table{
-              border-collapse:collapse;
-          } */
-            /* tr td{
-              page-break-inside: avoid;
-              white-space: nowrap;
-          } */
-            /* table tbody tr td:before,
-          table tbody tr td:after {
-              content: "";
-              height: 4px;
-              display: block;
-          } */
-
-            /* table.table-bordered tr td th {
-              page-break-inside: avoid;
-          } */
-
             table,
             table tr td,
             table tr th {
@@ -99,7 +75,7 @@
 
     <!--start wrapper-->
     <div class="wrapper">
-        <header>
+        <header class="no-print">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
                     <a class="navbar-brand" href="{{ route('dashboard') }}"><img
@@ -137,22 +113,26 @@
         </header>
 
         <!--start content-->
-        <main>
-            <div class="container">
-                <div class="mt-1">
-                    <div class="card border shadow-none" id="reportContainer">
-                        <div class="card-header py-3">
-                            <div class="row align-items-center g-3">
-                                <div class="col-12 col-lg-6">
-                                    <h5 class="mb-0">Sample Batch <span
-                                            class="text-info">{{ $sampleReception->batch_no }}</span> Details</h5>
-                                </div>
-                                <div class="col-12 col-lg-6 text-md-end no-print">
-                                    <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
-                                            class="bi bi-printer-fill"></i> Print</a>
-                                </div>
+        <main id="reportContainer">
+            <div class="container card mt-2">
+                <div>
+                    <div class="card-header py-3 no-print">
+                        <div class="row align-items-center g-3">
+                            <div class="col-12 col-lg-6">
+                                <h5 class="mb-0"><span class="text-info">
+                                        {{ $sampleReception->batch_no }}</span></h5>
+                            </div>
+                            <div class="col-12 col-lg-6 text-md-end no-print">
+                                <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
+                                        class="bi bi-printer-fill"></i> Print</a>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-header text-center text-danger">
+                        <img src="{{ asset('autolab-assets/images/headers/header.png') }}"
+                            alt="Makerere University Logo" width="100%" height="200px">
+                        <h5 class="mb-0">{{$sampleReception->batch_no}}<span class="text-info"> Details</h5>
+                    </div>
                         <div class="card-header py-2 bg-light">
                             <div class="row">
                                 <div class="table-responsiv col">
@@ -268,10 +248,8 @@
                             @endif
                         </div>
 
-                        <div class="card-footer py-3">
-                            <p class="text-center mb-2">
-                                Sample Reception data for Batch <strong>{{ $sampleReception->batch_no }}</strong>
-                            </p>
+                        <div class="card-footer py-3 me-3 float-end">
+                            {{ QrCode::size(84)->generate($sampleReception->batch_no.'|'.$sampleReception->samples_accepted)}}
                         </div>
                     </div>
                 </div>

@@ -17,8 +17,8 @@
                         <li><a class="dropdown-item {{ $model === 'SampleReception' ? 'active' : '' }}"
                                 href="javascript: void(0);" wire:click="$set('model','SampleReception')">Batch</a>
                         </li>
-                        <li><a class="dropdown-item {{ $model === 'Sample' ? 'active' : '' }}" href="javascript: void(0);"
-                                wire:click="$set('model','Sample')">Sample</a>
+                        <li><a class="dropdown-item {{ $model === 'Sample' ? 'active' : '' }}"
+                                href="javascript: void(0);" wire:click="$set('model','Sample')">Sample</a>
                         </li>
                         <li><a class="dropdown-item {{ $model === 'Participant' ? 'active' : '' }}"
                                 href="javascript: void(0);" wire:click="$set('model','Participant')">Participant</a>
@@ -36,7 +36,7 @@
                 <div class="position-absolute top-50 translate-middle-y d-block d-xl-none search-close-icon"><i
                         class="bi bi-x-lg"></i></div>
             </form>
-            
+
             <div class="top-navbar-right ms-3">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item dropdown dropdown-large">
@@ -71,6 +71,31 @@
                                     </a>
                                 </form>
                             </li>
+                            <hr>
+                            <li>
+                                <h6 class="mb-0 text-center text-info">Color Mode</h6>
+                                <hr>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" wire:model='theme' id="Light"
+                                        value="light-theme">
+                                    <label class="form-check-label" for="Light">Light</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" wire:model='theme' id="Dark"
+                                        value="dark-theme">
+                                    <label class="form-check-label" for="Dark">Dark</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" wire:model='theme' id="SemiDark"
+                                        value="semi-dark">
+                                    <label class="form-check-label" for="SemiDark">Semi Dark</label>
+                                </div>
+                                {{-- <hr> --}}
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" wire:model='theme' id="Minimal"
+                                        value="minimal-theme" checked>
+                                    <label class="form-check-label" for="Minimal">Minimal Theme</label>
+                                </div>
                         </ul>
                     </li>
                 </ul>
