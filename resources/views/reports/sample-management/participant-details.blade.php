@@ -67,7 +67,7 @@
 
     <!--start wrapper-->
     <div class="wrapper">
-        <header>
+        <header class="no-print">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
                     <a class="navbar-brand" href="{{ route('dashboard') }}"><img
@@ -105,211 +105,207 @@
         </header>
 
         <!--start content-->
-        <main>
-            <div class="container">
-                <div class="mt-1">
-                    <div class="card border shadow-none" id="reportContainer">
-                        <div class="card-header py-3">
-                            <div class="row align-items-center g-3">
-                                <div class="col-12 col-lg-6">
-                                    <h5 class="mb-0">Participant<span class="text-info">
-                                            {{ $participant->identity }}</span> Details</h5>
-                                </div>
-                                <div class="col-12 col-lg-6 text-md-end no-print">
-                                    <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
-                                            class="bi bi-printer-fill"></i> Print</a>
-                                </div>
+        <main id="reportContainer">
+            <div class="container card mt-2">
+                <div>
+                    <div class="card-header py-3 no-print">
+                        <div class="row align-items-center g-3">
+                            <div class="col-12 col-lg-6">
+                                <h5 class="mb-0"><span class="text-info">
+                                        {{ $participant->identity }}</span></h5>
+                            </div>
+                            <div class="col-12 col-lg-6 text-md-end no-print">
+                                <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
+                                        class="bi bi-printer-fill"></i> Print</a>
                             </div>
                         </div>
-                        <div class="card-header py-2 bg-light">
+                    </div>
+                    <div class="card-header text-center text-danger">
+                        <img src="{{ asset('autolab-assets/images/headers/header.png') }}"
+                            alt="Makerere University Logo" width="100%" height="200px">
+                        <h5 class="mb-0">Participant<span class="text-info">
+                                {{ $participant->identity }}</span> Details</h5>
+                    </div>
+                    <div class="card-header py-2 bg-light">
+                        <div class="row">
+                            <div class="col">
+                                <table class="table table-striped mb-0 w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</th>
+                                            <th>SOURCE FACILITY</th>
+                                            <th>PARTICIPANT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong class="text-inverse">Entry Type: </strong>
+                                                {{ $participant->entry_type }}<br>
+                                                <strong class="text-inverse">Entry Date:
+                                                </strong>{{ date('d-m-Y H:i', strtotime($participant->created_at)) }}<br>
+                                                <strong class="text-inverse">Sample Count:
+                                                </strong>{{ $participant->sample_count }}<br>
+                                                <strong class="text-inverse">Test Count:
+                                                </strong>{{ $participant->test_result_count }}
+                                            </td>
+                                            <td>
+                                                <strong class="text-inverse">Name: </strong>
+                                                {{ $participant->facility->name }}<br>
+                                                <strong class="text-inverse">Study: </strong>
+                                                {{ $participant->study->name }}
+                                            </td>
+                                            <td>
+                                                <strong class="text-inverse">Participant ID:
+                                                </strong>{{ $participant->identity ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Age:
+                                                </strong>{{ $participant->age ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Gender:
+                                                </strong>{{ $participant->gender ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Contact:
+                                                </strong>{{ $participant->contact ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Address:
+                                                </strong>{{ $participant->address ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Kin Contact:
+                                                </strong>{{ $participant->nok_contact ?? 'N/A' }}
+                                            </td>
+                                        </tr>
+                                        @if ($participant->clinical_notes)
+                                            <tr>
+                                                <td colspan="3">
+                                                    <strong class="text-inverse">Clinical Notes
+                                                    </strong>
+                                                    <p>{{ $participant->clinical_notes }}</p>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        @forelse ($participant->sample as $sample)
                             <div class="row">
                                 <div class="col">
                                     <table class="table table-striped mb-0 w-100">
-                                        <thead>
-                                            <tr>
-                                                <th>{{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</th>
-                                                <th>SOURCE FACILITY</th>
-                                                <th>PARTICIPANT</th>
-                                            </tr>
-                                        </thead>
+                                        {{-- <thead> --}}
+                                        <tr>
+                                            <th>SAMPLE <strong
+                                                    class="text-info">{{ $sample->sample_identity }}</strong>
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        {{-- </thead> --}}
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <strong class="text-inverse">Entry Type: </strong>
-                                                    {{ $participant->entry_type }}<br>
-                                                    <strong class="text-inverse">Entry Date:
-                                                    </strong>{{ date('d-m-Y H:i', strtotime($participant->created_at)) }}<br>
-                                                    <strong class="text-inverse">Sample Count:
-                                                    </strong>{{ $participant->sample_count }}<br>
-                                                    <strong class="text-inverse">Test Count:
-                                                    </strong>{{ $participant->test_result_count }}
+                                                    <strong class="text-inverse">Received By: </strong>
+                                                    {{ $sample->sampleReception->receiver->fullName }}<br>
+                                                    <strong class="text-inverse">Batch:
+                                                    </strong>
+                                                    <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $sample->sampleReception->id]) }}"
+                                                        class="text-secondary"
+                                                        target="_blank">{{ $sample->sampleReception->batch_no }}
+                                                    </a><br>
+                                                    <strong class="text-inverse">Accessioined By:
+                                                    </strong>{{ $sample->accessioner->fullName ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Date Accessioned:
+                                                    </strong>{{ date('d-m-Y H:i', strtotime($sample->created_at)) }}<br>
+                                                    <strong class="text-success">Lab No:
+                                                    </strong>{{ $sample->lab_no }}<br>
+                                                    <strong class="text-inverse">Tests Requested:
+                                                    </strong>{{ count($sample->tests_requested) }}<br>
+                                                    <strong class="text-inverse">Tests Performed:
+                                                    </strong>{{ count($sample->tests_performed ?? []) }}
                                                 </td>
                                                 <td>
-                                                    <strong class="text-inverse">Name: </strong>
-                                                    {{ $participant->facility->name }}<br>
-                                                    <strong class="text-inverse">Study: </strong>
-                                                    {{ $participant->study->name }}
+
+                                                    <strong class="text-inverse">Requested By:
+                                                    </strong>{{ $sample->requester->name ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Date Requested:
+                                                    </strong>{{ date('d-m-Y', strtotime($sample->date_requested)) }}<br>
+                                                    <strong class="text-inverse">Courier Name:
+                                                    </strong>{{ $sample->sampleReception->courier->name ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Date Delivered:
+                                                    </strong>{{ date('d-m-Y H:i', strtotime($sample->sampleReception->date_delivered)) }}
                                                 </td>
                                                 <td>
-                                                    <strong class="text-inverse">Participant ID:
-                                                    </strong>{{ $participant->identity ?? 'N/A' }}<br>
-                                                    <strong class="text-inverse">Age:
-                                                    </strong>{{ $participant->age ?? 'N/A' }}<br>
-                                                    <strong class="text-inverse">Gender:
-                                                    </strong>{{ $participant->gender ?? 'N/A' }}<br>
-                                                    <strong class="text-inverse">Contact:
-                                                    </strong>{{ $participant->contact ?? 'N/A' }}<br>
-                                                    <strong class="text-inverse">Address:
-                                                    </strong>{{ $participant->address ?? 'N/A' }}<br>
-                                                    <strong class="text-inverse">Kin Contact:
-                                                    </strong>{{ $participant->nok_contact ?? 'N/A' }}
+                                                    <strong class="text-inverse">Sample Type:
+                                                    </strong>{{ $sample->sampleType->type ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Collected By:
+                                                    </strong>{{ $sample->collector->name ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Date collected:
+                                                    </strong>{{ date('d-m-Y H:i', strtotime($sample->date_collected)) }}<br>
+                                                    <strong class="text-inverse">Volume:
+                                                    </strong>{{ $sample->volume ?? 'N/A' }}<br>
+                                                    <strong class="text-inverse">Visit:
+                                                    </strong>{{ $sample->visit ?? 'N/A' }}
                                                 </td>
                                             </tr>
-                                            @if ($participant->clinical_notes)
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <strong class="text-inverse">Clinical Notes
-                                                        </strong>
-                                                        <p>{{ $participant->clinical_notes }}</p>
-                                                    </td>
-                                                </tr>
-                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="card-body">
-                            @forelse ($participant->sample as $sample)
-                                <div class="row">
-                                    <div class="col">
-                                        <table class="table table-striped mb-0 w-100">
-                                            {{-- <thead> --}}
+                            <div>
+                                <table class="table mb-0 w-100">
+                                    {{-- <thead> --}}
+                                    <tr>
+                                        <th>Test Requested</th>
+                                        <th>Result</th>
+                                        <th>Result Date</th>
+                                        <th>Performed By</th>
+                                        <th>Reviewed By</th>
+                                        <th>Approved By</th>
+                                    </tr>
+                                    {{-- </thead> --}}
+                                    <tbody>
+                                        @forelse ($sample->testResult as $result)
                                             <tr>
-                                                <th>SAMPLE <strong
-                                                        class="text-info">{{ $sample->sample_identity }}</strong>
-                                                </th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                            {{-- </thead> --}}
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <strong class="text-inverse">Received By: </strong>
-                                                        {{ $sample->sampleReception->receiver->fullName }}<br>
-                                                        <strong class="text-inverse">Batch:
-                                                        </strong>
-                                                        <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $sample->sampleReception->id]) }}"
-                                                            class="text-secondary"
-                                                            target="_blank">{{ $sample->sampleReception->batch_no }}
-                                                        </a><br>
-                                                        <strong class="text-inverse">Accessioined By:
-                                                        </strong>{{ $sample->accessioner->fullName ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Date Accessioned:
-                                                        </strong>{{ date('d-m-Y H:i', strtotime($sample->created_at)) }}<br>
-                                                        <strong class="text-success">Lab No:
-                                                        </strong>{{ $sample->lab_no }}<br>
-                                                        <strong class="text-inverse">Tests Requested:
-                                                        </strong>{{ count($sample->tests_requested) }}<br>
-                                                        <strong class="text-inverse">Tests Performed:
-                                                        </strong>{{ count($sample->tests_performed ?? []) }}
-
-                                                    </td>
-                                                    <td>
-
-                                                        <strong class="text-inverse">Requested By:
-                                                        </strong>{{ $sample->requester->name ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Date Requested:
-                                                        </strong>{{ date('d-m-Y', strtotime($sample->date_requested)) }}<br>
-                                                        <strong class="text-inverse">Courier Name:
-                                                        </strong>{{ $sample->sampleReception->courier->name ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Date Delivered:
-                                                        </strong>{{ date('d-m-Y H:i', strtotime($sample->sampleReception->date_delivered)) }}
-                                                    </td>
-                                                    <td>
-                                                        <strong class="text-inverse">Sample Type:
-                                                        </strong>{{ $sample->sampleType->type ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Collected By:
-                                                        </strong>{{ $sample->collector->name ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Date collected:
-                                                        </strong>{{ date('d-m-Y H:i', strtotime($sample->date_collected)) }}<br>
-                                                        <strong class="text-inverse">Volume:
-                                                        </strong>{{ $sample->volume ?? 'N/A' }}<br>
-                                                        <strong class="text-inverse">Visit:
-                                                        </strong>{{ $sample->visit ?? 'N/A' }}
-
-                                                    </td>
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <table class="table mb-0 w-100">
-                                        {{-- <thead> --}}
-                                        <tr>
-                                            <th>Test Requested</th>
-                                            <th>Result</th>
-                                            <th>Result Date</th>
-                                            <th>Performed By</th>
-                                            <th>Reviewed By</th>
-                                            <th>Approved By</th>
-                                        </tr>
-                                        {{-- </thead> --}}
-                                        <tbody>
-                                            @forelse ($sample->testResult as $result)
-                                                <tr>
-                                                    <td>
-                                                        <strong
-                                                            class="text-success">{{ $result->test->name }}</strong>
-                                                    </td>
-                                                    <td>
-                                                        @if ($result->result)
-                                                            {{ $result->result }}<br>
-                                                            @if ($result->comment)
-                                                                <strong class="text-inverse">Comments:</strong>
-                                                                <p>{{ $result->comment }}</p>
-                                                            @endif
-                                                        @else
-                                                            <a href="{{ route('attachment.download', $result->id) }}">See
-                                                                Attachment</a>
+                                                <td>
+                                                    <strong class="text-success">{{ $result->test->name }}</strong>
+                                                </td>
+                                                <td>
+                                                    @if ($result->result)
+                                                        {{ $result->result }}<br>
+                                                        @if ($result->comment)
+                                                            <strong class="text-inverse">Comments:</strong>
+                                                            <p>{{ $result->comment }}</p>
                                                         @endif
-                                                    </td>
-                                                    <td>
+                                                    @else
+                                                        <a href="{{ route('attachment.download', $result->id) }}">See
+                                                            Attachment</a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    </strong>{{ date('d-m-Y H:i', strtotime($result->created_at)) }}
+                                                </td>
+                                                <td>
+                                                    {{ $result->performer ? $result->performer->fullName : 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    {{ $result->performer ? $result->reviewer->fullName : 'N/A' }}
+                                                </td>
+                                                <td>
+                                                    {{ $result->performer ? $result->approver->fullName : 'N/A' }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        @empty
 
-                                                        </strong>{{ date('d-m-Y H:i', strtotime($result->created_at)) }}
+                        @endforelse
+                    </div>
 
-                                                    </td>
-                                                    <td>
-
-                                                        {{ $result->performer ? $result->performer->fullName : 'N/A' }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $result->performer ? $result->reviewer->fullName : 'N/A' }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $result->performer ? $result->approver->fullName : 'N/A' }}
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @empty
-
-                            @endforelse
-                        </div>
-
-                        <div class="card-footer py-3">
-                            <p class="text-center mb-2">
-                                Participant Details for <strong>{{ $participant->identity }}</strong>
-                            </p>
-                        </div>
+                    <div class="card-footer py-3 me-3 float-end">
+                        {{ QrCode::size(84)->generate($participant->identity) }}
                     </div>
                 </div>
             </div>

@@ -76,7 +76,7 @@
 
     <!--start wrapper-->
     <div class="wrapper">
-        <header>
+        <header class="no-print">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
                     <a class="navbar-brand" href="{{ route('dashboard') }}"><img
@@ -114,197 +114,194 @@
         </header>
 
         <!--start content-->
-        <main>
-            <div class="container">
-                <div class="mt-1">
-                    <div class="card border shadow-none" id="reportContainer">
-                        <div class="card-header py-3">
-                            <div class="row align-items-center g-3">
-                                <div class="col-12 col-lg-6">
-                                    <h5 class="mb-0">Test Report For <span
-                                            class="text-info">{{ $testResult->tracker }}</span></h5>
-                                </div>
-                                <div class="col-12 col-lg-6 text-md-end no-print">
-                                    <a href="{{ route('result-report', $testResult->id) }}"
-                                        class="btn btn-sm btn-info me-2"><i class="bi bi-download"></i> Download</a>
-                                    <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
-                                            class="bi bi-printer-fill"></i> Print</a>
-                                </div>
+        <main id="reportContainer">
+            <div class="container card mt-2">
+                <div>
+                    <div class="card-header py-3 no-print">
+                        <div class="row align-items-center g-3">
+                            <div class="col-12 col-lg-6">
+                                <h5 class="mb-0"><span class="text-info">
+                                        {{ $testResult->tracker }}</span></h5>
+                            </div>
+                            <div class="col-12 col-lg-6 text-md-end no-print">
+                                <a href="{{ route('result-report', $testResult->id) }}"
+                                    class="btn btn-sm btn-info me-2"><i class="bi bi-download"></i> Download</a>
+                                <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-success"><i
+                                        class="bi bi-printer-fill"></i> Print</a>
                             </div>
                         </div>
-                        <div class="card-header py-2 bg-light">
+                    </div>
+                    <div class="card-header text-center text-danger">
+                        <img src="{{ asset('autolab-assets/images/headers/header.png') }}"
+                            alt="Makerere University Logo" width="100%" height="200px">
+                        <h5 class="mb-0">Result Report<span class="text-info"></h5>
+                    </div>
+
+                    <div class="card-header py-2 bg-light">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60%">
+                                        PARTICIPANT
+                                    </th>
+                                    <th>
+                                        REQUESTER
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong class="text-inverse">Lab No:
+                                        </strong>{{ $testResult->sample->lab_no }}<br>
+                                        <strong class="text-inverse">Participant ID:
+                                        </strong>
+                                        <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $testResult->sample->participant->id]) }}"
+                                            class="text-secondary"
+                                            target="_blank">{{ $testResult->sample->participant->identity }}
+                                        </a><br>
+                                        <strong class="text-inverse">Sample ID:
+                                        </strong>
+                                        <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $testResult->sample->id]) }}"
+                                            class="text-secondary"
+                                            target="_blank">{{ $testResult->sample->sample_identity }}
+                                        </a><br>
+                                        <strong class="text-inverse">Name:
+                                        </strong>{{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
+                                        <strong class="text-inverse">Age:
+                                        </strong>{{ $testResult->sample->participant->age }}<b>
+                                            Gender: </b>{{ $testResult->sample->participant->gender }}<br>
+                                        <strong class="text-inverse">Study Name:
+                                        </strong>{{ $testResult->sample->study->name ?? 'N/A' }}<br>
+                                    </td>
+                                    <td>
+                                        <strong class="text-inverse">Name:
+                                        </strong>{{ $testResult->sample->requester->name }}<br>
+                                        <strong class="text-inverse">Telephone:
+                                        </strong>{{ $testResult->sample->requester->contact }}<br>
+                                        <strong class="text-inverse">Email:
+                                        </strong>{{ $testResult->sample->requester->email }}<br>
+                                        <strong class="text-inverse">Date Requested:
+                                        </strong>{{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}<br>
+                                        <strong class="text-inverse">Organisation: </strong>
+                                        {{ $testResult->sample->requester->facility->name }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 60%">
-                                            PARTICIPANT
-                                        </th>
-                                        <th>
-                                            REQUESTER
-                                        </th>
-                                    </tr>
-                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <strong class="text-inverse">Lab No:
-                                            </strong>{{ $testResult->sample->lab_no }}<br>
-                                            <strong class="text-inverse">Participant ID:
-                                            </strong>
-                                            <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $testResult->sample->participant->id]) }}"
-                                                class="text-secondary"
-                                                target="_blank">{{ $testResult->sample->participant->identity }}
-                                            </a><br>
-                                            <strong class="text-inverse">Sample ID:
-                                            </strong>
-                                            <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $testResult->sample->id]) }}"
-                                                class="text-secondary"
-                                                target="_blank">{{ $testResult->sample->sample_identity }}
-                                            </a><br>
-                                            <strong class="text-inverse">Name:
-                                            </strong>{{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
-                                            <strong class="text-inverse">Age:
-                                            </strong>{{ $testResult->sample->participant->age }}<b>
-                                                Gender: </b>{{ $testResult->sample->participant->gender }}<br>
-                                            <strong class="text-inverse">Study Name:
-                                            </strong>{{ $testResult->sample->study->name ?? 'N/A' }}<br>
+                                        <td colspan="2">
+                                            <strong class="text-inverse">Test Requested:
+                                            </strong>{{ $testResult->test->name }}
                                         </td>
                                         <td>
-                                            <strong class="text-inverse">Name:
-                                            </strong>{{ $testResult->sample->requester->name }}<br>
-                                            <strong class="text-inverse">Telephone:
-                                            </strong>{{ $testResult->sample->requester->contact }}<br>
-                                            <strong class="text-inverse">Email:
-                                            </strong>{{ $testResult->sample->requester->email }}<br>
-                                            <strong class="text-inverse">Date Requested:
-                                            </strong>{{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}<br>
-                                            <strong class="text-inverse">Organisation: </strong>
-                                            {{ $testResult->sample->requester->facility->name }}
+                                            <strong class="text-inverse">Sample Type:
+                                            </strong>{{ $testResult->sample->sampleType->type }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="">
+                                            <strong class="text-inverse">Collection Date:
+                                            </strong>{{ date('d-m-Y', strtotime($testResult->sample->date_collected)) }}
+                                        </td>
+                                        <td>
+                                            <strong class="text-inverse">Date Received:
+                                            </strong>{{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
+                                        </td>
+                                        <td>
+                                            <strong class="text-inverse">Result Date:
+                                            </strong>{{ $testResult->created_at }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong class="text-inverse">Result:
+                                            </strong>
+                                            @if ($testResult->result)
+                                                {{ $testResult->result }}
+                                            @else
+                                                <a href="{{ route('attachment.download', $testResult->id) }}">See
+                                                    Attachment</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2">
-                                                <strong class="text-inverse">Test Requested:
-                                                </strong>{{ $testResult->test->name }}
-                                            </td>
-                                            <td>
-                                                <strong class="text-inverse">Sample Type:
-                                                </strong>{{ $testResult->sample->sampleType->type }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="">
-                                                <strong class="text-inverse">Collection Date:
-                                                </strong>{{ date('d-m-Y', strtotime($testResult->sample->date_collected)) }}
-                                            </td>
-                                            <td>
-                                                <strong class="text-inverse">Date Received:
-                                                </strong>{{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
-                                            </td>
-                                            <td>
-                                                <strong class="text-inverse">Result Date:
-                                                </strong>{{ $testResult->created_at }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3">
-                                                <strong class="text-inverse">Result:
-                                                </strong>
-                                                @if ($testResult->result)
-                                                    {{ $testResult->result }}
-                                                @else
-                                                    <a href="{{ route('attachment.download', $testResult->id) }}">See
-                                                        Attachment</a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
 
-                            <div class="row bg-light align-items-center m-0">
-                                <strong class="text-inverse">Comments:</strong>
-                                <p>{{ $testResult->comment }}</p>
-                            </div>
-                            <!--end row-->
-
-                            <hr>
-                            <div class="my-3">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <strong>Performed By</strong><br>
-                                                @if ($testResult->performer->signature)
-                                                    <img src="{{ asset('storage/' . $testResult->performer->signature) }}"
-                                                        alt="" height="5%" width="30%"><br>
-                                                @endif
-                                                {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
-                                            </td>
-                                            <td>
-                                                <strong>Rewiewed By</strong><br>
-                                                @if ($testResult->reviewer->signature)
-                                                    <img src="{{ asset('storage/' . $testResult->reviewer->signature) }}"
-                                                        alt="" height="5%" width="30%"><br>
-                                                @endif
-                                                {{ $testResult->reviewer->fullName }}
-                                            </td>
-                                            <td>
-                                                <strong>Approved By</strong><br>
-                                                @if ($testResult->approver->signature)
-                                                    <img src="{{ asset('storage/' . $testResult->approver->signature) }}"
-                                                        alt="" height="5%" width="30%"><br>
-                                                @endif
-                                                {{ $testResult->approver->fullName }}
-                                            </td>
-                                            <td>
-                                            <td class="btop" style="width:20%">
-                                                {{-- <div>
-
-                                                    <img src="data:image/png;base64, {!! base64_encode(
-                                                        QrCode::format('svg')->size(84)->generate(
-                                                                $testResult->tracker .
-                                                                    '|' .
-                                                                    $testResult->sample->participant->identity .
-                                                                    '|' .
-                                                                    $testResult->sample->sample_identity,
-                                                            ),
-                                                    ) !!} ">
-                                                </div> --}}
-                                            </td>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="row bg-light align-items-center m-0">
+                            <strong class="text-inverse">Comments:</strong>
+                            <p>{{ $testResult->comment }}</p>
                         </div>
+                        <!--end row-->
 
-                        <div class="card-footer py-3">
-                            <p class="text-center mb-2">
-                                The Laboratory is Certified by the Ministry of Health Uganda
-                            </p>
+                        <hr>
+                        <div class="my-3">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Performed By</strong><br>
+                                            @if ($testResult->performer->signature)
+                                                <img src="{{ asset('storage/' . $testResult->performer->signature) }}"
+                                                    alt="" height="5%" width="30%"><br>
+                                            @endif
+                                            {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
+                                        </td>
+                                        <td>
+                                            <strong>Rewiewed By</strong><br>
+                                            @if ($testResult->reviewer->signature)
+                                                <img src="{{ asset('storage/' . $testResult->reviewer->signature) }}"
+                                                    alt="" height="5%" width="30%"><br>
+                                            @endif
+                                            {{ $testResult->reviewer->fullName }}
+                                        </td>
+                                        <td>
+                                            <strong>Approved By</strong><br>
+                                            @if ($testResult->approver->signature)
+                                                <img src="{{ asset('storage/' . $testResult->approver->signature) }}"
+                                                    alt="" height="5%" width="30%"><br>
+                                            @endif
+                                            {{ $testResult->approver->fullName }}
+                                        </td>
+                                        <td>
+                                            {{ QrCode::size(84)->generate(
+                                                $testResult->tracker .
+                                                    '|' .
+                                                    $testResult->sample->participant->identity .
+                                                    '|' .
+                                                    $testResult->sample->sample_identity,
+                                            ) }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-
                     </div>
                 </div>
+                <div class="card-footer py-3">
+                    <p class="text-center mb-2">
+                        The Laboratory is Certified by the Ministry of Health Uganda
+                    </p>
+                </div>
             </div>
-        </main>
+    </div>
+    </main>
+    </div>
 
-        <!--end page main-->
 
-        <footer class="bg-white border-top p-3 text-center fixed-bottom">
-            <p class="mb-0">Makerere University Biomedical Research Centre © {{ date('Y') }}. All right
-                reserved.
-            </p>
-        </footer>
+    <!--end page main-->
+
+    <footer class="bg-white border-top p-3 text-center fixed-bottom">
+        <p class="mb-0">Makerere University Biomedical Research Centre © {{ date('Y') }}. All right
+            reserved.
+        </p>
+    </footer>
 
     </div>
     <!--end wrapper-->
