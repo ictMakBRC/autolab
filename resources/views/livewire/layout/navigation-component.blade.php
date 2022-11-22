@@ -89,8 +89,8 @@
                                 <h5 class="mb-0">Home</h5>
                             </div>
                         </div>
-                        <a href="{{ route('dashboard') }}" class="list-group-item"><i
-                                class="bi bi-house-door-fill"></i>Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Dashboard</a>
+                        <a href="{{ route('user.dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>My Dashboard</a>
                     </div>
                 </div>
                 {{-- <div class="tab-pane fade" id="pills-patients">
