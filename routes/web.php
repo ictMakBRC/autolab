@@ -11,6 +11,7 @@ use App\Http\Controllers\SearchResultsController;
 use App\Http\Livewire\Admin\CollectorComponent;
 use App\Http\Livewire\Admin\CourierComponent;
 use App\Http\Livewire\Admin\Dashboards\MainDashboardComponent;
+use App\Http\Livewire\Admin\Dashboards\UserDashboardComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\FacilityComponent;
 use App\Http\Livewire\Admin\KitComponent;
@@ -115,6 +116,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
 
     Route::group(['prefix' => 'Dashboard'], function () {
         Route::get('/', MainDashboardComponent::class)->name('dashboard');
+        Route::get('myDashboard', UserDashboardComponent::class)->name('user.dashboard');
     });
 });
 
