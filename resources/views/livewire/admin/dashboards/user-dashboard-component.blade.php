@@ -1,13 +1,13 @@
 <div>
     <!--breadcrumb-->
-    <div class="card">
-        <div class="card-body">
+    {{-- <div class="card">
+        <div class="card-body"> --}}
+
             <div class="row">
-                <div class="ms-auto col-md-12 float-end mb-2">
-                    <div class=" align-items-center ml-4 me-2">
-                        <label for="view" class="text-nowrap mr-2 mb-0">View</label>
-                        <select wire:model="view" class="form-select">
-                            <option value="all">All</option>
+                <div class="ms-auto col-md-12 mb-2 ">
+                    <div class="form-group">
+                        <select wire:model="view" class="form-select" style=" position: relative; width: 300px; float: right;">
+                            <option value="all">View All</option>
                             <option value="today">Today</option>
                             <option value="week">This Week</option>
                             <option value="month">This Month</option>
@@ -290,8 +290,8 @@
                 </div>
             </div>
             <!--end row-->
-        </div>
-    </div>
+        {{-- </div>
+    </div> --}}
 
 
 
