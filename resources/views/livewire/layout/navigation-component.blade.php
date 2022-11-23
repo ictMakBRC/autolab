@@ -172,9 +172,12 @@
                         @endif
 
                         @if (Auth::user()->hasPermission(['view-participant-info']))
+                        <a href="{{ route('samples-list') }}" class="list-group-item"><i
+                            class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
+                        </x-count-badge></a>
                             <a href="{{ route('participants') }}" class="list-group-item"><i
-                                    class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
-                                </x-count-badge></a>
+                                class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
+                            </x-count-badge></a>
                         @endif
 
                     </div>

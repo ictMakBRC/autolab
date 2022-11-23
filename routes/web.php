@@ -24,7 +24,10 @@ use App\Http\Livewire\Admin\TestComponent;
 use App\Http\Livewire\Admin\UserActivityComponent;
 use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Admin\UserProfileComponent;
+use App\Http\Livewire\Lab\Lists\AliquotingSamplesComponent;
+use App\Http\Livewire\Lab\Lists\DefferedSamplesComponent;
 use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
+use App\Http\Livewire\Lab\Lists\SamplesListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
@@ -96,6 +99,10 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
         Route::get('result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
+
+        Route::get('samplesList', SamplesListComponent::class)->middleware('permission:view-participant-info')->name('samples-list');
+        // Route::get('aliquotingSamples', AliquotingSamplesComponent::class)->middleware('permission:view-participant-info')->name('samples-aliquoting');
+        // Route::get('defferedSamples', DefferedSamplesComponent::class)->middleware('permission:view-participant-info')->name('deffered-samples');
 
         Route::group(['middleware' => 'signed'], function () {
             Route::get('batch/{sampleReception}/searchResults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');

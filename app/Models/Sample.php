@@ -148,6 +148,20 @@ class Sample extends Model
             : static::query()
                 ->where('creator_lab', auth()->user()->laboratory_id)
                 ->where('sample_identity', trim($search))
-                ->orWhere('lab_no', trim($search));
+                ->orWhere('lab_no', trim($search))
+                ->orWhere(
+                    function ($query) use ($search) {
+                        $query->whereHas('sampleReception', function ($query) use ($search) {
+                            $query->where('batch_no', $search);
+                        });
+                    }
+                )
+                ->orWhere(
+                    function ($query) use ($search) {
+                        $query->whereHas('study', function ($query) use ($search) {
+                            $query->where('name', 'like', '%'.$search.'%');
+                        });
+                    }
+                );
     }
 }

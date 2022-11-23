@@ -2,11 +2,11 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
+use App\Exports\ParticipantsExport;
+use App\Models\Participant;
 use App\Models\Sample;
 use Livewire\Component;
-use App\Models\Participant;
 use Livewire\WithPagination;
-use App\Exports\ParticipantsExport;
 
 class ParticipantListComponent extends Component
 {
@@ -47,9 +47,9 @@ class ParticipantListComponent extends Component
 
     public function render()
     {
-        $participantList=Sample::select('participant_id')->where('creator_lab', auth()->user()->laboratory_id)->distinct()->get()->pluck('participant_id');
+        $participantList = Sample::select('participant_id')->where('creator_lab', auth()->user()->laboratory_id)->distinct()->get()->pluck('participant_id');
         $participants = Participant::search($this->search)
-        ->whereIn('id', $participantList??[])->withCount(['sample', 'testResult'])->with('facility', 'study')
+        ->whereIn('id', $participantList ?? [])->withCount(['sample', 'testResult'])->with('facility', 'study')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 

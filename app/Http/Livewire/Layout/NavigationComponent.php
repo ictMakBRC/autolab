@@ -9,7 +9,6 @@ use App\Models\Designation;
 use App\Models\Facility;
 use App\Models\Kit;
 use App\Models\Laboratory;
-use App\Models\Participant;
 use App\Models\Permission;
 use App\Models\Platform;
 use App\Models\Requester;
@@ -34,6 +33,8 @@ class NavigationComponent extends Component
     public $batchesCount;
 
     public $participantCount;
+
+    public $samplesCount;
 
     public $testAssignedCount;
 
@@ -83,7 +84,8 @@ class NavigationComponent extends Component
             $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
         }
         if (Auth::user()->hasPermission(['view-participant-info'])) {
-            $this->participantCount = Participant::count(); //depends
+            $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
+            $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         }
         if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
             $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();

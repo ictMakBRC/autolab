@@ -6,7 +6,6 @@ use App\Models\Collector;
 use App\Models\Courier;
 use App\Models\Facility;
 use App\Models\Laboratory;
-use App\Models\Participant;
 use App\Models\Requester;
 use App\Models\Sample;
 use App\Models\SampleReception;

@@ -480,8 +480,11 @@
                                                 <select class="form-select select2" data-toggle="select2"
                                                     id="sample_is_for" wire:model="sample_is_for">
                                                     <option selected value="">Select</option>
-                                                    <option value='Processing'>Processing</option>
-                                                    <option value='Storage'>Storage</option>
+                                                    <option value='Testing'>Testing</option>
+                                                    <option value='Aliquoting'>Aliquoting</option>
+                                                    <option value='Deffered'>Deffered Testing</option>
+                                                    {{-- <option value='Processing and Storage'>Processing & Storage</option>
+                                                    <option value='Direct Storage'>Direct Storage</option> --}}
                                                 </select>
                                                 @error('sample_is_for')
                                                     <div class="text-danger text-small">{{ $message }}</div>

@@ -12,7 +12,7 @@ class SearchResultsController extends Controller
     public function batchSearchResults(SampleReception $sampleReception)
     {
         $sampleReception->load(['facility', 'courier', 'receiver', 'reviewer', 'sample', 'sample.participant',
-            'sample.sampleType', 'sample.requester', 'sample.collector', 'sample.study', 'sample.testResult', ]);  
+            'sample.sampleType', 'sample.requester', 'sample.collector', 'sample.study', 'sample.testResult', ]);
 
         return view('reports.sample-management.batch-details', compact('sampleReception'));
     }
@@ -41,12 +41,11 @@ class SearchResultsController extends Controller
 
     public function combinedTestReport($sampleIds)
     {
-
         $samples = Sample::with(['sampleReception', 'sampleReception.facility', 'sampleReception.courier', 'sampleReception.receiver', 'participant',
-        'sampleType', 'requester', 'collector', 'study', 'testResult', 'testResult.test', ])->whereIn('id',explode('-',$sampleIds))->get();
-        $qrCodeContent=implode('|',$samples->pluck('sample_identity')->toArray());
+            'sampleType', 'requester', 'collector', 'study', 'testResult', 'testResult.test', ])->whereIn('id', explode('-', $sampleIds))->get();
+        $qrCodeContent = implode('|', $samples->pluck('sample_identity')->toArray());
         // return $testResults;
 
-        return view('reports.sample-management.combined-test-report',compact('samples','qrCodeContent'));
+        return view('reports.sample-management.combined-test-report', compact('samples', 'qrCodeContent'));
     }
 }

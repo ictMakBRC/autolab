@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Layout;
 
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\TestResult;
 use App\Models\Participant;
+use App\Models\Sample;
 use App\Models\SampleReception;
-use Illuminate\Support\Facades\URL;
+use App\Models\TestResult;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Livewire\Component;
 
 class HeaderComponent extends Component
 {
@@ -24,13 +24,13 @@ class HeaderComponent extends Component
 
     public function updatedTheme()
     {
-        Auth::user()->update(['color_scheme'=>$this->theme]);
-        $this->dispatchBrowserEvent('switch-theme', ['theme' =>$this->theme]);
+        Auth::user()->update(['color_scheme' => $this->theme]);
+        $this->dispatchBrowserEvent('switch-theme', ['theme' => $this->theme]);
     }
 
     public function mount()
     {
-        $this->theme=auth()->user()->color_scheme;
+        $this->theme = auth()->user()->color_scheme;
     }
 
     public function updatedModel()
