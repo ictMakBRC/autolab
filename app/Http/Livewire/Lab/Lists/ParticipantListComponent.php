@@ -25,14 +25,10 @@ class ParticipantListComponent extends Component
     public $export;
 
     protected $paginationTheme = 'bootstrap';
-    // public function export()
-    // {
-    //     return (new CollectorsExport())->download('sample_collectors.xlsx');
-    // }
 
     public function export()
     {
-        return (new ParticipantsExport())->download('Participants.xlsx');
+        return (new ParticipantsExport())->download('Participants_' . date('Y-m-d') . '_' . now()->toTimeString() . '.xlsx');
     }
 
     public function updatingSearch()

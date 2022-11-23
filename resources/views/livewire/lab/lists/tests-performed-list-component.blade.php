@@ -8,7 +8,7 @@
                             <div class="col-sm-12 mt-3">
                                 <div class="d-sm-flex align-items-center">
                                     <h5 class="mb-2 mb-sm-0">
-                                        Samples
+                                        Tests Performed
                                     </h5>
                                     <div class="ms-auto">
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
@@ -51,7 +51,7 @@
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="mb-3 col-md-2">
+                                    {{-- <div class="mb-3 col-md-2">
                                         <label for="job" class="form-label">Sample State</label>
                                         <select class="form-select" id="job" wire:model="job">
                                             <option selected value="">All</option>
@@ -64,7 +64,7 @@
                                         @error('job')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
-                                    </div>
+                                    </div> --}}
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"
@@ -97,9 +97,7 @@
                                     <div class="mb-3 col-md-2">
                                         <label for="orderBy" class="form-label">OrderBy</label>
                                         <select wire:model="orderBy" class="form-select">
-                                            <option value="sample_identity">Sample ID</option>
-                                            <option value="lab_no">Lab No</option>
-                                            <option value="id">Latest</option>
+                                            <option value="approved_at">Latest</option>
                                         </select>
                                     </div>
 
@@ -122,77 +120,73 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
-                                        <th>Sample</th>
-                                        <th>Sample ID</th>
-                                        <th>Lab No</th>
+                                        <th>Sample Batch</th>
+                                        <th>Tracker</th>
                                         <th>Facility</th>
                                         <th>Study</th>
-                                        <th>For</th>
+                                        <th>Participant ID</th>
+                                        <th>Sample</th>
+                                        <th>Test</th>
+                                        <th>Requester</th>
+                                        <th>Result Date</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($samples as $key => $sample)
+                                    @forelse ($testResults as $key => $testResult)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
-                                                <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $sample->sampleReception->id]) }}"
+                                                <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
                                                     class="text-secondary"
-                                                    target="_blank">{{ $sample->sampleReception->batch_no }}
+                                                    target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $sample->participant->id]) }}"
-                                                    class="text-secondary"
-                                                    target="_blank">{{ $sample->participant->identity }}
+                                                <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
+                                                    target="_blank"><strong
+                                                        class="text-info">{{ $testResult->tracker }}</strong>
                                                 </a>
+                                            </td>
+                                            <td>
+                                                {{ $testResult->sample->sampleReception->facility->name ?? 'N/A' }}
+                                            </td>
+                                            <td>
+                                                {{ $testResult->sample->study->name ?? 'N/A' }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $testResult->sample->participant->id]) }}"
+                                                    class="text-secondary"
+                                                    target="_blank">{{ $testResult->sample->participant->identity }}
+                                                </a>
+                                            </td>
 
-                                            </td>
                                             <td>
-                                                {{ $sample->sampleType->type }}
+                                                {{ $testResult->sample->sampleType->type }}
                                             </td>
-                                            <td>
-                                                {{ $sample->sample_identity }}
-                                            </td>
-                                            <td>
-                                                <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                            </td>
-                                            <td>
-                                                {{ $sample->participant->facility->name ?? 'N/A' }}
-                                            </td>
-                                            <td>
-                                                {{ $sample->study->name ?? 'N/A' }}
-                                            </td>
-                                            <td>
-                                                @if ($sample->sample_is_for == 'Testing')
-                                                    <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
-                                                @elseif($sample->sample_is_for == 'Deffered')
-                                                    <span class="badge bg-warning">{{ $sample->sample_is_for }}</span>
-                                                @else
-                                                    <span class="badge bg-info">{{ $sample->sample_is_for }}</span>
-                                                @endif
-                                            </td>
-                                            <td class="table-action">
-                                                @if ($sample->sample_is_for == 'Deffered')
-                                                    <a href="javascript:;" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Recall for Testing"><i
-                                                            class="bi bi-arrow-90deg-left"
-                                                            wire:click="recallSampleConfirmation({{ $sample->id }})"></i></a>
-                                                @elseif($sample->sample_is_for == 'Testing')
-                                                    <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
-                                                        type="button" class="btn btn-outline-info"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title="View Details"
-                                                        target="_blank"><i class="bi bi-eye"></i>
-                                                    </a>
-                                                @else
-                                                    N/A
-                                                @endif
 
+                                            <td>
+                                                {{ $testResult->test->name }}
+                                            </td>
+
+                                            <td>
+                                                {{ $testResult->sample->requester->name }}
+                                            </td>
+                                            <td>
+                                                {{ $testResult->created_at }}
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-success">{{ $testResult->status }}</span>
+                                            </td>
+                                            <td class="action-ico">
+                                                <a href="{{ route('result-report', $testResult->id) }}"
+                                                    type="button" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Result Report"
+                                                    class="action-ico btn btn-outline-info"
+                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                        class="bi bi-arrow-down-square"></i></a>
                                             </td>
                                         </tr>
                                     @empty
@@ -203,7 +197,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $samples->links() }}
+                                    {{ $testResults->links() }}
                                 </div>
                             </div>
                         </div>
@@ -213,42 +207,4 @@
         </div><!-- end col-->
 
     </div>
-
-
-    {{-- //SAMPLE RECALL CONFIRMATION MODAL --}}
-
-    <div wire:ignore.self class="modal fade" id="recall-confirmation-modal" tabindex="-1" data-backdrop="static"
-        data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Recall sample for testing</h5>
-                    <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body pt-4 pb-4">
-                    <h6>Are you sure you want to recall this sample for testing?</h6>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-sm btn-success" wire:click="recallForTesting()">Yes! Recall</button>
-                    <button class="btn btn-sm btn-info" wire:click="recallBatchForTesting()">Yes! whole Batch</button>
-                    <button class="btn btn-sm btn-danger" wire:click="cancel()" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @push('scripts')
-        <script>
-            window.addEventListener('close-modal', event => {
-                $('#recall-confirmation-modal').modal('hide');
-            });
-
-            window.addEventListener('recall-confirmation', event => {
-                $('#recall-confirmation-modal').modal('show');
-            });
-        </script>
-    @endpush
 </div>

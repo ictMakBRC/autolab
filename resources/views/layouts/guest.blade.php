@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{auth()->user()->color_scheme??'minimal-theme'}}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="minimal-theme">
 
 <head>
     <!-- Required meta tags -->

@@ -99,6 +99,7 @@ class Sample extends Model
             ->where(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->whereHas('participant', function ($query) use ($search) {
                         $query->where('identity', 'like', '%'.$search.'%');
                     });
@@ -107,18 +108,21 @@ class Sample extends Model
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->where('lab_no', 'like', '%'.$search.'%');
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->where('sample_identity', 'like', '%'.$search.'%');
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->whereHas('study', function ($query) use ($search) {
                         $query->where('name', 'like', '%'.$search.'%');
                     });
@@ -127,6 +131,7 @@ class Sample extends Model
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->whereHas('sampleReception', function ($query) use ($search) {
                         $query->where('batch_no', 'like', '%'.$search.'%');
                     });
@@ -135,6 +140,7 @@ class Sample extends Model
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->whereIn('status', $status)
+                    ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
                     ->whereHas('requester', function ($query) use ($search) {
                         $query->where('name', 'like', '%'.$search.'%');
                     });
@@ -148,20 +154,6 @@ class Sample extends Model
             : static::query()
                 ->where('creator_lab', auth()->user()->laboratory_id)
                 ->where('sample_identity', trim($search))
-                ->orWhere('lab_no', trim($search))
-                ->orWhere(
-                    function ($query) use ($search) {
-                        $query->whereHas('sampleReception', function ($query) use ($search) {
-                            $query->where('batch_no', $search);
-                        });
-                    }
-                )
-                ->orWhere(
-                    function ($query) use ($search) {
-                        $query->whereHas('study', function ($query) use ($search) {
-                            $query->where('name', 'like', '%'.$search.'%');
-                        });
-                    }
-                );
+                ->orWhere('lab_no', trim($search));
     }
 }
