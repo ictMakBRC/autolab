@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Exports\SamplesExport;
-use App\Models\Facility;
-use App\Models\Sample;
 use App\Models\Study;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Exports\SamplesExport;
 
 class SamplesListComponent extends Component
 {
@@ -18,6 +19,8 @@ class SamplesListComponent extends Component
     public $study_id = 0;
 
     public $job = '';
+
+    public $sampleType;
 
     public $from_date = '';
 
@@ -84,6 +87,11 @@ class SamplesListComponent extends Component
                     }, function ($query) {
                         return $query;
                     })
+                    ->when($this->sampleType != 0, function ($query) {
+                        $query->where('sample_type_id', $this->sampleType);
+                    }, function ($query) {
+                        return $query;
+                    })
                     ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                         $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
                     }, function ($query) {
@@ -132,10 +140,11 @@ class SamplesListComponent extends Component
     public function render()
     {
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
+        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type','asc')->get();
         $jobs = Sample::select('sample_is_for')->distinct()->get();
         $samples = $this->filterSamples()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs'));
+        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs','sampleTypes'));
     }
 }

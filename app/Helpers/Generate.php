@@ -56,7 +56,7 @@ class Generate
             $participantNumberYear = (int) filter_var($participantNumberSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
             if ($participantNumberYear == $yearStart) {
-                $participant_no = $participantNumberSplit[0].'-'.((int) filter_var($participantNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1).'P';
+                $participant_no = $participantNumberSplit[0].'-'.str_pad(((int) filter_var($participantNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).'P';
             } else {
                 $participant_no = 'GMI'.$yearStart.'-001P';
             }

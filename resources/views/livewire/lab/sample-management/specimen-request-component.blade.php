@@ -510,6 +510,7 @@
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
                                             <hr>
+                                            @if ($entry_type=='Participant')
                                             <div class="mb-3 col-md-2">
                                                 <label for="visit" class="form-label">Participant Visit
                                                     @if ($lastVisit)
@@ -523,6 +524,8 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            @endif
+                                        
                                             <div class="mb-3 col-md-8">
                                                 <label for="sampleType" class="form-label">Sample<span
                                                         class="text-danger">*</span></label>

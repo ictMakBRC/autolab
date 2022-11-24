@@ -65,6 +65,22 @@
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    <div class="mb-3 col-md-2">
+                                        <label for="sampleType" class="form-label">Sample Type</label>
+                                        <select class="form-select" id="sampleType"
+                                        wire:model='sampleType'>
+                                        <option selected value="0">All</option>
+                                        @foreach ($sampleTypes as $sampleType)
+                                            <option value='{{ $sampleType->id }}'>
+                                                {{ $sampleType->type }}</option>
+                                        @endforeach
+                                    </select>
+                                        @error('sampleType')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"

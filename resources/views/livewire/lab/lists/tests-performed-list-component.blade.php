@@ -51,20 +51,34 @@
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    {{-- <div class="mb-3 col-md-2">
-                                        <label for="job" class="form-label">Sample State</label>
-                                        <select class="form-select" id="job" wire:model="job">
-                                            <option selected value="">All</option>
-                                            @forelse ($jobs as $job)
-                                                <option value='{{ $job->sample_is_for }}'>{{ $job->sample_is_for }}
-                                                </option>
-                                            @empty
-                                            @endforelse
-                                        </select>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="sampleType" class="form-label">Sample Type</label>
+                                        <select class="form-select" id="sampleType"
+                                        wire:model='sampleType'>
+                                        <option selected value="0">All</option>
+                                        @foreach ($sampleTypes as $sampleType)
+                                            <option value='{{ $sampleType->id }}'>
+                                                {{ $sampleType->type }}</option>
+                                        @endforeach
+                                    </select>
                                         @error('job')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
-                                    </div> --}}
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="test_id" class="form-label">Test</label>
+                                        <select class="form-select" id="test_id"
+                                        wire:model='test_id'>
+                                        <option selected value="0">All</option>
+                                        @foreach ($tests as $test)
+                                            <option value='{{ $test->id }}'>
+                                                {{ $test->name }}</option>
+                                        @endforeach
+                                    </select>
+                                        @error('test')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"
