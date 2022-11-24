@@ -84,7 +84,7 @@ class TestRequestComponent extends Component
     {
         $samples = Sample::search($this->search, ['Assigned'])
         ->whereIn('status', ['Assigned'])
-        ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->whereHas('testAssignment', function (Builder $query) {
             $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);

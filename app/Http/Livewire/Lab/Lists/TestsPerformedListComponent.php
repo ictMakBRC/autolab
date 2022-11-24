@@ -2,13 +2,12 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Models\Study;
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\TestResult;
-use Livewire\WithPagination;
 use App\Exports\TestResultsExport;
+use App\Models\Facility;
+use App\Models\Study;
+use App\Models\TestResult;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestsPerformedListComponent extends Component
 {
@@ -53,7 +52,7 @@ class TestsPerformedListComponent extends Component
     public function export()
     {
         if (count($this->resultIds) > 0) {
-            return (new TestResultsExport($this->resultIds))->download('Tests_Performed_' . date('Y-m-d') . '_' . now()->toTimeString() . '.xlsx');
+            return (new TestResultsExport($this->resultIds))->download('Tests_Performed_'.date('Y-m-d').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No performed Tests selected for export!']);
         }
@@ -61,7 +60,7 @@ class TestsPerformedListComponent extends Component
 
     public function filterTests()
     {
-        $results = TestResult::select('*')->where(['creator_lab'=>auth()->user()->laboratory_id,'status'=>'Approved'])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
+        $results = TestResult::select('*')->where(['creator_lab' => auth()->user()->laboratory_id, 'status' => 'Approved'])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
                     ->when($this->facility_id != 0, function ($query) {
                         $query->whereHas('sample.sampleReception', function ($query) {
                             $query->where('facility_id', $this->facility_id);
@@ -93,7 +92,7 @@ class TestsPerformedListComponent extends Component
             $testResult->increment('download_count', 1);
         }
     }
-    
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));

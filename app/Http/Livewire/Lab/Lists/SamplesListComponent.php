@@ -31,8 +31,6 @@ class SamplesListComponent extends Component
 
     public $orderAsc = 0;
 
-    public $activeRow;
-
     public $export;
 
     public $studies;
@@ -42,6 +40,7 @@ class SamplesListComponent extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $recall_id;
+
     public $reception_id;
 
     public function updatedFacilityId()
@@ -59,7 +58,7 @@ class SamplesListComponent extends Component
     public function export()
     {
         if (count($this->sampleIds) > 0) {
-            return (new SamplesExport($this->sampleIds))->download('Samples_' . date('Y-m-d') . '_' . now()->toTimeString() . '.xlsx');
+            return (new SamplesExport($this->sampleIds))->download('Samples_'.date('Y-m-d').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No Samples selected for export!']);
         }
@@ -106,7 +105,7 @@ class SamplesListComponent extends Component
     public function recallForTesting()
     {
         $sample = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('id', $this->recall_id)->first();
-        $sample->update(['sample_is_for'=>'Testing']);
+        $sample->update(['sample_is_for' => 'Testing']);
         $this->recall_id = '';
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Successfully recalled for testing!']);
@@ -114,11 +113,12 @@ class SamplesListComponent extends Component
 
     public function recallBatchForTesting()
     {
-        Sample::where(['sample_reception_id'=>$this->reception_id,'sample_is_for'=>'Deffered'])->update(['sample_is_for'=>'Testing']);
+        Sample::where(['sample_reception_id' => $this->reception_id, 'sample_is_for' => 'Deffered'])->update(['sample_is_for' => 'Testing']);
         $this->recall_id = '';
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Batch Samples Successfully recalled for testing!']);
     }
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));

@@ -142,7 +142,7 @@ class AssignTestsComponent extends Component
     {
         $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
         ->whereIn('status', ['Accessioned', 'Processing'])
-        ->where(['creator_lab'=>auth()->user()->laboratory_id,'sample_is_for'=>'Testing'])
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);

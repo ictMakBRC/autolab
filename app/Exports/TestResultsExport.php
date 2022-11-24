@@ -2,12 +2,11 @@
 
 namespace App\Exports;
 
-use App\Models\Sample;
 use App\Models\TestResult;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class TestResultsExport implements FromCollection, WithMapping, WithHeadings
 {
@@ -28,7 +27,7 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        return TestResult::whereIn('id', $this->resultIds)->where(['creator_lab'=>auth()->user()->laboratory_id,'status'=>'Approved'])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception', 'sample.sampleReception.facility'])->latest()->get();
+        return TestResult::whereIn('id', $this->resultIds)->where(['creator_lab' => auth()->user()->laboratory_id, 'status' => 'Approved'])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception', 'sample.sampleReception.facility'])->latest()->get();
     }
 
     public function map($result): array
@@ -71,4 +70,3 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings
         ];
     }
 }
-
