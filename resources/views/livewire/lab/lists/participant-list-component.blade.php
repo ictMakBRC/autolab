@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Samples
+                                    Participants
                                 </h5>
                                 <div class="ms-auto">
                                     <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
