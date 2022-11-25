@@ -25,13 +25,9 @@ return [
             'access-settings',
             'manage-users',
             'assign-test-requests',
+            'master-access',
+            'manager-access',
+            'normal-access',
         ],
     ],
-
-    // 'permissions_map' => [
-    //     'c' => 'create',
-    //     'r' => 'read',
-    //     'u' => 'update',
-    //     'd' => 'delete',
-    // ],
 ];

@@ -104,7 +104,7 @@ class NavigationComponent extends Component
             $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
         }
         if (Auth::user()->hasPermission(['manage-users'])) {
-            $this->usersCount = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->count();
+            $this->usersCount = User::where(['is_active' => 1])->count();
             $this->rolesCount = Role::count();
             $this->permissionsCount = Permission::count();
             $this->laboratoryCount = Laboratory::where('is_active', 1)->count();

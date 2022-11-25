@@ -77,7 +77,15 @@
         </div>
         <div class="textmenu">
             <div class="brand-logo">
-                <a href="{{ route('dashboard') }}"><img
+                <a href="
+                @if (Auth::user()->hasPermission(['manager-access']))
+                {{ route('manager-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['master-access']))
+                {{ route('master-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['normal-access']))
+                {{ route('user-dashboard') }}
+                @endif
+                "><img
                     src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140"
                     alt="" /></a>
             </div>
@@ -89,8 +97,15 @@
                                 <h5 class="mb-0">Home</h5>
                             </div>
                         </div>
-                        <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Dashboard</a>
-                        <a href="{{ route('user.dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>My Dashboard</a>
+                        @if (Auth::user()->hasPermission(['manager-access']))
+                        <a href="{{ route('manager-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Manager Dashboard</a>
+                        @endif
+                        @if (Auth::user()->hasPermission(['master-access']))
+                        <a href="{{ route('master-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Master Dashboard</a>
+                        @endif
+                        @if (Auth::user()->hasPermission(['normal-access']))
+                        <a href="{{ route('user-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>User Dashboard</a>
+                        @endif
                     </div>
                 </div>
                 {{-- <div class="tab-pane fade" id="pills-patients">

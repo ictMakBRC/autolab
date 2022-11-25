@@ -35,7 +35,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (Auth::user()->hasPermission(['manager-access'])){
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+        elseif (Auth::user()->hasPermission(['master-access'])){
+            return redirect()->route('master-dashboard');
+        }
+        elseif (Auth::user()->hasPermission(['normal-access'])){
+            return redirect()->route('user-dashboard');
+        }
     }
 
     /**
