@@ -77,17 +77,15 @@
         </div>
         <div class="textmenu">
             <div class="brand-logo">
-                <a href="
-                @if (Auth::user()->hasPermission(['manager-access']))
-                {{ route('manager-dashboard') }}
+                <a
+                    href="
+                @if (Auth::user()->hasPermission(['manager-access'])) {{ route('manager-dashboard') }}
                 @elseif (Auth::user()->hasPermission(['master-access']))
                 {{ route('master-dashboard') }}
                 @elseif (Auth::user()->hasPermission(['normal-access']))
-                {{ route('user-dashboard') }}
-                @endif
+                {{ route('user-dashboard') }} @endif
                 "><img
-                    src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140"
-                    alt="" /></a>
+                        src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140" alt="" /></a>
             </div>
             <div class="tab-content">
                 <div class="tab-pane fade" id="pills-dashboards">
@@ -98,13 +96,16 @@
                             </div>
                         </div>
                         @if (Auth::user()->hasPermission(['manager-access']))
-                        <a href="{{ route('manager-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Manager Dashboard</a>
+                            <a href="{{ route('manager-dashboard') }}" class="list-group-item"><i
+                                    class="bi bi-house-door-fill"></i>Manager Dashboard</a>
                         @endif
                         @if (Auth::user()->hasPermission(['master-access']))
-                        <a href="{{ route('master-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>Master Dashboard</a>
+                            <a href="{{ route('master-dashboard') }}" class="list-group-item"><i
+                                    class="bi bi-house-door-fill"></i>Master Dashboard</a>
                         @endif
                         @if (Auth::user()->hasPermission(['normal-access']))
-                        <a href="{{ route('user-dashboard') }}" class="list-group-item"><i class="bi bi-house-door-fill"></i>User Dashboard</a>
+                            <a href="{{ route('user-dashboard') }}" class="list-group-item"><i
+                                    class="bi bi-house-door-fill"></i>User Dashboard</a>
                         @endif
                     </div>
                 </div>
@@ -146,11 +147,13 @@
                                 class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
                                     class="bi bi-receipt"></i>Accessioning</a>
                         @endif
+                        
                         @if (Auth::user()->hasPermission(['assign-test-requests']))
                             <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Assign
                                 Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
                         @endif
+
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Test
@@ -160,7 +163,6 @@
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
                                     class="bi bi-file-earmark-medical"></i>Attach Results</a>
                         @endif
-
 
                         @if (Auth::user()->hasPermission(['review-results']))
                             <a href="{{ route('test-review') }}"
@@ -187,17 +189,16 @@
                         @endif
 
                         @if (Auth::user()->hasPermission(['view-participant-info']))
-                        <a href="{{ route('samples-list') }}" class="list-group-item"><i
-                            class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
-                        </x-count-badge></a>
+                            <a href="{{ route('samples-list') }}" class="list-group-item"><i
+                                    class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
+                                </x-count-badge></a>
                             <a href="{{ route('tests-performed-list') }}" class="list-group-item"><i
-                                class="bx bxs-flask"></i>Tests Performed <x-count-badge>{{ $testsPerformedCount }}
-                            </x-count-badge></a>
+                                    class="bx bxs-flask"></i>Tests Performed <x-count-badge>{{ $testsPerformedCount }}
+                                </x-count-badge></a>
                             <a href="{{ route('participants') }}" class="list-group-item"><i
-                                class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
-                            </x-count-badge></a>
+                                    class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
+                                </x-count-badge></a>
                         @endif
-
                     </div>
                 </div>
                 {{-- <div class="tab-pane fade" id="pills-referrals">
@@ -277,6 +278,9 @@
                             <a href="{{ route('laboratories') }}" class="list-group-item"><i
                                     class="bx bx-clinic"></i>Laboratories<x-count-badge>{{ $laboratoryCount }}
                                 </x-count-badge></a>
+                            <a href="{{ route('designations') }}" class="list-group-item"><i
+                                    class="bi bi-person-square"></i>Designations<x-count-badge>{{ $designationCount }}
+                                </x-count-badge></a>
                             <a href="{{ route('user-roles.index') }}"
                                 class="list-group-item {{ request()->segment(3) == 'user-roles' ? 'active' : '' }}"><i
                                     class="bi bi-person-check"></i>Roles<x-count-badge>{{ $rolesCount }}
@@ -295,7 +299,6 @@
                             <a href="{{ route('useractivity') }}" class="list-group-item"><i
                                     class="bi bi-list-columns"></i>User
                                 Activity</a>
-
                         </div>
                     </div>
                 @endif
@@ -309,10 +312,6 @@
                                     <h5 class="mb-0">Settings</h5>
                                 </div>
                             </div>
-
-                            <a href="{{ route('designations') }}" class="list-group-item"><i
-                                    class="bi bi-person-square"></i>Designations<x-count-badge>{{ $designationCount }}
-                                </x-count-badge></a>
                             <a href="{{ route('facilities') }}" class="list-group-item"><i
                                     class="bi bi-hospital"></i>Facilities<x-count-badge>{{ $facilityCount }}
                                 </x-count-badge></a>
@@ -334,16 +333,15 @@
                             <a href="{{ route('kits') }}" class="list-group-item"><i class="bx bx-bong"></i>Kits
                                 <x-count-badge>{{ $kitCount }}</x-count-badge>
                             </a>
-                            <a href="{{ route('sampletypes') }}" class="list-group-item"><i
-                                    class="bx bxs-vial"></i>Sample Types<x-count-badge>{{ $sampleTypeCount }}
-                                </x-count-badge></a>
                             <a href="{{ route('categories') }}" class="list-group-item"><i
                                     class="bi bi-virus"></i>Test
                                 Categories<x-count-badge>{{ $testCategoryCount }}</x-count-badge></a>
                             <a href="{{ route('tests') }}" class="list-group-item"><i class="bx bxs-flask"></i>Tests
                                 <x-count-badge>{{ $testCount }}</x-count-badge>
                             </a>
-
+                            <a href="{{ route('sampletypes') }}" class="list-group-item"><i
+                                    class="bx bxs-vial"></i>Sample Types<x-count-badge>{{ $sampleTypeCount }}
+                                </x-count-badge></a>
                         </div>
                     </div>
                 @endif
