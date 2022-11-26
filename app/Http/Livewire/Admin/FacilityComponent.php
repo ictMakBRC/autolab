@@ -197,11 +197,6 @@ class FacilityComponent extends Component
         $facilities = Facility::search($this->search)->with('parent')->where('is_active', 1)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        // return view('livewire.users-table', [
-        //     'users' => User::search($this->search)
-        //         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        //         ->paginate($this->perPage),
-        // ]);
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

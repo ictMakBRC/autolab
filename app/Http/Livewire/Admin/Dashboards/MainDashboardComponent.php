@@ -93,12 +93,12 @@ class MainDashboardComponent extends Component
         $this->laboratoryCount = Laboratory::where('is_active', 1)->count();
 
         //FACILITIES
-        $this->facilityActiveCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
-        $this->facilitySuspendedCount = Facility::where('is_active', 0)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
+        $this->facilityActiveCount = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->where('is_active',1)->count();
+        $this->facilitySuspendedCount = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->where('is_active',0)->count();
 
         //STUDIES
-        $this->studyActiveCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
-        $this->studySuspendedCount = Study::where('is_active', 0)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count();
+        $this->studyActiveCount = Study::where('is_active', 1)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
+        $this->studySuspendedCount = Study::where('is_active', 0)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
 
         //REQUESTERS
         $this->requesterActiveCount = Requester::where('is_active', 1)->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->count();
