@@ -68,14 +68,16 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
-                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $facility->id }})"
-                                                    data-bs-target="#editfacility"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})"
-                                                class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"
+                                                data-bs-toggle="modal" wire:click="editdata({{ $facility->id }})"
+                                                data-bs-target="#editfacility">
+                                                <i class="bi bi-pencil-square"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript: void(0);"
+                                                    wire:click="deleteConfirmation({{ $facility->id }})"
+                                                    class="action-ico btn btn-outline-danger mx-1">
+                                                    <i class="bi bi-trash"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

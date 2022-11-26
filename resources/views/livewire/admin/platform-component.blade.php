@@ -61,13 +61,16 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($platform->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $platform->id }})"
                                                     data-bs-target="#editplatform"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $platform->id }})" class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript: void(0);"
+                                                    wire:click="deleteConfirmation({{ $platform->id }})"
+                                                    class="action-ico btn btn-outline-danger mx-1">
+                                                    <i class="bi bi-trash"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -110,7 +113,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="platformRange" class="form-label">Range</label>
-                                    <input type="text" id="platformRange" class="form-control" wire:model.lazy="range">
+                                    <input type="text" id="platformRange" class="form-control"
+                                        wire:model.lazy="range">
                                     @error('range')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror

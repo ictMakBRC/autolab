@@ -69,15 +69,18 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
+                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $user->id }})"
                                                     data-bs-target="#edituser"></i></a>
-                                            <a href="javascript: void(0);" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="" data-bs-original-title="Delete"
-                                                wire:click="deleteConfirmation({{ $user->id }})"
-                                                class="action-ico btn btn-outline-danger">
-                                                <i class="bi bi-trash"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript: void(0);" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title=""
+                                                    data-bs-original-title="Delete"
+                                                    wire:click="deleteConfirmation({{ $user->id }})"
+                                                    class="action-ico btn btn-outline-danger">
+                                                    <i class="bi bi-trash"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -143,21 +146,24 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" id="first_name" class="form-control" wire:model.lazy="first_name">
+                                <input type="text" id="first_name" class="form-control"
+                                    wire:model.lazy="first_name">
                                 @error('first_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="other_name" class="form-label">Other Name</label>
-                                <input type="text" id="other_name" class="form-control" wire:model.lazy="other_name">
+                                <input type="text" id="other_name" class="form-control"
+                                    wire:model.lazy="other_name">
                                 @error('other_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="usercontact" class="form-label">Contact</label>
-                                <input type="text" id="usercontact" class="form-control" wire:model.lazy="contact">
+                                <input type="text" id="usercontact" class="form-control"
+                                    wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -314,21 +320,24 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" id="first_name" class="form-control" wire:model.lazy="first_name">
+                                <input type="text" id="first_name" class="form-control"
+                                    wire:model.lazy="first_name">
                                 @error('first_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="other_name" class="form-label">Other Name</label>
-                                <input type="text" id="other_name" class="form-control" wire:model.lazy="other_name">
+                                <input type="text" id="other_name" class="form-control"
+                                    wire:model.lazy="other_name">
                                 @error('other_name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="usercontact" class="form-label">Contact</label>
-                                <input type="text" id="usercontact" class="form-control" wire:model.lazy="contact">
+                                <input type="text" id="usercontact" class="form-control"
+                                    wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

@@ -144,6 +144,10 @@ class RequesterComponent extends Component
         $requester->is_active = $this->is_active;
         $requester->update();
 
+        if($this->is_active==0){
+            Study::where('id',$requester->study_id)->update(['is_active'=>$this->is_active]);
+        }
+
         $this->reset(['name', 'contact', 'facility_id', 'email', 'is_active', 'study_id']);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Requester updated successfully!']);

@@ -63,7 +63,8 @@
                                 </div>
                                 <div class="mb-2 col-md-2">
                                     <label for="short_code" class="form-label">Short Code</label>
-                                    <input type="text" id="short_code" class="form-control" wire:model.lazy="short_code">
+                                    <input type="text" id="short_code" class="form-control"
+                                        wire:model.lazy="short_code">
                                     @error('short_code')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
@@ -192,7 +193,8 @@
                                                         </span>
                                                     </div>
                                                     <input type="text" class="form-control"
-                                                        id="measurable_result_uom" wire:model.lazy="measurable_result_uom">
+                                                        id="measurable_result_uom"
+                                                        wire:model.lazy="measurable_result_uom">
                                                 </div>
                                             </div>
                                         @endif
@@ -281,10 +283,12 @@
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @endif
                                             <td class="table-action">
-                                                <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"
-                                                    wire:click="editTest({{ $test->id }})"data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Edit Test" class="action-ico btn btn-outline-danger mx-1"> <i
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-info mx-1"
+                                                    wire:click="editTest({{ $test->id }})"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                    title="" data-bs-original-title="Edit Test"
+                                                    class="action-ico btn btn-outline-danger mx-1"> <i
                                                         class="bi bi-pencil-square"></i></a>
                                             </td>
                                         </tr>

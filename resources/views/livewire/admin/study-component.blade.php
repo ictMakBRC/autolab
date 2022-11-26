@@ -65,14 +65,25 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($study->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
-                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            @if ($study->facility->is_active == 0)
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-warning mx-1"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Can not Edit"><i
+                                                        class="bi bi-lock-fill"></i></a>
+                                            @else
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-info mx-1" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $study->id }})"
-                                                    data-bs-target="#editstudy"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $study->id }})"
-                                                class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                                    data-bs-target="#editstudy">
+                                                    <i class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="deleteConfirmation({{ $study->id }})"
+                                                        class="action-ico btn btn-outline-danger mx-1">
+                                                        <i class="bi bi-trash"></i></a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
