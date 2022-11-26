@@ -67,6 +67,7 @@ return new class extends Migration
             $table->integer('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->string('color_scheme')->nullable();
+            $table->unsignedBigInteger('creator_lab')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

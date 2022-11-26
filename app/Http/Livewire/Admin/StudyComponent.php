@@ -79,6 +79,11 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->save();
 
+        array_push($this->aassociated_studies,$study->id);
+        $lab=Laboratory::findOrfail(auth()->user()->laboratory_id);
+        $lab->aassociated_studies = $this->associated_studies;
+        $lab->update();
+
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project created successfully!']);

@@ -78,9 +78,14 @@ class FacilityComponent extends Component
         $facility->parent_id = $this->parent_id;
         $facility->save();
 
+        array_push($this->associated_facilities,$facility->id);
+        $lab=Laboratory::findOrfail(auth()->user()->laboratory_id);
+        $lab->associated_facilities=$this->associated_facilities;
+        $lab->update();
+
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility and association to Lab created successfully!']);
     }
 
     public function associateFacility()
