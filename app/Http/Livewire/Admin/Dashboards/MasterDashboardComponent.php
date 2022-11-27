@@ -158,14 +158,14 @@ class MasterDashboardComponent extends Component
         //STUDIES
         $count["studyActiveCount"] = Study::select('*')
                                         ->when($this->laboratory_id != 0, function ($query)  {
-                                            $query->whereIn('facility_id', $this->associatedFacilities ?? []);
+                                            $query->whereIn('id', $this->associatedStudies ?? []);
                                         }, function ($query) {
                                             return $query;
                                         })->where('is_active', 1)->count();
 
         $count["studySuspendedCount"] = Study::select('*')
                                             ->when($this->laboratory_id != 0, function ($query)  {
-                                                $query->whereIn('facility_id', $this->associatedFacilities ?? []);
+                                                $query->whereIn('id', $this->associatedStudies ?? []);
                                             }, function ($query) {
                                                 return $query;
                                             })->where('is_active', 0)->count();
@@ -176,7 +176,7 @@ class MasterDashboardComponent extends Component
                                                     $query->whereIn('study_id', $this->associatedStudies ?? []);
                                                 }, function ($query) {
                                                     return $query;
-                                                })->where('is_active', 0)->count();
+                                                })->where('is_active', 1)->count();
 
         $count["requesterSuspendedCount"] = Requester::select('*')
                                                     ->when($this->laboratory_id != 0, function ($query) {
@@ -198,7 +198,7 @@ class MasterDashboardComponent extends Component
                                                         $query->whereIn('facility_id', $this->associatedFacilities ?? []);
                                                     }, function ($query) {
                                                         return $query;
-                                                    })->where('is_active', 1)->count();
+                                                    })->where('is_active', 0)->count();
 
         //COURIERS
         $count["courierActiveCount"] = Courier::select('*')

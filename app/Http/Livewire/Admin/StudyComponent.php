@@ -121,7 +121,7 @@ class StudyComponent extends Component
         }else{
             $study->is_active = $this->is_active;
             $study->update();
-            Requester::where('facility_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
+            Requester::where('study_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
         }
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);
