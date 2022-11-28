@@ -52,7 +52,7 @@ use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate']);
-
+Route::get('user/account', UserProfileComponent::class)->name('user.account')->middleware('auth');
 Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'settings'], function () {
@@ -85,7 +85,6 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         });
     });
 
-    Route::get('user/account', UserProfileComponent::class)->name('user.account');
     Route::get('user/myActivity', UserActivityComponent::class)->name('myactivity');
 
     Route::group(['prefix' => 'samplemgt'], function () {
