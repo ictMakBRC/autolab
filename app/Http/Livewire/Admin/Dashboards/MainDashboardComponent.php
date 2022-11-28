@@ -2,18 +2,19 @@
 
 namespace App\Http\Livewire\Admin\Dashboards;
 
-use App\Models\Collector;
-use App\Models\Courier;
-use App\Models\Facility;
-use App\Models\Laboratory;
-use App\Models\Requester;
-use App\Models\Sample;
-use App\Models\SampleReception;
-use App\Models\Study;
-use App\Models\TestResult;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Study;
+use App\Models\Sample;
+use App\Models\Courier;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Laboratory;
+use App\Models\TestResult;
+use App\Models\SampleReception;
+use Illuminate\Support\Facades\DB;
 
 class MainDashboardComponent extends Component
 {
@@ -67,6 +68,10 @@ class MainDashboardComponent extends Component
 
     public $courierActiveCount;
 
+    public $labels=[];
+    public $currentYearSampleData=[];
+    public $previousYearSampleData=[];
+
     public function mount()
     {
         //SAMPLES
@@ -113,8 +118,35 @@ class MainDashboardComponent extends Component
         $this->courierSuspendedCount = Courier::where('is_active', 0)->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->count();
     }
 
+    // public function chartData()
+    // {
+    //     $samples = Sample::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
+    //                 ->whereYear('created_at', date('Y'))
+    //                 ->groupBy(DB::raw("Month(created_at)"))->orderBy('created_at','asc')
+    //                 ->pluck('count', 'month_name');
+ 
+    //     // return $users;
+    //     $labels = $samples->keys();
+    //     $data = $samples->values();
+              
+    //     return view('chart', compact('labels', 'data'));
+    // }
+
     public function render()
     {
+        $currentYearSamples = Sample::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
+                    ->whereYear('created_at', date('Y'))
+                    ->groupBy(DB::raw("Month(created_at)"))->orderBy('created_at','asc')
+                    ->pluck('count', 'month_name');
+        $previousYearSamples = Sample::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
+        ->whereYear('created_at', date('Y')-1)
+        ->groupBy(DB::raw("Month(created_at)"))->orderBy('created_at','asc')
+        ->pluck('count', 'month_name');
+
+        $this->labels = array_merge($currentYearSamples->keys()->toArray(),$previousYearSamples->keys()->toArray()) ;
+        $this->currentYearSampleData = $currentYearSamples->values();
+        $this->previousYearSampleData = $previousYearSamples->values();
+
         return view('livewire.admin.dashboards.main-dashboard-component');
     }
 }
