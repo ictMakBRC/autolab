@@ -210,7 +210,7 @@ class SpecimenRequestComponent extends Component
 
         if ($participant) {
             $lastSampleEntry = Sample::where(['participant_id' => $participant->id, 'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
-            $this->lastVisit = $lastSampleEntry->visit??null;
+            $this->lastVisit = $lastSampleEntry->visit ?? null;
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
             // $this->entry_type = $participant->entry_type;
@@ -494,7 +494,7 @@ class SpecimenRequestComponent extends Component
             'tests_requested' => 'array|required',
         ]);
 
-        if (!$this->is_isolate) {
+        if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
@@ -595,7 +595,7 @@ class SpecimenRequestComponent extends Component
             'tests_requested' => 'array|required',
         ]);
 
-        if (!$this->is_isolate) {
+        if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
@@ -641,7 +641,7 @@ class SpecimenRequestComponent extends Component
 
     public function resetSampleInformationInputs()
     {
-        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by','is_isolate',
+        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by', 'is_isolate',
             'date_requested', 'collected_by', 'date_collected', 'study_id', 'sample_is_for', 'priority', 'tests_requested', 'matched_participant_id', 'participantMatch', ]);
     }
 

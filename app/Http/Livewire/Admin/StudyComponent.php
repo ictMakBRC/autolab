@@ -2,16 +2,16 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Requester;
-use App\Models\Laboratory;
-use Livewire\WithPagination;
 use App\Exports\StudiesExport;
+use App\Models\Facility;
+use App\Models\Laboratory;
+use App\Models\Requester;
+use App\Models\Sample;
+use App\Models\Study;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class StudyComponent extends Component
 {
@@ -80,8 +80,8 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->save();
 
-        array_push($this->associated_studies,$study->id);
-        $lab=Laboratory::findOrfail(auth()->user()->laboratory_id);
+        array_push($this->associated_studies, $study->id);
+        $lab = Laboratory::findOrfail(auth()->user()->laboratory_id);
         $lab->associated_studies = $this->associated_studies;
         $lab->update();
 
@@ -116,12 +116,12 @@ class StudyComponent extends Component
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
 
-        if($study->is_active==$this->is_active){
+        if ($study->is_active == $this->is_active) {
             $study->update();
-        }else{
+        } else {
             $study->is_active = $this->is_active;
             $study->update();
-            Requester::where('study_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
+            Requester::where('study_id', $this->edit_id)->update(['is_active' => $this->is_active]);
         }
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);

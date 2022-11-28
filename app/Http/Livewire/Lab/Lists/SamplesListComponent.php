@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Models\Study;
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\SampleType;
-use Livewire\WithPagination;
 use App\Exports\SamplesExport;
+use App\Models\Facility;
+use App\Models\Sample;
+use App\Models\SampleType;
+use App\Models\Study;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class SamplesListComponent extends Component
 {
@@ -140,11 +140,11 @@ class SamplesListComponent extends Component
     public function render()
     {
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
-        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type','asc')->get();
+        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $jobs = Sample::select('sample_is_for')->distinct()->get();
         $samples = $this->filterSamples()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs','sampleTypes'));
+        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs', 'sampleTypes'));
     }
 }

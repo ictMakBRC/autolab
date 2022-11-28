@@ -2,18 +2,18 @@
 
 namespace App\Http\Livewire\Admin;
 
-use Exception;
-use App\Models\Study;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Collector;
-use App\Models\Requester;
-use App\Models\Laboratory;
-use Livewire\WithPagination;
-use App\Models\SampleReception;
 use App\Exports\FacilitiesExport;
+use App\Models\Collector;
+use App\Models\Courier;
+use App\Models\Facility;
+use App\Models\Laboratory;
+use App\Models\Requester;
+use App\Models\SampleReception;
+use App\Models\Study;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class FacilityComponent extends Component
 {
@@ -40,7 +40,8 @@ class FacilityComponent extends Component
     public $is_active;
 
     public $delete_id;
-    public $exportIds=[];
+
+    public $exportIds = [];
     // public $count=0;
 
     protected $paginationTheme = 'bootstrap';
@@ -82,9 +83,9 @@ class FacilityComponent extends Component
         $facility->parent_id = $this->parent_id;
         $facility->save();
 
-        array_push($this->associated_facilities,$facility->id);
-        $lab=Laboratory::findOrfail(auth()->user()->laboratory_id);
-        $lab->associated_facilities=$this->associated_facilities;
+        array_push($this->associated_facilities, $facility->id);
+        $lab = Laboratory::findOrfail(auth()->user()->laboratory_id);
+        $lab->associated_facilities = $this->associated_facilities;
         $lab->update();
 
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
@@ -150,16 +151,16 @@ class FacilityComponent extends Component
         $facility->name = $this->name;
         $facility->type = $this->type;
         $facility->parent_id = $this->parent_id != '' ? $this->parent_id : null;
-        
-        if($facility->is_active==$this->is_active){
+
+        if ($facility->is_active == $this->is_active) {
             $facility->update();
-        }else{
+        } else {
             $facility->is_active = $this->is_active;
             $facility->update();
-            Study::where('facility_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
-            Requester::where('facility_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
-            Collector::where('facility_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
-            Courier::where('facility_id',$this->edit_id)->update(['is_active'=>$this->is_active]);
+            Study::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Requester::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Collector::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Courier::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
         }
 
         $this->reset(['name', 'type', 'parent_id', 'is_active']);

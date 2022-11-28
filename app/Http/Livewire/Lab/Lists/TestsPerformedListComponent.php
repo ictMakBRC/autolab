@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Models\Study;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Admin\Test;
-use App\Models\SampleType;
-use App\Models\TestResult;
-use Livewire\WithPagination;
 use App\Exports\TestResultsExport;
+use App\Models\Admin\Test;
+use App\Models\Facility;
+use App\Models\SampleType;
+use App\Models\Study;
+use App\Models\TestResult;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestsPerformedListComponent extends Component
 {
@@ -18,7 +18,9 @@ class TestsPerformedListComponent extends Component
     public $facility_id = 0;
 
     public $study_id = 0;
+
     public $sampleType;
+
     public $test_id;
 
     public $from_date = '';
@@ -86,7 +88,7 @@ class TestsPerformedListComponent extends Component
                     }, function ($query) {
                         return $query;
                     })
-                    ->when($this->test_id !=0, function ($query) {
+                    ->when($this->test_id != 0, function ($query) {
                         $query->where('test_id', $this->test_id);
                     }, function ($query) {
                         return $query;
@@ -117,11 +119,11 @@ class TestsPerformedListComponent extends Component
     public function render()
     {
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
-        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type','asc')->get();
-        $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->orderBy('name','asc')->get();
+        $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->orderBy('name', 'asc')->get();
         $testResults = $this->filterTests()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities','sampleTypes','tests'));
+        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests'));
     }
 }
