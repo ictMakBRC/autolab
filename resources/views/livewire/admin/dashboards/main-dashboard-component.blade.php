@@ -1,6 +1,5 @@
 <div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-4">
-
         <div class="col">
             <div class="card radius-10 border-start border-purple border-3">
                 <div class="card-body">
@@ -272,7 +271,7 @@
                     // Monthly samples line chart
                     var options = {
                         series: [{
-                                name: {{date('Y')}},
+                                name: {{ date('Y') }},
                                 data: [
                                     @foreach ($labels['month'] as $month)
                                         {{ $currentYearSampleData->where('month_name', $month)->first()->count ?? 0 }},
@@ -280,7 +279,7 @@
                                 ]
                             },
                             {
-                                name: {{date('Y')-1}},
+                                name: {{ date('Y') - 1 }},
                                 data: [
                                     @foreach ($labels['month'] as $month)
                                         {{ $previousYearSampleData->where('month_name', $month)->first()->count ?? 0 }},
@@ -383,10 +382,10 @@
                     samples_chart.render();
 
 
-                       // Monthly samples line chart
-                       var options2 = {
+                    // Monthly samples line chart
+                    var options2 = {
                         series: [{
-                                name: {{date('Y')}},
+                                name: {{ date('Y') }},
                                 data: [
                                     @foreach ($monthTestLabels['month'] as $month)
                                         {{ $currentYearTestData->where('month_name', $month)->first()->count ?? 0 }},
@@ -394,7 +393,7 @@
                                 ]
                             },
                             {
-                                name: {{date('Y')-1}},
+                                name: {{ date('Y') - 1 }},
                                 data: [
                                     @foreach ($monthTestLabels['month'] as $month)
                                         {{ $previousYearTestData->where('month_name', $month)->first()->count ?? 0 }},
@@ -499,7 +498,7 @@
                     // System users Piechart 2
 
                     var options3 = {
-                        series: [{{$usersActiveCount}}, {{$usersSuspendedCount}}],
+                        series: [{{ $usersActiveCount }}, {{ $usersSuspendedCount }}],
                         chart: {
                             height: 250,
                             type: 'pie',
@@ -546,3 +545,4 @@
             </script>
         @endpush
     </div>
+</div>

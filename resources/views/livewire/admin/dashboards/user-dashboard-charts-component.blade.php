@@ -1,30 +1,6 @@
 <div>
     <div class="row g-3">
-        <div class="col-12 col-lg-4 col-xl-4 d-flex">
-            <div class="card radius-10 w-100">
-                <div class="card-body">
-                    <h5 class="card-title">System Users</h5>
-                    <div class="align-items-center justify-content-center gap-4">
-                        <div id="usersChart"></div>
-                        <div class="widget-icon-large bg-gradient-info text-white ms-auto"><i
-                                class="bi bi-people-fill"></i>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><i class="bi bi-circle-fill text-success me-1"></i>
-                                Active Users: <span class="me-1">{{ $usersActiveCount }}</span></li>
-                            <li class="list-group-item"><i class="bi bi-circle-fill text-danger me-1"></i>
-                                Suspended Users:
-                                <span class="me-1">{{ $usersSuspendedCount }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-secondary">Total :
-                                {{ $usersSuspendedCount + $usersActiveCount }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-lg-8 col-xl-8 d-flex">
+        <div class="col-12 col-lg-12 col-xl-12 d-flex">
             <div class="card radius-10 w-100">
                 <div class="card-body">
                     <div class="row row-cols-1 row-cols-lg-2 g-3 align-items-center">
@@ -296,52 +272,6 @@
 
             var tests_chart = new ApexCharts(document.querySelector("#testsChart"), options2);
             tests_chart.render();
-
-            // System users Piechart 2
-
-            var options3 = {
-                series: [{{ $usersActiveCount }}, {{ $usersSuspendedCount }}],
-                chart: {
-                    height: 250,
-                    type: 'pie',
-                },
-                labels: ['Active', 'Suspended'],
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shade: 'light',
-                        type: "vertical",
-                        shadeIntensity: 0.5,
-                        gradientToColors: ["#A7E7AE", "#ff6a00"],
-                        inverseColors: true,
-                        opacityFrom: 1,
-                        opacityTo: 1,
-                        //stops: [0, 50, 100],
-                        //colorStops: []
-                    }
-                },
-                colors: ["#72DA7D", "#ee0979"],
-                legend: {
-                    show: false,
-                    position: 'top',
-                    horizontalAlign: 'left',
-                    offsetX: -20
-                },
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            height: 270
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }]
-            };
-
-            var users_chart = new ApexCharts(document.querySelector("#usersChart"), options3);
-            users_chart.render();
         </script>
     @endpush
 </div>

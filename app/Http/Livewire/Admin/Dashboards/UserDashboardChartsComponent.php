@@ -4,14 +4,11 @@ namespace App\Http\Livewire\Admin\Dashboards;
 
 use App\Models\Sample;
 use App\Models\TestResult;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class MasterDashboardChartsComponent extends Component
+class UserDashboardChartsComponent extends Component
 {
-    public $laboratory_id;
-
     public $labels;
 
     public $currentYearSampleData;
@@ -24,22 +21,10 @@ class MasterDashboardChartsComponent extends Component
 
     public $previousYearTestData;
 
-    public $usersActiveCount;
-
-    public $usersSuspendedCount;
-
-    // protected $listeners = ['refreshCharts'];
-
     public function mount()
     {
         $this->loadCharts();
     }
-
-    // public function refreshCharts($lab_id){
-
-    //     $this->laboratory_id=$lab_id;
-    //     $this->loadCharts();
-    // }
 
     public function loadCharts(): void
     {
@@ -47,22 +32,14 @@ class MasterDashboardChartsComponent extends Component
 
         $currentYearSamples = Sample::select(DB::raw('COUNT(*) as count'), DB::raw('date_format(created_at,"%b") as month_name'))
         ->whereYear('created_at', date('Y'))
-        ->when($this->laboratory_id != 0, function ($query) {
-            $query->where('creator_lab', $this->laboratory_id);
-        }, function ($query) {
-            return $query;
-        })
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'created_by' => auth()->user()->id])
         ->orderBy('created_at', 'asc')
         ->groupBy(DB::raw('Month(created_at)'))
             ->get();
 
         $previousYearSamples = Sample::select(DB::raw('COUNT(*) as count'), DB::raw('date_format(created_at,"%b") as month_name'))
         ->whereYear('created_at', date('Y') - 1)
-        ->when($this->laboratory_id != 0, function ($query) {
-            $query->where('creator_lab', $this->laboratory_id);
-        }, function ($query) {
-            return $query;
-        })
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'created_by' => auth()->user()->id])
         ->orderBy('created_at', 'asc')
         ->groupBy(DB::raw('Month(created_at)'))
         ->get();
@@ -85,22 +62,14 @@ class MasterDashboardChartsComponent extends Component
 
         $currentYearTests = TestResult::select(DB::raw('COUNT(*) as count'), DB::raw('date_format(created_at,"%b") as month_name'))
         ->whereYear('created_at', date('Y'))
-        ->when($this->laboratory_id != 0, function ($query) {
-            $query->where('creator_lab', $this->laboratory_id);
-        }, function ($query) {
-            return $query;
-        })
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'created_by' => auth()->user()->id])
         ->orderBy('created_at', 'asc')
         ->groupBy(DB::raw('Month(created_at)'))
             ->get();
 
         $previousYearTests = TestResult::select(DB::raw('COUNT(*) as count'), DB::raw('date_format(created_at,"%b") as month_name'))
         ->whereYear('created_at', date('Y') - 1)
-        ->when($this->laboratory_id != 0, function ($query) {
-            $query->where('creator_lab', $this->laboratory_id);
-        }, function ($query) {
-            return $query;
-        })
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'created_by' => auth()->user()->id])
         ->orderBy('created_at', 'asc')
         ->groupBy(DB::raw('Month(created_at)'))
         ->get();
@@ -117,25 +86,10 @@ class MasterDashboardChartsComponent extends Component
         $this->monthTestLabels = $monthTestLabels;
         $this->currentYearTestData = $currentYearTests;
         $this->previousYearTestData = $previousYearTests;
-
-        //USERS
-        $this->usersActiveCount = User::select('*')->where(['is_active' => 1])
-        ->when($this->laboratory_id != 0, function ($query) {
-            $query->where('laboratory_id', $this->laboratory_id);
-        }, function ($query) {
-            return $query;
-        })->count();
-
-        $this->usersSuspendedCount = User::select('*')->where(['is_active' => 0])
-                ->when($this->laboratory_id != 0, function ($query) {
-                    $query->where('laboratory_id', $this->laboratory_id);
-                }, function ($query) {
-                    return $query;
-                })->count();
     }
 
     public function render()
     {
-        return view('livewire.admin.dashboards.master-dashboard-charts-component');
+        return view('livewire.admin.dashboards.user-dashboard-charts-component');
     }
 }
