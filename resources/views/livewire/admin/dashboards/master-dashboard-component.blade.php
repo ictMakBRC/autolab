@@ -209,32 +209,10 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-12 col-lg-4 col-xl-4 d-flex">
-                    <div class="card radius-10 w-100">
-
-                        <div class="card-body">
-                            <h5 class="card-title">System Users</h5>
-                            <div class="align-items-center justify-content-center gap-4">
-                                {{-- <div id="chart5"></div> --}}
-                                <div class="widget-icon-large bg-gradient-info text-white ms-auto"><i
-                                        class="bi bi-people-fill"></i>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><i class="bi bi-circle-fill text-success me-1"></i>
-                                        Active Users: <span class="me-1">{{ $usersActiveCount }}</span></li>
-                                    <li class="list-group-item"><i class="bi bi-circle-fill text-danger me-1"></i>
-                                        Suspended Users:
-                                        <span class="me-1">{{ $usersSuspendedCount }}</span>
-                                    </li>
-                                    <li class="list-group-item list-group-item-secondary">Total :
-                                        {{ $usersSuspendedCount + $usersActiveCount }}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!--end row-->
             </div>
+            <livewire:admin.dashboards.master-dashboard-charts-component/>
         </div>
+
+
     </div>

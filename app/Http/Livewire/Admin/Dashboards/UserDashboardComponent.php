@@ -23,48 +23,6 @@ class UserDashboardComponent extends Component
 
     public $view;
 
-    // public function mount()
-    // {
-    //     $value = $this->view;
-    //     // $this->day = whereDay('created_at', '=', date('d'))->count();
-    //     // $this->week = whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
-    //     // $this->month = whereMonth('created_at', '=', date('m'))->count();
-    //     // $this->year = whereYear('created_at', '=', date('Y'))->count();
-
-    //     $this->samplesAccepted = SampleReception::where('created_by', auth()->user()->id)
-    //     ->when($value != '', function ($query) {
-    //         $query->whereDay('created_at', '=', date('d'));
-    //     })->sum('samples_accepted');
-
-    //     $this->sampleAandled = SampleReception::where('created_by', auth()->user()->id)
-    //     ->when($value != '', function ($query) {
-    //         $query->whereDay('created_at', '=', date('d'));
-    //     })->sum('samples_handled');
-
-    //     $this->sampleAccessioned = Sample::where('created_by', auth()->user()->id)
-    //     ->when($value != '', function ($query) {
-    //         $query->whereDay('created_at', '=', date('d'));
-    //     })->count();
-
-    //     $this->testAssigned = Sample::search($this->search, ['Assigned'])
-    //     ->where('creator_lab', auth()->user()->laboratory_id)
-    //     ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-    //     ->whereHas('testAssignment', function (Builder $query) {
-    //         $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
-    //     })->latest()->limit(5)->get();
-
-    //     $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->count();
-    //     $this->testDoneAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Test Done'])->count();
-
-    //     $this->testRequestsCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->whereIn('status', ['Accessioned', 'Processing'])->count();
-    //     $this->testRequestsUrgentCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->whereIn('status', ['Accessioned', 'Processing'])->where('priority','Urgent')->count();
-
-    //     $this->testsPendindReviewCount = TestResult::where('performed_by', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
-    //     $this->testsPendindApprovalCount = TestResult::where('performed_by', auth()->user()->laboratory_id)->where('status', 'Reviewed')->count();
-    //     $this->testReportsCount = TestResult::where('performed_by', auth()->user()->id)->count();
-
-    // }
-
     public function render()
     {
         $data['samplesAccepted'] = SampleReception::where('created_by', auth()->user()->id)

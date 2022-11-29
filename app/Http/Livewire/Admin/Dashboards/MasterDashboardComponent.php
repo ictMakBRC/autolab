@@ -2,18 +2,19 @@
 
 namespace App\Http\Livewire\Admin\Dashboards;
 
-use App\Models\Collector;
-use App\Models\Courier;
-use App\Models\Facility;
-use App\Models\Laboratory;
-use App\Models\Requester;
-use App\Models\Sample;
-use App\Models\SampleReception;
-use App\Models\Study;
-use App\Models\TestResult;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Study;
+use App\Models\Sample;
+use App\Models\Courier;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Laboratory;
+use App\Models\TestResult;
+use App\Models\SampleReception;
+use Illuminate\Support\Facades\DB;
 
 class MasterDashboardComponent extends Component
 {
@@ -25,11 +26,17 @@ class MasterDashboardComponent extends Component
 
     public $laboratories;
 
+
     public function mount()
     {
         $this->laboratories = Laboratory::where('is_active', 1)->latest()->get();
     }
 
+    // public function updatedLaboratoryId(){
+
+    //     $this->emit('refreshCharts',['lab_id'=>$this->laboratory_id ]);
+
+    // }
     public function filterData()
     {
         //SAMPLES
@@ -219,6 +226,7 @@ class MasterDashboardComponent extends Component
 
         return $count;
     }
+    
 
     public function render()
     {

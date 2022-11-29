@@ -253,7 +253,7 @@
     {{-- <div class="card">
         <div class="card-body"> --}}
 
-    {{-- <div class="row">
+    <div class="row">
         <div class="ms-auto col-md-12 mb-2 ">
             <div class="form-group">
                 <select wire:model="view" class="form-select" style=" position: relative; width: 300px; float: right;">
@@ -265,7 +265,7 @@
                 </select>
             </div>
         </div>
-    </div> --}}
+    </div>
     <!--end breadcrumb-->
     {{-- <div class="row">
         <div class="col-12 col-lg-12 col-xl-6 d-flex">
@@ -420,7 +420,9 @@
         </div>
     </div> --}}
     <!--end row-->
-
+    <div class="card-body">
+        <canvas id="test-pie-chart" class="test-pie-chart" width="400" height="400"></canvas>
+    </div>
     {{-- <div class="row">
         <div class="col-12 col-lg-12 col-xl-12 col-xxl-6 d-flex">
             <div class="card radius-10 w-100">
