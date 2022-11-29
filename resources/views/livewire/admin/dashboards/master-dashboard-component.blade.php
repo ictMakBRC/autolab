@@ -68,20 +68,20 @@
     <div class="card radius-10">
         <div class="card-header bg-transparent">
             <div class="row g-3 align-items-center">
-              <div class="col">
-                <h5 class="mb-0">Summaries</h5>
-              </div>
-              <div class="col">
-                <select class="form-select"  wire:model="laboratory_id">
-                    <option selected value="0">All</option>
-                    @forelse ($laboratories as $laboratory)
-                        <option value='{{ $laboratory->id }}'>{{ $laboratory->laboratory_name }}</option>
-                    @empty
-                    @endforelse
-                </select>
-              </div>
-             </div>
-          </div>
+                <div class="col">
+                    <h5 class="mb-0">Summaries</h5>
+                </div>
+                <div class="col">
+                    <select class="form-select" wire:model="laboratory_id">
+                        <option selected value="0">All</option>
+                        @forelse ($laboratories as $laboratory)
+                            <option value='{{ $laboratory->id }}'>{{ $laboratory->laboratory_name }}</option>
+                        @empty
+                        @endforelse
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-12 col-lg-4 col-xl-4 d-flex">
@@ -142,7 +142,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Today</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $samplesTodayCount}}</strong></div>
+                                                class="text-success">{{ $samplesTodayCount }}</strong></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -181,7 +181,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div>Today</div>
                                         <div class="ms-auto"><strong
-                                                class="text-success">{{ $testsTodayCount}}</strong></div>
+                                                class="text-success">{{ $testsTodayCount }}</strong></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item">
@@ -211,8 +211,7 @@
                 </div>
                 <!--end row-->
             </div>
-            <livewire:admin.dashboards.master-dashboard-charts-component/>
+            <livewire:admin.dashboards.master-dashboard-charts-component />
         </div>
-
-
     </div>
+</div>
