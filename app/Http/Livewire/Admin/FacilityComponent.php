@@ -3,9 +3,13 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Exports\FacilitiesExport;
+use App\Models\Collector;
+use App\Models\Courier;
 use App\Models\Facility;
 use App\Models\Laboratory;
+use App\Models\Requester;
 use App\Models\SampleReception;
+use App\Models\Study;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -36,6 +40,8 @@ class FacilityComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    public $exportIds = [];
     // public $count=0;
 
     protected $paginationTheme = 'bootstrap';
@@ -55,7 +61,6 @@ class FacilityComponent extends Component
             'name' => 'required|unique:facilities',
             'type' => 'required',
             'is_active' => 'required',
-
         ]);
     }
 
@@ -78,9 +83,14 @@ class FacilityComponent extends Component
         $facility->parent_id = $this->parent_id;
         $facility->save();
 
+        array_push($this->associated_facilities, $facility->id);
+        $lab = Laboratory::findOrfail(auth()->user()->laboratory_id);
+        $lab->associated_facilities = $this->associated_facilities;
+        $lab->update();
+
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility and association to Lab created successfully!']);
     }
 
     public function associateFacility()
@@ -141,8 +151,17 @@ class FacilityComponent extends Component
         $facility->name = $this->name;
         $facility->type = $this->type;
         $facility->parent_id = $this->parent_id != '' ? $this->parent_id : null;
-        $facility->is_active = $this->is_active;
-        $facility->update();
+
+        if ($facility->is_active == $this->is_active) {
+            $facility->update();
+        } else {
+            $facility->is_active = $this->is_active;
+            $facility->update();
+            Study::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Requester::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Collector::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+            Courier::where('facility_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+        }
 
         $this->reset(['name', 'type', 'parent_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
@@ -189,14 +208,9 @@ class FacilityComponent extends Component
 
     public function render()
     {
-        $facilities = Facility::search($this->search)->with('parent')->where('is_active', 1)
+        $facilities = Facility::search($this->search)->with('parent')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        // return view('livewire.users-table', [
-        //     'users' => User::search($this->search)
-        //         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        //         ->paginate($this->perPage),
-        // ]);
 
         return view('livewire.admin.facility-component', compact('facilities'))->layout('layouts.app');
     }

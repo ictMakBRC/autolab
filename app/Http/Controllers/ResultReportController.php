@@ -19,6 +19,7 @@ class ResultReportController extends Controller
         $testResult = TestResult::with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
         $pdf = PDF::loadView('reports.sample-management.downloadReport', compact('testResult'));
         $pdf->setPaper('a4', 'portrait');   //horizontal
+
         return  $pdf->stream($testResult->sample->participant->identity.rand().'.pdf');
         // $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
 

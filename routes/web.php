@@ -11,6 +11,7 @@ use App\Http\Controllers\SearchResultsController;
 use App\Http\Livewire\Admin\CollectorComponent;
 use App\Http\Livewire\Admin\CourierComponent;
 use App\Http\Livewire\Admin\Dashboards\MainDashboardComponent;
+use App\Http\Livewire\Admin\Dashboards\MasterDashboardComponent;
 use App\Http\Livewire\Admin\Dashboards\UserDashboardComponent;
 use App\Http\Livewire\Admin\DesignationComponent;
 use App\Http\Livewire\Admin\FacilityComponent;
@@ -26,6 +27,8 @@ use App\Http\Livewire\Admin\UserActivityComponent;
 use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Admin\UserProfileComponent;
 use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
+use App\Http\Livewire\Lab\Lists\SamplesListComponent;
+use App\Http\Livewire\Lab\Lists\TestsPerformedListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
@@ -49,7 +52,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate']);
-
+Route::get('user/account', UserProfileComponent::class)->name('user.account')->middleware('auth');
 Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'settings'], function () {
@@ -82,7 +85,6 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         });
     });
 
-    Route::get('user/account', UserProfileComponent::class)->name('user.account');
     Route::get('user/myActivity', UserActivityComponent::class)->name('myactivity');
 
     Route::group(['prefix' => 'samplemgt'], function () {
@@ -98,6 +100,9 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 
+        Route::get('samplesList', SamplesListComponent::class)->middleware('permission:view-participant-info')->name('samples-list');
+        Route::get('testsPerformedList', TestsPerformedListComponent::class)->middleware('permission:view-participant-info')->name('tests-performed-list');
+
         Route::group(['middleware' => 'signed'], function () {
             Route::get('batch/{sampleReception}/searchResults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');
             Route::get('participant/{participant}/searchResults', [SearchResultsController::class, 'participantSearchResults'])->name('participant-search-results');
@@ -108,8 +113,9 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
     });
 
     Route::group(['prefix' => 'Dashboard'], function () {
-        Route::get('/', MainDashboardComponent::class)->name('dashboard');
-        Route::get('myDashboard', UserDashboardComponent::class)->name('user.dashboard');
+        Route::get('/', MainDashboardComponent::class)->name('manager-dashboard');
+        Route::get('master', MasterDashboardComponent::class)->name('master-dashboard');
+        Route::get('user', UserDashboardComponent::class)->name('user-dashboard');
     });
 });
 

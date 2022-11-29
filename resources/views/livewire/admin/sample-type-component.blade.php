@@ -47,11 +47,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($sampleType as $key=> $item)
+                                @foreach ($sampleType as $key => $item)
                                     <tr>
-                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $key + 1 }}</td>
                                         <td>{{ $item->type }}</td>
-                                        <td>{{ count($item->possible_tests??[]) }}</td>
+                                        <td>{{ count($item->possible_tests ?? []) }}</td>
                                         <td>
                                             @if ($item->status == 1)
                                                 <span class="badge bg-success">Active</span>
@@ -60,13 +60,16 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="javascript:;" class="action-ico btn btn-outline-info mx-1" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" wire:click="editdata({{ $item->id }})"
-                                                data-target="#edit_modal" title="Edit"><i
-                                                    class="bi bi-pencil-square"></i></a>
-                                            <a href="javascript:;" class="action-ico btn btn-outline-danger mx-1" data-bs-toggle="tooltip"
-                                                wire:click="deleteConfirmation({{ $item->id }})" title="Delete"><i
-                                                    class="bi bi-trash-fill"></i></a>
+                                            <a href="javascript:;" class="action-ico btn btn-outline-info mx-1"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                wire:click="editdata({{ $item->id }})" data-target="#edit_modal"
+                                                title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript:;" class="action-ico btn btn-outline-danger mx-1"
+                                                    data-bs-toggle="tooltip"
+                                                    wire:click="deleteConfirmation({{ $item->id }})"
+                                                    title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

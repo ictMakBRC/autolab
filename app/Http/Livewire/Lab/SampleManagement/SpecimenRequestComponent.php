@@ -117,6 +117,8 @@ class SpecimenRequestComponent extends Component
 
     public $date_requested;
 
+    public $is_isolate;
+
     public $collected_by;
 
     public $date_collected;
@@ -208,10 +210,10 @@ class SpecimenRequestComponent extends Component
 
         if ($participant) {
             $lastSampleEntry = Sample::where(['participant_id' => $participant->id, 'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
-            $this->lastVisit = $lastSampleEntry->visit;
+            $this->lastVisit = $lastSampleEntry->visit ?? null;
             $this->participantMatch = true;
             $this->matched_participant_id = $participant->id;
-            $this->entry_type = $participant->entry_type;
+            // $this->entry_type = $participant->entry_type;
             $this->identity = $participant->identity;
             $this->age = $participant->age;
             $this->address = $participant->address;
@@ -281,7 +283,7 @@ class SpecimenRequestComponent extends Component
                     ]);
                 }
 
-                if ($this->entry_type == 'Participant' || $this->entry_type == 'Isolate') {
+                if ($this->entry_type == 'Participant') {
                     $this->validate([
                         'identity' => 'required|string|unique:participants',
                     ]);
@@ -380,7 +382,7 @@ class SpecimenRequestComponent extends Component
                 ]);
             }
 
-            if ($this->entry_type == 'Participant' || $this->entry_type == 'Isolate') {
+            if ($this->entry_type == 'Participant') {
                 $this->validate([
                     'identity' => 'required|string',
                 ]);
@@ -422,7 +424,7 @@ class SpecimenRequestComponent extends Component
 
     public function setParticipantId(Participant $participant)
     {
-        if ($participant->entry_type == 'Participant' || $participant->entry_type == 'Isolate') {
+        if ($participant->entry_type == 'Participant') {
             $this->participant_id = $participant->id;
             $this->entry_type = $participant->entry_type;
             $this->study_id = $participant->study_id ?? '';
@@ -492,7 +494,7 @@ class SpecimenRequestComponent extends Component
             'tests_requested' => 'array|required',
         ]);
 
-        if ($this->entry_type != 'Isolate') {
+        if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
@@ -523,6 +525,7 @@ class SpecimenRequestComponent extends Component
         $sample->tests_requested = $this->tests_requested;
         $sample->test_count = count($this->tests_requested);
         $sample->status = 'Accessioned';
+        $sample->is_isolate = $this->is_isolate;
         $sample->save();
 
         $this->same_participant_id = $sample->participant_id;
@@ -571,6 +574,7 @@ class SpecimenRequestComponent extends Component
         $this->tests_requested = $sample->tests_requested ?? [];
         $this->participant_id = $sample->participant_id;
         $this->entry_type = $sample->participant->entry_type;
+        $this->is_isolate = $sample->is_isolate;
 
         $sampleType = SampleType::where('id', $sample->sample_type_id)->first();
         $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
@@ -591,7 +595,7 @@ class SpecimenRequestComponent extends Component
             'tests_requested' => 'array|required',
         ]);
 
-        if ($this->entry_type != 'Isolate') {
+        if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
@@ -615,6 +619,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_identity = $this->sample_identity;
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
+        $sample->is_isolate = $this->is_isolate;
         $sample->tests_requested = $this->tests_requested ?? [];
         $sample->test_count = count($this->tests_requested) ?? 0;
         $sample->update();
@@ -636,7 +641,7 @@ class SpecimenRequestComponent extends Component
 
     public function resetSampleInformationInputs()
     {
-        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by',
+        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by', 'is_isolate',
             'date_requested', 'collected_by', 'date_collected', 'study_id', 'sample_is_for', 'priority', 'tests_requested', 'matched_participant_id', 'participantMatch', ]);
     }
 

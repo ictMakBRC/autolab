@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Exports\StudiesExport;
 use App\Models\Facility;
 use App\Models\Laboratory;
+use App\Models\Requester;
 use App\Models\Sample;
 use App\Models\Study;
 use Exception;
@@ -79,9 +80,14 @@ class StudyComponent extends Component
         $study->facility_id = $this->facility_id;
         $study->save();
 
+        array_push($this->associated_studies, $study->id);
+        $lab = Laboratory::findOrfail(auth()->user()->laboratory_id);
+        $lab->associated_studies = $this->associated_studies;
+        $lab->update();
+
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project and association to Lab successfully!']);
     }
 
     public function editdata($id)
@@ -109,8 +115,14 @@ class StudyComponent extends Component
         $study->name = $this->name;
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
-        $study->is_active = $this->is_active;
-        $study->update();
+
+        if ($study->is_active == $this->is_active) {
+            $study->update();
+        } else {
+            $study->is_active = $this->is_active;
+            $study->update();
+            Requester::where('study_id', $this->edit_id)->update(['is_active' => $this->is_active]);
+        }
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Study/Project updated successfully!']);
         $this->reset(['name', 'description', 'facility_id', 'is_active']);
@@ -192,7 +204,7 @@ class StudyComponent extends Component
     public function render()
     {
         $studies = Study::search($this->search)
-        ->with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])->where('is_active', 1)
+        ->with('facility')->whereIn('facility_id', auth()->user()->laboratory->associated_facilities ?? [])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->where('is_active', 1)->latest()->get();

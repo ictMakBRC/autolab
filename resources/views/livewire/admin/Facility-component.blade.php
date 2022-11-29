@@ -12,9 +12,11 @@
                                 <a type="button" class="btn btn-outline-info mx-1" wire:click="refresh()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                     data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
-                                    data-bs-target="#associate">Associate</a>
 
+                                @if (!$facilities->isEmpty())
+                                    <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
+                                        data-bs-target="#associate">Associate</a>
+                                @endif
                                 <a type="button" class="btn btn-info" data-bs-toggle="modal"
                                     data-bs-target="#addFacility">Add Facility</a>
                             </div>
@@ -37,7 +39,7 @@
                         </div>
                     </div>
                 </x-table-utilities>
-             
+
                 <div class="tab-content">
                     <div class="table-responsive">
                         <table id="datableButton" class="table table-striped mb-0 w-100 ">
@@ -66,14 +68,16 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($facility->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
-                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
-                                                    wire:click="editdata({{ $facility->id }})"
-                                                    data-bs-target="#editfacility"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $facility->id }})"
-                                                class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"
+                                                data-bs-toggle="modal" wire:click="editdata({{ $facility->id }})"
+                                                data-bs-target="#editfacility">
+                                                <i class="bi bi-pencil-square"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript: void(0);"
+                                                    wire:click="deleteConfirmation({{ $facility->id }})"
+                                                    class="action-ico btn btn-outline-danger mx-1">
+                                                    <i class="bi bi-trash"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -140,7 +144,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
+                                    <select class="form-select" id="isActive" name="is_active"
+                                        wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>

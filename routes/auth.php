@@ -6,12 +6,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-// use App\Http\Controllers\Auth\UserRolesPermissionsController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Models\Designation;
-use App\Models\Laboratory;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
@@ -60,25 +55,3 @@ Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->middleware('auth')
                 ->name('logout');
-
-Route::group(['prefix' => 'user', 'middleware' => ['auth']], function () {
-    // Route::put('settings/{id}', function (Request $request, $id) {
-    //     if (User::findOrFail($id)->update($request->all())) {
-    //         return redirect()->back()->with(['success' => 'Settings successfully updated']);
-    //     } else {
-    //         return redirect()->back()->with(['error' => 'Something went wrong and settings were not updated']);
-    //     }
-    // })->name('settings.update');
-});
-
-// Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
-//     Route::get('dashboard', function () {
-//         $users = User::latest()->get();
-//         $designations = Designation::latest()->get();
-//         $laboratories = Laboratory::latest()->get();
-
-//         return view('super-admin.dashboard', compact('users', 'designations', 'laboratories'));
-//     })->name('super.dashboard');
-
-//     // ->only(['index', 'create', 'store', 'edit', 'update'])
-// });

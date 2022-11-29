@@ -12,8 +12,10 @@
                                 <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                     data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
-                                    data-bs-target="#associate">Associate</a>
+                                @if (!$studies->isEmpty())
+                                    <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
+                                        data-bs-target="#associate">Associate</a>
+                                @endif
                                 <a type="button" class="btn btn-info" data-bs-toggle="modal"
                                     data-bs-target="#addStudy">Add Study</a>
                             </div>
@@ -63,14 +65,25 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($study->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1">
-                                                <i class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            @if ($study->facility->is_active == 0)
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-warning mx-1"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Can not Edit"><i
+                                                        class="bi bi-lock-fill"></i></a>
+                                            @else
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-info mx-1" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $study->id }})"
-                                                    data-bs-target="#editstudy"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $study->id }})"
-                                                class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                                    data-bs-target="#editstudy">
+                                                    <i class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="deleteConfirmation({{ $study->id }})"
+                                                        class="action-ico btn btn-outline-danger mx-1">
+                                                        <i class="bi bi-trash"></i></a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -135,7 +148,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
+                                    <select class="form-select" id="isActive" name="is_active"
+                                        wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -282,7 +296,6 @@
                                                 class="text-info">{{ $study->name }}</strong>{{ ' (' . $study->facility->name . ')' }}</label>
                                     </div>
                                 </div>
-
                             @empty
                             @endforelse
                         </div>

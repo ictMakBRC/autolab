@@ -2,12 +2,11 @@
 
 namespace App\Exports;
 
-use App\Models\Sample;
 use App\Models\Participant;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
 {
@@ -18,15 +17,17 @@ class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
      */
     public $count;
 
-    public function __construct()
+    public $participantIds;
+
+    public function __construct($participantIds)
     {
         $this->count = 0;
+        $this->participantIds = $participantIds;
     }
 
     public function collection()
     {
-        $participantList=Sample::select('participant_id')->where('creator_lab', auth()->user()->laboratory_id)->distinct()->get()->pluck('participant_id');
-        return Participant::whereIn('id',$participantList??[])->with('facility', 'study')->latest()->get();
+        return Participant::whereIn('id', $this->participantIds)->with('facility', 'study')->latest()->get();
     }
 
     public function map($participant): array

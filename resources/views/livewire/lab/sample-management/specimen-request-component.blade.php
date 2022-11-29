@@ -83,16 +83,15 @@
                                             <div class="mb-3 col-md-2">
                                                 <label for="entry_type" class="form-label">Entry Type</label>
                                                 <select class="form-select" id="entry_type" wire:model="entry_type">
-                                                    <option selected value="Participant">Participant</option>
+                                                    <option selected value="Participant">Participant/Isolate</option>
                                                     <option value="Client">Client</option>
-                                                    <option value="Isolate">Isolate</option>
                                                     <option value="Other">Other</option>
                                                 </select>
                                                 @error('entry_type')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'Isolate')
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Client')
 
                                                 <div class="mb-3 col-md-2">
                                                     <label for="identity" class="form-label">Participant ID<span
@@ -420,11 +419,24 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            @if ($entry_type=='Participant')
+                                            <div class="mb- col-md-1">
+                                                <div class="form-check mt-4">
+                                                    <input class="form-check-input" type="checkbox" value="1"
+                                                        id="is_isolate" checked wire:model="is_isolate">
+                                                    <label class="form-check-label text-success" for="is_isolate"><strong>Isolate?</strong></label>
+                                                </div>
+                                                @error('is_isolate')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            @endif
+                                           
                                             <div class="mb-3 col-md-3">
                                                 <label for="collected_by" class="form-label">Collected By</label>
                                                 <select class="form-select" id="collected_by"
                                                     wire:model="collected_by"
-                                                    @if ($entry_type == 'Isolate') disabled @endif>
+                                                    @if ($is_isolate) disabled @endif>
                                                     <option selected value="">Select</option>
                                                     @forelse ($collectors as $collector)
                                                         <option value='{{ $collector->id }}'>{{ $collector->name }}
@@ -437,12 +449,12 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="mb-3 col-md-3">
+                                            <div class="mb-3 @if ($entry_type=='Participant') col-md-2 @else col-md-3 @endif">
                                                 <label for="date_collected" class="form-label">Collection
                                                     Date/Time</label>
                                                 <input id="date_collected" type="datetime-local" class="form-control"
                                                     wire:model.lazy="date_collected"
-                                                    @if ($entry_type == 'Isolate') disabled @endif>
+                                                    @if ($is_isolate) disabled @endif>
                                                 @error('date_collected')
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
@@ -480,8 +492,11 @@
                                                 <select class="form-select select2" data-toggle="select2"
                                                     id="sample_is_for" wire:model="sample_is_for">
                                                     <option selected value="">Select</option>
-                                                    <option value='Processing'>Processing</option>
-                                                    <option value='Storage'>Storage</option>
+                                                    <option value='Testing'>Testing</option>
+                                                    <option value='Aliquoting'>Aliquoting</option>
+                                                    <option value='Deffered'>Deffered Testing</option>
+                                                    {{-- <option value='Processing and Storage'>Processing & Storage</option>
+                                                    <option value='Direct Storage'>Direct Storage</option> --}}
                                                 </select>
                                                 @error('sample_is_for')
                                                     <div class="text-danger text-small">{{ $message }}</div>
@@ -507,6 +522,7 @@
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
                                             <hr>
+                                            @if ($entry_type=='Participant')
                                             <div class="mb-3 col-md-2">
                                                 <label for="visit" class="form-label">Participant Visit
                                                     @if ($lastVisit)
@@ -520,6 +536,8 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            @endif
+                                        
                                             <div class="mb-3 col-md-8">
                                                 <label for="sampleType" class="form-label">Sample<span
                                                         class="text-danger">*</span></label>

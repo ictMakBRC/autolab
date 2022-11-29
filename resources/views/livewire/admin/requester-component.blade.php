@@ -68,14 +68,25 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($requester->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            @if ($requester->facility->is_active == 0 || $requester->study->is_active == 0)
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-warning mx-1"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Can not Edit"><i
+                                                        class="bi bi-lock-fill"></i></a>
+                                            @else
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-info mx-1" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $requester->id }})"
-                                                    data-bs-target="#editrequester"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $requester->id }})"
-                                                class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                                    data-bs-target="#editrequester"><i
+                                                        class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="deleteConfirmation({{ $requester->id }})"
+                                                        class="action-ico btn btn-outline-danger mx-1"> <i
+                                                            class="bi bi-trash"></i></a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -118,7 +129,8 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="requestercontact" class="form-label">Contact</label>
-                                <input type="text" id="requestercontact" class="form-control" wire:model.lazy="contact">
+                                <input type="text" id="requestercontact" class="form-control"
+                                    wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

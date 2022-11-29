@@ -49,13 +49,16 @@
                                         <td>{{ $category->category_name }}</td>
                                         <td>{{ $category->description }}</td>
                                         <td>
-                                            <a href="javascript:;" class="action-ico btn btn-outline-info btn-xs btn-rounded mx-1" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" wire:click="editdata({{ $category->id }})"
-                                                data-target="#edit_modal" title="Edit"><i
-                                                    class="bi bi-pencil-square"></i></a>
-                                            <a href="javascript:;" class="action-ico btn btn-outline-danger btn-xs btn-rounded sharp mx-1" data-bs-toggle="tooltip"
-                                                wire:click="deleteConfirmation({{ $category->id }})" title="Delete"><i
-                                                    class="bi bi-trash-fill"></i></a>
+                                            <a href="javascript:;" class="action-ico btn btn-outline-info mx-1"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                wire:click="editdata({{ $category->id }})" data-target="#edit_modal"
+                                                title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                            @if (Auth::user()->hasPermission(['master-access']))
+                                                <a href="javascript:;" class="action-ico btn btn-outline-danger mx-1"
+                                                    data-bs-toggle="tooltip"
+                                                    wire:click="deleteConfirmation({{ $category->id }})"
+                                                    title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -88,8 +91,8 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="name" class="form-label">Category name</label>
-                            <input type="text" name="category_name" id="category_name" wire:model.lazy="category_name"
-                                class="form-control">
+                            <input type="text" name="category_name" id="category_name"
+                                wire:model.lazy="category_name" class="form-control">
                             @error('category_name')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -127,8 +130,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="name" class="form-label">Category name</label>
-                            <input type="text" name="category_name" id="category_name" wire:model.lazy="category_name"
-                                class="form-control">
+                            <input type="text" name="category_name" id="category_name"
+                                wire:model.lazy="category_name" class="form-control">
                             @error('category_name')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

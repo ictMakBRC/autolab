@@ -70,7 +70,13 @@
         <header class="no-print">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ route('dashboard') }}"><img
+                    <a class="navbar-brand" href="
+                @if (Auth::user()->hasPermission(['manager-access'])) {{ route('manager-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['master-access']))
+                {{ route('master-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['normal-access']))
+                {{ route('user-dashboard') }} @endif
+                "><img
                             src="{{ asset('autolab-assets/images/brand-logo-2.png') }}" width="140"
                             alt="" /></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -85,7 +91,13 @@
                             </li>
                         </ul>
                         <div class="d-flex ms-3 gap-3">
-                            <a href="{{ route('dashboard') }}"
+                            <a href="
+                @if (Auth::user()->hasPermission(['manager-access'])) {{ route('manager-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['master-access']))
+                {{ route('master-dashboard') }}
+                @elseif (Auth::user()->hasPermission(['normal-access']))
+                {{ route('user-dashboard') }} @endif
+                "
                                 class="btn btn-outline-info btn-sm px-4 radius-30">Dashboard</a>
 
                             <form method="POST" action="{{ route('logout') }}">

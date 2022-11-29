@@ -38,6 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('creator_lab');
             $table->string('status')->default('Accessioned');
+            $table->boolean('is_isolate')->default(0);
             $table->timestamps();
         });
     }

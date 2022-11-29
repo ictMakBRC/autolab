@@ -9,7 +9,6 @@ use App\Models\Designation;
 use App\Models\Facility;
 use App\Models\Kit;
 use App\Models\Laboratory;
-use App\Models\Participant;
 use App\Models\Permission;
 use App\Models\Platform;
 use App\Models\Requester;
@@ -34,6 +33,8 @@ class NavigationComponent extends Component
     public $batchesCount;
 
     public $participantCount;
+
+    public $samplesCount;
 
     public $testAssignedCount;
 
@@ -83,13 +84,14 @@ class NavigationComponent extends Component
             $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
         }
         if (Auth::user()->hasPermission(['view-participant-info'])) {
-            $this->participantCount = Participant::count(); //depends
+            $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
+            $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         }
         if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
             $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
         }
         if (Auth::user()->hasPermission(['enter-results'])) {
-            $this->testRequestsCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->whereIn('status', ['Accessioned', 'Processing'])->count();
+            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])->whereIn('status', ['Accessioned', 'Processing'])->count();
         }
         if (Auth::user()->hasPermission(['review-results'])) {
             $this->testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
@@ -99,9 +101,10 @@ class NavigationComponent extends Component
         }
         if (Auth::user()->hasPermission(['view-result-reports'])) {
             $this->testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
+            $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
         }
         if (Auth::user()->hasPermission(['manage-users'])) {
-            $this->usersCount = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->count();
+            $this->usersCount = User::where(['is_active' => 1])->count();
             $this->rolesCount = Role::count();
             $this->permissionsCount = Permission::count();
             $this->laboratoryCount = Laboratory::where('is_active', 1)->count();

@@ -68,13 +68,25 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($courier->created_at)) }}</td>
                                         <td class="table-action">
-                                            <a href="javascript: void(0);" class="action-ico btn btn-outline-info mx-1"> <i
-                                                    class="bi bi-pencil-square" data-bs-toggle="modal"
+                                            @if ($courier->facility->is_active == 0 || $courier->study->is_active == 0)
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-warning mx-1"
+                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="Can not Edit"><i
+                                                        class="bi bi-lock-fill"></i></a>
+                                            @else
+                                                <a href="javascript: void(0);"
+                                                    class="action-ico btn btn-outline-info mx-1" data-bs-toggle="modal"
                                                     wire:click="editdata({{ $courier->id }})"
-                                                    data-bs-target="#editcourier"></i></a>
-                                            <a href="javascript: void(0);"
-                                                wire:click="deleteConfirmation({{ $courier->id }})" class="action-ico btn btn-outline-danger mx-1">
-                                                <i class="bi bi-trash"></i></a>
+                                                    data-bs-target="#editcourier"><i
+                                                        class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="deleteConfirmation({{ $courier->id }})"
+                                                        class="action-ico btn btn-outline-danger mx-1">
+                                                        <i class="bi bi-trash"></i></a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -116,7 +128,8 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="couriercontact" class="form-label">Contact</label>
-                                <input type="text" id="couriercontact" class="form-control" wire:model.lazy="contact">
+                                <input type="text" id="couriercontact" class="form-control"
+                                    wire:model.lazy="contact">
                                 @error('contact')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror

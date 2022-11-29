@@ -5,7 +5,6 @@ namespace App\Helpers;
 use App\Models\Participant;
 use App\Models\Sample;
 use App\Models\SampleReception;
-use Carbon\Carbon;
 
 class Generate
 {
@@ -49,20 +48,20 @@ class Generate
     public static function participantNo()
     {
         $participant_no = '';
-        $yearStart = Carbon::now();
+        $yearStart = date('y');
         $latestParticipantNo = Participant::select('participant_no')->orderBy('id', 'desc')->first();
 
         if ($latestParticipantNo) {
             $participantNumberSplit = explode('-', $latestParticipantNo->participant_no);
             $participantNumberYear = (int) filter_var($participantNumberSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
-            if ($participantNumberYear == $yearStart->year) {
-                $participant_no = $participantNumberSplit[0].'-'.((int) filter_var($participantNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1).'P';
+            if ($participantNumberYear == $yearStart) {
+                $participant_no = $participantNumberSplit[0].'-'.str_pad(((int) filter_var($participantNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).'P';
             } else {
-                $participant_no = 'BRC'.$yearStart->year.'-100P';
+                $participant_no = 'GMI'.$yearStart.'-001P';
             }
         } else {
-            $participant_no = 'BRC'.$yearStart->year.'-100P';
+            $participant_no = 'GMI'.$yearStart.'-001P';
         }
 
         return $participant_no;
@@ -71,20 +70,20 @@ class Generate
     public static function sampleNo()
     {
         $sample_no = '';
-        $yearStart = Carbon::now();
+        $yearStart = date('y');
         $latestSampleNo = Sample::select('sample_no')->orderBy('id', 'desc')->first();
 
         if ($latestSampleNo) {
             $sampleNumberSplit = explode('-', $latestSampleNo->sample_no);
             $sampleNumberYear = (int) filter_var($sampleNumberSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
-            if ($sampleNumberYear == $yearStart->year) {
-                $sample_no = $sampleNumberSplit[0].'-'.((int) filter_var($sampleNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1).'S';
+            if ($sampleNumberYear == $yearStart) {
+                $sample_no = $sampleNumberSplit[0].'-'.str_pad(((int) filter_var($sampleNumberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).'S';
             } else {
-                $sample_no = 'PTSP'.$yearStart->year.'-100S';
+                $sample_no = 'GMI'.$yearStart.'-001S';
             }
         } else {
-            $sample_no = 'PTSP'.$yearStart->year.'-100S';
+            $sample_no = 'GMI'.$yearStart.'-001S';
         }
 
         return $sample_no;
