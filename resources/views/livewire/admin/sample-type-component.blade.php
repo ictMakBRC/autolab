@@ -36,7 +36,7 @@
                         </div>
                     </x-table-utilities>
                     <div class="table-responsive">
-                        <table class="table table-striped mb-0 w-100" id="datableButton">
+                        <table class="table table-striped mb-0 w-100 sortable" id="datableButton">
                             <thead>
                                 <tr>
                                     <td>No.</td>
