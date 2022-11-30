@@ -2,19 +2,18 @@
 
 namespace App\Http\Livewire\Admin\Dashboards;
 
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Study;
-use App\Models\Sample;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
 use App\Models\Collector;
-use App\Models\Requester;
+use App\Models\Courier;
+use App\Models\Facility;
 use App\Models\Laboratory;
-use App\Models\TestResult;
+use App\Models\Requester;
+use App\Models\Sample;
 use App\Models\SampleReception;
-use Illuminate\Support\Facades\DB;
+use App\Models\Study;
+use App\Models\TestResult;
+use App\Models\User;
+use Carbon\Carbon;
+use Livewire\Component;
 
 class MasterDashboardComponent extends Component
 {
@@ -25,7 +24,6 @@ class MasterDashboardComponent extends Component
     public $associatedStudies = [];
 
     public $laboratories;
-
 
     public function mount()
     {
@@ -226,7 +224,6 @@ class MasterDashboardComponent extends Component
 
         return $count;
     }
-    
 
     public function render()
     {

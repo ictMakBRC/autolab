@@ -2,29 +2,20 @@
 
 namespace App\Http\Livewire\Admin\Dashboards;
 
-use App\Models\Admin\Test;
-use App\Models\Collector;
-use App\Models\Laboratory;
-use App\Models\Participant;
-use App\Models\Requester;
 use App\Models\Sample;
 use App\Models\SampleReception;
-use App\Models\SampleType;
-use App\Models\Study;
 use App\Models\TestAssignment;
 use App\Models\TestResult;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class UserDashboardComponent extends Component
 {
-    public $search;
-
     public $view;
 
     public function render()
     {
+        //TOTAL SAMPLE RECEPTION
         $data['samplesDelivered'] = SampleReception::where('created_by', auth()->user()->id)
         ->when($this->view == 'today', function ($query) {
             $query->whereDay('created_at', '=', date('d'));
@@ -85,6 +76,7 @@ class UserDashboardComponent extends Component
         })
         ->count();
 
+        //SAMPLES
         $data['sampleAccessioned'] = Sample::where('created_by', auth()->user()->id)
         ->when($this->view == 'today', function ($query) {
             $query->whereDay('created_at', '=', date('d'));
@@ -100,8 +92,7 @@ class UserDashboardComponent extends Component
         })
         ->count();
 
-        
-        $data['sampleForTesting'] = Sample::where(['created_by'=>auth()->user()->id,'sample_is_for'=>'Testing'])
+        $data['sampleForTesting'] = Sample::where(['created_by' => auth()->user()->id, 'sample_is_for' => 'Testing'])
         ->when($this->view == 'today', function ($query) {
             $query->whereDay('created_at', '=', date('d'));
         })
@@ -131,24 +122,7 @@ class UserDashboardComponent extends Component
         })->distinct('participant_id')
         ->count();
 
-        $data['CompletedTestResultCount'] = TestResult::where('performed_by', auth()->user()->id)
-        ->when($this->view == 'today', function ($query) {
-            $query->whereDay('created_at', '=', date('d'));
-        })
-        ->when($this->view == 'week', function ($query) {
-            $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-        })
-        ->when($this->view == 'month', function ($query) {
-            $query->whereMonth('created_at', '=', date('m'));
-        })
-        ->when($this->view == 'year', function ($query) {
-            $query->whereYear('created_at', '=', date('Y'));
-        })
-        ->count();
-
-        // $data['testChart'] = TestAssignment::where('assignee', auth()->user()->id)
-        // ->selectRaw('COUNT(id) as total, status')->groupBy('status')->get();
-
+        //TOTAL TESTS ASSIGNED
         $data['testAssignedCount'] = TestAssignment::where('assignee', auth()->user()->id)
         ->when($this->view == 'today', function ($query) {
             $query->whereDay('created_at', '=', date('d'));
@@ -179,6 +153,22 @@ class UserDashboardComponent extends Component
         })
         ->count();
 
+        //TESTS PERFORMED
+        $data['completedTestResultCount'] = TestResult::where('performed_by', auth()->user()->id)
+        ->when($this->view == 'today', function ($query) {
+            $query->whereDay('created_at', '=', date('d'));
+        })
+        ->when($this->view == 'week', function ($query) {
+            $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        })
+        ->when($this->view == 'month', function ($query) {
+            $query->whereMonth('created_at', '=', date('m'));
+        })
+        ->when($this->view == 'year', function ($query) {
+            $query->whereYear('created_at', '=', date('Y'));
+        })
+        ->count();
+
         $data['testsPendindReviewCount'] = TestResult::where('performed_by', auth()->user()->laboratory_id)->where('status', 'Pending Review')
         ->when($this->view == 'today', function ($query) {
             $query->whereDay('created_at', '=', date('d'));
@@ -200,21 +190,6 @@ class UserDashboardComponent extends Component
         })
         ->when($this->view == 'week', function ($query) {
             $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
-        })
-        ->when($this->view == 'month', function ($query) {
-            $query->whereMonth('created_at', '=', date('m'));
-        })
-        ->when($this->view == 'year', function ($query) {
-            $query->whereYear('created_at', '=', date('Y'));
-        })
-        ->count();
-
-        $data['testReportsCount'] = TestResult::where('performed_by', auth()->user()->id)
-        ->when($this->view == 'today', function ($query) {
-            $query->whereDay('created_at', '=', date('d'));
-        })
-        ->when($this->view == 'week', function ($query) {
-            $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
         })
         ->when($this->view == 'month', function ($query) {
             $query->whereMonth('created_at', '=', date('m'));

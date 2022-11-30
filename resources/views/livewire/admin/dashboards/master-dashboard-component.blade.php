@@ -1,6 +1,5 @@
 <div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-4">
-
         <div class="col">
             <div class="card radius-10 border-start border-purple border-3">
                 <div class="card-body">
