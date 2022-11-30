@@ -20,20 +20,21 @@ class TestReportsComponent extends Component
 
     public $orderAsc = true;
 
-    public $combinedList = [];
+    public $combinedSamplesList = [];
 
     protected $paginationTheme = 'bootstrap';
 
     public function combinedTestReport()
     {
         $sampleIds = '';
-        if (count($this->combinedList) >= 2) {
-            $sameStudyCheck = Sample::whereIn('id', array_unique($this->combinedList))->get()->pluck('study_id')->toArray();
+        if (count($this->combinedSamplesList) >= 1) {
+            $sameStudyCheck = Sample::whereIn('id', array_unique($this->combinedSamplesList))->get()->pluck('study_id')->toArray();
 
             if (count(array_unique($sameStudyCheck)) == 1) {
-                $sampleIds = implode('-', array_unique($this->combinedList));
-                $this->dispatchBrowserEvent('loadCombinedReport', ['url' => URL::signedRoute('combined-test-report', ['sampleIds' => $sampleIds])]);
-                $this->combinedList = [];
+                shuffle($this->combinedSamplesList);
+                $sampleIds = implode('-', array_unique($this->combinedSamplesList));
+                $this->dispatchBrowserEvent('loadCombinedSampleTestReport', ['url' => URL::signedRoute('combined-sample-test-report', ['sampleIds' => $sampleIds])]);
+                $this->combinedSamplesList = [];
             } else {
                 $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Test Report is only possible for samples of the same study!']);
             }

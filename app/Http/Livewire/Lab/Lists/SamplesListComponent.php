@@ -28,8 +28,6 @@ class SamplesListComponent extends Component
 
     public $perPage = 10;
 
-    public $search = '';
-
     public $orderBy = 'id';
 
     public $orderAsc = 0;
@@ -103,8 +101,9 @@ class SamplesListComponent extends Component
         return $samples;
     }
 
-    public function recallSampleConfirmation(Sample $sample)
+    public function recallSampleConfirmation($id)
     {
+        $sample = Sample::where('creator_lab', auth()->user()->laboratory_id)->where('id', $id)->first();
         $this->recall_id = $sample->id;
         $this->reception_id = $sample->sample_reception_id;
         $this->dispatchBrowserEvent('recall-confirmation');
@@ -134,7 +133,7 @@ class SamplesListComponent extends Component
 
     public function cancel()
     {
-        $this->recall_id = '';
+        $this->reset('recall_id');
     }
 
     public function render()

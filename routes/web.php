@@ -108,7 +108,8 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
             Route::get('participant/{participant}/searchResults', [SearchResultsController::class, 'participantSearchResults'])->name('participant-search-results');
             Route::get('sample/{sample}/searchResults', [SearchResultsController::class, 'sampleSearchResults'])->name('sample-search-results');
             Route::get('testRpt/{testResult}/searchResults', [SearchResultsController::class, 'testReportSearchResults'])->name('report-search-results');
-            Route::get('combinedRpt/{sampleIds?}', [SearchResultsController::class, 'combinedTestReport'])->name('combined-test-report');
+            Route::get('combinedSamplesTestRpt/{sampleIds?}', [SearchResultsController::class, 'combinedSampleTestReport'])->name('combined-sample-test-report');
+            Route::get('combinedTestResultsRpt/{resultIds?}', [SearchResultsController::class, 'combinedTestResultsReport'])->name('combined-test-results-report');
         });
     });
 

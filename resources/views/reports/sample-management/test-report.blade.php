@@ -79,7 +79,8 @@
         <header class="no-print">
             <nav class="navbar navbar-expand-lg navbar-light bg-white rounded-0 border-bottom">
                 <div class="container">
-                    <a class="navbar-brand" href="
+                    <a class="navbar-brand"
+                        href="
                 @if (Auth::user()->hasPermission(['manager-access'])) {{ route('manager-dashboard') }}
                 @elseif (Auth::user()->hasPermission(['master-access']))
                 {{ route('master-dashboard') }}
@@ -258,27 +259,33 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <strong>Performed By</strong><br>
                                             @if ($testResult->performer->signature)
                                                 <img src="{{ asset('storage/' . $testResult->performer->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
+                                            <hr>
+                                            <strong>Performed By</strong><br>
+
                                             {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
                                         </td>
                                         <td>
-                                            <strong>Rewiewed By</strong><br>
                                             @if ($testResult->reviewer->signature)
                                                 <img src="{{ asset('storage/' . $testResult->reviewer->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
+                                            <hr>
+                                            <strong>Rewiewed By</strong><br>
+
                                             {{ $testResult->reviewer->fullName }}
                                         </td>
                                         <td>
-                                            <strong>Approved By</strong><br>
                                             @if ($testResult->approver->signature)
                                                 <img src="{{ asset('storage/' . $testResult->approver->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
+                                            <hr>
+                                            <strong>Approved By</strong><br>
+
                                             {{ $testResult->approver->fullName }}
                                         </td>
                                         <td>
