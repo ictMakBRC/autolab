@@ -3,10 +3,11 @@
 namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Sample;
-use App\Models\TestResult;
-use Illuminate\Support\Facades\URL;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use App\Exports\ReportExport;
+use Illuminate\Support\Facades\URL;
 
 class TestReportsComponent extends Component
 {
@@ -40,6 +41,11 @@ class TestReportsComponent extends Component
             }
         }
     }
+
+    // public function export($id)
+    // {
+    //     return (new ReportExport($id))->download('report_' . date('Y-m-d') . '_' . now()->toTimeString() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+    // }
 
     public function updatingSearch()
     {

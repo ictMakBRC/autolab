@@ -75,6 +75,7 @@ class NavigationComponent extends Component
     public $testCategoryCount;
 
     public $testCount;
+    public $rejectedResultsCount;
 
     protected $listeners = ['updateNav'];
 
@@ -92,6 +93,7 @@ class NavigationComponent extends Component
         }
         if (Auth::user()->hasPermission(['enter-results'])) {
             $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])->whereIn('status', ['Accessioned', 'Processing'])->count();
+            $this->rejectedResultsCount = TestResult::where(['status'=>'Rejected','performed_by'=> auth()->user()->id,'creator_lab'=>auth()->user()->laboratory_id])->count();
         }
         if (Auth::user()->hasPermission(['review-results'])) {
             $this->testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();

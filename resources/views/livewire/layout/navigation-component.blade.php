@@ -164,6 +164,14 @@
                                     class="bi bi-file-earmark-medical"></i>Attach Results</a>
                         @endif
 
+                        @if (Auth::user()->hasPermission(['enter-results']))
+                        <a href="{{ route('rejected-results') }}"
+                            class="list-group-item"><i
+                                class="bi bi-check-square text-danger"></i>Rejected Results
+                                <span class="badge bg-danger pill float-end">{{ $rejectedResultsCount }}</span>
+                            </a>
+                        @endif
+
                         @if (Auth::user()->hasPermission(['review-results']))
                             <a href="{{ route('test-review') }}"
                                 class="list-group-item

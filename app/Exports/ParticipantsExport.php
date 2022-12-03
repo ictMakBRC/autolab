@@ -4,11 +4,14 @@ namespace App\Exports;
 
 use App\Models\Participant;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithProperties;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
+class ParticipantsExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
 {
     use Exportable;
 
@@ -23,6 +26,21 @@ class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
     {
         $this->count = 0;
         $this->participantIds = $participantIds;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => auth()->user()->fullName,
+            'lastModifiedBy' => 'Autolab',
+            'title'          => 'Participants',
+            'description'    => 'Participants export',
+            'subject'        => 'Participants export',
+            'keywords'       => 'Autolab exports',
+            'category'       => 'Autolab Exports',
+            'manager'        => 'MakBRC IT TEAM',
+            'company'        => 'Makerere University Biomedical Research Centre',
+        ];
     }
 
     public function collection()
@@ -97,6 +115,14 @@ class ParticipantsExport implements FromCollection, WithMapping, WithHeadings
             'Facility',
             'Study Name',
             'Entry Type',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

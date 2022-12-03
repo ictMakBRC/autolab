@@ -21,7 +21,9 @@ class TestApprovalComponent extends Component
 
     public $viewReport = false;
 
-    public $resultId;
+    public $testResult;
+
+    public $approver_comment;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -32,19 +34,42 @@ class TestApprovalComponent extends Component
 
     public function markAsApproved(TestResult $testResult)
     {
+        $this->validate([
+            'approver_comment' => 'required',
+        ]);
         $testResult->approved_by = Auth::id();
         $testResult->approved_at = now();
         $testResult->status = 'Approved';
+        $testResult->approver_comment = $this->approver_comment;
         $testResult->update();
         $this->emit('updateNav', 'testsPendindApprovalCount');
 
+        $this->reset('approver_comment');
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
     }
 
+    public function markAsDeclined(TestResult $testResult)
+    {
+        $this->validate([
+            'approver_comment' => 'required',
+        ]);
+
+        $testResult->approved_by = Auth::id();
+        $testResult->approved_at = now();
+        $testResult->approver_comment = $this->approver_comment;
+        $testResult->status = 'Rejected';
+        $testResult->update();
+        $this->emit('updateNav', 'testsPendindApprovalCount');
+
+        $this->reset('approver_comment');
+        $this->viewReport = false;
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);
+    }
+
     public function viewPreliminaryReport(TestResult $testResult)
     {
-        $this->resultId = $testResult->id;
+        $this->testResult=$testResult;
         $this->viewReport = true;
     }
 
@@ -56,7 +81,7 @@ class TestApprovalComponent extends Component
     public function render()
     {
         if ($this->viewReport) {
-            $testResults = TestResult::where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where(['id' => $this->resultId, 'status' => 'Reviewed'])->first();
+            $testResults = $this->testResult->load(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name']);
         } else {
             $testResults = TestResult::resultSearch($this->search, 'Reviewed')
             ->where('creator_lab', auth()->user()->laboratory_id)->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('status', 'Reviewed')

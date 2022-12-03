@@ -173,6 +173,7 @@ class SampleReceptionComponent extends Component
     {
         $this->couriers = collect([]);
         $this->studies = collect([]);
+        $this->received_by=auth()->user()->id;
     }
 
     public function storeData()
