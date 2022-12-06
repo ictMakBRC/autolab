@@ -57,6 +57,16 @@ class KitComponent extends Component
 
     public function storeData()
     {
+        $isExist = Kit::select('*')
+        ->where([['name',$this->name],['creator_lab', auth()->user()->laboratory_id],['platform_id',$this->platform_id]])
+        ->exists();
+        if ($isExist) {           
+            $this->name = '';
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Kit name already exists!']);
+        }
+        
+        else{
         $this->validate([
             'name' => 'required',
             'is_active' => 'required',
@@ -71,7 +81,9 @@ class KitComponent extends Component
         $this->reset(['name', 'platform_id', 'is_active']);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Kit created successfully!']);
+        }
     }
+
 
     public function editdata($id)
     {
