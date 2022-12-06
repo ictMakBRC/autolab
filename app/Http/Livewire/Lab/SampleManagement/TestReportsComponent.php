@@ -3,10 +3,11 @@
 namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Sample;
-use App\Models\TestResult;
-use Illuminate\Support\Facades\URL;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use App\Exports\ReportExport;
+use Illuminate\Support\Facades\URL;
 
 class TestReportsComponent extends Component
 {
@@ -20,25 +21,31 @@ class TestReportsComponent extends Component
 
     public $orderAsc = true;
 
-    public $combinedList = [];
+    public $combinedSamplesList = [];
 
     protected $paginationTheme = 'bootstrap';
 
     public function combinedTestReport()
     {
         $sampleIds = '';
-        if (count($this->combinedList) >= 2) {
-            $sameStudyCheck = Sample::whereIn('id', array_unique($this->combinedList))->get()->pluck('study_id')->toArray();
+        if (count($this->combinedSamplesList) >= 1) {
+            $sameStudyCheck = Sample::whereIn('id', array_unique($this->combinedSamplesList))->get()->pluck('study_id')->toArray();
 
             if (count(array_unique($sameStudyCheck)) == 1) {
-                $sampleIds = implode('-', array_unique($this->combinedList));
-                $this->dispatchBrowserEvent('loadCombinedReport', ['url' => URL::signedRoute('combined-test-report', ['sampleIds' => $sampleIds])]);
-                $this->combinedList = [];
+                shuffle($this->combinedSamplesList);
+                $sampleIds = implode('-', array_unique($this->combinedSamplesList));
+                $this->dispatchBrowserEvent('loadCombinedSampleTestReport', ['url' => URL::signedRoute('combined-sample-test-report', ['sampleIds' => $sampleIds])]);
+                $this->combinedSamplesList = [];
             } else {
                 $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Test Report is only possible for samples of the same study!']);
             }
         }
     }
+
+    // public function export($id)
+    // {
+    //     return (new ReportExport($id))->download('report_' . date('Y-m-d') . '_' . now()->toTimeString() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+    // }
 
     public function updatingSearch()
     {

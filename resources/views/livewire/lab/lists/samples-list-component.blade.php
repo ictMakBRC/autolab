@@ -192,12 +192,14 @@
                                             </td>
                                             <td class="table-action">
                                                 @if ($sample->sample_is_for == 'Deffered')
-                                                    <a href="javascript:;" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Recall for Testing"><i
-                                                            class="bi bi-arrow-90deg-left"
-                                                            wire:click="recallSampleConfirmation({{ $sample->id }})"></i></a>
+                                                {{-- <a href="javascript: void(0);"
+                                                class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom" title=""
+                                                data-bs-original-title="Recall for Testing" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
+                                                    ></i></a> --}}
+
+                                                <button class="btn btn-outline-success" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
+                                                    ></i></button>
                                                 @elseif($sample->sample_is_for == 'Testing')
                                                     <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
                                                         type="button" class="btn btn-outline-info"

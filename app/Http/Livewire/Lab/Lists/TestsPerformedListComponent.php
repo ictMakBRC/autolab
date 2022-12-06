@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Lab\Lists;
 use App\Exports\TestResultsExport;
 use App\Models\Admin\Test;
 use App\Models\Facility;
+use App\Models\Sample;
 use App\Models\SampleType;
 use App\Models\Study;
 use App\Models\TestResult;
+use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -41,12 +43,33 @@ class TestsPerformedListComponent extends Component
 
     public $resultIds = [];
 
+    public $combinedResultsList = [];
+
     protected $paginationTheme = 'bootstrap';
 
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
             $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
+        }
+    }
+
+    public function combinedTestResultsReport()
+    {
+        $resultIds = '';
+        if (count($this->combinedResultsList) >= 2) {
+            $sameStudyCheck = Sample::whereNotNull('study_id')->whereHas('testResult', function ($query) {
+                $query->whereIn('id', array_unique($this->combinedResultsList));
+            })->get()->pluck('study_id')->toArray();
+
+            if (count(array_unique($sameStudyCheck)) == 1) {
+                shuffle($this->combinedResultsList);
+                $resultIds = implode('-', array_unique($this->combinedResultsList));
+                $this->dispatchBrowserEvent('loadCombinedTestResultsReport', ['url' => URL::signedRoute('combined-test-results-report', ['resultIds' => $resultIds])]);
+                $this->combinedResultsList = [];
+            } else {
+                $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Result Report is only possible for results of the same study!']);
+            }
         }
     }
 

@@ -11,6 +11,11 @@
                                         Tests Performed
                                     </h5>
                                     <div class="ms-auto">
+                                        @if (count($combinedResultsList)>=2)
+                                        <a href="javascript:;" class="btn btn-sm btn-info me-2" wire:click='combinedTestResultsReport'><i class="bi bi-list"></i>
+                                            Combined Test Report
+                                        </a>
+                                        @endif
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
                                                 class="bi bi-file-earmark-fill"></i> Export</a>
                                         <a type="button" class="btn btn-outline-info" wire:click="refresh()"
@@ -126,6 +131,9 @@
                                 <!-- end row-->
                             </form>
                         </div>
+                        @if (count($combinedResultsList)>=2)
+                        You have selected <strong class="text-success">{{ count($combinedResultsList) }}</strong> Test Results(s) for the combined Result report (<a href="javascript:;" class="text-info" wire:click="$set('combinedResultsList',[])">Clear All</a>)
+                        @endif
                     </div>
 
                     <div class="tab-content">
@@ -182,6 +190,7 @@
 
                                             <td>
                                                 {{ $testResult->test->name }}
+                                                <input type="checkbox" value="{{$testResult->id}}" class="me-2 float-end" wire:model="combinedResultsList">
                                             </td>
 
                                             <td>
@@ -221,4 +230,11 @@
         </div><!-- end col-->
 
     </div>
+    @push('scripts')
+    <script>
+        window.addEventListener('loadCombinedTestResultsReport', event => {
+            window.open(`${event.detail.url}`, '_blank').focus();
+        });
+    </script>
+@endpush
 </div>

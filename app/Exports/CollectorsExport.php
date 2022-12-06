@@ -7,8 +7,9 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-
-class CollectorsExport implements FromCollection, WithMapping, WithHeadings
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+class CollectorsExport implements FromCollection, WithMapping, WithHeadings,WithStyles
 {
     use Exportable;
 
@@ -50,6 +51,14 @@ class CollectorsExport implements FromCollection, WithMapping, WithHeadings
             'Study',
             'Contact',
             'Email',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

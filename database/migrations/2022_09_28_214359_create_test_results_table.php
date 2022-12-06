@@ -22,7 +22,9 @@ return new class extends Migration
             $table->unsignedBigInteger('performed_by')->nullable();
             $table->text('comment')->nullable();
             $table->unsignedBigInteger('reviewed_by')->nullable();
+            $table->text('reviewer_comment')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
+            $table->text('approver_comment')->nullable();
             $table->dateTime('reviewed_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->string('status')->nullable();

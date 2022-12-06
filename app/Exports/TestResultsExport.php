@@ -4,11 +4,14 @@ namespace App\Exports;
 
 use App\Models\TestResult;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithProperties;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TestResultsExport implements FromCollection, WithMapping, WithHeadings
+class TestResultsExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
 {
     use Exportable;
 
@@ -23,6 +26,21 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings
     {
         $this->count = 0;
         $this->resultIds = $resultIds;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => auth()->user()->fullName,
+            'lastModifiedBy' => 'Autolab',
+            'title'          => 'Tests',
+            'description'    => 'Tests Performed export',
+            'subject'        => 'Tests Performed export',
+            'keywords'       => 'Autolab exports',
+            'category'       => 'Autolab Exports',
+            'manager'        => 'MakBRC IT TEAM',
+            'company'        => 'Makerere University Biomedical Research Centre',
+        ];
     }
 
     public function collection()
@@ -67,6 +85,14 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings
             'Test Performed',
             'Requested By',
             'Result Date',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

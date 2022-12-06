@@ -4,11 +4,14 @@ namespace App\Exports;
 
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithProperties;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class UsersExport implements FromCollection, WithMapping, WithHeadings
+class UsersExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
 {
     use Exportable;
 
@@ -20,6 +23,21 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings
     public function __construct()
     {
         $this->count = 0;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => auth()->user()->fullName,
+            'lastModifiedBy' => 'Autolab',
+            'title'          => 'Users',
+            'description'    => 'Users export',
+            'subject'        => 'Users export',
+            'keywords'       => 'Autolab exports',
+            'category'       => 'Autolab Exports',
+            'manager'        => 'MakBRC IT TEAM',
+            'company'        => 'Makerere University Biomedical Research Centre',
+        ];
     }
 
     public function collection()
@@ -55,6 +73,14 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings
             'Contact',
             'Status',
 
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

@@ -4,11 +4,14 @@ namespace App\Exports;
 
 use App\Models\Sample;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithProperties;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SamplesExport implements FromCollection, WithMapping, WithHeadings
+class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
 {
     use Exportable;
 
@@ -23,6 +26,21 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings
     {
         $this->count = 0;
         $this->sampleIds = $sampleIds;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => auth()->user()->fullName,
+            'lastModifiedBy' => 'Autolab',
+            'title'          => 'Samples',
+            'description'    => 'Samples export',
+            'subject'        => 'Samples Export',
+            'keywords'       => 'Autolab exports',
+            'category'       => 'Autolab Exports',
+            'manager'        => 'MakBRC IT TEAM',
+            'company'        => 'Makerere University Biomedical Research Centre',
+        ];
     }
 
     public function collection()
@@ -57,6 +75,14 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings
             'Lab No',
             'Facility',
             'Study',
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text.
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

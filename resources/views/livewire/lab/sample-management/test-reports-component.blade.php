@@ -10,7 +10,7 @@
                                     Test Result Reports
                                 </h5>
                                 <div class="ms-auto">
-                                    @if (count($combinedList)>=2)
+                                    @if (count($combinedSamplesList)>=1)
                                     <a href="javascript:;" class="btn btn-sm btn-info me-2" wire:click='combinedTestReport'><i class="bi bi-list"></i>
                                         Combined Test Report
                                     </a>
@@ -23,8 +23,8 @@
                             </div>
                         </div>
                     </div>
-                    @if (count($combinedList)>=2)
-                    You have selected <strong class="text-success">{{ count($combinedList) }}</strong> samples for the combined test report (<a href="javascript:;" class="text-info" wire:click="$set('combinedList',[])">Clear All</a>)
+                    @if (count($combinedSamplesList)>=1)
+                    You have selected <strong class="text-success">{{ count($combinedSamplesList) }}</strong> sample(s) for the combined test report (<a href="javascript:;" class="text-info" wire:click="$set('combinedSamplesList',[])">Clear All</a>)
                     @endif
                 </div>
 
@@ -89,7 +89,7 @@
 
                                             <td>
                                                 {{ $testResult->sample->sampleType->type }}
-                                                <input type="checkbox" value="{{$testResult->sample->id}}" class="me-2 float-end" wire:model="combinedList">
+                                                <input type="checkbox" value="{{$testResult->sample->id}}" class="me-2 float-end" wire:model="combinedSamplesList">
                                             </td>
 
                                             <td>
@@ -113,8 +113,6 @@
                                             </td>
                                             <td class="action-ico">
                                                 <a href="{{ route('result-report', $testResult->id) }}" type="button"
-                                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Result Report"
                                                     class="action-ico btn btn-outline-info"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-arrow-down-square"></i></a>
@@ -141,7 +139,7 @@
 
     @push('scripts')
     <script>
-        window.addEventListener('loadCombinedReport', event => {
+        window.addEventListener('loadCombinedSampleTestReport', event => {
             window.open(`${event.detail.url}`, '_blank').focus();
         });
     </script>

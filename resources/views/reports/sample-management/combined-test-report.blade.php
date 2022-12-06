@@ -142,15 +142,15 @@
                                     <td>
                                         <strong class="text-inverse">FACILITY:
                                         </strong>
-                                        {{ $samples[1]->participant->facility->name ?? 'N/A' }}<br>
+                                        {{ $samples[0]->participant->facility->name ?? 'N/A' }}<br>
                                     </td>
                                     <td>
                                         <strong class="text-inverse">STUDY: </strong>
-                                        {{ $samples[1]->study->name }}
+                                        {{ $samples[0]->study->name }}
                                     </td>
                                     <td>
                                         <strong class="text-inverse">REQUESTER:
-                                        </strong>{{ $samples[1]->requester->name ?? 'N/A' }}<br>
+                                        </strong>{{ $samples[0]->requester->name ?? 'N/A' }}<br>
                                     </td>
                                 </tr>
                             </tbody>

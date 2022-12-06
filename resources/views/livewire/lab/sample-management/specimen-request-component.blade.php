@@ -530,7 +530,7 @@
                                                         </strong>{{ $lastVisit }})
                                                     @endif
                                                 </label>
-                                                <input id="visit" type="number" class="form-control"
+                                                <input id="visit" type="text" class="form-control"
                                                     wire:model.lazy="visit">
                                                 @error('visit')
                                                     <div class="text-danger text-small">{{ $message }}</div>

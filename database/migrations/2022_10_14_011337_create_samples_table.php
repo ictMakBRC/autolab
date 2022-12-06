@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sample_reception_id');
             $table->unsignedBigInteger('participant_id');
-            $table->integer('visit')->nullable();
+            $table->string('visit', 20)->nullable();
             $table->unsignedBigInteger('sample_type_id');
             $table->string('sample_no');
             $table->string('sample_identity');

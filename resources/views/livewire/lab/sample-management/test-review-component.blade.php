@@ -99,11 +99,9 @@
                                                 </td>
                                                 <td>
                                                     <a href="javascript: void(0);" type="button"
-                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                        title="" data-bs-original-title="Review Results"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
                                                         class="action-ico btn btn-outline-info"><i
-                                                            class="bi bi-check-square"></i></a>
+                                                            class="bi bi-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @empty
