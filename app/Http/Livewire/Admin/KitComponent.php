@@ -58,8 +58,7 @@ class KitComponent extends Component
     public function storeData()
     {
         $isExist = Kit::select('*')
-        ->where('name', $this->name)
-        ->where('creator_lab', auth()->user()->laboratory_id)
+        ->where([['name',$this->name],['creator_lab', auth()->user()->laboratory_id],['platform_id',$this->platform_id]])
         ->exists();
         if ($isExist) {           
             $this->name = '';
