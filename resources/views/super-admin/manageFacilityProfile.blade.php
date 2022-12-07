@@ -113,7 +113,7 @@
                                                                     data-toggle="select2" id="facility"
                                                                     name="facility_type" required>
                                                                     <option selected value="">Select</option>
-                                                                    <option value="GOVERMENT">GOVERMENT</option>
+                                                                    <option value="GOVERNMENT">GOVERNMENT</option>
                                                                     <option value="NGO">NGO</option>
                                                                     <option value="PRIVATE">PRIVATE</option>
                                                                 </select>
@@ -256,7 +256,7 @@
 
                                                 <option selected value="{{ $profile->facility_type }}">
                                                     {{ $profile->facility_type }}</option>
-                                                <option value="GOVERMENT">GOVERMENT</option>
+                                                <option value="GOVERNMENT">GOVERNMENT</option>
                                                 <option value="NGO">NGO</option>
                                                 <option value="PRIVATE">PRIVATE</option>
                                                 <option value="OTHER">OTHER</option>

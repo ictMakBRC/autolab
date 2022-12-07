@@ -112,7 +112,7 @@
                         @if (Auth::user()->hasPermission(['enter-results']))
                         <a href="{{ route('rejected-results') }}"
                             class="list-group-item"><i
-                                class="bi bi-check-square text-danger"></i>Rejected Results
+                                class="bi bi-exclamation-triangle-fill text-danger"></i>Rejected Results
                                 <span class="badge bg-danger pill float-end">{{ $rejectedResultsCount }}</span>
                             </a>
                         @endif
