@@ -257,10 +257,10 @@
                                                     {{ $result->performer ? $result->performer->fullName : 'N/A' }}
                                                 </td>
                                                 <td>
-                                                    {{ $result->performer ? $result->reviewer->fullName : 'N/A' }}
+                                                    {{ $result->reviewer ? $result->reviewer->fullName : 'N/A' }}
                                                 </td>
                                                 <td>
-                                                    {{ $result->performer ? $result->approver->fullName : 'N/A' }}
+                                                    {{ $result->approver ? $result->approver->fullName : 'N/A' }}
                                                 </td>
                                             </tr>
                                         @empty
