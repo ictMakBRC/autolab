@@ -65,7 +65,7 @@
                     <tr>
                         <td colspan="">
                             <strong class="text-inverse">Collection Date:
-                            </strong>{{ date('d-m-Y', strtotime($testResults->sample->date_collected)) }}
+                            </strong>{{$testResults->sample->date_collected?date('d-m-Y H:i', strtotime($testResults->sample->date_collected)):'N/A'}}
                         </td>
                         <td>
                             <strong class="text-inverse">Date Received:

@@ -75,6 +75,7 @@ class NavigationComponent extends Component
     public $testCategoryCount;
 
     public $testCount;
+    
     public $rejectedResultsCount;
 
     protected $listeners = ['updateNav'];
@@ -84,27 +85,34 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
             $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
         }
+
         if (Auth::user()->hasPermission(['view-participant-info'])) {
             $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
             $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         }
-        if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
-            $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
-        }
+
         if (Auth::user()->hasPermission(['enter-results'])) {
-            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])->whereIn('status', ['Accessioned', 'Processing'])->count();
+            $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
             $this->rejectedResultsCount = TestResult::where(['status'=>'Rejected','performed_by'=> auth()->user()->id,'creator_lab'=>auth()->user()->laboratory_id])->count();
         }
+
+        if (Auth::user()->hasPermission(['assign-test-requests'])) {
+            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting'])->whereIn('status', ['Accessioned', 'Processing'])->count();
+        }
+
         if (Auth::user()->hasPermission(['review-results'])) {
             $this->testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
         }
+
         if (Auth::user()->hasPermission(['approve-results'])) {
             $this->testsPendindApprovalCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Reviewed')->count();
         }
+
         if (Auth::user()->hasPermission(['view-result-reports'])) {
             $this->testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
             $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
         }
+
         if (Auth::user()->hasPermission(['manage-users'])) {
             $this->usersCount = User::where(['is_active' => 1])->count();
             $this->rolesCount = Role::count();
@@ -113,6 +121,7 @@ class NavigationComponent extends Component
         }
 
         if (Auth::user()->hasPermission(['access-settings'])) {
+
             $this->designationCount = Designation::where('is_active', 1)->count();
             $this->facilityCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
             $this->studyCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->count(); //depends

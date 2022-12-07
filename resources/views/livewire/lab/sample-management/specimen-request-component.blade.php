@@ -573,40 +573,43 @@
                                             </div>
 
                                         </div>
+                                       
+                                        @if ($sample_is_for!='Aliquoting')
                                         <div wire:loading.delay>
                                             <div class="spinner-border text-info" role="status"> <span
                                                     class="visually-hidden">Loading...</span>
                                             </div>
                                         </div>
-
-                                        @if (!$tests->isEmpty())
-                                            <div class="row mx-auto" wire:loading.class='invisible'>
-                                                <h6> <strong class="text-success">Test(s) Requested</strong>
-                                                </h6>
-                                                <hr>
-                                                <div class="col-md-12">
-                                                    @foreach ($tests as $test)
-                                                        <div class="form-check form-check-inline mb-1 test-list"
-                                                            id="test-list">
-                                                            <label class="form-check-label"
-                                                                for="test{{ $test->id }}">{{ $test->name }}</label>
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="test{{ $test->id }}"
-                                                                value="{{ $test->id }}"
-                                                                wire:model='tests_requested'>
-                                                        </div>
-                                                    @endforeach
-                                                    @error('tests_requested')
-                                                        <div class="text-danger text-small">{{ $message }}</div>
-                                                    @enderror
+                                            @if (!$tests->isEmpty())
+                                                <div class="row mx-auto" wire:loading.class='invisible'>
+                                                    <h6> <strong class="text-success">Test(s) Requested</strong>
+                                                    </h6>
+                                                    <hr>
+                                                    <div class="col-md-12">
+                                                        @foreach ($tests as $test)
+                                                            <div class="form-check form-check-inline mb-1 test-list"
+                                                                id="test-list">
+                                                                <label class="form-check-label"
+                                                                    for="test{{ $test->id }}">{{ $test->name }}</label>
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="test{{ $test->id }}"
+                                                                    value="{{ $test->id }}"
+                                                                    wire:model='tests_requested'>
+                                                            </div>
+                                                        @endforeach
+                                                        @error('tests_requested')
+                                                            <div class="text-danger text-small">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @else
-                                            <div class="row mx-auto" wire:loading.class='invisible'>
-                                                <div class="text-danger col-md-12">No associated tests! Please select
-                                                    sample type</div>
-                                            </div>
+                                            @else
+                                                <div class="row mx-auto" wire:loading.class='invisible'>
+                                                    <div class="text-danger col-md-12">No associated tests! Please select
+                                                        sample type</div>
+                                                </div>
+                                            @endif
                                         @endif
+                                     
 
                                         <div class="modal-footer">
                                             @if (!$toggleForm)

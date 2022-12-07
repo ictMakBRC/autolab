@@ -8,7 +8,7 @@
                             <div class="col-sm-12 mt-3">
                                 <div class="d-sm-flex align-items-center">
                                     <h5 class="mb-2 mb-sm-0">
-                                        Samples
+                                        Samples (<strong class="text-danger">{{ count($sampleIds) }}</strong>)
                                     </h5>
                                     <div class="ms-auto">
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
@@ -34,9 +34,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('facility_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="study" class="form-label">Study</label>
@@ -47,9 +44,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('study_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="job" class="form-label">Sample State</label>
@@ -61,9 +55,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('job')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
 
                                     <div class="mb-3 col-md-2">
@@ -76,25 +67,30 @@
                                                 {{ $sampleType->type }}</option>
                                         @endforeach
                                     </select>
-                                        @error('sampleType')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
-
+                                    <div class="mb-3 col-md-2">
+                                        <label for="created_by" class="form-label">Accessioned By</label>
+                                        <select class="form-select" id="created_by" wire:model='created_by'>
+                                            @if (Auth::user()->hasPermission('manager-access|master-access'))
+                                                <option selected value="0">All</option>
+                                                @foreach ($users as $user)
+                                                    <option value='{{ $user->id }}'>
+                                                        {{ $user->fullName }}</option>
+                                                @endforeach
+                                            @else
+                                                <option selected value="{{ auth()->user()->id }}">
+                                                    {{ auth()->user()->fullName }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"
                                             wire:model="from_date">
-                                        @error('from_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="to_date" class="form-label">End Date</label>
                                         <input id="to_date" type="date" class="form-control" wire:model="to_date">
-                                        @error('to_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="perPage" class="form-label">Per Page</label>

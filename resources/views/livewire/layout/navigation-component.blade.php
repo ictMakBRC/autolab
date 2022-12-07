@@ -17,43 +17,6 @@
                             class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
                 </li>
 
-
-                {{-- <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Patient Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-patients" type="button"><i
-                        class="bi bi-person-workspace"></i></button>
-            </li>
-           
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Referral">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-referrals" type="button"><i
-                        class="bi bi-airplane-fill"></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-storage" type="button"><i
-                        class="bi bi-archive-fill"></i></button>
-            </li>
-            
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Logistic Management">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-logistics" type="button"><i
-                        class="bi bi-bar-chart-line-fill"></i></button>
-            </li>
-
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Trainings">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-trainings" type="button"><i
-                        class="bi bi-easel2-fill"></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Documents/Resources">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-resources" type="button"><i
-                        class="bi bi-file-earmark-medical-fill"></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Engagements">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-engagements" type="button"><i
-                        class="bi bi-file-earmark-easel-fill"></i></button>
-            </li>
-            <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Help Desk">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-helpdesk" type="button"><i
-                        class="bi bi-question-square-fill"></i></button>
-            </li> --}}
-
                 @if (Auth::user()->hasPermission(['manage-users']))
                     <li class="nav-item {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
                         data-bs-toggle="tooltip" data-bs-placement="right" title="User Management">
@@ -109,24 +72,6 @@
                         @endif
                     </div>
                 </div>
-                {{-- <div class="tab-pane fade" id="pills-patients">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">PATIENTS</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Create
-                        New</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
-                        Month</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All Patients</a>
-                </div>
-            </div> --}}
 
                 <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
                     id="pills-samples">
@@ -209,65 +154,6 @@
                         @endif
                     </div>
                 </div>
-                {{-- <div class="tab-pane fade" id="pills-referrals">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">REFERRAL</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Outgoing</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Incoming</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Sequence
-                        Data</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>Track
-                        Sample</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-bar-chart-line"></i>Equipment
-                        Profiling</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>Reports</a>
-
-                </div>
-            </div>
-            <div class="tab-pane fade" id="pills-storage">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">STORAGE</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Search
-                        Sample</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-house-door-fill"></i>Store
-                        New</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Today</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>This Week</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-bar-chart-line"></i>This
-                        Month</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-archive"></i>This Year</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>All stored</a>
-                </div>
-            </div>
-           
-            <div class="tab-pane fade" id="pills-logistics">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">LOGISTICS</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Inventory</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Suppliers</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-cast"></i>Couriers</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i class="bi bi-wallet"></i>Dry Ice
-                        Sources</a>
-                </div>
-            </div> --}}
 
                 @if (Auth::user()->hasPermission(['manage-users']))
                     <div class="tab-pane fade {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
@@ -353,72 +239,7 @@
                         </div>
                     </div>
                 @endif
-
-                {{-- <div class="tab-pane fade" id="pills-resources">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Resources</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>General
-                        Documents</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Shipment
-                        Documents</a>
-                </div>
-            </div> --}}
-
-                {{-- <div class="tab-pane fade" id="pills-trainings">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Training</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Trainers</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Trainees</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Training
-                        Materials</a>
-                </div>
-            </div> --}}
-
-                {{-- <div class="tab-pane fade" id="pills-engagements">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Engagements</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Minutes</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Other</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Reports</a>
-                </div>
-            </div> --}}
-
-                {{-- <div class="tab-pane fade" id="pills-helpdesk">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">Help Desk</h5>
-                        </div>
-                    </div>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Tickets</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Resolved
-                        Issues</a>
-                    <a href="javascript: void(0);" class="list-group-item"><i
-                            class="bi bi-house-door-fill"></i>Reports</a>
-                </div>
-            </div> --}}
+                
                 <div class="tab-pane fade" id="pills-user-profile">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">

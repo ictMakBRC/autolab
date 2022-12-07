@@ -121,7 +121,7 @@
             <tbody>
                 <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 10px; margin-bottom: 10px">
                     <td class="btop"><strong>Collection Date:</strong> <br>
-                        {{ date('d-m-Y H:i', strtotime($testResult->sample->date_collected ?? 'N/A')) }}</td>
+                        {{$testResult->sample->date_collected?date('d-m-Y H:i', strtotime($testResult->sample->date_collected)):'N/A'}}</td>
                     <td class="btop" style="text-align: center"><strong>Date received:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>

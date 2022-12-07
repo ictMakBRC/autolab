@@ -2,7 +2,6 @@
     <div class="row">
         @if (!$viewReport)
             <div class="col-12">
-
                 <div class="card">
                     <div class="card-header pt-0">
                         <div class="row mb-2">
@@ -40,6 +39,7 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Sample Batch</th>
+                                            <th>Tracker</th>
                                             <th>Study</th>
                                             <th>Participant ID</th>
                                             <th>Sample</th>
@@ -54,12 +54,23 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($testResults as $key => $testResult)
-                                            <tr>
+                                            <tr
+                                                class="
+                                            @if ($testResult->test->tat != 0 &&
+                                                $testResult->sample->created_at->diffInHours($testResult->created_at) > $testResult->test->tat) bg-light-danger @endif
+                                            ">
                                                 <td>{{ $key + 1 }}</td>
+
                                                 <td>
                                                     <a href="{{ URL::signedRoute('batch-search-results', ['sampleReception' => $testResult->sample->sampleReception->id]) }}"
                                                         class="text-secondary"
                                                         target="_blank">{{ $testResult->sample->sampleReception->batch_no }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
+                                                        target="_blank"><strong
+                                                            class="text-info">{{ $testResult->tracker }}</strong>
                                                     </a>
                                                 </td>
                                                 <td>

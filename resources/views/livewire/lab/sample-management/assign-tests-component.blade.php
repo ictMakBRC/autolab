@@ -7,12 +7,28 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Assign Test Requests
+                                    Assign Test/Aliquoting Requests
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-info">Select...</button>
+                                        <button type="button"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
+                                                Dropdown</span>
+                                        </button>
+
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                            <a class="dropdown-item {{ $sample_is_for=== 'Testing' ? 'active' : '' }}"
+                                                    href="javascript: void(0);" wire:click="$set('sample_is_for','Testing')">Testing</a>
+                                            <a class="dropdown-item {{ $sample_is_for=== 'Aliquoting' ? 'active' : '' }}"
+                                                href="javascript: void(0);" wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -46,6 +62,7 @@
                                         <th>Study</th>
                                         <th>Requested By</th>
                                         <th>Collected By</th>
+                                        <th>For</th>
                                         <th>Test Count</th>
                                         <th>Priority</th>
                                         <th>Status</th>
@@ -82,6 +99,9 @@
                                                 {{ $sample->collector->name ?? 'N/A' }}
                                             </td>
                                             <td>
+                                                <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
+                                            </td>
+                                            <td>
                                                 {{ $sample->test_count }}
                                             </td>
                                             @if ($sample->priority == 'Normal')
@@ -99,13 +119,16 @@
                                                 @endif
                                             </td>
                                             <td class="table-action">
-                                                <a href="javascript: void(0);"
+                                                @if ($sample->sample_is_for=='Testing')
+                                                    <a href="javascript: void(0);"
                                                     wire:click="viewTests({{ $sample->id }})" type="button"
                                                     class="btn btn-outline-info" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title=""
                                                     data-bs-original-title="Assign"><i class="bi bi-check-square"></i>
-                                                </a>
-
+                                                    </a>
+                                                @else
+                                                    N/A
+                                                @endif
                                             </td>
                                         </tr>
 

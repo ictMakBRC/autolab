@@ -201,7 +201,7 @@
                                                     <strong class="text-inverse">Collected By:
                                                     </strong>{{ $sample->collector->name ?? 'N/A' }}<br>
                                                     <strong class="text-inverse">Date collected:
-                                                    </strong>{{ date('d-m-Y H:i', strtotime($sample->date_collected)) }}<br>
+                                                    </strong>{{$sample->date_collected?date('d-m-Y H:i', strtotime($sample->date_collected)):'N/A'}}<br>
                                                     <strong class="text-inverse">Volume:
                                                     </strong>{{ $sample->volume ?? 'N/A' }}<br>
                                                     <strong class="text-inverse">Visit:

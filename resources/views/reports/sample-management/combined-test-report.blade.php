@@ -188,7 +188,7 @@
                                                 </td>
                                                 <td>
                                                     <strong class="text-inverse">Date collected:
-                                                    </strong>{{ date('d-m-Y H:i', strtotime($sample->date_collected)) }}<br>
+                                                    </strong>{{$sample->date_collected?date('d-m-Y H:i', strtotime($sample->date_collected)):'N/A'}}<br>
                                                     <strong class="text-inverse">Date Received:
                                                     </strong>{{ date('d-m-Y H:i', strtotime($sample->sampleReception->date_delivered)) }}
                                                 </td>

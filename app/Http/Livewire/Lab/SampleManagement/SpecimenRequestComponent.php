@@ -169,10 +169,14 @@ class SpecimenRequestComponent extends Component
 
     public function updatedSampleTypeId()
     {
-        $this->reset(['tests_requested', 'tests']);
-        $sampleType = SampleType::where('id', $this->sample_type_id)->first();
-        sleep(1);
-        $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
+        if ($this->sample_is_for!='Aliquoting') {
+            $this->reset(['tests_requested', 'tests']);
+            $sampleType = SampleType::where('id', $this->sample_type_id)->first();
+            sleep(1);
+            $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
+        }else{
+            $this->reset(['tests_requested', 'tests']);
+        } 
     }
 
     public function updatedRequestedBy()
@@ -491,13 +495,18 @@ class SpecimenRequestComponent extends Component
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
             'sample_type_id' => 'integer|required',
-            'tests_requested' => 'array|required',
         ]);
+
+        if ($this->sample_is_for!='Aliquoting') {
+            $this->validate([
+                'tests_requested' => 'array|required',
+            ]);
+        }
 
         if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
-                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
+                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
         if ($this->entry_type != 'Client') {
@@ -522,7 +531,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_identity = $this->sample_identity;
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
-        $sample->tests_requested = $this->tests_requested;
+        $sample->tests_requested = count($this->tests_requested)>1?$this->tests_requested:null;
         $sample->test_count = count($this->tests_requested);
         $sample->status = 'Accessioned';
         $sample->is_isolate = $this->is_isolate;
@@ -576,8 +585,10 @@ class SpecimenRequestComponent extends Component
         $this->entry_type = $sample->participant->entry_type;
         $this->is_isolate = $sample->is_isolate;
 
-        $sampleType = SampleType::where('id', $sample->sample_type_id)->first();
-        $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
+        if ($this->sample_is_for!='Aliquoting') {
+            $sampleType = SampleType::where('id', $sample->sample_type_id)->first();
+            $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
+        }
 
         $this->toggleForm = true;
         $this->activeParticipantTab = false;
@@ -587,18 +598,23 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date|before_or_equal:now',
+            'date_requested' => 'required|date|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
             'sample_identity' => 'required|string',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
             'sample_type_id' => 'integer|required',
-            'tests_requested' => 'array|required',
         ]);
+
+        if ($this->sample_is_for!='Aliquoting') {
+            $this->validate([
+                'tests_requested' => 'array|required',
+            ]);
+        }
 
         if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
-                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)).'|before_or_equal:'.date('Y-m-d 23:59', strtotime($this->date_requested)),
+                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
         if ($this->entry_type != 'Client') {
@@ -620,7 +636,7 @@ class SpecimenRequestComponent extends Component
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->is_isolate = $this->is_isolate;
-        $sample->tests_requested = $this->tests_requested ?? [];
+        $sample->tests_requested = count($this->tests_requested)>1?$this->tests_requested:null;;
         $sample->test_count = count($this->tests_requested) ?? 0;
         $sample->update();
 

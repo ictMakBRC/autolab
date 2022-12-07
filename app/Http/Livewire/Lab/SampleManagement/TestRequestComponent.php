@@ -22,6 +22,8 @@ class TestRequestComponent extends Component
 
     public $orderAsc = true;
 
+    public $sample_is_for='Testing';
+
     public $tests_requested;
 
     public $request_acknowledged_by;
@@ -65,6 +67,20 @@ class TestRequestComponent extends Component
         $this->dispatchBrowserEvent('view-tests');
     }
 
+    public function viewAliqoutes(Sample $sample)
+    {
+        // $assignedTests = TestAssignment::where(['sample_id' => $sample->id, 'assignee' => auth()->user()->id])->get()->pluck('test_id')->toArray();
+        // $tests = Test::whereIn('id', $assignedTests)->get();
+        // $this->tests_requested = $tests;
+        // $this->sample_identity = $sample->sample_identity;
+        // $this->lab_no = $sample->lab_no;
+        // $this->request_acknowledged_by = $sample->request_acknowledged_by;
+        // $this->clinical_notes = $sample->participant->clinical_notes;
+        // $this->sample_id = $sample->id;
+
+        // $this->dispatchBrowserEvent('view-tests');
+    }
+
     public function acknowledgeRequest(Sample $sample)
     {
         $sample->request_acknowledged_by = Auth::id();
@@ -84,10 +100,14 @@ class TestRequestComponent extends Component
     {
         $samples = Sample::search($this->search, ['Assigned','Processing'])
         ->whereIn('status', ['Assigned','Processing'])
-        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-        ->whereHas('testAssignment', function (Builder $query) {
-            $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+        ->when($this->sample_is_for=='Testing', function ($query) {
+            $query->whereHas('testAssignment', function (Builder $query) {
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+            });
+        }, function ($query) {
+            return $query;
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
