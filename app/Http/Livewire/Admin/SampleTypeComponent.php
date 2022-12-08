@@ -32,7 +32,12 @@ class SampleTypeComponent extends Component
 
     public $possible_tests = [];
 
+    public $possible_aliquots = [];
+
+    // public $can_be_aliquot;
+
     protected $paginationTheme = 'bootstrap';
+    public $toggleForm = false;
 
     public function updated($fields)
     {
@@ -56,15 +61,18 @@ class SampleTypeComponent extends Component
         $this->validate([
             'type' => 'required|unique:sample_types',
         ]);
+
         $sampleType = new SampleType();
         $sampleType->type = $this->type;
-        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->possible_tests = count($this->possible_tests)>0? $this->possible_tests:null;
+        // $sampleType->can_be_aliquot = $this->can_be_aliquot??0;
+        $sampleType->possible_aliquots = count($this->possible_aliquots)>0? $this->possible_aliquots:null;
         $sampleType->save();
 
         $this->status = '';
         $this->type = '';
         $this->possible_tests = [];
-        $this->dispatchBrowserEvent('close-modal');
+        // $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type created successfully!']);
     }
 
@@ -74,9 +82,11 @@ class SampleTypeComponent extends Component
         $this->edit_id = $sampleType->id;
         $this->type = $sampleType->type;
         $this->status = $sampleType->status;
+        // $this->can_be_aliquot = $sampleType->can_be_aliquot;
         $this->possible_tests = $sampleType->possible_tests ?? [];
+        $this->possible_aliquots = $sampleType->possible_aliquots ?? [];
 
-        $this->dispatchBrowserEvent('edit-modal');
+        $this->toggleForm = true;
     }
 
     public function refresh()
@@ -89,6 +99,8 @@ class SampleTypeComponent extends Component
         $this->status = '';
         $this->type = '';
         $this->possible_tests = [];
+        $this->possible_aliquots = [];
+        // $this->can_be_aliquot='';
     }
 
     public function updateData()
@@ -100,11 +112,12 @@ class SampleTypeComponent extends Component
         $sampleType = SampleType::find($this->edit_id);
         $sampleType->type = $this->type;
         $sampleType->status = $this->status;
-        $sampleType->possible_tests = $this->possible_tests;
+        $sampleType->possible_tests = count($this->possible_tests)>0? $this->possible_tests:null;
+        // $sampleType->can_be_aliquot = $this->can_be_aliquot?? 0;
+        $sampleType->possible_aliquots = count($this->possible_aliquots)>0? $this->possible_aliquots:null;
         $sampleType->update();
-
+        $this->toggleForm = false;
         $this->resetInputs();
-        $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type updated successfully!']);
     }
 
@@ -138,12 +151,12 @@ class SampleTypeComponent extends Component
 
     public function close()
     {
+        $this->toggleForm = false;
         $this->resetInputs();
     }
 
     public function render()
     {
-        // $sampleType = SampleType::where('creator_lab', auth()->user()->laboratory_id)->get();
         $sampleType = SampleType::search($this->search)->where('creator_lab', auth()->user()->laboratory_id)
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);

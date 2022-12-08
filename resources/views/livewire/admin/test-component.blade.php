@@ -289,6 +289,12 @@
                                                     title="" data-bs-original-title="Edit Test"
                                                     class="action-ico btn btn-outline-danger mx-1"> <i
                                                         class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript:;"
+                                                        class="action-ico btn btn-outline-danger mx-1"
+                                                        wire:click="deleteConfirmation({{ $test->id }})"
+                                                        ><i class="bi bi-trash-fill"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -324,7 +330,7 @@
                         <h6>Are you sure you want to delete this Record?</h6>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
+                        <button class="btn btn-sm btn-success" wire:click="cancel()" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                         <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
                     </div>
@@ -332,25 +338,14 @@
             </div>
         </div>
 
-
-
-
         @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
-                    $('#show-data').modal('hide');
-                    $('#addFacility').modal('hide');
-                    $('#addCourier').modal('hide');
                     $('#delete_modal').modal('hide');
-                    $('#show-delete-confirmation-modal').modal('hide');
                 });
 
                 window.addEventListener('delete-modal', event => {
                     $('#delete_modal').modal('show');
-                });
-
-                window.addEventListener('show-modal', event => {
-                    $('#show-data').modal('show');
                 });
             </script>
         @endpush

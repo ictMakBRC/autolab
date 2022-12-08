@@ -44,6 +44,7 @@
                                             <th>Participant ID</th>
                                             <th>Sample</th>
                                             <th>Test</th>
+                                            <th>TAT(HR<->MIN)</th>
                                             <th>Requester</th>
                                             <th>Requested At</th>
                                             <th>Received At</th>
@@ -91,6 +92,9 @@
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Preliminary Result Report"
                                                         class="text-info">{{ $testResult->test->name }}</a>
+                                                </td>
+                                                <td>
+                                                    <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
                                                 </td>
                                                 <td>
                                                     {{ $testResult->sample->requester->name }}

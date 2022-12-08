@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Test/Aliquoting Requests
+                                    <span class="text-danger fw-bold">{{$sample_is_for}}</span> Tasks
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"

@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
-use App\Models\Sample;
-use App\Models\TestAssignment;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Models\TestAssignment;
+use Illuminate\Support\Facades\Auth;
 
 class AssignTestsComponent extends Component
 {
@@ -25,6 +26,7 @@ class AssignTestsComponent extends Component
     public $sample_is_for='Testing';
 
     public $tests_requested;
+    public $aliquots_requested;
 
     public $request_acknowledged_by;
 
@@ -54,6 +56,7 @@ class AssignTestsComponent extends Component
     public function mount()
     {
         $this->tests_requested = collect([]);
+        $this->aliquots_requested=collect([]);
         $this->assignedTests = [];
     }
 
@@ -86,6 +89,19 @@ class AssignTestsComponent extends Component
         $this->request_acknowledged_by = $sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('view-tests');
+    }
+
+    public function viewAliquots(Sample $sample)
+    {
+        $this->reset(['aliquots_requested', 'request_acknowledged_by']);
+        $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->orderBy('type', 'asc')->get();
+        $this->aliquots_requested = $aliquots;
+        $this->sample_identity = $sample->sample_identity;
+        $this->lab_no = $sample->lab_no;
+        $this->sample_id = $sample->id;
+        $this->request_acknowledged_by = $sample->request_acknowledged_by;
+
+        $this->dispatchBrowserEvent('view-aliquots');
     }
 
     public function assignTest()
@@ -124,6 +140,7 @@ class AssignTestsComponent extends Component
         }
     }
 
+
     public function acknowledgeRequest(Sample $sample)
     {
         $sample->request_acknowledged_by = Auth::id();
@@ -131,13 +148,14 @@ class AssignTestsComponent extends Component
         $sample->status = 'Processing';
         $sample->update();
         $this->request_acknowledged_by = $sample->request_acknowledged_by;
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Request Updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Updated successfully!']);
     }
 
     public function close()
     {
         $this->reset(['sample_id', 'sample_identity', 'lab_no', 'assignee', 'test_id', 'clinical_notes']);
         $this->tests_requested = collect([]);
+        $this->aliquots_requested = collect([]);
     }
 
     public function render()
@@ -151,7 +169,8 @@ class AssignTestsComponent extends Component
 
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
+        $aliquots=$this->aliquots_requested;
 
-        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests'));
+        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests','aliquots'));
     }
 }

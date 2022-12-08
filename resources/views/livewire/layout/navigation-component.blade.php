@@ -81,13 +81,10 @@
                                 <h5 class="mb-0">Sample Mgt</h5>
                             </div>
                         </div>
-                        @if (Auth::user()->hasPermission(['create-reception-info|review-reception-info']))
+                        @if (Auth::user()->hasPermission(['accession-samples']))
                             <a href="{{ route('samplereception') }}" class="list-group-item"><i
                                     class="bi bi-box2"></i>Reception<x-count-badge>{{ $batchesCount }}</x-count-badge>
                             </a>
-                        @endif
-
-                        @if (Auth::user()->hasPermission(['accession-samples']))
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
                                     class="bi bi-receipt"></i>Accessioning</a>
@@ -96,17 +93,17 @@
                         @if (Auth::user()->hasPermission(['assign-test-requests']))
                             <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Assign
-                                Requests<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
+                                Tasks<x-count-badge>{{ $testRequestsCount }}</x-count-badge></a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
-                                    class="bi bi-file-medical"></i>Test
-                                Requests<x-count-badge>{{ $testAssignedCount }}</x-count-badge></a>
+                                    class="bi bi-file-medical"></i>My
+                                Tasks<x-count-badge>{{ $testAssignedCount }}</x-count-badge></a>
 
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
-                                    class="bi bi-file-earmark-medical"></i>Attach Results</a>
+                                    class="bi bi-file-earmark-medical"></i>Entering Results</a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))

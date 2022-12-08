@@ -124,7 +124,7 @@
                                                 <div class="mb-3 col-md-2">
                                                     <label for="gender" class="form-label">Gender<span
                                                             class="text-danger">*</span></label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="gender" wire:model="gender">
                                                         <option selected value="">Select</option>
                                                         <option value='Male'>Male</option>
@@ -197,7 +197,7 @@
                                                 <hr>
                                                 <div class="mb-3 col-md-1">
                                                     <label for="title" class="form-label">Title</label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="title" wire:model="title">
                                                         <option selected value="">Select</option>
                                                         <option value="Mr.">Mr.</option>
@@ -265,7 +265,7 @@
 
                                                 <div class="mb-3 col-md-2">
                                                     <label for="nationality" class="form-label">Nationality</label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="nationality" wire:model="nationality">
                                                         <option selected value="">Select</option>
                                                         @include('layouts.countries')
@@ -276,7 +276,7 @@
                                                 </div>
                                                 <div class="mb-3 col-md-2">
                                                     <label for="district" class="form-label">District</label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="district" wire:model="district">
                                                         <option value="" selected>Select</option>
                                                         @include('layouts.districts')
@@ -330,7 +330,7 @@
 
                                                 <div class="mb-3 col-md-3">
                                                     <label for="civil_status" class="form-label">Civil Status</label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="civil_status" wire:model="civil_status">
                                                         <option selected value="">Select</option>
                                                         <option value='Single'>Single</option>
@@ -359,7 +359,7 @@
                                                 <div class="mb-3 col-md-3">
                                                     <label for="nok_relationship" class="form-label">NoK
                                                         Relationship</label>
-                                                    <select class="form-select select2" data-toggle="select2"
+                                                    <select class="form-select select2" 
                                                         id="nok_relationship" wire:model.lazy="nok_relationship">
                                                         <option selected value="">Select</option>
                                                         @include('layouts.nokRelationships')
@@ -419,19 +419,21 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            @if ($entry_type=='Participant')
-                                            <div class="mb- col-md-1">
-                                                <div class="form-check mt-4">
-                                                    <input class="form-check-input" type="checkbox" value="1"
-                                                        id="is_isolate" checked wire:model="is_isolate">
-                                                    <label class="form-check-label text-success" for="is_isolate"><strong>Isolate?</strong></label>
+                                            @if ($entry_type == 'Participant')
+                                                <div class="mb- col-md-1">
+                                                    <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            value="1" id="is_isolate" checked
+                                                            wire:model="is_isolate">
+                                                        <label class="form-check-label text-success"
+                                                            for="is_isolate"><strong>Isolate?</strong></label>
+                                                    </div>
+                                                    @error('is_isolate')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
-                                                @error('is_isolate')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
                                             @endif
-                                           
+
                                             <div class="mb-3 col-md-3">
                                                 <label for="collected_by" class="form-label">Collected By</label>
                                                 <select class="form-select" id="collected_by"
@@ -449,7 +451,8 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="mb-3 @if ($entry_type=='Participant') col-md-2 @else col-md-3 @endif">
+                                            <div
+                                                class="mb-3 @if ($entry_type == 'Participant') col-md-2 @else col-md-3 @endif">
                                                 <label for="date_collected" class="form-label">Collection
                                                     Date/Time</label>
                                                 <input id="date_collected" type="datetime-local" class="form-control"
@@ -489,14 +492,12 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_is_for" class="form-label">Sample is For?<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select select2" data-toggle="select2"
+                                                <select class="form-select" 
                                                     id="sample_is_for" wire:model="sample_is_for">
                                                     <option selected value="">Select</option>
                                                     <option value='Testing'>Testing</option>
                                                     <option value='Aliquoting'>Aliquoting</option>
                                                     <option value='Deffered'>Deffered Testing</option>
-                                                    {{-- <option value='Processing and Storage'>Processing & Storage</option>
-                                                    <option value='Direct Storage'>Direct Storage</option> --}}
                                                 </select>
                                                 @error('sample_is_for')
                                                     <div class="text-danger text-small">{{ $message }}</div>
@@ -506,7 +507,7 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="priority" class="form-label">Priority<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select select2" data-toggle="select2"
+                                                <select class="form-select" 
                                                     id="priority" wire:model="priority">
                                                     <option selected value="">Select</option>
                                                     <option value='Normal'>Normal</option>
@@ -522,22 +523,22 @@
                                             <h6> <strong class="text-success">Sample Delivered</strong>
                                             </h6>
                                             <hr>
-                                            @if ($entry_type=='Participant')
-                                            <div class="mb-3 col-md-2">
-                                                <label for="visit" class="form-label">Participant Visit
-                                                    @if ($lastVisit)
-                                                        (<strong class="text-info"> last:
-                                                        </strong>{{ $lastVisit }})
-                                                    @endif
-                                                </label>
-                                                <input id="visit" type="text" class="form-control"
-                                                    wire:model.lazy="visit">
-                                                @error('visit')
-                                                    <div class="text-danger text-small">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                                            @if ($entry_type == 'Participant')
+                                                <div class="mb-3 col-md-2">
+                                                    <label for="visit" class="form-label">Participant Visit
+                                                        @if ($lastVisit)
+                                                            (<strong class="text-info"> last:
+                                                            </strong>{{ $lastVisit }})
+                                                        @endif
+                                                    </label>
+                                                    <input id="visit" type="text" class="form-control"
+                                                        wire:model.lazy="visit">
+                                                    @error('visit')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                             @endif
-                                        
+
                                             <div class="mb-3 col-md-8">
                                                 <label for="sampleType" class="form-label">Sample<span
                                                         class="text-danger">*</span></label>
@@ -573,22 +574,35 @@
                                             </div>
 
                                         </div>
-                                       
-                                        @if ($sample_is_for!='Aliquoting')
-                                        <div wire:loading.delay>
-                                            <div class="spinner-border text-info" role="status"> <span
-                                                    class="visually-hidden">Loading...</span>
+
+                                        @if ($sample_is_for != 'Aliquoting')
+                                            <div wire:loading.delay wire:target="updatedSampleTypeId">
+                                                <div class="spinner-border text-info" role="status"> <span
+                                                        class="visually-hidden">Loading...</span>
+                                                </div>
                                             </div>
-                                        </div>
                                             @if (!$tests->isEmpty())
                                                 <div class="row mx-auto" wire:loading.class='invisible'>
                                                     <h6> <strong class="text-success">Test(s) Requested</strong>
                                                     </h6>
                                                     <hr>
+                                                    {{-- <div class="col-md-12">
+                                                        <label for="test" class="form-label">Test<span
+                                                                class="text-danger">*</span></label>
+                                                        <select class="form-select" 
+                                                            id="test" wire:model='tests_requested' multiple>
+                                                            <option selected value="">Select</option>
+                                                            @foreach ($tests as $test)
+                                                            <option value='{{ $test->id }}'>{{ $test->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('tests_requested')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                        @enderror
+                                                    </div> --}}
                                                     <div class="col-md-12">
                                                         @foreach ($tests as $test)
-                                                            <div class="form-check form-check-inline mb-1 test-list"
-                                                                id="test-list">
+                                                            <div class="form-check form-check-inline mb-1">
                                                                 <label class="form-check-label"
                                                                     for="test{{ $test->id }}">{{ $test->name }}</label>
                                                                 <input class="form-check-input" type="checkbox"
@@ -603,13 +617,48 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="row mx-auto" wire:loading.class='invisible'>
-                                                    <div class="text-danger col-md-12">No associated tests! Please select
+                                                <div class="row mx-auto" wire:loading.class='invisible' wire:target="updatedSampleTypeId">
+                                                    <div class="text-danger col-md-12">No associated tests! Please
+                                                        select
                                                         sample type</div>
                                                 </div>
                                             @endif
+                                        @else
+                                        <div wire:loading.delay wire:target="updatedSampleTypeId">
+                                            <div class="spinner-border text-info" role="status"> <span
+                                                    class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                            @if (!$aliquots->isEmpty())
+                                            
+                                                <div class="row mx-auto" wire:loading.class='invisible'>
+                                                    <h6> <strong class="text-success">Aliquot(s) Requested</strong>
+                                                    </h6>
+                                                    <hr>
+                                                    <div class="col-md-12">
+                                                        @foreach ($aliquots as $aliquot)
+                                                            <div class="form-check form-check-inline mb-1">
+                                                                <label class="form-check-label"
+                                                                    for="aliquot{{ $aliquot->id }}">{{ $aliquot->type }}</label>
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="aliquot{{ $aliquot->id }}"
+                                                                    value="{{ $aliquot->id }}"
+                                                                    wire:model='aliquots_requested'>
+                                                            </div>
+                                                        @endforeach
+                                                        @error('aliquots_requested')
+                                                            <div class="text-danger text-small">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="row mx-auto" wire:loading.class='invisible' wire:target="updatedSampleTypeId">
+                                                    <div class="text-danger col-md-12">No associated possible aliquots! Please select sample type</div>
+                                                </div>
+                                            @endif
+
                                         @endif
-                                     
+
 
                                         <div class="modal-footer">
                                             @if (!$toggleForm)
@@ -648,13 +697,10 @@
                                             <th>Batch No</th>
                                             <th>Entry Type</th>
                                             <th>Part ID</th>
-                                            <th>Age</th>
-                                            <th>Gender</th>
-                                            <th>Contact</th>
-                                            <th>Address</th>
                                             <th>Sample</th>
                                             <th>Sample ID</th>
                                             <th>Lab No</th>
+                                            <th>For</th>
                                             <th>Study</th>
                                             <th>Requested By</th>
                                             <th>Collected By</th>
@@ -684,11 +730,6 @@
                                                             wire:click="editParticipant({{ $sample->participant->id }})">{{ $sample->participant->identity }}</a>
                                                     @endif
                                                 </td>
-
-                                                <td>{{ $sample->participant->age ?? 'N/A' }}</td>
-                                                <td>{{ $sample->participant->gender ?? 'N/A' }}</td>
-                                                <td>{{ $sample->participant->contact ?? 'N/A' }}</td>
-                                                <td>{{ $sample->participant->address ?? 'N/A' }}</td>
                                                 <td>
                                                     @if ($sample)
                                                         @if ($sample->request_acknowledged_by)
@@ -719,6 +760,13 @@
                                                     @endif
                                                 </td>
                                                 <td>
+                                                    @if ($sample)
+                                                        <strong class="text-info">{{ $sample->sample_is_for }}</strong>
+                                                    @else
+                                                        {{ __('N/A') }}
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     @if ($sample && $sample->study)
                                                         {{ $sample->study->name }}
                                                     @else
@@ -740,13 +788,13 @@
                                                     @endif
                                                 </td>
                                                 <td class="table-action">
-                                                    @if ($sample)
-                                                        {{ __('N/A') }}
-                                                    @else
+                                                    @if ($sample->status=='Accessioned')
                                                         <a href="javascript: void(0);"
                                                             wire:click="deleteConfirmation({{ $sample->id }})"
                                                             class="action-ico btn btn-outline-danger mx-1">
                                                             <i class="bi bi-trash"></i></a>
+                                                    @else
+                                                    {{__('N/A')}}
                                                     @endif
                                                 </td>
                                             </tr>
@@ -767,16 +815,16 @@
             <div class="modal-dialog" role="confirm-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Participant</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Sample</h5>
                         <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body pt-4 pb-4">
-                        <h6>This will delete this <strong class="text-danger">Participant together with associated
+                        <h6>This will delete this particular <strong class="text-danger">
                                 Sample Data</strong> for this particular batch! Do you want to continue?</h6>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
+                        <button class="btn btn-sm btn-success" wire:click="cancel()" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                         <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
                     </div>
@@ -788,7 +836,6 @@
             <script>
                 window.addEventListener('close-modal', event => {
                     $('#delete_modal').modal('hide');
-                    $('#show-delete-confirmation-modal').modal('hide');
                 });
 
                 window.addEventListener('delete-modal', event => {

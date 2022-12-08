@@ -82,7 +82,7 @@ class NavigationComponent extends Component
 
     public function mount()
     {
-        if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
+        if (Auth::user()->hasPermission(['accession-samples'])) {
             $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
         }
 

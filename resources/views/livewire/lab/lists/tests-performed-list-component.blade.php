@@ -170,6 +170,7 @@
                                         <th>Sample</th>
                                         <th>Lab No</th>
                                         <th>Test</th>
+                                        <th>TAT(HR<->MIN)</th>
                                         <th>Requester</th>
                                         <th>Result Date</th>
                                         <th>Status</th>
@@ -216,7 +217,9 @@
                                                 <input type="checkbox" value="{{ $testResult->id }}"
                                                     class="me-2 float-end" wire:model="combinedResultsList">
                                             </td>
-
+                                            <td>
+                                                <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
+                                            </td>
                                             <td>
                                                 {{ $testResult->sample->requester->name }}
                                             </td>
