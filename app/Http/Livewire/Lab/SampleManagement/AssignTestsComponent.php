@@ -162,6 +162,8 @@ class AssignTestsComponent extends Component
     {
         $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
         ->whereIn('status', ['Accessioned', 'Processing'])
+        ->whereNotNull('tests_requested')
+        ->where('test_count','>',1)
         ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
