@@ -18,9 +18,6 @@
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-
-                                    <a type="button" class="btn btn-info" data-bs-toggle="modal"
-                                        data-bs-target="#modalAdd">Add Sample</a>
                                 </div>
                             </div>
                         </div>
