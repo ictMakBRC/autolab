@@ -9,6 +9,7 @@ use App\Models\Admin\Test;
 use App\Models\SampleType;
 use Livewire\WithPagination;
 use App\Models\TestAssignment;
+use App\Models\AliquotingAssignment;
 use Illuminate\Support\Facades\Auth;
 
 class AssignTestsComponent extends Component
@@ -137,6 +138,33 @@ class AssignTestsComponent extends Component
                 $this->reset(['assignee', 'backlog']);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
             }
+        }
+    }
+
+    public function assignAliquotingTasks()
+    {
+        $this->validate([
+            'assignee' => 'required|integer',
+        ]);
+        $isExist = AliquotingAssignment::select('*')
+        ->where('sample_id', $this->sample_id)
+        ->exists();
+
+        if ($isExist) {
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Aliquoting Task already Assigned to someone!']);
+        } else {
+            $aliquoting_assignment = new AliquotingAssignment();
+            $aliquoting_assignment->sample_id = $this->sample_id;
+            $aliquoting_assignment->assignee = $this->assignee;
+            $aliquoting_assignment->save();
+
+            $sample = Sample::where('id', $this->sample_id)->first();
+            $sample->update(['status' => 'Assigned']);
+
+            $this->reset(['assignee', 'backlog']);
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Aliquoting Task assigned successfully!']);
         }
     }
 

@@ -2,27 +2,29 @@
 
 namespace App\Http\Livewire\Layout;
 
-use App\Models\Admin\Test;
-use App\Models\Collector;
-use App\Models\Courier;
-use App\Models\Designation;
-use App\Models\Facility;
 use App\Models\Kit;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Study;
+use App\Models\Sample;
+use App\Models\Courier;
+use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Platform;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Admin\Test;
 use App\Models\Laboratory;
 use App\Models\Permission;
-use App\Models\Platform;
-use App\Models\Requester;
-use App\Models\Role;
-use App\Models\Sample;
-use App\Models\SampleReception;
 use App\Models\SampleType;
-use App\Models\Study;
-use App\Models\TestAssignment;
-use App\Models\TestCategory;
 use App\Models\TestResult;
-use App\Models\User;
+use App\Models\Designation;
+use App\Models\TestCategory;
+use App\Models\TestAssignment;
+use App\Models\SampleReception;
+use App\Models\AliquotingAssignment;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class NavigationComponent extends Component
 {
@@ -83,7 +85,13 @@ class NavigationComponent extends Component
     public function mount()
     {
         if (Auth::user()->hasPermission(['accession-samples'])) {
-            $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
+            $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->where(function (Builder $query) {
+                $query->whereRaw('samples_accepted != samples_handled')
+                ->orWhereHas('sample', function (Builder $query) {
+                    $query->whereNull('tests_requested')
+                    ->orWhere('test_count',0);
+            });
+            })->count();
         }
 
         if (Auth::user()->hasPermission(['view-participant-info'])) {
@@ -93,6 +101,7 @@ class NavigationComponent extends Component
 
         if (Auth::user()->hasPermission(['enter-results'])) {
             $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
+            $this->AliquotingAssignedCount = AliquotingAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
             $this->rejectedResultsCount = TestResult::where(['status'=>'Rejected','performed_by'=> auth()->user()->id,'creator_lab'=>auth()->user()->laboratory_id])->count();
         }
 

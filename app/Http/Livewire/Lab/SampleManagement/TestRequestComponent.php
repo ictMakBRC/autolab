@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
 use App\Models\Sample;
-use App\Models\TestAssignment;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Models\TestAssignment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class TestRequestComponent extends Component
 {
@@ -25,6 +26,7 @@ class TestRequestComponent extends Component
     public $sample_is_for='Testing';
 
     public $tests_requested;
+    public $aliquots;
 
     public $request_acknowledged_by;
 
@@ -46,6 +48,7 @@ class TestRequestComponent extends Component
     public function mount()
     {
         $this->tests_requested = collect([]);
+        $this->aliquots=collect([]);
     }
 
     public function refresh()
@@ -67,18 +70,16 @@ class TestRequestComponent extends Component
         $this->dispatchBrowserEvent('view-tests');
     }
 
-    public function viewAliqoutes(Sample $sample)
+    public function viewAliquots(Sample $sample)
     {
-        // $assignedTests = TestAssignment::where(['sample_id' => $sample->id, 'assignee' => auth()->user()->id])->get()->pluck('test_id')->toArray();
-        // $tests = Test::whereIn('id', $assignedTests)->get();
-        // $this->tests_requested = $tests;
-        // $this->sample_identity = $sample->sample_identity;
-        // $this->lab_no = $sample->lab_no;
-        // $this->request_acknowledged_by = $sample->request_acknowledged_by;
-        // $this->clinical_notes = $sample->participant->clinical_notes;
-        // $this->sample_id = $sample->id;
+        $aliquots = SampleType::whereIn('id', (array)$sample->tests_requested)->get();
+        $this->aliquots = $aliquots;
+        $this->sample_identity = $sample->sample_identity;
+        $this->lab_no = $sample->lab_no;
+        $this->request_acknowledged_by = $sample->request_acknowledged_by;
+        $this->sample_id = $sample->id;
 
-        // $this->dispatchBrowserEvent('view-tests');
+        $this->dispatchBrowserEvent('view-tests');
     }
 
     public function acknowledgeRequest(Sample $sample)
@@ -93,6 +94,7 @@ class TestRequestComponent extends Component
     public function close()
     {
         $this->tests_requested = collect([]);
+        $this->aliquots = collect([]);
         $this->reset(['sample_id', 'sample_identity', 'lab_no', 'request_acknowledged_by']);
     }
 
@@ -107,7 +109,9 @@ class TestRequestComponent extends Component
                 $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
             });
         }, function ($query) {
-            return $query;
+            $query->whereHas('aliquotingAssignment', function (Builder $query) {
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+            });
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);

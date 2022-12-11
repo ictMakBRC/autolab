@@ -176,6 +176,7 @@
                     </div> <!-- end modal header -->
                     <div class="row">
                         <div class="mb-0">
+                            
                             <div class="table-responsiv">
                                 <table class="table table-striped mb-0 w-100">
                                     <thead>
@@ -291,7 +292,7 @@
                                         @endforeach
                                     </ul>
                                     @if ($request_acknowledged_by)
-                                        <form wire:submit.prevent="assignTest" class="mt-2">
+                                        <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="mb-2">

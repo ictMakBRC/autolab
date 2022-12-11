@@ -7,28 +7,30 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    <span class="text-danger fw-bold">{{$sample_is_for}}</span> Tasks
+                                    <span class="text-danger fw-bold">{{ $sample_is_for }}</span> Tasks
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
-                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                    data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-info">Select...</button>
-                                    <button type="button"
-                                        class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
-                                        data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
-                                            Dropdown</span>
-                                    </button>
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title=""
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-info">Select...</button>
+                                        <button type="button"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
+                                                Dropdown</span>
+                                        </button>
 
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                        <a class="dropdown-item {{ $sample_is_for=== 'Testing' ? 'active' : '' }}"
-                                                href="javascript: void(0);" wire:click="$set('sample_is_for','Testing')">Testing</a>
-                                        <a class="dropdown-item {{ $sample_is_for=== 'Aliquoting' ? 'active' : '' }}"
-                                            href="javascript: void(0);" wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
-                                        
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                            <a class="dropdown-item {{ $sample_is_for === 'Testing' ? 'active' : '' }}"
+                                                href="javascript: void(0);"
+                                                wire:click="$set('sample_is_for','Testing')">Testing</a>
+                                            <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
+                                                href="javascript: void(0);"
+                                                wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
+
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +64,14 @@
                                         <th>Study</th>
                                         <th>Requested By</th>
                                         <th>Collected By</th>
-                                        <th>Test Count</th>
+                                        <th>
+                                            @if ($sample_is_for == 'Testing')
+                                                Test
+                                            @else
+                                                Aliquot
+                                            @endif
+                                            Count
+                                        </th>
                                         <th>Priority</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -88,26 +97,27 @@
                                                 {{ $sample->sample_identity }}
                                             </td>
                                             <td>
-                                                @if ($sample->sample_is_for=='Testing')
-                                                <a href="javascript: void(0);"
-                                                    wire:click="viewTests({{ $sample->id }})" class="action-ico">
-                                                    <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                                </a>
+                                                @if ($sample->sample_is_for == 'Testing')
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="viewTests({{ $sample->id }})" class="action-ico">
+                                                        <strong class="text-success">{{ $sample->lab_no }}</strong>
+                                                    </a>
                                                 @else
                                                     <a href="javascript: void(0);"
-                                                    wire:click="viewAliquots({{ $sample->id }})" class="action-ico">
-                                                    <strong class="text-success">{{ $sample->lab_no }}</strong>
-                                                </a>
+                                                        wire:click="viewAliquots({{ $sample->id }})"
+                                                        class="action-ico">
+                                                        <strong class="text-success">{{ $sample->lab_no }}</strong>
+                                                    </a>
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ $sample->study->name??'N/A' }}
+                                                {{ $sample->study->name ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->requester->name }}
                                             </td>
                                             <td>
-                                                {{ $sample->collector->name??'N/A' }}
+                                                {{ $sample->collector->name ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->test_count }}
@@ -128,11 +138,20 @@
 
                                             </td>
                                             <td class="table-action">
-                                                <a href="{{ route('attach-test-results', $sample->id) }}"
-                                                    type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Attach Results"><i
-                                                        class="bi bi-file-earmark-medical"></i></a>
+                                                
+                                                    @if ($sample->sample_is_for == 'Testing')
+                                                    <a href="{{ URL::signedRoute('attach-test-results', $sample->id) }}"
+                                                        type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Attach Results"><i
+                                                            class="bi bi-file-earmark-medical"></i></a>
+                                                    @else
+                                                    <a href="{{ URL::signedRoute('attach-aliquots', $sample->id) }}"
+                                                        type="button" class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Attach Aliquots"><i
+                                                            class="bx bx-vial"></i></a>
+                                                    @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -157,40 +176,61 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
+                        <h6 class="modal-title" id="staticBackdropLabel">{{ $sample_is_for }} for sample (<span
                                 class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
                                 class="text-info">{{ $lab_no }}</span></h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->
                     <div class="row">
-                        <div class="col-md-12">
-                            <ul class="list-group">
-                                @forelse ($tests_requested as $test)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        {{ $test->name }}
-                                    </li>
-                                @empty
-                                @endforelse
-                            </ul>
-                        </div>
-                        @if ($clinical_notes)
-                            <div class="col-md-12">
-                                <div class="card-body text-center">
-                                    <div>
-                                        <h5 class="card-title">Clinical Notes</h5>
-                                    </div>
-                                    <p class="card-text">{{ $clinical_notes }}</p>
+                        @if ($sample_is_for == 'Aliquoting')
+                        <div class="mb-0">
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="list-group">
+                                        @foreach ($aliquots as $key => $aliquot)
+                                            <li class="list-group-item"><strong
+                                                    class="text-danger">Aliquot-{{ $key + 1 }}
+                                                </strong>{{ $aliquot->type }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
+                        </div>
+                        @else
+                            <div class="col-md-12">
+                                <ul class="list-group">
+                                    @forelse ($tests_requested as $test)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ $test->name }}
+                                        </li>
+                                    @empty
+                                    @endforelse
+                                </ul>
+                            </div>
+                            @if ($clinical_notes)
+                                <div class="col-md-12">
+                                    <div class="card-body text-center">
+                                        <div>
+                                            <h5 class="card-title">Clinical Notes</h5>
+                                        </div>
+                                        <p class="card-text">{{ $clinical_notes }}</p>
+                                    </div>
+                                </div>
+                            @endif
                         @endif
-
                     </div>
 
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
+                            @if ($sample->sample_is_for == 'Testing')
                             <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
                                 class="btn btn-success radius-30 px-3">Process</a>
+                            @else
+                            <a href="#" type="button"
+                                class="btn btn-success radius-30 px-3">Process</a>
+                            @endif
                         @endif
 
                         <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"

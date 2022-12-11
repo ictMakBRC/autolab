@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+use App\Models\SamplesAliquot;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sample extends Model
 {
@@ -75,6 +76,16 @@ class Sample extends Model
     public function testAssignment()
     {
         return $this->hasMany(TestAssignment::class, 'sample_id', 'id');
+    }
+
+    public function aliquotingAssignment()
+    {
+        return $this->hasOne(AliquotingAssignment::class, 'sample_id', 'id');
+    }
+
+    public function aliquots()
+    {
+        return $this->hasMany(SamplesAliquot::class, 'parent_id', 'id');
     }
 
     public static function boot()

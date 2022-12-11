@@ -181,30 +181,28 @@
                                                 @if ($sample->sample_is_for == 'Testing')
                                                     <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
                                                 @elseif($sample->sample_is_for == 'Deffered')
-                                                    <span class="badge bg-warning">{{ $sample->sample_is_for }}</span>
+                                                    <span class="badge bg-danger">{{ $sample->sample_is_for }}</span>
                                                 @else
                                                     <span class="badge bg-info">{{ $sample->sample_is_for }}</span>
                                                 @endif
                                             </td>
                                             <td class="table-action">
                                                 @if ($sample->sample_is_for == 'Deffered')
-                                                {{-- <a href="javascript: void(0);"
-                                                class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Recall for Testing" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
-                                                    ></i></a> --}}
-
-                                                <button class="btn btn-outline-success" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
+                                                <button class="btn btn-outline-danger" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
                                                     ></i></button>
                                                 @elseif($sample->sample_is_for == 'Testing')
                                                     <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
-                                                        type="button" class="btn btn-outline-info"
+                                                        type="button" class="btn btn-outline-success"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View Details"
                                                         target="_blank"><i class="bi bi-eye"></i>
                                                     </a>
                                                 @else
-                                                    N/A
+                                                <a href="{{ URL::signedRoute('sample-search-results', $sample->id) }}"
+                                                    type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom" title=""
+                                                    data-bs-original-title="View Aliquots" target="_blank"><i
+                                                        class="bx bx-vial"></i></a>
                                                 @endif
 
                                             </td>

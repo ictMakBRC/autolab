@@ -35,6 +35,7 @@ use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
+use App\Http\Livewire\Lab\SampleManagement\SampleAliquotsComponent;
 use App\Http\Livewire\Lab\SampleManagement\RejectedResultsComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
@@ -93,7 +94,8 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->middleware('permission:accession-samples')->name('specimen-request');
         Route::get('testAssignment', AssignTestsComponent::class)->middleware('permission:assign-test-requests')->name('test-request-assignment');
         Route::get('testRequests', TestRequestComponent::class)->middleware('permission:acknowledge-test-request')->name('test-request');
-        Route::get('sample/{id}/testResults', AttachTestResultComponent::class)->middleware('permission:enter-results')->name('attach-test-results');
+        Route::get('sample/{id}/testResults', AttachTestResultComponent::class)->middleware('permission:enter-results','signed')->name('attach-test-results');
+        Route::get('sample/{id}/aliquots', SampleAliquotsComponent::class)->middleware(['permission:enter-results','signed'])->name('attach-aliquots');
         Route::get('resultReview', TestReviewComponent::class)->middleware('permission:review-results')->name('test-review');
         Route::get('resultApproval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
         Route::get('resultReports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');

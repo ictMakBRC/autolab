@@ -29,7 +29,7 @@
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            @if (Auth::user()->hasPermission(['create-reception-info']))
+                                            @if (Auth::user()->hasPermission(['accession-samples']))
                                                 <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
                                                     data-bs-target="#addFacility">Add Facility</a>
                                                 <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
@@ -197,7 +197,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($sampleReceptions as $key => $sampleReception)
-                                        @if ($sampleReception->samples_accepted != $sampleReception->samples_handled)
+                                        {{-- @if ($sampleReception->samples_accepted != $sampleReception->samples_handled) --}}
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
@@ -241,7 +241,7 @@
                                                                 class="bi bi-pencil-square"></i></a>
                                                     @endif
 
-                                                    @if ($sampleReception->samples_handled == 0 && Auth::user()->hasPermission(['create-reception-info']))
+                                                    @if ($sampleReception->samples_handled == 0 && Auth::user()->hasPermission(['accession-samples']))
                                                         <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title=""
                                                             data-bs-original-title="Delete Record"
@@ -251,7 +251,7 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endif
+                                        {{-- @endif --}}
                                     @empty
                                     @endforelse
                                 </tbody>

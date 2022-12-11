@@ -99,11 +99,14 @@
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>My
-                                Tasks<x-count-badge>{{ $testAssignedCount }}</x-count-badge></a>
+                                Tasks<x-count-badge>{{ $testAssignedCount+$AliquotingAssignedCount  }}</x-count-badge></a>
 
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
                                     class="bi bi-file-earmark-medical"></i>Entering Results</a>
+                            <a href="javascript: void(0);"
+                            class="list-group-item {{ Request::routeIs('attach-aliquots') ? 'active' : '' }}"><i
+                                class="bi bi-receipt"></i>Aliquoting</a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))

@@ -18,6 +18,7 @@ class AttachTestResultComponent extends Component
     public $requestedTests;
 
     public $tests_performed = [];
+    
 
     public $sample;
 

@@ -15,9 +15,24 @@
                                     @endif
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
+
+                                        
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-info">More...</button>
+                                        <button type="button"
+                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
+                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
+                                                Dropdown</span>
+                                        </button>
+
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                                            <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
+                                                form</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
