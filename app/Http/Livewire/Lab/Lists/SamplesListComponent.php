@@ -48,7 +48,11 @@ class SamplesListComponent extends Component
     public $reception_id;
 
     public $sample_identity;
+<<<<<<< HEAD
     public $sample_id;
+=======
+
+>>>>>>> 61d73abfb58ce244aa5e323dc3213052bd480c20
     public $freezer_location;
 
     public $freezer;
@@ -97,7 +101,10 @@ class SamplesListComponent extends Component
     public function storageDetails(Sample $sample)
     {
         $sample->load('storage', 'storage.freezer', 'storage.freezer.location');
+<<<<<<< HEAD
         $this->sample_id = $sample->id;
+=======
+>>>>>>> 61d73abfb58ce244aa5e323dc3213052bd480c20
         $this->sample_identity = $sample->sample_identity;
         $this->barcode = $sample->storage->barcode;
         $this->freezer_location = $sample->storage->freezer->location->name;
