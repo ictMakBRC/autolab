@@ -19,7 +19,7 @@
                 <li class="nav-item {{ request()->segment(1) == 'samplestg' || $navItem == 'samplestg' ? 'active show' : '' }}"
                     data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sample-storage" type="button"><i
-                            class="bi bi-archive"></i></button>
+                            class="bx bx-archive"></i></button>
                 </li>
 
                 @if (Auth::user()->hasPermission(['manage-users']))
@@ -104,7 +104,7 @@
 
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
-                                    class="bi bi-file-medical"></i>My
+                                    class="bi bi-list-task"></i>My
                                 Tasks<x-count-badge>{{ $testAssignedCount+$AliquotingAssignedCount  }}</x-count-badge></a>
 
                             <a href="javascript: void(0);"
@@ -112,7 +112,7 @@
                                     class="bi bi-file-earmark-medical"></i>Entering Results</a>
                             <a href="javascript: void(0);"
                             class="list-group-item {{ Request::routeIs('attach-aliquots') ? 'active' : '' }}"><i
-                                class="bi bi-receipt"></i>Aliquoting</a>
+                                class="bi bi-hourglass-split"></i>Aliquoting</a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))
@@ -169,9 +169,9 @@
                         </div>
                         @if (Auth::user()->hasPermission(['access-settings']))
                             <a href="{{ route('freezer-location') }}" class="list-group-item"><i
-                                    class="bi bi-archive"></i>Freezer Locations</a>
+                                    class="bi bi-geo-alt-fill"></i>Freezer Locations</a>
                                     <a href="{{ route('freezers') }}" class="list-group-item"><i
-                                        class="bi bi-archive"></i>Freezers</a>
+                                        class="bi bi-thermometer-snow"></i>Freezers</a>
                         @endif
                     </div>
                 </div>

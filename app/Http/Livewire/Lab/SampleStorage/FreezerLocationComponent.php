@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Lab\SampleStorage;
 
+use App\Exports\FreezerLocationsExport;
+use App\Models\FreezerLocation;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\FreezerLocation;
-use Illuminate\Support\Facades\Auth;
-use App\Exports\FreezerLocationsExport;
 
 class FreezerLocationComponent extends Component
 {
@@ -150,6 +150,6 @@ class FreezerLocationComponent extends Component
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         // $export=true;
-        return view('livewire.lab.sample-storage.freezer-location-component',compact('freezerLocations'));
+        return view('livewire.lab.sample-storage.freezer-location-component', compact('freezerLocations'));
     }
 }

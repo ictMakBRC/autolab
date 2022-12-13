@@ -10,30 +10,36 @@
                                     Assign Tasks for <span class="text-danger fw-bold">{{ $sample_is_for }}</span>
                                 </h5>
                                 <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-success me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Testing')">
+                                        @if ($sample_is_for === 'Testing')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+                                        <i class="bx bxs-flask"></i>Testing
+                                    </a>
+                                    <a type="button" class="btn btn-outline-info me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Aliquoting')">
+                                        @if ($sample_is_for === 'Aliquoting')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting
+                                    </a>
+
+                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Storage')">
+                                        @if ($sample_is_for === 'Storage')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+
+                                        <i class="bx bx-archive"></i> Storage
+                                    </a>
+
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-info">Select...</button>
-                                        <button type="button"
-                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
-                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
-                                                Dropdown</span>
-                                        </button>
-
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            <a class="dropdown-item {{ $sample_is_for === 'Testing' ? 'active' : '' }}"
-                                                href="javascript: void(0);"
-                                                wire:click="$set('sample_is_for','Testing')">Testing</a>
-                                            <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
-                                                href="javascript: void(0);"
-                                                wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
-                                            <a class="dropdown-item {{ $sample_is_for === 'Storage' ? 'active' : '' }}"
-                                            href="javascript: void(0);"
-                                            wire:click="$set('sample_is_for','Storage')">Storage</a>
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -69,9 +75,9 @@
                                         <th>Collected By</th>
                                         <th>For</th>
                                         @if ($sample_is_for == 'Testing')
-                                        <th> TestCount</th>
+                                            <th> TestCount</th>
                                         @elseif($sample_is_for == 'Aliquoting')
-                                        <th> Aliquot Count</th>
+                                            <th> Aliquot Count</th>
                                         @endif
                                         <th>Priority</th>
                                         <th>Status</th>
@@ -115,7 +121,7 @@
                                                     {{ $sample->test_count }}
                                                 </td>
                                             @endif
-                                            
+
                                             @if ($sample->priority == 'Normal')
                                                 <td><span class="badge bg-info">{{ $sample->priority }}</span>
                                                 </td>
@@ -186,7 +192,7 @@
                     </div> <!-- end modal header -->
                     <div class="row">
                         <div class="mb-0">
-                            
+
                             <div class="table-responsiv">
                                 <table class="table table-striped mb-0 w-100">
                                     <thead>
@@ -284,14 +290,14 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="staticBackdropLabel">
-                            @if ($sample_is_for=='Aliquoting')
-                            Requested Aliquots
+                            @if ($sample_is_for == 'Aliquoting')
+                                Requested Aliquots
                             @else
-                            Assign storage task
+                                Assign storage task
                             @endif
-                            for sample (<span
-                                class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
-                                class="text-info">{{ $lab_no }}</span></h6>
+                            for sample (<span class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
+                                class="text-info">{{ $lab_no }}</span>
+                        </h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                             wire:click="close()"></button>
                     </div> <!-- end modal header -->
@@ -299,17 +305,17 @@
                         <div class="mb-0">
                             <div class="card">
                                 <div class="card-body">
-                                    @if ($sample_is_for=='Aliquoting')
-                                    <ul class="list-group">
-                                        @foreach ($aliquots as $key => $aliquot)
-                                            <li class="list-group-item"><strong
-                                                    class="text-danger">Aliquot-{{ $key + 1 }}
-                                                </strong>{{ $aliquot->type }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                    @if ($sample_is_for == 'Aliquoting')
+                                        <ul class="list-group">
+                                            @foreach ($aliquots as $key => $aliquot)
+                                                <li class="list-group-item"><strong
+                                                        class="text-danger">Aliquot-{{ $key + 1 }}
+                                                    </strong>{{ $aliquot->type }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endif
-                                  
+
                                     @if ($request_acknowledged_by)
                                         <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
                                             <div class="row">

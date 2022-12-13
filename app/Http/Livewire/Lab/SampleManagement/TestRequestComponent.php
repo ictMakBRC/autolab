@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Sample;
-use Livewire\Component;
 use App\Models\Admin\Test;
+use App\Models\Sample;
 use App\Models\SampleType;
-use Livewire\WithPagination;
 use App\Models\TestAssignment;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestRequestComponent extends Component
 {
@@ -23,9 +23,10 @@ class TestRequestComponent extends Component
 
     public $orderAsc = true;
 
-    public $sample_is_for='Testing';
+    public $sample_is_for = 'Testing';
 
     public $tests_requested;
+
     public $aliquots;
 
     public $request_acknowledged_by;
@@ -48,7 +49,7 @@ class TestRequestComponent extends Component
     public function mount()
     {
         $this->tests_requested = collect([]);
-        $this->aliquots=collect([]);
+        $this->aliquots = collect([]);
     }
 
     public function refresh()
@@ -72,7 +73,7 @@ class TestRequestComponent extends Component
 
     public function viewAliquots(Sample $sample)
     {
-        $aliquots = SampleType::whereIn('id', (array)$sample->tests_requested)->get();
+        $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->get();
         $this->aliquots = $aliquots;
         $this->sample_identity = $sample->sample_identity;
         $this->lab_no = $sample->lab_no;
@@ -100,11 +101,11 @@ class TestRequestComponent extends Component
 
     public function render()
     {
-        $samples = Sample::search($this->search, ['Assigned','Processing'])
-        ->whereIn('status', ['Assigned','Processing'])
+        $samples = Sample::search($this->search, ['Assigned', 'Processing'])
+        ->whereIn('status', ['Assigned', 'Processing'])
         ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-        ->when($this->sample_is_for=='Testing', function ($query) {
+        ->when($this->sample_is_for == 'Testing', function ($query) {
             $query->whereHas('testAssignment', function (Builder $query) {
                 $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
             });

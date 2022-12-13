@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class SampleStorage extends Model
 {
     use HasFactory,LogsActivity;
 
-    protected $fillable = ['barcode','sample_id','freezer_id', 'section_id', 'rack_id','drawer_id','box_id','box_column','box_row','creator_lab','created_by'];
+    protected $fillable = ['barcode', 'sample_id', 'freezer_id', 'section_id', 'rack_id', 'drawer_id', 'box_id', 'box_column', 'box_row', 'creator_lab', 'created_by'];
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -25,7 +25,6 @@ class SampleStorage extends Model
         ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-
 
     public function sample()
     {
@@ -40,6 +39,11 @@ class SampleStorage extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function freezer()
+    {
+        return $this->belongsTo(Freezer::class, 'freezer_id', 'id');
     }
 
     public static function boot()

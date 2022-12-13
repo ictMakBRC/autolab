@@ -10,30 +10,35 @@
                                     <span class="text-danger fw-bold">{{ $sample_is_for }}</span> Tasks
                                 </h5>
                                 <div class="ms-auto">
+                                    <a type="button" class="btn btn-outline-success me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Testing')">
+                                        @if ($sample_is_for === 'Testing')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+                                        <i class="bx bxs-flask"></i>Testing
+                                    </a>
+                                    <a type="button" class="btn btn-outline-info me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Aliquoting')">
+                                        @if ($sample_is_for === 'Aliquoting')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting
+                                    </a>
+
+                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold"
+                                        wire:click="$set('sample_is_for','Storage')">
+                                        @if ($sample_is_for === 'Storage')
+                                            <span class="spinner-grow spinner-grow-sm" role="status"
+                                                aria-hidden="true"></span>
+                                        @endif
+
+                                        <i class="bx bx-archive"></i> Storage
+                                    </a>
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-info">Select...</button>
-                                        <button type="button"
-                                            class="btn btn-outline-info split-bg-primary dropdown-toggle dropdown-toggle-split"
-                                            data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle
-                                                Dropdown</span>
-                                        </button>
-
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            <a class="dropdown-item {{ $sample_is_for === 'Testing' ? 'active' : '' }}"
-                                            href="javascript: void(0);"
-                                            wire:click="$set('sample_is_for','Testing')">Testing</a>
-                                        <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
-                                            href="javascript: void(0);"
-                                            wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
-                                        <a class="dropdown-item {{ $sample_is_for === 'Storage' ? 'active' : '' }}"
-                                        href="javascript: void(0);"
-                                        wire:click="$set('sample_is_for','Storage')">Storage</a>
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -68,9 +73,9 @@
                                         <th>Requested By</th>
                                         <th>Collected By</th>
                                         @if ($sample_is_for == 'Testing')
-                                        <th> TestCount</th>
+                                            <th> TestCount</th>
                                         @elseif($sample_is_for == 'Aliquoting')
-                                        <th> Aliquot Count</th>
+                                            <th> Aliquot Count</th>
                                         @endif
                                         <th>Priority</th>
                                         <th>Status</th>
@@ -120,10 +125,10 @@
                                                 {{ $sample->collector->name ?? 'N/A' }}
                                             </td>
                                             @if ($sample_is_for == 'Testing' || $sample_is_for == 'Aliquoting')
-                                            <td>
-                                                {{ $sample->test_count }}
-                                            </td>
-                                             @endif
+                                                <td>
+                                                    {{ $sample->test_count }}
+                                                </td>
+                                            @endif
                                             @if ($sample->priority == 'Normal')
                                                 <td><span class="badge bg-info">{{ $sample->priority }}</span>
                                                 </td>
@@ -133,33 +138,33 @@
                                             @endif
                                             <td>
                                                 @if ($sample->status == 'Assigned')
-                                                    <span class="badge bg-warning">{{ $sample->status }}</span>
+                                                    <span class="badge bg-success">{{ $sample->status }}</span>
                                                 @else
                                                     <span class="badge bg-info">{{ $sample->status }}</span>
                                                 @endif
 
                                             </td>
                                             <td class="table-action">
-                                                
-                                                    @if ($sample->sample_is_for == 'Testing')
+
+                                                @if ($sample->sample_is_for == 'Testing')
                                                     <a href="{{ URL::signedRoute('attach-test-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Attach Results"><i
+                                                        type="button" class="btn btn-outline-success"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Attach Results"><i
                                                             class="bx bxs-flask"></i></a>
-                                                    @elseif($sample->sample_is_for == 'Aliquoting')
+                                                @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="{{ URL::signedRoute('attach-aliquots', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Attach Aliquots"><i
+                                                        type="button" class="btn btn-outline-info"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Attach Aliquots"><i
                                                             class="bx bx-vial"></i></a>
-                                                    @elseif($sample->sample_is_for == 'Storage')
+                                                @elseif($sample->sample_is_for == 'Storage')
                                                     <a href="{{ URL::signedRoute('store-sample', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Attach Aliquots" target="_blank"><i
-                                                            class="bi bi-archive"></i></a>
-                                                    @endif
+                                                        type="button" class="btn btn-outline-warning"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Attach Aliquots"><i
+                                                            class="bx bx-archive"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -192,20 +197,20 @@
                     </div> <!-- end modal header -->
                     <div class="row">
                         @if ($sample_is_for == 'Aliquoting')
-                        <div class="mb-0">
-                            <div class="card">
-                                <div class="card-body">
-                                    <ul class="list-group">
-                                        @foreach ($aliquots as $key => $aliquot)
-                                            <li class="list-group-item"><strong
-                                                    class="text-danger">Aliquot-{{ $key + 1 }}
-                                                </strong>{{ $aliquot->type }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                            <div class="mb-0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            @foreach ($aliquots as $key => $aliquot)
+                                                <li class="list-group-item"><strong
+                                                        class="text-danger">Aliquot-{{ $key + 1 }}
+                                                    </strong>{{ $aliquot->type }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @else
                             <div class="col-md-12">
                                 <ul class="list-group">
@@ -233,11 +238,10 @@
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
                             @if ($sample->sample_is_for == 'Testing')
-                            <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
-                                class="btn btn-success radius-30 px-3">Process</a>
+                                <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
+                                    class="btn btn-success radius-30 px-3">Process</a>
                             @else
-                            <a href="#" type="button"
-                                class="btn btn-success radius-30 px-3">Process</a>
+                                <a href="#" type="button" class="btn btn-success radius-30 px-3">Process</a>
                             @endif
                         @endif
 

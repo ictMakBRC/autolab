@@ -4,14 +4,14 @@ namespace App\Exports;
 
 use App\Models\TestResult;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithProperties;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TestResultsExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
+class TestResultsExport implements FromCollection, WithMapping, WithHeadings, WithStyles, WithProperties
 {
     use Exportable;
 
@@ -31,15 +31,15 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings,Wit
     public function properties(): array
     {
         return [
-            'creator'        => auth()->user()->fullName,
+            'creator' => auth()->user()->fullName,
             'lastModifiedBy' => 'Autolab',
-            'title'          => 'Tests',
-            'description'    => 'Tests Performed export',
-            'subject'        => 'Tests Performed export',
-            'keywords'       => 'Autolab exports',
-            'category'       => 'Autolab Exports',
-            'manager'        => 'MakBRC IT TEAM',
-            'company'        => 'Makerere University Biomedical Research Centre',
+            'title' => 'Tests',
+            'description' => 'Tests Performed export',
+            'subject' => 'Tests Performed export',
+            'keywords' => 'Autolab exports',
+            'category' => 'Autolab Exports',
+            'manager' => 'MakBRC IT TEAM',
+            'company' => 'Makerere University Biomedical Research Centre',
         ];
     }
 
@@ -94,7 +94,7 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings,Wit
     {
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
         ];
     }
 }

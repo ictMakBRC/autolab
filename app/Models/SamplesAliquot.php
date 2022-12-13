@@ -2,21 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Sample;
-use App\Models\Laboratory;
-use App\Models\SampleType;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class SamplesAliquot extends Model
 {
     use HasFactory,LogsActivity;
 
-    protected $fillable = ['parent_id','aliquot_type_id', 'aliquot_identity', 'creator_lab','created_by'];
+    protected $fillable = ['parent_id', 'aliquot_type_id', 'aliquot_identity', 'creator_lab', 'created_by'];
 
     public function getActivitylogOptions(): LogOptions
     {

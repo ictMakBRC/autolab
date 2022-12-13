@@ -69,7 +69,7 @@ class TestApprovalComponent extends Component
 
     public function viewPreliminaryReport(TestResult $testResult)
     {
-        $this->testResult=$testResult;
+        $this->testResult = $testResult;
         $this->viewReport = true;
     }
 

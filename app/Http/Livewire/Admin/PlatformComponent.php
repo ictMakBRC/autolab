@@ -56,29 +56,27 @@ class PlatformComponent extends Component
     public function storeData()
     {
         $isExist = Platform::select('*')
-        ->where([['name',$this->name],['creator_lab', auth()->user()->laboratory_id]])
+        ->where([['name', $this->name], ['creator_lab', auth()->user()->laboratory_id]])
         ->exists();
-        if ($isExist) {           
+        if ($isExist) {
             $this->name = '';
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Platiform name already exists!']);
-        }
-        
-        else{
-        $this->validate([
-            'name' => 'required',
-            'is_active' => 'required',
-        ]);
+        } else {
+            $this->validate([
+                'name' => 'required',
+                'is_active' => 'required',
+            ]);
 
-        $platform = new Platform();
-        $platform->name = $this->name;
-        $platform->range = $this->range;
-        $platform->is_active = $this->is_active;
-        $platform->save();
+            $platform = new Platform();
+            $platform->name = $this->name;
+            $platform->range = $this->range;
+            $platform->is_active = $this->is_active;
+            $platform->save();
 
-        $this->reset(['name', 'range', 'is_active']);
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform created successfully!']);
+            $this->reset(['name', 'range', 'is_active']);
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Platform created successfully!']);
         }
     }
 

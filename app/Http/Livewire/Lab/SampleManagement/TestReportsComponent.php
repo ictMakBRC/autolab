@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\TestResult;
-use Livewire\WithPagination;
 use App\Exports\ReportExport;
+use App\Models\Sample;
+use App\Models\TestResult;
 use Illuminate\Support\Facades\URL;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestReportsComponent extends Component
 {

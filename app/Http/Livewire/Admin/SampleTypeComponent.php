@@ -37,6 +37,7 @@ class SampleTypeComponent extends Component
     // public $can_be_aliquot;
 
     protected $paginationTheme = 'bootstrap';
+
     public $toggleForm = false;
 
     public function updated($fields)
@@ -64,9 +65,9 @@ class SampleTypeComponent extends Component
 
         $sampleType = new SampleType();
         $sampleType->type = $this->type;
-        $sampleType->possible_tests = count($this->possible_tests)>0? $this->possible_tests:null;
+        $sampleType->possible_tests = count($this->possible_tests) > 0 ? $this->possible_tests : null;
         // $sampleType->can_be_aliquot = $this->can_be_aliquot??0;
-        $sampleType->possible_aliquots = count($this->possible_aliquots)>0? $this->possible_aliquots:null;
+        $sampleType->possible_aliquots = count($this->possible_aliquots) > 0 ? $this->possible_aliquots : null;
         $sampleType->save();
 
         $this->status = '';
@@ -112,9 +113,9 @@ class SampleTypeComponent extends Component
         $sampleType = SampleType::find($this->edit_id);
         $sampleType->type = $this->type;
         $sampleType->status = $this->status;
-        $sampleType->possible_tests = count($this->possible_tests)>0? $this->possible_tests:null;
+        $sampleType->possible_tests = count($this->possible_tests) > 0 ? $this->possible_tests : null;
         // $sampleType->can_be_aliquot = $this->can_be_aliquot?? 0;
-        $sampleType->possible_aliquots = count($this->possible_aliquots)>0? $this->possible_aliquots:null;
+        $sampleType->possible_aliquots = count($this->possible_aliquots) > 0 ? $this->possible_aliquots : null;
         $sampleType->update();
         $this->toggleForm = false;
         $this->resetInputs();

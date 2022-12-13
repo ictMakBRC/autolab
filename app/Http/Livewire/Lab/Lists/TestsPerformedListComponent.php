@@ -2,17 +2,17 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Models\User;
-use App\Models\Study;
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Admin\Test;
-use App\Models\SampleType;
-use App\Models\TestResult;
-use Livewire\WithPagination;
 use App\Exports\TestResultsExport;
+use App\Models\Admin\Test;
+use App\Models\Facility;
+use App\Models\Sample;
+use App\Models\SampleType;
+use App\Models\Study;
+use App\Models\TestResult;
+use App\Models\User;
 use Illuminate\Support\Facades\URL;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestsPerformedListComponent extends Component
 {
@@ -27,7 +27,7 @@ class TestsPerformedListComponent extends Component
     public $test_id;
 
     public $performed_by = 0;
-    
+
     public $reviewed_by = 0;
 
     public $approved_by = 0;
@@ -170,6 +170,6 @@ class TestsPerformedListComponent extends Component
         $testResults = $this->filterTests()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests','users'));
+        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests', 'users'));
     }
 }
