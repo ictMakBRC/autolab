@@ -191,7 +191,7 @@ class SpecimenRequestComponent extends Component
 
     public function updatedSampleTypeId()
     {
-        if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
            
             $this->tests=collect([]);
             $this->tests_requested=[];
@@ -200,13 +200,17 @@ class SpecimenRequestComponent extends Component
             $sampleType = SampleType::where('id', $this->sample_type_id)->first();
             sleep(1);
             $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $this->aliquots=collect([]);
             $this->tests_requested=[];
             $this->aliquots_requested =[];
             $sampleType = SampleType::where('id', $this->sample_type_id)->first();
             sleep(1);
             $this->aliquots = SampleType::whereIn('id', (array) $sampleType->possible_aliquots)->orderBy('type', 'asc')->get();
+        }else{
+            $this->aliquots=collect([]);
+            $this->tests_requested=[];
+            $this->aliquots_requested =[];
         } 
     }
 
@@ -529,11 +533,11 @@ class SpecimenRequestComponent extends Component
             'sample_type_id' => 'integer|required',
         ]);
 
-        if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $this->validate([
                 'tests_requested' => 'array|required',
             ]);
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $this->validate([
                 'aliquots_requested' => 'array|required',
             ]);
@@ -545,6 +549,7 @@ class SpecimenRequestComponent extends Component
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
+
         if ($this->entry_type != 'Client') {
             $this->validate([
                 'study_id' => 'required|integer',
@@ -567,16 +572,18 @@ class SpecimenRequestComponent extends Component
         $sample->sample_identity = $this->sample_identity;
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
-        if ($this->sample_is_for!='Aliquoting') {
+
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $sample->tests_requested = count($this->tests_requested)>=1?$this->tests_requested:null;
             $sample->test_count = count($this->tests_requested);
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $sample->tests_requested = count($this->aliquots_requested)>=1?$this->aliquots_requested:null;
-            $sample->test_count = count($this->aliquots_requested);
+            $sample->test_count = count($this->aliquots_requested) ?? 0;
+        }else{
+            $sample->tests_requested=null;
+            $sample->test_count =0;
         }
 
-       
-        
         $sample->status = 'Accessioned';
         $sample->is_isolate = $this->is_isolate;
         $sample->save();
@@ -627,21 +634,32 @@ class SpecimenRequestComponent extends Component
         $this->sample_is_for = $sample->sample_is_for;
         $this->priority = $sample->priority;
 
-        if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $this->tests_requested = $sample->tests_requested ?? [];
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $this->aliquots_requested = $sample->tests_requested ?? [];
+        }else{
+            $this->aliquots_requested=[];
+            $this->tests_requested =[];
         }
 
+      
         $this->participant_id = $sample->participant_id;
         $this->entry_type = $sample->participant->entry_type;
         $this->is_isolate = $sample->is_isolate;
 
         $sampleType = SampleType::where('id', $sample->sample_type_id)->first();
-        if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
+
             $this->tests = Test::whereIn('id', (array) $sampleType->possible_tests)->orderBy('name', 'asc')->get();
-        }else{
+
+        }elseif($this->sample_is_for=='Aliquoting'){
+
             $this->aliquots = SampleType::whereIn('id', (array) $sampleType->possible_aliquots)->orderBy('type', 'asc')->get();
+
+        }else{
+            $this->tests = collect([]);
+            $this->aliquots = collect([]);
         }
 
         $this->toggleForm = true;
@@ -659,11 +677,11 @@ class SpecimenRequestComponent extends Component
             'sample_type_id' => 'integer|required',
         ]);
 
-       if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $this->validate([
                 'tests_requested' => 'array|required',
             ]);
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $this->validate([
                 'aliquots_requested' => 'array|required',
             ]);
@@ -694,12 +712,15 @@ class SpecimenRequestComponent extends Component
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->is_isolate = $this->is_isolate;
-        if ($this->sample_is_for!='Aliquoting') {
+        if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $sample->tests_requested = count($this->tests_requested)>=1?$this->tests_requested:null;
             $sample->test_count = count($this->tests_requested);
-        }else{
+        }elseif($this->sample_is_for=='Aliquoting'){
             $sample->tests_requested = count($this->aliquots_requested)>=1?$this->aliquots_requested:null;
             $sample->test_count = count($this->aliquots_requested) ?? 0;
+        }else{
+            $sample->tests_requested=null;
+            $sample->test_count =0;
         }
         
         $sample->update();

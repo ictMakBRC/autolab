@@ -43,8 +43,7 @@
                             <div class="row">
                                 <div class="mb-2 col-md-2">
                                     <label for="category" class="form-label">{{ __('Category') }}</label>
-                                    <select wire:model='category_id' class="form-select" id="category"
-                                        wire:model="category_id">
+                                    <select wire:model='category_id' class="form-select" id="category">
                                         <option selected value="">Select</option>
                                         @foreach ($testCategories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>

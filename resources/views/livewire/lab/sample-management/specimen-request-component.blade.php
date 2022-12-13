@@ -124,8 +124,8 @@
                                                 <div class="mb-3 col-md-2">
                                                     <label for="gender" class="form-label">Gender<span
                                                             class="text-danger">*</span></label>
-                                                    <select class="form-select select2" 
-                                                        id="gender" wire:model="gender">
+                                                    <select class="form-select select2" id="gender"
+                                                        wire:model="gender">
                                                         <option selected value="">Select</option>
                                                         <option value='Male'>Male</option>
                                                         <option value='Female'>Female</option>
@@ -197,8 +197,8 @@
                                                 <hr>
                                                 <div class="mb-3 col-md-1">
                                                     <label for="title" class="form-label">Title</label>
-                                                    <select class="form-select select2" 
-                                                        id="title" wire:model="title">
+                                                    <select class="form-select select2" id="title"
+                                                        wire:model="title">
                                                         <option selected value="">Select</option>
                                                         <option value="Mr.">Mr.</option>
                                                         <option value="Ms.">Ms.</option>
@@ -265,8 +265,8 @@
 
                                                 <div class="mb-3 col-md-2">
                                                     <label for="nationality" class="form-label">Nationality</label>
-                                                    <select class="form-select select2" 
-                                                        id="nationality" wire:model="nationality">
+                                                    <select class="form-select select2" id="nationality"
+                                                        wire:model="nationality">
                                                         <option selected value="">Select</option>
                                                         @include('layouts.countries')
                                                     </select>
@@ -276,8 +276,8 @@
                                                 </div>
                                                 <div class="mb-3 col-md-2">
                                                     <label for="district" class="form-label">District</label>
-                                                    <select class="form-select select2" 
-                                                        id="district" wire:model="district">
+                                                    <select class="form-select select2" id="district"
+                                                        wire:model="district">
                                                         <option value="" selected>Select</option>
                                                         @include('layouts.districts')
                                                     </select>
@@ -330,8 +330,8 @@
 
                                                 <div class="mb-3 col-md-3">
                                                     <label for="civil_status" class="form-label">Civil Status</label>
-                                                    <select class="form-select select2" 
-                                                        id="civil_status" wire:model="civil_status">
+                                                    <select class="form-select select2" id="civil_status"
+                                                        wire:model="civil_status">
                                                         <option selected value="">Select</option>
                                                         <option value='Single'>Single</option>
                                                         <option value='Married'>Married</option>
@@ -359,8 +359,8 @@
                                                 <div class="mb-3 col-md-3">
                                                     <label for="nok_relationship" class="form-label">NoK
                                                         Relationship</label>
-                                                    <select class="form-select select2" 
-                                                        id="nok_relationship" wire:model.lazy="nok_relationship">
+                                                    <select class="form-select select2" id="nok_relationship"
+                                                        wire:model.lazy="nok_relationship">
                                                         <option selected value="">Select</option>
                                                         @include('layouts.nokRelationships')
                                                     </select>
@@ -492,12 +492,13 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_is_for" class="form-label">Sample is For?<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select" 
-                                                    id="sample_is_for" wire:model="sample_is_for">
+                                                <select class="form-select" id="sample_is_for"
+                                                    wire:model="sample_is_for">
                                                     <option selected value="">Select</option>
                                                     <option value='Testing'>Testing</option>
                                                     <option value='Aliquoting'>Aliquoting</option>
                                                     <option value='Deffered'>Deffered Testing</option>
+                                                    <option value='Storage'>Storage</option>
                                                 </select>
                                                 @error('sample_is_for')
                                                     <div class="text-danger text-small">{{ $message }}</div>
@@ -507,8 +508,7 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="priority" class="form-label">Priority<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select" 
-                                                    id="priority" wire:model="priority">
+                                                <select class="form-select" id="priority" wire:model="priority">
                                                     <option selected value="">Select</option>
                                                     <option value='Normal'>Normal</option>
                                                     <option value='Urgent'>Urgent</option>
@@ -575,7 +575,7 @@
 
                                         </div>
 
-                                        @if ($sample_is_for != 'Aliquoting')
+                                        @if ($sample_is_for == 'Testing' || $sample_is_for == 'Deffered')
                                             <div wire:loading.delay wire:target="updatedSampleTypeId">
                                                 <div class="spinner-border text-info" role="status"> <span
                                                         class="visually-hidden">Loading...</span>
@@ -586,20 +586,6 @@
                                                     <h6> <strong class="text-success">Test(s) Requested</strong>
                                                     </h6>
                                                     <hr>
-                                                    {{-- <div class="col-md-12">
-                                                        <label for="test" class="form-label">Test<span
-                                                                class="text-danger">*</span></label>
-                                                        <select class="form-select" 
-                                                            id="test" wire:model='tests_requested' multiple>
-                                                            <option selected value="">Select</option>
-                                                            @foreach ($tests as $test)
-                                                            <option value='{{ $test->id }}'>{{ $test->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('tests_requested')
-                                                        <div class="text-danger text-small">{{ $message }}</div>
-                                                        @enderror
-                                                    </div> --}}
                                                     <div class="col-md-12">
                                                         @foreach ($tests as $test)
                                                             <div class="form-check form-check-inline mb-1">
@@ -617,20 +603,21 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="row mx-auto" wire:loading.class='invisible' wire:target="updatedSampleTypeId">
+                                                <div class="row mx-auto" wire:loading.class='invisible'
+                                                    wire:target="updatedSampleTypeId">
                                                     <div class="text-danger col-md-12">No associated tests! Please
                                                         select
                                                         sample type</div>
                                                 </div>
                                             @endif
-                                        @else
-                                        <div wire:loading.delay wire:target="updatedSampleTypeId">
-                                            <div class="spinner-border text-info" role="status"> <span
-                                                    class="visually-hidden">Loading...</span>
+                                        @elseif($sample_is_for == 'Aliquoting')
+                                            <div wire:loading.delay wire:target="updatedSampleTypeId">
+                                                <div class="spinner-border text-info" role="status"> <span
+                                                        class="visually-hidden">Loading...</span>
+                                                </div>
                                             </div>
-                                        </div>
                                             @if (!$aliquots->isEmpty())
-                                            
+
                                                 <div class="row mx-auto" wire:loading.class='invisible'>
                                                     <h6> <strong class="text-success">Aliquot(s) Requested</strong>
                                                     </h6>
@@ -652,11 +639,13 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <div class="row mx-auto" wire:loading.class='invisible' wire:target="updatedSampleTypeId">
-                                                    <div class="text-danger col-md-12">No associated possible aliquots! Please select sample type</div>
+                                                <div class="row mx-auto" wire:loading.class='invisible'
+                                                    wire:target="updatedSampleTypeId">
+                                                    <div class="text-danger col-md-12">No associated possible aliquots!
+                                                        Please select sample type</div>
                                                 </div>
                                             @endif
-
+                                        @else
                                         @endif
 
 
@@ -761,7 +750,8 @@
                                                 </td>
                                                 <td>
                                                     @if ($sample)
-                                                        <strong class="text-info">{{ $sample->sample_is_for }}</strong>
+                                                        <strong
+                                                            class="text-info">{{ $sample->sample_is_for }}</strong>
                                                     @else
                                                         {{ __('N/A') }}
                                                     @endif
@@ -788,13 +778,13 @@
                                                     @endif
                                                 </td>
                                                 <td class="table-action">
-                                                    @if ($sample->status=='Accessioned')
+                                                    @if ($sample->status == 'Accessioned')
                                                         <a href="javascript: void(0);"
                                                             wire:click="deleteConfirmation({{ $sample->id }})"
                                                             class="action-ico btn btn-outline-danger mx-1">
                                                             <i class="bi bi-trash"></i></a>
                                                     @else
-                                                    {{__('N/A')}}
+                                                        {{ __('N/A') }}
                                                     @endif
                                                 </td>
                                             </tr>

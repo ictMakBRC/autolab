@@ -45,7 +45,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
 
     public function collection()
     {
-        return Sample::whereIn('id', $this->sampleIds)->with(['participant', 'participant.facility', 'sampleType:id,type', 'study:id,name', 'sampleReception'])->latest()->get();
+        return Sample::whereIn('id', $this->sampleIds)->with(['participant', 'participant.facility', 'sampleType:id,type', 'study:id,name', 'sampleReception'])->latest('sample_is_for')->get();
     }
 
     public function map($sample): array
@@ -61,6 +61,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
             $sample->lab_no ?? 'N/A',
             $sample->participant->facility->name ?? 'N/A',
             $sample->study->name ?? 'N/A',
+            $sample->sample_is_for ?? 'N/A',
         ];
     }
 
@@ -75,6 +76,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
             'Lab No',
             'Facility',
             'Study',
+            'Sample Was For'
         ];
     }
 

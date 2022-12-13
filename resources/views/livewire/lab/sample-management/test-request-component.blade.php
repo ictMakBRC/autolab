@@ -23,11 +23,14 @@
 
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
                                             <a class="dropdown-item {{ $sample_is_for === 'Testing' ? 'active' : '' }}"
-                                                href="javascript: void(0);"
-                                                wire:click="$set('sample_is_for','Testing')">Testing</a>
-                                            <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
-                                                href="javascript: void(0);"
-                                                wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
+                                            href="javascript: void(0);"
+                                            wire:click="$set('sample_is_for','Testing')">Testing</a>
+                                        <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
+                                            href="javascript: void(0);"
+                                            wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
+                                        <a class="dropdown-item {{ $sample_is_for === 'Storage' ? 'active' : '' }}"
+                                        href="javascript: void(0);"
+                                        wire:click="$set('sample_is_for','Storage')">Storage</a>
 
                                         </div>
                                     </div>
@@ -64,14 +67,11 @@
                                         <th>Study</th>
                                         <th>Requested By</th>
                                         <th>Collected By</th>
-                                        <th>
-                                            @if ($sample_is_for == 'Testing')
-                                                Test
-                                            @else
-                                                Aliquot
-                                            @endif
-                                            Count
-                                        </th>
+                                        @if ($sample_is_for == 'Testing')
+                                        <th> TestCount</th>
+                                        @elseif($sample_is_for == 'Aliquoting')
+                                        <th> Aliquot Count</th>
+                                        @endif
                                         <th>Priority</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -119,9 +119,11 @@
                                             <td>
                                                 {{ $sample->collector->name ?? 'N/A' }}
                                             </td>
+                                            @if ($sample_is_for == 'Testing' || $sample_is_for == 'Aliquoting')
                                             <td>
                                                 {{ $sample->test_count }}
                                             </td>
+                                             @endif
                                             @if ($sample->priority == 'Normal')
                                                 <td><span class="badge bg-info">{{ $sample->priority }}</span>
                                                 </td>
@@ -144,13 +146,19 @@
                                                         type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Attach Results"><i
-                                                            class="bi bi-file-earmark-medical"></i></a>
-                                                    @else
+                                                            class="bx bxs-flask"></i></a>
+                                                    @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="{{ URL::signedRoute('attach-aliquots', $sample->id) }}"
                                                         type="button" class="btn btn-outline-success" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Attach Aliquots"><i
                                                             class="bx bx-vial"></i></a>
+                                                    @elseif($sample->sample_is_for == 'Storage')
+                                                    <a href="{{ URL::signedRoute('store-sample', $sample->id) }}"
+                                                        type="button" class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Attach Aliquots" target="_blank"><i
+                                                            class="bi bi-archive"></i></a>
                                                     @endif
                                             </td>
                                         </tr>

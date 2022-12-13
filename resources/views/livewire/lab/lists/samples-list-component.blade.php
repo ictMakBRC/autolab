@@ -182,8 +182,10 @@
                                                     <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
                                                 @elseif($sample->sample_is_for == 'Deffered')
                                                     <span class="badge bg-danger">{{ $sample->sample_is_for }}</span>
+                                                @elseif($sample->sample_is_for == 'Aliquoting')
+                                                <span class="badge bg-info">{{ $sample->sample_is_for }}</span>
                                                 @else
-                                                    <span class="badge bg-info">{{ $sample->sample_is_for }}</span>
+                                                    <span class="badge bg-primary">{{ $sample->sample_is_for }}</span>
                                                 @endif
                                             </td>
                                             <td class="table-action">
@@ -197,12 +199,15 @@
                                                         title="" data-bs-original-title="View Details"
                                                         target="_blank"><i class="bi bi-eye"></i>
                                                     </a>
-                                                @else
+                                                @elseif($sample->sample_is_for == 'Aliquoting')
                                                 <a href="{{ URL::signedRoute('sample-search-results', $sample->id) }}"
                                                     type="button" class="btn btn-outline-info" data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom" title=""
                                                     data-bs-original-title="View Aliquots" target="_blank"><i
                                                         class="bx bx-vial"></i></a>
+                                                @else
+                                                N/A
+                                                
                                                 @endif
 
                                             </td>

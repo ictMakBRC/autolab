@@ -28,6 +28,9 @@
                                             <a class="dropdown-item {{ $sample_is_for === 'Aliquoting' ? 'active' : '' }}"
                                                 href="javascript: void(0);"
                                                 wire:click="$set('sample_is_for','Aliquoting')">Aliquoting</a>
+                                            <a class="dropdown-item {{ $sample_is_for === 'Storage' ? 'active' : '' }}"
+                                            href="javascript: void(0);"
+                                            wire:click="$set('sample_is_for','Storage')">Storage</a>
 
                                         </div>
                                     </div>
@@ -65,14 +68,11 @@
                                         <th>Requested By</th>
                                         <th>Collected By</th>
                                         <th>For</th>
-                                        <th>
-                                            @if ($sample_is_for == 'Testing')
-                                                Test
-                                            @else
-                                                Aliquot
-                                            @endif
-                                            Count
-                                        </th>
+                                        @if ($sample_is_for == 'Testing')
+                                        <th> TestCount</th>
+                                        @elseif($sample_is_for == 'Aliquoting')
+                                        <th> Aliquot Count</th>
+                                        @endif
                                         <th>Priority</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -110,9 +110,12 @@
                                             <td>
                                                 <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
                                             </td>
-                                            <td>
-                                                {{ $sample->test_count }}
-                                            </td>
+                                            @if ($sample_is_for == 'Testing' || $sample_is_for == 'Aliquoting')
+                                                <td>
+                                                    {{ $sample->test_count }}
+                                                </td>
+                                            @endif
+                                            
                                             @if ($sample->priority == 'Normal')
                                                 <td><span class="badge bg-info">{{ $sample->priority }}</span>
                                                 </td>
@@ -136,6 +139,13 @@
                                                         data-bs-original-title="Assign"><i class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Aliquoting')
+                                                    <a href="javascript: void(0);"
+                                                        wire:click="viewAliquots({{ $sample->id }})" type="button"
+                                                        class="btn btn-outline-success" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Assign"><i class="bi bi-list"></i>
+                                                    </a>
+                                                @elseif($sample->sample_is_for == 'Storage')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
                                                         class="btn btn-outline-success" data-bs-toggle="tooltip"
@@ -273,7 +283,13 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="staticBackdropLabel">Requested Aliquots for sample (<span
+                        <h6 class="modal-title" id="staticBackdropLabel">
+                            @if ($sample_is_for=='Aliquoting')
+                            Requested Aliquots
+                            @else
+                            Assign storage task
+                            @endif
+                            for sample (<span
                                 class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
                                 class="text-info">{{ $lab_no }}</span></h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
@@ -283,6 +299,7 @@
                         <div class="mb-0">
                             <div class="card">
                                 <div class="card-body">
+                                    @if ($sample_is_for=='Aliquoting')
                                     <ul class="list-group">
                                         @foreach ($aliquots as $key => $aliquot)
                                             <li class="list-group-item"><strong
@@ -291,6 +308,8 @@
                                             </li>
                                         @endforeach
                                     </ul>
+                                    @endif
+                                  
                                     @if ($request_acknowledged_by)
                                         <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
                                             <div class="row">

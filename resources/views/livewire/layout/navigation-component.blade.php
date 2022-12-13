@@ -16,6 +16,11 @@
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
                             class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
                 </li>
+                <li class="nav-item {{ request()->segment(1) == 'samplestg' || $navItem == 'samplestg' ? 'active show' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sample-storage" type="button"><i
+                            class="bi bi-archive"></i></button>
+                </li>
 
                 @if (Auth::user()->hasPermission(['manage-users']))
                     <li class="nav-item {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
@@ -38,6 +43,7 @@
                 </li>
             </ul>
         </div>
+
         <div class="textmenu">
             <div class="brand-logo">
                 <a
@@ -154,6 +160,21 @@
                         @endif
                     </div>
                 </div>
+                <div class="tab-pane fade" id="sample-storage">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">Sample Storage</h5>
+                            </div>
+                        </div>
+                        @if (Auth::user()->hasPermission(['manager-access']))
+                            <a href="{{ route('freezer-location') }}" class="list-group-item"><i
+                                    class="bi bi-archive"></i>Freezer Locations</a>
+                                    <a href="{{ route('freezers') }}" class="list-group-item"><i
+                                        class="bi bi-archive"></i>Freezers</a>
+                        @endif
+                    </div>
+                </div>
 
                 @if (Auth::user()->hasPermission(['manage-users']))
                     <div class="tab-pane fade {{ request()->segment(2) == 'usermgt' ? 'active show' : '' }}"
@@ -196,6 +217,7 @@
                         </div>
                     </div>
                 @endif
+
                 @if (Auth::user()->hasPermission(['access-settings']))
                     <div class="tab-pane fade"
                         class="tab-pane fade {{ request()->segment(2) == 'settings' ? 'active show' : '' }}"
