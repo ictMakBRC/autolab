@@ -19,14 +19,13 @@ class SearchResultsController extends Controller
 
     public function sampleSearchResults(Sample $sample)
     {
-        if ($sample->sample_is_for=='Testing') {
+        if ($sample->sample_is_for == 'Testing') {
             $sample->load(['sampleReception', 'sampleReception.facility', 'sampleReception.courier', 'sampleReception.receiver', 'participant',
-            'sampleType', 'requester', 'collector', 'study', 'testResult', 'testResult.test', ]);
-        } elseif($sample->sample_is_for=='Aliquoting') {
+                'sampleType', 'requester', 'collector', 'study', 'testResult', 'testResult.test', ]);
+        } elseif ($sample->sample_is_for == 'Aliquoting') {
             $sample->load(['sampleReception', 'sampleReception.facility', 'sampleReception.courier', 'sampleReception.receiver', 'participant',
-            'aliquots','aliquots.aliquotType', 'requester', 'collector', 'study', 'aliquotingAssignment', 'aliquotingAssignment.performer']);
+                'aliquots', 'aliquots.aliquotType', 'requester', 'collector', 'study', 'aliquotingAssignment', 'aliquotingAssignment.performer', ]);
         }
-        
 
         return view('reports.sample-management.sample-details', compact('sample'));
     }

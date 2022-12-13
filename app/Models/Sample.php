@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\SamplesAliquot;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sample extends Model
 {
@@ -86,6 +85,11 @@ class Sample extends Model
     public function aliquots()
     {
         return $this->hasMany(SamplesAliquot::class, 'parent_id', 'id');
+    }
+
+    public function storage()
+    {
+        return $this->hasOne(SampleStorage::class, 'sample_id', 'id');
     }
 
     public static function boot()

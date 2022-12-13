@@ -2,29 +2,29 @@
 
 namespace App\Http\Livewire\Layout;
 
-use App\Models\Kit;
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Study;
-use App\Models\Sample;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Models\Platform;
-use App\Models\Collector;
-use App\Models\Requester;
 use App\Models\Admin\Test;
+use App\Models\AliquotingAssignment;
+use App\Models\Collector;
+use App\Models\Courier;
+use App\Models\Designation;
+use App\Models\Facility;
+use App\Models\Kit;
 use App\Models\Laboratory;
 use App\Models\Permission;
-use App\Models\SampleType;
-use App\Models\TestResult;
-use App\Models\Designation;
-use App\Models\TestCategory;
-use App\Models\TestAssignment;
+use App\Models\Platform;
+use App\Models\Requester;
+use App\Models\Role;
+use App\Models\Sample;
 use App\Models\SampleReception;
-use App\Models\AliquotingAssignment;
-use Illuminate\Support\Facades\Auth;
+use App\Models\SampleType;
+use App\Models\Study;
+use App\Models\TestAssignment;
+use App\Models\TestCategory;
+use App\Models\TestResult;
+use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class NavigationComponent extends Component
 {
@@ -77,7 +77,7 @@ class NavigationComponent extends Component
     public $testCategoryCount;
 
     public $testCount;
-    
+
     public $rejectedResultsCount;
 
     protected $listeners = ['updateNav'];
@@ -89,8 +89,8 @@ class NavigationComponent extends Component
                 $query->whereRaw('samples_accepted != samples_handled')
                 ->orWhereHas('sample', function (Builder $query) {
                     $query->whereNull('tests_requested')
-                    ->orWhere('test_count',0);
-            });
+                    ->orWhere('test_count', 0);
+                });
             })->count();
         }
 
@@ -102,12 +102,12 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['enter-results'])) {
             $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
             $this->AliquotingAssignedCount = AliquotingAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
-            $this->rejectedResultsCount = TestResult::where(['status'=>'Rejected','performed_by'=> auth()->user()->id,'creator_lab'=>auth()->user()->laboratory_id])->count();
+            $this->rejectedResultsCount = TestResult::where(['status' => 'Rejected', 'performed_by' => auth()->user()->id, 'creator_lab' => auth()->user()->laboratory_id])->count();
         }
 
         if (Auth::user()->hasPermission(['assign-test-requests'])) {
             $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting'])->whereIn('status', ['Accessioned', 'Processing'])->whereNotNull('tests_requested')
-            ->where('test_count','>',0)->count();
+            ->where('test_count', '>', 0)->count();
         }
 
         if (Auth::user()->hasPermission(['review-results'])) {
@@ -131,7 +131,6 @@ class NavigationComponent extends Component
         }
 
         if (Auth::user()->hasPermission(['access-settings'])) {
-
             $this->designationCount = Designation::where('is_active', 1)->count();
             $this->facilityCount = Facility::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->count(); //depends
             $this->studyCount = Study::where('is_active', 1)->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->count(); //depends

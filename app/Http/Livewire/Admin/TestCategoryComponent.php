@@ -57,26 +57,24 @@ class TestCategoryComponent extends Component
         ->where('category_name', $this->category_name)
         ->where('creator_lab', auth()->user()->laboratory_id)
         ->exists();
-        if ($isExist) {           
+        if ($isExist) {
             $this->category_name = '';
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Test Category name already exists!']);
-        }
-        
-        else{
+        } else {
             $this->validate([
                 'category_name' => 'required',
                 'description' => 'required',
             ]);
-        $TestCategory = new TestCategory();
-        $TestCategory->category_name = $this->category_name;
-        $TestCategory->description = $this->description;
-        $TestCategory->save();
+            $TestCategory = new TestCategory();
+            $TestCategory->category_name = $this->category_name;
+            $TestCategory->description = $this->description;
+            $TestCategory->save();
 
-        $this->description = '';
-        $this->category_name = '';
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Category data created successfully!']);
+            $this->description = '';
+            $this->category_name = '';
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Category data created successfully!']);
         }
     }
 

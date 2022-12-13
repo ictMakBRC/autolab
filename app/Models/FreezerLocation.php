@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Freezer;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FreezerLocation extends Model
 {
@@ -24,8 +23,9 @@ class FreezerLocation extends Model
         ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = ['name', 'description', 'is_active', 'created_by'];
-    
+
     public function freezers()
     {
         return $this->hasMany(Freezer::class);

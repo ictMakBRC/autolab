@@ -2,27 +2,38 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Sample;
-use App\Models\Freezer;
-use Livewire\Component;
-use App\Models\SampleStorage;
 use App\Models\AliquotingAssignment;
+use App\Models\Freezer;
+use App\Models\Sample;
+use App\Models\SampleStorage;
+use Livewire\Component;
 
 class StoreSamplesComponent extends Component
 {
     public $sample;
+
     public $sample_id;
+
     public $sample_identity;
+
     public $lab_no;
 
     public $barcode;
+
     public $freezer_id;
+
     public $section_id;
+
     public $rack_id;
+
     public $drawer_id;
+
     public $box_id;
+
     public $box_column;
+
     public $box_row;
+
     public $comment;
 
     protected $validationAttributes = [
@@ -61,15 +72,16 @@ class StoreSamplesComponent extends Component
         $storage->box_row = $this->box_row;
         $storage->save();
 
-        $this->sample->update(['status'=>'Stored']);
-        AliquotingAssignment::where('sample_id',$this->sample_id)->update(['comment'=>$this->comment,'status'=>'Stored']);
+        $this->sample->update(['status' => 'Stored']);
+        AliquotingAssignment::where('sample_id', $this->sample_id)->update(['comment' => $this->comment, 'status' => 'Stored']);
 
         redirect()->route('test-request');
     }
-    
+
     public function render()
     {
         $freezers = Freezer::with('location')->get();
-        return view('livewire.lab.sample-management.store-samples-component',compact('freezers'));
+
+        return view('livewire.lab.sample-management.store-samples-component', compact('freezers'));
     }
 }

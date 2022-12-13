@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Lab\SampleStorage;
 
-use Exception;
+use App\Exports\FreezersExport;
 use App\Models\Freezer;
+use App\Models\FreezerLocation;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Exports\FreezersExport;
-use App\Models\FreezerLocation;
-use Illuminate\Support\Facades\Auth;
 
 class FreezersComponent extends Component
 {
@@ -23,10 +23,15 @@ class FreezersComponent extends Component
     public $orderAsc = true;
 
     public $freezer_location_id;
+
     public $name;
+
     public $type;
+
     public $temp;
+
     public $description;
+
     public $is_active;
 
     public $edit_id;
@@ -34,6 +39,7 @@ class FreezersComponent extends Component
     public $delete_id;
 
     protected $paginationTheme = 'bootstrap';
+
     public $toggleForm = false;
 
     protected $validationAttributes = [
@@ -50,7 +56,7 @@ class FreezersComponent extends Component
             'type' => 'required',
             'temp' => 'required',
             'is_active' => 'required',
-            
+
         ]);
     }
 
@@ -93,7 +99,7 @@ class FreezersComponent extends Component
         $this->type = $freezer->type;
         $this->temp = $freezer->temp;
         $this->description = $freezer->description;
-        $this->freezer_location_id=$freezer->freezer_location_id;
+        $this->freezer_location_id = $freezer->freezer_location_id;
         $this->is_active = $freezer->is_active;
         $this->toggleForm = true;
     }
@@ -105,7 +111,7 @@ class FreezersComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['name','type','temp','description','is_active','freezer_location_id']);
+        $this->reset(['name', 'type', 'temp', 'description', 'is_active', 'freezer_location_id']);
     }
 
     public function updateFreezer()
@@ -171,8 +177,9 @@ class FreezersComponent extends Component
         $freezers = Freezer::search($this->search)->with('location')
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        
+
         $freezerLocations = FreezerLocation::select('id', 'name')->get();
-        return view('livewire.lab.sample-storage.freezers-component',compact('freezers','freezerLocations'));
+
+        return view('livewire.lab.sample-storage.freezers-component', compact('freezers', 'freezerLocations'));
     }
 }

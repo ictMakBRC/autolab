@@ -4,14 +4,14 @@ namespace App\Exports;
 
 use App\Models\Sample;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithProperties;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithStyles,WithProperties
+class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithStyles, WithProperties
 {
     use Exportable;
 
@@ -31,15 +31,15 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
     public function properties(): array
     {
         return [
-            'creator'        => auth()->user()->fullName,
+            'creator' => auth()->user()->fullName,
             'lastModifiedBy' => 'Autolab',
-            'title'          => 'Samples',
-            'description'    => 'Samples export',
-            'subject'        => 'Samples Export',
-            'keywords'       => 'Autolab exports',
-            'category'       => 'Autolab Exports',
-            'manager'        => 'MakBRC IT TEAM',
-            'company'        => 'Makerere University Biomedical Research Centre',
+            'title' => 'Samples',
+            'description' => 'Samples export',
+            'subject' => 'Samples Export',
+            'keywords' => 'Autolab exports',
+            'category' => 'Autolab Exports',
+            'manager' => 'MakBRC IT TEAM',
+            'company' => 'Makerere University Biomedical Research Centre',
         ];
     }
 
@@ -76,7 +76,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
             'Lab No',
             'Facility',
             'Study',
-            'Sample Was For'
+            'Sample Was For',
         ];
     }
 
@@ -84,7 +84,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings,WithSty
     {
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true]],
+            1 => ['font' => ['bold' => true]],
         ];
     }
 }
