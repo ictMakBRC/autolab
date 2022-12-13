@@ -167,7 +167,7 @@
                                 <h5 class="mb-0">Sample Storage</h5>
                             </div>
                         </div>
-                        @if (Auth::user()->hasPermission(['manager-access']))
+                        @if (Auth::user()->hasPermission(['access-settings']))
                             <a href="{{ route('freezer-location') }}" class="list-group-item"><i
                                     class="bi bi-archive"></i>Freezer Locations</a>
                                     <a href="{{ route('freezers') }}" class="list-group-item"><i
