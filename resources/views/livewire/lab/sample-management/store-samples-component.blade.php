@@ -18,7 +18,16 @@
                 <div class="card-body">
                     <form wire:submit.prevent="storeSample">
                         <div class="row">
-                            <div class="mb-2 col-md-5">
+                            <div class="mb-2 col-md-2">
+                                <label for="barcode" class="form-label">Sample Barcode</label>
+                                <input type="text" wire:model.lazy="barcode"class="form-control" placeholder="{{ __('barcode') }}">
+
+                                @error('barcode')
+                                    <div class="text-danger text-small">
+                                        {{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-2 col-md-3">
                                 <label for="freezer_id" class="form-label">{{ __('Freezer ->(Room)') }}</label>
                                 <select wire:model='freezer_id' class="form-select" id="freezer_id">
                                     <option selected value="">Select</option>

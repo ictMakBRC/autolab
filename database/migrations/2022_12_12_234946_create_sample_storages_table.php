@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('sample_storages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sample_id');
+            $table->string('barcode')->nullable();
             $table->unsignedBigInteger('freezer_id');
             $table->unsignedBigInteger('section_id')->nullable();
             $table->unsignedBigInteger('rack_id')->nullable();

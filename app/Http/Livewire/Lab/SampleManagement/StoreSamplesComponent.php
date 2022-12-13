@@ -15,6 +15,7 @@ class StoreSamplesComponent extends Component
     public $sample_identity;
     public $lab_no;
 
+    public $barcode;
     public $freezer_id;
     public $section_id;
     public $rack_id;
@@ -50,6 +51,7 @@ class StoreSamplesComponent extends Component
     {
         $storage = new SampleStorage();
         $storage->sample_id = $this->sample_id;
+        $storage->barcode = $this->barcode;
         $storage->freezer_id = $this->freezer_id;
         $storage->section_id = $this->section_id;
         $storage->rack_id = $this->rack_id;

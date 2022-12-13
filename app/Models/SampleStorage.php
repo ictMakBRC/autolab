@@ -12,7 +12,7 @@ class SampleStorage extends Model
 {
     use HasFactory,LogsActivity;
 
-    protected $fillable = ['sample_id','freezer_id', 'section_id', 'rack_id','drawer_id','box_id','box_column','box_row','creator_lab','created_by'];
+    protected $fillable = ['barcode','sample_id','freezer_id', 'section_id', 'rack_id','drawer_id','box_id','box_column','box_row','creator_lab','created_by'];
 
     public function getActivitylogOptions(): LogOptions
     {
