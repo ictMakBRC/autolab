@@ -97,6 +97,12 @@
         <!--end row-->
 
         <hr>
+        <div class="row row-cols-1 row-cols-lg-3">
+            <div class="col"><b>Kit Used:</b> {{ $testResult->kit->name ?? 'N/A' }}</div>
+            <div class="col"><b>Verified Kit Lot:</b> {{ $testResult->verified_lot ?? 'N/A' }}</div>
+            <div class="col"><b>Kit Expiry Date:</b> {{ $testResult->kit_expiry_date ?? 'N/A' }}</div>
+        </div>
+        <hr>
         <div class="my-3">
             <div class="row row-cols-1 row-cols-lg-3">
                 <div class="col">
