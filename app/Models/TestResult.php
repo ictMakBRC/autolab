@@ -45,6 +45,10 @@ class TestResult extends Model
         'download_count',
         'created_by',
         'creator_lab',
+        'kit_id',
+        'platform_id',
+        'verified_lot',
+        'kit_expiry_date',
     ];
 
     public function sample()
@@ -55,6 +59,10 @@ class TestResult extends Model
     public function test()
     {
         return $this->belongsTo(Test::class, 'test_id', 'id');
+    }
+    public function kit()
+    {
+        return $this->belongsTo(Kit::class, 'kit_id', 'id');
     }
 
     public function performer()
