@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Admin\Test;
+use App\Models\Kit;
 use App\Models\Sample;
 use App\Models\TestAssignment;
 use App\Models\TestResult;
@@ -42,6 +43,8 @@ class AttachTestResultComponent extends Component
     public $sample_identity;
 
     public $lab_no;
+
+    public $kit_expiry_date, $verified_lot, $kit_id;
 
     public function mount($id)
     {
@@ -114,6 +117,9 @@ class AttachTestResultComponent extends Component
         $testResult->attachment = $this->attachmentPath;
         $testResult->performed_by = $this->performed_by;
         $testResult->comment = $this->comment;
+        $testResult->kit_id = $this->kit_id;
+        $testResult->verified_lot = $this->verified_lot;
+        $testResult->kit_expiry_date = $this->kit_expiry_date;
         $testResult->status = 'Pending Review';
 
         $testResult->save();
@@ -156,9 +162,10 @@ class AttachTestResultComponent extends Component
 
     public function render()
     {
-        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
-        $testsRequested = $this->requestedTests ?? collect();
+        $data['users'] = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
+        $data['testsRequested'] = $this->requestedTests ?? collect();
+        $data['kits'] = Kit::where('is_active', 1)->get();
 
-        return view('livewire.lab.sample-management.attach-test-result-component', compact('users', 'testsRequested'));
+        return view('livewire.lab.sample-management.attach-test-result-component', $data);
     }
 }
