@@ -41,7 +41,7 @@ class TestReviewComponent extends Component
         $testResult->reviewed_at = now();
         $testResult->status = 'Reviewed';
         $testResult->reviewer_comment = $this->reviewer_comment;
-        $testResult->approver_comment =null;
+        $testResult->approver_comment = null;
         $testResult->update();
         $this->emit('updateNav', 'testsPendindReviewCount');
 
@@ -70,7 +70,7 @@ class TestReviewComponent extends Component
 
     public function viewPreliminaryReport(TestResult $testResult)
     {
-        $this->testResult=$testResult;
+        $this->testResult = $testResult;
         $this->viewReport = true;
     }
 

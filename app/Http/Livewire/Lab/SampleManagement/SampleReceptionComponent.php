@@ -9,6 +9,7 @@ use App\Models\SampleReception;
 use App\Models\Study;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -173,7 +174,7 @@ class SampleReceptionComponent extends Component
     {
         $this->couriers = collect([]);
         $this->studies = collect([]);
-        $this->received_by=auth()->user()->id;
+        $this->received_by = auth()->user()->id;
     }
 
     public function storeData()
@@ -373,6 +374,13 @@ class SampleReceptionComponent extends Component
 
         $sampleReceptions = SampleReception::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)
+        ->where(function (Builder $query) {
+            $query->whereRaw('samples_accepted != samples_handled')
+            ->orWhereHas('sample', function (Builder $query) {
+                $query->whereNull('tests_requested')
+                ->orWhere('test_count', 0);
+            });
+        })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->simplePaginate($this->perPage);
 

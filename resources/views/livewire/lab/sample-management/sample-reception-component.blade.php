@@ -29,12 +29,12 @@
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                            @if (Auth::user()->hasPermission(['create-reception-info']))
+                                            {{-- @if (Auth::user()->hasPermission(['accession-samples']))
                                                 <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
                                                     data-bs-target="#addFacility">Add Facility</a>
                                                 <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
                                                     data-bs-target="#addCourier">Add Courier</a>
-                                            @endif
+                                            @endif --}}
                                             <a class="dropdown-item" href="javascript:;" wire:click="close()">Reset
                                                 form</a>
                                         </div>
@@ -197,7 +197,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($sampleReceptions as $key => $sampleReception)
-                                        @if ($sampleReception->samples_accepted != $sampleReception->samples_handled)
+                                        {{-- @if ($sampleReception->samples_accepted != $sampleReception->samples_handled) --}}
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
@@ -241,7 +241,7 @@
                                                                 class="bi bi-pencil-square"></i></a>
                                                     @endif
 
-                                                    @if ($sampleReception->samples_handled == 0 && Auth::user()->hasPermission(['create-reception-info']))
+                                                    @if ($sampleReception->samples_handled == 0 && Auth::user()->hasPermission(['accession-samples']))
                                                         <a href="javascript: void(0);" data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom" title=""
                                                             data-bs-original-title="Delete Record"
@@ -251,7 +251,7 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endif
+                                        {{-- @endif --}}
                                     @empty
                                     @endforelse
                                 </tbody>
@@ -376,7 +376,7 @@
             </div>
 
             {{-- ADD FACILITY --}}
-            <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static"
+            {{-- <div wire:ignore.self class="modal fade" id="addFacility" data-bs-backdrop="static"
                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -446,10 +446,10 @@
                         </div>
                     </div> <!-- end modal content-->
                 </div> <!-- end modal dialog-->
-            </div> <!-- end modal-->
+            </div> <!-- end modal--> --}}
 
             {{-- ADD COURIER --}}
-            <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static"
+            {{-- <div wire:ignore.self class="modal fade" id="addCourier" data-bs-backdrop="static"
                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -539,15 +539,15 @@
                         </div>
                     </div> <!-- end modal content-->
                 </div> <!-- end modal dialog-->
-            </div> <!-- end modal-->
+            </div> <!-- end modal--> --}}
         @endif
 
         @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
                     $('#show-data').modal('hide');
-                    $('#addFacility').modal('hide');
-                    $('#addCourier').modal('hide');
+                    // $('#addFacility').modal('hide');
+                    // $('#addCourier').modal('hide');
                     $('#delete_modal').modal('hide');
                     $('#show-delete-confirmation-modal').modal('hide');
                 });

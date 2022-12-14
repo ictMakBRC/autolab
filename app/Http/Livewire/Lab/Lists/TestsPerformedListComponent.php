@@ -9,6 +9,7 @@ use App\Models\Sample;
 use App\Models\SampleType;
 use App\Models\Study;
 use App\Models\TestResult;
+use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -24,6 +25,12 @@ class TestsPerformedListComponent extends Component
     public $sampleType;
 
     public $test_id;
+
+    public $performed_by = 0;
+
+    public $reviewed_by = 0;
+
+    public $approved_by = 0;
 
     public $from_date = '';
 
@@ -116,6 +123,21 @@ class TestsPerformedListComponent extends Component
                     }, function ($query) {
                         return $query;
                     })
+                    ->when($this->performed_by != 0, function ($query) {
+                        $query->where('performed_by', $this->performed_by);
+                    }, function ($query) {
+                        return $query;
+                    })
+                    ->when($this->reviewed_by != 0, function ($query) {
+                        $query->where('reviewed_by', $this->reviewed_by);
+                    }, function ($query) {
+                        return $query;
+                    })
+                    ->when($this->approved_by != 0, function ($query) {
+                        $query->where('approved_by', $this->approved_by);
+                    }, function ($query) {
+                        return $query;
+                    })
                     ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                         $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
                     }, function ($query) {
@@ -141,12 +163,13 @@ class TestsPerformedListComponent extends Component
 
     public function render()
     {
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->orderBy('name', 'asc')->get();
         $testResults = $this->filterTests()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests'));
+        return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests', 'users'));
     }
 }

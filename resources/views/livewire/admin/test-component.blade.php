@@ -15,7 +15,7 @@
                                     @endif
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-info" wire:click="refresh()"
+                                    <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                     <div class="btn-group">
@@ -43,8 +43,7 @@
                             <div class="row">
                                 <div class="mb-2 col-md-2">
                                     <label for="category" class="form-label">{{ __('Category') }}</label>
-                                    <select wire:model='category_id' class="form-select" id="category"
-                                        wire:model="category_id">
+                                    <select wire:model='category_id' class="form-select" id="category">
                                         <option selected value="">Select</option>
                                         @foreach ($testCategories as $category)
                                             <option value="{{ $category->id }}">{{ $category->category_name }}</option>
@@ -289,6 +288,12 @@
                                                     title="" data-bs-original-title="Edit Test"
                                                     class="action-ico btn btn-outline-danger mx-1"> <i
                                                         class="bi bi-pencil-square"></i></a>
+                                                @if (Auth::user()->hasPermission(['master-access']))
+                                                    <a href="javascript:;"
+                                                        class="action-ico btn btn-outline-danger mx-1"
+                                                        wire:click="deleteConfirmation({{ $test->id }})"
+                                                        ><i class="bi bi-trash-fill"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -324,7 +329,7 @@
                         <h6>Are you sure you want to delete this Record?</h6>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-primary" wire:click="cancel()" data-bs-dismiss="modal"
+                        <button class="btn btn-sm btn-success" wire:click="cancel()" data-bs-dismiss="modal"
                             aria-label="Close">Cancel</button>
                         <button class="btn btn-sm btn-danger" wire:click="deleteData()">Yes! Delete</button>
                     </div>
@@ -332,25 +337,14 @@
             </div>
         </div>
 
-
-
-
         @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
-                    $('#show-data').modal('hide');
-                    $('#addFacility').modal('hide');
-                    $('#addCourier').modal('hide');
                     $('#delete_modal').modal('hide');
-                    $('#show-delete-confirmation-modal').modal('hide');
                 });
 
                 window.addEventListener('delete-modal', event => {
                     $('#delete_modal').modal('show');
-                });
-
-                window.addEventListener('show-modal', event => {
-                    $('#show-data').modal('show');
                 });
             </script>
         @endpush

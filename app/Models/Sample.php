@@ -77,6 +77,21 @@ class Sample extends Model
         return $this->hasMany(TestAssignment::class, 'sample_id', 'id');
     }
 
+    public function aliquotingAssignment()
+    {
+        return $this->hasOne(AliquotingAssignment::class, 'sample_id', 'id');
+    }
+
+    public function aliquots()
+    {
+        return $this->hasMany(SamplesAliquot::class, 'parent_id', 'id');
+    }
+
+    public function storage()
+    {
+        return $this->hasOne(SampleStorage::class, 'sample_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

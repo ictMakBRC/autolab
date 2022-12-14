@@ -8,13 +8,14 @@
                             <div class="col-sm-12 mt-3">
                                 <div class="d-sm-flex align-items-center">
                                     <h5 class="mb-2 mb-sm-0">
-                                        Tests Performed
+                                        Tests Performed (<strong class="text-danger">{{ count($resultIds) }}</strong>)
                                     </h5>
                                     <div class="ms-auto">
-                                        @if (count($combinedResultsList)>=2)
-                                        <a href="javascript:;" class="btn btn-sm btn-info me-2" wire:click='combinedTestResultsReport'><i class="bi bi-list"></i>
-                                            Combined Test Report
-                                        </a>
+                                        @if (count($combinedResultsList) >= 2)
+                                            <a href="javascript:;" class="btn btn-sm btn-info me-2"
+                                                wire:click='combinedTestResultsReport'><i class="bi bi-list"></i>
+                                                Combined Test Report
+                                            </a>
                                         @endif
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
                                                 class="bi bi-file-earmark-fill"></i> Export</a>
@@ -39,9 +40,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('facility_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="study" class="form-label">Study</label>
@@ -52,54 +50,74 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('study_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="sampleType" class="form-label">Sample Type</label>
-                                        <select class="form-select" id="sampleType"
-                                        wire:model='sampleType'>
-                                        <option selected value="0">All</option>
-                                        @foreach ($sampleTypes as $sampleType)
-                                            <option value='{{ $sampleType->id }}'>
-                                                {{ $sampleType->type }}</option>
-                                        @endforeach
-                                    </select>
-                                        @error('job')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
+                                        <select class="form-select" id="sampleType" wire:model='sampleType'>
+                                            <option selected value="0">All</option>
+                                            @foreach ($sampleTypes as $sampleType)
+                                                <option value='{{ $sampleType->id }}'>
+                                                    {{ $sampleType->type }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="test_id" class="form-label">Test</label>
-                                        <select class="form-select" id="test_id"
-                                        wire:model='test_id'>
-                                        <option selected value="0">All</option>
-                                        @foreach ($tests as $test)
-                                            <option value='{{ $test->id }}'>
-                                                {{ $test->name }}</option>
-                                        @endforeach
-                                    </select>
-                                        @error('test')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
+                                        <select class="form-select" id="test_id" wire:model='test_id'>
+                                            <option selected value="0">All</option>
+                                            @foreach ($tests as $test)
+                                                <option value='{{ $test->id }}'>
+                                                    {{ $test->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
+                                    <div class="mb-3 col-md-2">
+                                        <label for="performed_by" class="form-label">Performed By</label>
+                                        <select class="form-select" id="performed_by" wire:model='performed_by'>
+                                            @if (Auth::user()->hasPermission('manager-access|master-access'))
+                                                <option selected value="0">All</option>
+                                                @foreach ($users as $user)
+                                                    <option value='{{ $user->id }}'>
+                                                        {{ $user->fullName }}</option>
+                                                @endforeach
+                                            @else
+                                                <option selected value="{{ auth()->user()->id }}">
+                                                    {{ auth()->user()->fullName }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="reviewed_by" class="form-label">Reviewed By</label>
+                                        <select class="form-select" id="reviewed_by" wire:model='reviewed_by'>
+                                            <option selected value="0">All</option>
+                                            @foreach ($users as $user)
+                                                <option value='{{ $user->id }}'>
+                                                    {{ $user->fullName }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="approved_by" class="form-label">Approved By</label>
+                                        <select class="form-select" id="approved_by" wire:model='approved_by'>
+                                            <option selected value="0">All</option>
+                                            @foreach ($users as $user)
+                                                <option value='{{ $user->id }}'>
+                                                    {{ $user->fullName }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"
                                             wire:model="from_date">
-                                        @error('from_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="to_date" class="form-label">End Date</label>
                                         <input id="to_date" type="date" class="form-control" wire:model="to_date">
-                                        @error('to_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
-                                    <div class="mb-3 col-md-2">
+                                    <div class="mb-3 col-md-1">
                                         <label for="perPage" class="form-label">Per Page</label>
                                         <select wire:model="perPage" class="form-select" id="perPage">
                                             <option value="10">10</option>
@@ -113,7 +131,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="mb-3 col-md-2">
+                                    <div class="mb-3 col-md-1">
                                         <label for="orderBy" class="form-label">OrderBy</label>
                                         <select wire:model="orderBy" class="form-select">
                                             <option value="approved_at">Latest</option>
@@ -131,8 +149,10 @@
                                 <!-- end row-->
                             </form>
                         </div>
-                        @if (count($combinedResultsList)>=2)
-                        You have selected <strong class="text-success">{{ count($combinedResultsList) }}</strong> Test Results(s) for the combined Result report (<a href="javascript:;" class="text-info" wire:click="$set('combinedResultsList',[])">Clear All</a>)
+                        @if (count($combinedResultsList) >= 2)
+                            You have selected <strong class="text-success">{{ count($combinedResultsList) }}</strong>
+                            Test Results(s) for the combined Result report (<a href="javascript:;" class="text-danger fw-bold"
+                                wire:click="$set('combinedResultsList',[])">Clear All</a>)
                         @endif
                     </div>
 
@@ -148,7 +168,9 @@
                                         <th>Study</th>
                                         <th>Participant ID</th>
                                         <th>Sample</th>
+                                        <th>Lab No</th>
                                         <th>Test</th>
+                                        <th>TAT(HR<->MIN)</th>
                                         <th>Requester</th>
                                         <th>Result Date</th>
                                         <th>Status</th>
@@ -187,12 +209,17 @@
                                             <td>
                                                 {{ $testResult->sample->sampleType->type }}
                                             </td>
-
+                                            <td class="text-success fw-bold">
+                                                {{ $testResult->sample->lab_no ?? 'N/A' }}
+                                            </td>
                                             <td>
                                                 {{ $testResult->test->name }}
-                                                <input type="checkbox" value="{{$testResult->id}}" class="me-2 float-end" wire:model="combinedResultsList">
+                                                <input type="checkbox" value="{{ $testResult->id }}"
+                                                    class="me-2 float-end" wire:model="combinedResultsList">
                                             </td>
-
+                                            <td>
+                                                <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
+                                            </td>
                                             <td>
                                                 {{ $testResult->sample->requester->name }}
                                             </td>
@@ -231,10 +258,10 @@
 
     </div>
     @push('scripts')
-    <script>
-        window.addEventListener('loadCombinedTestResultsReport', event => {
-            window.open(`${event.detail.url}`, '_blank').focus();
-        });
-    </script>
-@endpush
+        <script>
+            window.addEventListener('loadCombinedTestResultsReport', event => {
+                window.open(`${event.detail.url}`, '_blank').focus();
+            });
+        </script>
+    @endpush
 </div>

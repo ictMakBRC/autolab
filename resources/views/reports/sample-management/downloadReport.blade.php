@@ -61,7 +61,7 @@
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
     <div class="row">
-        <img src="{{ asset('autolab-assets/images/headers/header.png') }}" alt="Makerere University Logo" width="100%"
+        <img src="{{ asset('autolab-assets/images/headers/header-min.png') }}" alt="Makerere University Logo" width="100%"
             style="vertical-align:middle;"
             onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';">
         <h4 style="text-align:center; font-family:times; color:crimson">
@@ -121,7 +121,7 @@
             <tbody>
                 <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 10px; margin-bottom: 10px">
                     <td class="btop"><strong>Collection Date:</strong> <br>
-                        {{ date('d-m-Y H:i', strtotime($testResult->sample->date_collected ?? 'N/A')) }}</td>
+                        {{$testResult->sample->date_collected?date('d-m-Y H:i', strtotime($testResult->sample->date_collected)):'N/A'}}</td>
                     <td class="btop" style="text-align: center"><strong>Date received:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>

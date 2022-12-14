@@ -8,7 +8,7 @@
                             <div class="col-sm-12 mt-3">
                                 <div class="d-sm-flex align-items-center">
                                     <h5 class="mb-2 mb-sm-0">
-                                        Samples
+                                        Samples (<strong class="text-danger">{{ count($sampleIds) }}</strong>)
                                     </h5>
                                     <div class="ms-auto">
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i
@@ -34,9 +34,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('facility_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="study" class="form-label">Study</label>
@@ -47,9 +44,6 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('study_id')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="job" class="form-label">Sample State</label>
@@ -61,40 +55,41 @@
                                             @empty
                                             @endforelse
                                         </select>
-                                        @error('job')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
 
                                     <div class="mb-3 col-md-2">
                                         <label for="sampleType" class="form-label">Sample Type</label>
-                                        <select class="form-select" id="sampleType"
-                                        wire:model='sampleType'>
-                                        <option selected value="0">All</option>
-                                        @foreach ($sampleTypes as $sampleType)
-                                            <option value='{{ $sampleType->id }}'>
-                                                {{ $sampleType->type }}</option>
-                                        @endforeach
-                                    </select>
-                                        @error('sampleType')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
+                                        <select class="form-select" id="sampleType" wire:model='sampleType'>
+                                            <option selected value="0">All</option>
+                                            @foreach ($sampleTypes as $sampleType)
+                                                <option value='{{ $sampleType->id }}'>
+                                                    {{ $sampleType->type }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-
+                                    <div class="mb-3 col-md-2">
+                                        <label for="created_by" class="form-label">Accessioned By</label>
+                                        <select class="form-select" id="created_by" wire:model='created_by'>
+                                            @if (Auth::user()->hasPermission('manager-access|master-access'))
+                                                <option selected value="0">All</option>
+                                                @foreach ($users as $user)
+                                                    <option value='{{ $user->id }}'>
+                                                        {{ $user->fullName }}</option>
+                                                @endforeach
+                                            @else
+                                                <option selected value="{{ auth()->user()->id }}">
+                                                    {{ auth()->user()->fullName }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="from_date" class="form-label">Start Date</label>
                                         <input id="from_date" type="date" class="form-control"
                                             wire:model="from_date">
-                                        @error('from_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="to_date" class="form-label">End Date</label>
                                         <input id="to_date" type="date" class="form-control" wire:model="to_date">
-                                        @error('to_date')
-                                            <div class="text-danger text-small">{{ $message }}</div>
-                                        @enderror
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="perPage" class="form-label">Per Page</label>
@@ -185,30 +180,40 @@
                                                 @if ($sample->sample_is_for == 'Testing')
                                                     <span class="badge bg-success">{{ $sample->sample_is_for }}</span>
                                                 @elseif($sample->sample_is_for == 'Deffered')
-                                                    <span class="badge bg-warning">{{ $sample->sample_is_for }}</span>
-                                                @else
+                                                    <span class="badge bg-danger">{{ $sample->sample_is_for }}</span>
+                                                @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <span class="badge bg-info">{{ $sample->sample_is_for }}</span>
+                                                @else
+                                                    <span class="badge bg-warning">{{ $sample->sample_is_for }}</span>
                                                 @endif
                                             </td>
                                             <td class="table-action">
                                                 @if ($sample->sample_is_for == 'Deffered')
-                                                {{-- <a href="javascript: void(0);"
-                                                class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                data-bs-placement="bottom" title=""
-                                                data-bs-original-title="Recall for Testing" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
-                                                    ></i></a> --}}
-
-                                                <button class="btn btn-outline-success" wire:click="recallSampleConfirmation({{ $sample->id }})"><i   class="bi bi-arrow-90deg-left"
-                                                    ></i></button>
+                                                    <button class="btn btn-outline-danger"
+                                                        wire:click="recallSampleConfirmation({{ $sample->id }})"><i
+                                                            class="bi bi-arrow-90deg-left"></i></button>
                                                 @elseif($sample->sample_is_for == 'Testing')
                                                     <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
-                                                        type="button" class="btn btn-outline-info"
+                                                        type="button" class="btn btn-outline-success"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View Details"
                                                         target="_blank"><i class="bi bi-eye"></i>
                                                     </a>
+                                                @elseif($sample->sample_is_for == 'Aliquoting')
+                                                    <a href="{{ URL::signedRoute('sample-search-results', $sample->id) }}"
+                                                        type="button" class="btn btn-outline-info"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="View Aliquots"
+                                                        target="_blank"><i class="bi bi-hourglass-split"></i></a>
                                                 @else
-                                                    N/A
+                                                    <a href="javascript:;"
+                                                        class="action-ico btn btn-outline-warning mx-1"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Storage Details"
+                                                        aria-label="Views"
+                                                        wire:click="storageDetails({{ $sample->id }})"
+                                                        data-bs-target="#storage-details"><i
+                                                            class="bx bx-archive"></i></a>
                                                 @endif
 
                                             </td>
@@ -258,10 +263,84 @@
         </div>
     </div>
 
+    {{-- VIEW STORAGE DETAILS --}}
+    <div wire:ignore.self class="modal fade" id="storage-details" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            @if ($sample != null)
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Sample (<span
+                                class="text-info">{{ $sample_identity ?? 'N/A' }}</span>) Storage Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                            wire:click="cancel()"></button>
+                    </div> <!-- end modal header -->
+                    <div class="modal-body">
+                        <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3">
+                            <div class="col-md-7">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-box bg-light-primary border-0">
+                                        <i class="bi bi-archive text-success"></i><i
+                                            class='bx bxs-vial text-success'></i>
+                                    </div>
+                                    <div class="info">
+                                        <p class="mb-1"><strong>Barcode</strong> : {{ $barcode ?? 'N/A' }}
+                                        </p>
+                                        <p class="mb-1"><strong>Location</strong> :
+                                            {{ $freezer_location ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Freezer</strong> :
+                                            {{ $freezer ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Freezer Temp</strong> :
+                                            {{ $temp ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Section/Compartment</strong> :
+                                            {{ $section_id ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Racker/Column</strong> :
+                                            {{ $rack_id ?? 'N/A' }}</p>
+
+                                        <p class="mb-1"><strong>Drawer</strong> :
+                                            {{ $drawer_id ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Box</strong> :
+                                            {{ $box_id ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Well</strong> :
+                                            {{ $box_column . $box_row }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="card border shadow-none radius-10">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="icon-box bg-light-primary border-0">
+                                                <i class="bi bi-person text-success"></i>
+                                            </div>
+                                            <div class="info">
+                                                <h6 class="mb-2">Stored By</h6>
+                                                <p class="mb-1"><strong>Name</strong> : {{ $stored_by }}</p>
+                                                <p class="mb-1"><strong>Date</strong> : {{ $date_stored }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--end row-->
+
+                    </div>
+                </div> <!-- end modal content-->
+            @endif
+        </div> <!-- end modal dialog-->
+    </div> <!-- end modal-->
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
                 $('#recall-confirmation-modal').modal('hide');
+                $('#storage-details').modal('hide');
+            });
+
+            window.addEventListener('show-storage-details', event => {
+                $('#storage-details').modal('show');
             });
 
             window.addEventListener('recall-confirmation', event => {

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Admin\Test;
 use App\Models\Sample;
+use App\Models\SampleType;
 use App\Models\TestAssignment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,11 @@ class TestRequestComponent extends Component
 
     public $orderAsc = true;
 
+    public $sample_is_for = 'Testing';
+
     public $tests_requested;
+
+    public $aliquots;
 
     public $request_acknowledged_by;
 
@@ -44,6 +49,7 @@ class TestRequestComponent extends Component
     public function mount()
     {
         $this->tests_requested = collect([]);
+        $this->aliquots = collect([]);
     }
 
     public function refresh()
@@ -65,6 +71,18 @@ class TestRequestComponent extends Component
         $this->dispatchBrowserEvent('view-tests');
     }
 
+    public function viewAliquots(Sample $sample)
+    {
+        $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->get();
+        $this->aliquots = $aliquots;
+        $this->sample_identity = $sample->sample_identity;
+        $this->lab_no = $sample->lab_no;
+        $this->request_acknowledged_by = $sample->request_acknowledged_by;
+        $this->sample_id = $sample->id;
+
+        $this->dispatchBrowserEvent('view-tests');
+    }
+
     public function acknowledgeRequest(Sample $sample)
     {
         $sample->request_acknowledged_by = Auth::id();
@@ -77,17 +95,24 @@ class TestRequestComponent extends Component
     public function close()
     {
         $this->tests_requested = collect([]);
+        $this->aliquots = collect([]);
         $this->reset(['sample_id', 'sample_identity', 'lab_no', 'request_acknowledged_by']);
     }
 
     public function render()
     {
-        $samples = Sample::search($this->search, ['Assigned'])
-        ->whereIn('status', ['Assigned'])
-        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])
+        $samples = Sample::search($this->search, ['Assigned', 'Processing'])
+        ->whereIn('status', ['Assigned', 'Processing'])
+        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-        ->whereHas('testAssignment', function (Builder $query) {
-            $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+        ->when($this->sample_is_for == 'Testing', function ($query) {
+            $query->whereHas('testAssignment', function (Builder $query) {
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+            });
+        }, function ($query) {
+            $query->whereHas('aliquotingAssignment', function (Builder $query) {
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
+            });
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);

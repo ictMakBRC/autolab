@@ -7,6 +7,7 @@ use App\Models\Facility;
 use App\Models\Sample;
 use App\Models\SampleType;
 use App\Models\Study;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,6 +22,8 @@ class SamplesListComponent extends Component
     public $job = '';
 
     public $sampleType;
+
+    public $created_by = 0;
 
     public $from_date = '';
 
@@ -44,6 +47,34 @@ class SamplesListComponent extends Component
 
     public $reception_id;
 
+    public $sample_identity;
+
+    public $sample_id;
+
+    public $freezer_location;
+
+    public $freezer;
+
+    public $temp;
+
+    public $section_id;
+
+    public $rack_id;
+
+    public $drawer_id;
+
+    public $box_id;
+
+    public $box_row;
+
+    public $box_column;
+
+    public $barcode;
+
+    public $stored_by;
+
+    public $date_stored;
+
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
@@ -65,6 +96,27 @@ class SamplesListComponent extends Component
         }
     }
 
+    public function storageDetails(Sample $sample)
+    {
+        $sample->load('storage', 'storage.freezer', 'storage.freezer.location');
+        $this->sample_id = $sample->id;
+        $this->sample_identity = $sample->sample_identity;
+        $this->barcode = $sample->storage->barcode;
+        $this->freezer_location = $sample->storage->freezer->location->name;
+        $this->freezer = $sample->storage->freezer->name;
+        $this->temp = $sample->storage->freezer->temp;
+        $this->section_id = $sample->storage->section_id;
+        $this->rack_id = $sample->storage->rack_id;
+        $this->drawer_id = $sample->storage->drawer_id;
+        $this->box_id = $sample->storage->box_id;
+        $this->box_column = $sample->storage->box_column;
+        $this->box_row = $sample->storage->box_row;
+        $this->stored_by = $sample->storage->creator->fullName;
+        $this->date_stored = $sample->storage->created_at;
+
+        $this->dispatchBrowserEvent('show-storage-details');
+    }
+
     public function filterSamples()
     {
         $samples = Sample::select('*')->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'participant.facility', 'sampleType:id,type', 'study:id,name', 'sampleReception'])
@@ -77,6 +129,11 @@ class SamplesListComponent extends Component
                     })
                     ->when($this->study_id != 0, function ($query) {
                         $query->where('study_id', $this->study_id);
+                    }, function ($query) {
+                        return $query;
+                    })
+                    ->when($this->created_by != 0, function ($query) {
+                        $query->where('created_by', $this->created_by);
                     }, function ($query) {
                         return $query;
                     })
@@ -133,17 +190,18 @@ class SamplesListComponent extends Component
 
     public function cancel()
     {
-        $this->reset('recall_id');
+        $this->reset(['recall_id', 'sample_id']);
     }
 
     public function render()
     {
+        $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $jobs = Sample::select('sample_is_for')->distinct()->get();
         $samples = $this->filterSamples()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs', 'sampleTypes'));
+        return view('livewire.lab.lists.samples-list-component', compact('samples', 'facilities', 'jobs', 'sampleTypes', 'users'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Layout;
 
 use App\Models\Admin\Test;
+use App\Models\AliquotingAssignment;
 use App\Models\Collector;
 use App\Models\Courier;
 use App\Models\Designation;
@@ -21,6 +22,7 @@ use App\Models\TestAssignment;
 use App\Models\TestCategory;
 use App\Models\TestResult;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -75,36 +77,52 @@ class NavigationComponent extends Component
     public $testCategoryCount;
 
     public $testCount;
+
     public $rejectedResultsCount;
 
     protected $listeners = ['updateNav'];
 
     public function mount()
     {
-        if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
-            $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->whereRaw('samples_accepted>samples_handled')->count();
+        if (Auth::user()->hasPermission(['accession-samples'])) {
+            $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->where(function (Builder $query) {
+                $query->whereRaw('samples_accepted != samples_handled')
+                ->orWhereHas('sample', function (Builder $query) {
+                    $query->whereNull('tests_requested')
+                    ->orWhere('test_count', 0);
+                });
+            })->count();
         }
+
         if (Auth::user()->hasPermission(['view-participant-info'])) {
             $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
             $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
         }
-        if (Auth::user()->hasPermission(['create-reception-info|review-reception-info'])) {
-            $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
-        }
+
         if (Auth::user()->hasPermission(['enter-results'])) {
-            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => 'Testing'])->whereIn('status', ['Accessioned', 'Processing'])->count();
-            $this->rejectedResultsCount = TestResult::where(['status'=>'Rejected','performed_by'=> auth()->user()->id,'creator_lab'=>auth()->user()->laboratory_id])->count();
+            $this->testAssignedCount = TestAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
+            $this->AliquotingAssignedCount = AliquotingAssignment::where('assignee', auth()->user()->id)->whereIn('status', ['Assigned'])->count();
+            $this->rejectedResultsCount = TestResult::where(['status' => 'Rejected', 'performed_by' => auth()->user()->id, 'creator_lab' => auth()->user()->laboratory_id])->count();
         }
+
+        if (Auth::user()->hasPermission(['assign-test-requests'])) {
+            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting'])->whereIn('status', ['Accessioned', 'Processing'])->whereNotNull('tests_requested')
+            ->where('test_count', '>', 0)->count();
+        }
+
         if (Auth::user()->hasPermission(['review-results'])) {
             $this->testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
         }
+
         if (Auth::user()->hasPermission(['approve-results'])) {
             $this->testsPendindApprovalCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Reviewed')->count();
         }
+
         if (Auth::user()->hasPermission(['view-result-reports'])) {
             $this->testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
             $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
         }
+
         if (Auth::user()->hasPermission(['manage-users'])) {
             $this->usersCount = User::where(['is_active' => 1])->count();
             $this->rolesCount = Role::count();
