@@ -86,7 +86,7 @@ class TestReviewComponent extends Component
         } else {
             $testResults = TestResult::resultSearch($this->search, 'Pending Review')
             ->where('status', 'Pending Review')
-            ->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
+            ->with(['test', 'sample','kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         }
