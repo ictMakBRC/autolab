@@ -156,9 +156,9 @@ class SpecimenRequestComponent extends Component
         $this->validateOnly($fields, [
 
             'identity' => 'required|string',
-            'age' => 'required|integer|min:1',
+            //'age' => 'required|integer|min:1',
             'address' => 'required|string|max:40',
-            'gender' => 'required|string|max:6',
+            // 'gender' => 'required|string|max:6',
             'contact' => 'required|string',
             'nok_contact' => 'required|string',
             'nok_address' => 'required|string|max:40',
@@ -310,9 +310,9 @@ class SpecimenRequestComponent extends Component
                 if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
                     $this->validate([
                         'entry_type' => 'required|string',
-                        'age' => 'required|integer|min:1',
+                        //'age' => 'required|integer|min:1',
                         'address' => 'required|string|max:40',
-                        'gender' => 'required|string|max:6',
+                        // 'gender' => 'required|string|max:6',
                         'contact' => 'required|string',
                         'nok_contact' => 'required|string',
                         'nok_address' => 'required|string|max:40',

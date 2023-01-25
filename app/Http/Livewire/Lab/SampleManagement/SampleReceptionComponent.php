@@ -375,11 +375,11 @@ class SampleReceptionComponent extends Component
         $sampleReceptions = SampleReception::search($this->search)
         ->where('creator_lab', auth()->user()->laboratory_id)
         ->where(function (Builder $query) {
-            $query->whereRaw('samples_accepted != samples_handled')
-            ->orWhereHas('sample', function (Builder $query) {
-                $query->whereNull('tests_requested')
-                ->orWhere('test_count', 0);
-            });
+            $query->whereRaw('samples_accepted != samples_handled');
+            // ->orWhereHas('sample', function (Builder $query) {
+            //     $query->whereNull('tests_requested')
+            //     ->orWhere('test_count', 0);
+            // });
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->simplePaginate($this->perPage);

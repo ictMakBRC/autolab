@@ -102,8 +102,7 @@
 
                                                     </label>
                                                     <input type="text" id="identity"
-                                                        class="form-control text-uppercase"
-                                                        onkeyup="this.value = this.value.toUpperCase();" size="14"
+                                                        class="form-control" size="14"
                                                         wire:model.lazy="identity"
                                                         @if ($entry_type == 'Client') disabled @endif>
                                                     @error('identity')
