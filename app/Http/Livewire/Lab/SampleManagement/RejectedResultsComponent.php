@@ -6,6 +6,7 @@ use App\Models\Admin\Test;
 use App\Models\TestResult;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\Kit;
 use Livewire\WithPagination;
 
 class RejectedResultsComponent extends Component
@@ -47,6 +48,7 @@ class RejectedResultsComponent extends Component
     public $attachmentPath;
 
     public $performed_by;
+    public $kit_expiry_date, $verified_lot, $kit_id;
 
     public function updatingSearch()
     {
@@ -114,6 +116,9 @@ class RejectedResultsComponent extends Component
         $testResult->reviewer_comment = null;
         $testResult->approver_comment = null;
         $testResult->comment = $this->comment;
+        $testResult->kit_id = $this->kit_id;
+        $testResult->verified_lot = $this->verified_lot;
+        $testResult->kit_expiry_date = $this->kit_expiry_date;
         $testResult->status = 'Pending Review';
 
         $testResult->update();
@@ -149,7 +154,7 @@ class RejectedResultsComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         }
-
-        return view('livewire.lab.sample-management.rejected-results-component', compact('testResults'));
+        $kits = Kit::where('is_active', 1)->get();
+        return view('livewire.lab.sample-management.rejected-results-component', compact('testResults','kits'));
     }
 }

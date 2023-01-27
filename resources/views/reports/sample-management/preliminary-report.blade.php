@@ -357,6 +357,47 @@
                                                                     @enderror
                                                                 </div>
                                                             </div>
+                                                            {{-- KIT USED --}}
+                                                            <div class="col-md-5">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Kit Used</label>
+                                                                    <select class="form-select"
+                                                                        wire:model="kit_id">
+                                                                        <option selected value="">Select
+                                                                        </option>
+                                                                        @foreach ($kits as $kit)
+                                                                            <option
+                                                                                value='{{ $kit->id }}'>
+                                                                                {{ $kit->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('kit_id')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Verified Lot</label>
+                                                                        <textarea wire:model.lazy="verified_lot" rows="1" class="form-control" placeholder="{{ __('verified lot') }}"></textarea>
+
+                                                                    @error('verified_lot')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Kit expiry date</label>
+                                                                       <input type="date" name="kit_expiry_date" class="form-control" id="kit_expiry_date" wire:model="kit_expiry_date" required>
+                                                                    @error('kit_expiry_date')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
                                                             {{-- <div class="col-md-3">
                                                                 <div class="mb-2">
                                                                     <label class="form-label">Performed
@@ -374,7 +415,7 @@
                                                                         @enderror
                                                                 </div>
                                                             </div> --}}
-                                                            
+
                                                             <div class="col-md-1 mt-4">
                                                                 <x-button>{{ __('Save') }}</x-button>
                                                             </div>

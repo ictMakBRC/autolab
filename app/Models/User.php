@@ -91,13 +91,9 @@ class User extends Authenticatable
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->title.'. '.$this->surname.' '.$this->first_name.' '.$this->other_name,
-        );
-    }
-
-    protected function passwordUpdatedAt(): Attribute
-    {
-        return new Attribute(
+            get: fn () => $this->surname.' '.$this->first_name.' '.$this->other_name,
+ get: fn () => $this->title.'. '.$this->surname.' '.$this->first_name.' '.$this->other_name,
+ew Attribute(
             get: fn ($value) => Carbon::parse($value)->format('d-m-Y H:i'),
             // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
         );
