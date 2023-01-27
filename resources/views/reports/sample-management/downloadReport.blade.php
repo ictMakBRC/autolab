@@ -291,6 +291,6 @@
     <script type='text/php'>
         if (isset($pdf))
         {
-='text/php'>
-        if (isset($pdf))
-        {
+            $pdf->page_text(60, $pdf->get_height() - 50, "{PAGE_NUM} of {PAGE_COUNT}", null, 12, array(0,0,0));
+        }
+    </script>
