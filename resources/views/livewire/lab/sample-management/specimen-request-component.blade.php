@@ -461,6 +461,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
                                             @if ($entry_type != 'Client')
 
                                                 <div class="mb-3 col-md-3">
@@ -488,6 +489,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_is_for" class="form-label">Sample is For?<span
                                                         class="text-danger">*</span></label>
@@ -553,6 +555,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            
                                             <div class="mb-2 col-md-2">
                                                 <div class="form-group">
                                                     <label for="volume"

@@ -262,12 +262,12 @@
             </div>
         </div>
     </div>
-
+    @if ($sample != null)
     {{-- VIEW STORAGE DETAILS --}}
     <div wire:ignore.self class="modal fade" id="storage-details" data-bs-backdrop="static" data-bs-keyboard="false"
         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            @if ($sample != null)
+            {{-- @if ($sample != null) --}}
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Sample (<span
@@ -329,9 +329,10 @@
 
                     </div>
                 </div> <!-- end modal content-->
-            @endif
+            {{-- @endif --}}
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
+    @endif
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {

@@ -746,12 +746,17 @@ class SpecimenRequestComponent extends Component
 
     public function deleteData()
     {
+        $sample = Sample::where('id', $this->delete_id)->first();
         try {
-            $sample = Sample::where('id', $this->delete_id)->first();
-            $sample->delete();
-            $this->delete_id = '';
-            $this->dispatchBrowserEvent('close-modal');
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
+            if($sample->status=='Accessioned'){
+                $sample->delete();
+                $this->delete_id = '';
+                $this->dispatchBrowserEvent('close-modal');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
+            }else{
+                $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
+            }
+           
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
         }
