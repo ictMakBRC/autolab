@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use GuzzleHttp\Client;
 use App\Models\TestResult;
 use Illuminate\Support\Facades\Response;
-use PDF;
 
 class ResultReportController extends Controller
 {
@@ -37,5 +38,26 @@ class ResultReportController extends Controller
         } else {
             echo 'File not found.';
         }
+    }
+
+    public function getCrsPatient()
+    {
+        $endpoint = "http://crs.brc.online/api/get-patient/";
+        $client = new Client();
+        $patient_no = 'BRC-10118P';
+        $token = "ABC";
+
+        $response = $client->request('GET', $endpoint, ['query' => [
+        'pat_no' => $patient_no,
+        // 'key2' => $value,
+        ]]);
+ 
+       
+        $participant = json_decode($response->getBody(), true);
+
+        foreach  ($participant as $value){
+            return $value['given_name'];
+        }
+        
     }
 }

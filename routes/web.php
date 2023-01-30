@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 // Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate']);
 Route::get('user/account', UserProfileComponent::class)->name('user.account')->middleware('auth');
-Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
+Route::group(['middleware' => ['auth',  'suspended_user']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'settings'], function () {
             Route::get('testCategories', TestCategoryComponent::class)->name('categories');
@@ -110,6 +110,8 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
 
         Route::get('samplesList', SamplesListComponent::class)->middleware('permission:view-participant-info')->name('samples-list');
         Route::get('testsPerformedList', TestsPerformedListComponent::class)->middleware('permission:view-participant-info')->name('tests-performed-list');
+
+        Route::get('crs/patient/load', [ResultReportController::class, 'getCrsPatient'])->name('loadcrsPatient');
 
         Route::group(['middleware' => 'signed'], function () {
             Route::get('batch/{sampleReception}/searchResults', [SearchResultsController::class, 'batchSearchResults'])->name('batch-search-results');

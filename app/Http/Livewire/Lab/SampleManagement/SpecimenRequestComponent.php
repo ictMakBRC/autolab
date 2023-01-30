@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Helpers\Generate;
-use App\Models\Admin\Test;
-use App\Models\Collector;
-use App\Models\Participant;
-use App\Models\Requester;
-use App\Models\Sample;
-use App\Models\SampleReception;
-use App\Models\SampleType;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
+use App\Models\Sample;
+use GuzzleHttp\Client;
 use Livewire\Component;
+use App\Helpers\Generate;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
+use App\Models\Participant;
+use App\Models\SampleReception;
 
 class SpecimenRequestComponent extends Component
 {
@@ -144,6 +145,10 @@ class SpecimenRequestComponent extends Component
     public $tests;
 
     public $aliquots;
+
+    public $patient_found = false;
+
+    public $patno;
 
     protected $validationAttributes = [
         'study_id' => 'study',
@@ -295,6 +300,78 @@ class SpecimenRequestComponent extends Component
         } else {
             redirect()->route('samplereception');
         }
+    }
+
+    public function updatedpatno()
+    {
+        // $endpoint = "http://crs.brc.online/api/get-patient/";
+        // $client = new Client();
+        $patient_no = $this->patno;
+        $token = "ABC";
+
+        // $response = $client->request('GET', $endpoint, ['query' => [
+        // 'pat_no' => $patient_no,
+        // 'token' => 'ASHS773HD8883HDXHDHY',
+        // ]]);
+
+        // $crsparticipant = json_decode($response->getBody(), true);
+
+
+        $client = new Client(['base_uri' => 'https://crs.co.ug/api/get-patient/', 'verify' => false]);
+        try {
+            $response = $client->request('GET', 'https://crs.co.ug/api/get-patient/', ['query' => [
+                'pat_no' => $patient_no,
+                'token' => 'ASHS773HD8883HDXHDHY',
+                ]]);
+
+                $crsparticipant = json_decode($response->getBody(), true);
+                if($crsparticipant != null){
+                foreach  ($crsparticipant as $participant){
+                    $this->entry_type = 'CRS Patient';
+                    $this->identity = $participant['pat_no'];
+                    $this->age = $participant['age'];
+                    $this->address = $participant['swab_district'];
+                    $this->gender = $participant['gender'];
+                    $this->contact = $participant['phone_number'];
+                    $this->nok_contact = $participant['phone_number'];
+                    $this->nok_address = $participant['patient_district'];
+                    $this->date_collected = $participant['collection_date'];
+                    $this->title = null;
+                    $this->nin_number = $participant['doc_no'];
+                    $this->surname = $participant['surname'];
+                    $this->first_name = $participant['given_name'];
+                    $this->other_name = $participant['other_name'];
+                    $this->nationality = $participant['nationality'];
+                    $this->district = $participant['patient_district'];
+                    $this->dob = $participant['dob'];
+                    $this->birth_place = null;
+                   
+                    $this->toggleForm = false;
+                    $this->patient_found= true;
+                    $this->activeParticipantTab = true;
+                    }
+         
+                }else{
+                    $this->patient_found= false;
+                    $this->reset(['age', 'gender', 'contact', 'address',
+                    'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
+                    'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
+                    'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+                }
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $this->patient_found= false;
+            $this->reset(['age', 'gender', 'contact', 'address',
+            'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
+            'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
+            'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+
+        }
+    
+
+      
+       
+  
     }
 
     public function storeParticipant()
