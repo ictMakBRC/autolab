@@ -345,12 +345,12 @@ class SpecimenRequestComponent extends Component
                     $this->district = $participant['patient_district'];
                     $this->dob = $participant['dob'];
                     $this->birth_place = null;
-                   
+
                     $this->toggleForm = false;
                     $this->patient_found= true;
                     $this->activeParticipantTab = true;
                     }
-         
+
                 }else{
                     $this->patient_found= false;
                     $this->reset(['age', 'gender', 'contact', 'address',
@@ -367,11 +367,11 @@ class SpecimenRequestComponent extends Component
             'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
 
         }
-    
 
-      
-       
-  
+
+
+
+
     }
 
     public function storeParticipant()
@@ -403,47 +403,81 @@ class SpecimenRequestComponent extends Component
                     ]);
                 }
             }
-            $participant = new Participant();
-            $patNo = Generate::participantNo();
-            $participant->participant_no = $patNo;
-            if ($this->entry_type == 'Other' || $this->entry_type == 'Client') {
-                $participant->identity = $patNo;
-            } else {
-                $participant->identity = $this->identity;
-            }
-            $participant->age = $this->age ?? null;
-            $participant->address = $this->address ?? null;
-            $participant->gender = $this->gender ?? null;
-            $participant->contact = $this->contact ?? null;
-            $participant->nok_contact = $this->nok_contact ?? null;
-            $participant->nok_address = $this->nok_address ?? null;
-            $participant->clinical_notes = $this->clinical_notes ?? null;
+                try{
+                $participant = new Participant();
+                $patNo = Generate::participantNo();
+                $participant->participant_no = $patNo;
+                if ($this->entry_type == 'Other' || $this->entry_type == 'Client') {
+                    $participant->identity = $patNo;
+                } else {
+                    $participant->identity = $this->identity;
+                }
+                $participant->age = $this->age ?? null;
+                $participant->address = $this->address ?? null;
+                $participant->gender = $this->gender ?? null;
+                $participant->contact = $this->contact ?? null;
+                $participant->nok_contact = $this->nok_contact ?? null;
+                $participant->nok_address = $this->nok_address ?? null;
+                $participant->clinical_notes = $this->clinical_notes ?? null;
 
-            $participant->title = $this->title ?? null;
-            $participant->nin_number = $this->nin_number ?? null;
-            $participant->surname = $this->surname ?? null;
-            $participant->first_name = $this->first_name ?? null;
-            $participant->other_name = $this->other_name ?? null;
-            $participant->nationality = $this->nationality ?? null;
-            $participant->district = $this->district ?? null;
-            $participant->dob = $this->dob ?? null;
-            $participant->birth_place = $this->birth_place ?? null;
-            $participant->religious_affiliation = $this->religious_affiliation ?? null;
-            $participant->occupation = $this->occupation ?? null;
-            $participant->civil_status = $this->civil_status ?? null;
-            $participant->email = $this->email ?? null;
-            $participant->nok = $this->nok ?? null;
-            $participant->nok_relationship = $this->nok_relationship ?? null;
-            $participant->facility_id = $this->facility_id;
-            $participant->entry_type = $this->entry_type;
+                $participant->title = $this->title ?? null;
+                $participant->nin_number = $this->nin_number ?? null;
+                $participant->surname = $this->surname ?? null;
+                $participant->first_name = $this->first_name ?? null;
+                $participant->other_name = $this->other_name ?? null;
+                $participant->nationality = $this->nationality ?? null;
+                $participant->district = $this->district ?? null;
+                $participant->dob = $this->dob ?? null;
+                $participant->birth_place = $this->birth_place ?? null;
+                $participant->religious_affiliation = $this->religious_affiliation ?? null;
+                $participant->occupation = $this->occupation ?? null;
+                $participant->civil_status = $this->civil_status ?? null;
+                $participant->email = $this->email ?? null;
+                $participant->nok = $this->nok ?? null;
+                $participant->nok_relationship = $this->nok_relationship ?? null;
+                $participant->facility_id = $this->facility_id;
+                $participant->entry_type = $this->entry_type;
 
-            $participant->save();
+                $participant->save();
 
-            $this->participant_id = $participant->id;
-            $this->entry_type = $participant->entry_type;
-            $this->activeParticipantTab = false;
-            $this->resetParticipantInputs();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
+                $this->participant_id = $participant->id;
+                $this->entry_type = $participant->entry_type;
+                $this->activeParticipantTab = false;
+                $this->resetParticipantInputs();
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
+                } catch(Exception $error) {
+                    $participant = Participant::where('identity',$this->identity)->first();
+                    $participant->identity = $this->identity;
+                    $participant->age = $this->age;
+                    $participant->address = $this->address;
+                    $participant->gender = $this->gender;
+                    $participant->contact = $this->contact;
+                    $participant->nok_contact = $this->nok_contact;
+                    $participant->nok_address = $this->nok_address;
+                    $participant->clinical_notes = $this->clinical_notes;
+
+                    $participant->title = $this->title;
+                    $participant->nin_number = $this->nin_number;
+                    $participant->surname = $this->surname;
+                    $participant->first_name = $this->first_name;
+                    $participant->other_name = $this->other_name;
+                    $participant->nationality = $this->nationality;
+                    $participant->district = $this->district;
+                    $participant->dob = $this->dob;
+                    $participant->birth_place = $this->birth_place;
+                    $participant->religious_affiliation = $this->religious_affiliation;
+                    $participant->occupation = $this->occupation;
+                    $participant->civil_status = $this->civil_status;
+                    $participant->email = $this->email;
+                    $participant->nok = $this->nok;
+                    $participant->nok_relationship = $this->nok_relationship;
+                    $participant->update();
+                    $this->participant_id = $participant->id;
+                    $this->entry_type = $participant->entry_type;
+                    $this->activeParticipantTab = false;
+                    $this->resetParticipantInputs();
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
+                }
         }
     }
 
