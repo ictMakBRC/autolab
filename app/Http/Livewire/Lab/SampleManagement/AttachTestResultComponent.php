@@ -4,12 +4,18 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Kit;
 use App\Models\User;
+use App\Models\User;
 use App\Models\Sample;
 use Livewire\Component;
 use App\Models\Admin\Test;
 use App\Models\TestResult;
 use Livewire\WithFileUploads;
+use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\TestResult;
+use Livewire\WithFileUploads;
 use App\Models\TestAssignment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -41,6 +47,8 @@ class AttachTestResultComponent extends Component
 
     public $testParameters=[];
 
+    public $testParameters=[];
+
     public $status;
 
     public $sample_identity;
@@ -66,6 +74,8 @@ class AttachTestResultComponent extends Component
             ->orderBy('name', 'asc')->get();
             
             //Set the first test in the collection as active and load its parameters if present
+            
+            //Set the first test in the collection as active and load its parameters if present
             $this->test_id = $this->requestedTests[0]->id ?? null;
             $activeTest=$this->requestedTests->where('id',$this->test_id)->first();
 
@@ -77,6 +87,7 @@ class AttachTestResultComponent extends Component
            
         } else {
             $this->requestedTests = collect([]);
+            $this->testParameters=[];
             $this->testParameters=[];
             $this->reset('test_id');
         }
@@ -182,6 +193,7 @@ class AttachTestResultComponent extends Component
 
     public function resetResultInputs()
     {
+        $this->reset(['result', 'link', 'attachment','comment', 'attachmentPath']);
         $this->reset(['result', 'link', 'attachment','comment', 'attachmentPath']);
     }
 
