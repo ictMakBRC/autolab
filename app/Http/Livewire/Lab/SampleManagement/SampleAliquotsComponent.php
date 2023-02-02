@@ -7,7 +7,6 @@ use Livewire\Component;
 use App\Helpers\Generate;
 use App\Models\Admin\Test;
 use App\Models\SampleType;
-use App\Models\SamplesAliquot;
 use App\Models\SampleReception;
 use Illuminate\Support\Facades\DB;
 use App\Models\AliquotingAssignment;
@@ -155,15 +154,13 @@ class SampleAliquotsComponent extends Component
             $aliquot->save();
 
             array_push($this->aliquots_performed, "{$this->aliquot_id}");
-            $associatedSample = Sample::findOrfail($this->sample_id);
-            $associatedSample->update(['tests_performed' => $this->aliquots_performed]);
+            $this->sample->update(['tests_performed' => $this->aliquots_performed]);
 
-            if (count(array_diff($associatedSample->tests_requested, $associatedSample->tests_performed)) == 0) {
+            if (count(array_diff($this->sample->tests_requested, $this->sample->tests_performed)) == 0) {
                 AliquotingAssignment::where('sample_id', $this->sample_id)->update(['status' => 'Aliquoted']);
-                $associatedSample->update(['status' => 'Aliquoted']);
+                $this->sample->update(['status' => 'Aliquoted']);
                 redirect()->route('test-request');
             }
-            // $this->sample->update(['tests_performed' => $this->aliquots_performed, 'status' => 'Aliquoted']);
 
             $sampleReception = SampleReception::where('id', $this->sample_reception_id)->first();
             $sampleReception->increment('samples_delivered');
@@ -173,7 +170,6 @@ class SampleAliquotsComponent extends Component
 
         $this->requestedAliquots=$this->requestedAliquots->where('id', '!=',$this->aliquot_id)->values();
         $this->aliquot_id=$this->requestedAliquots[0]->id ?? null;
-        // $this->mount($this->aliquot_id);
         $this->tests_requested = [];
         $this->tests = collect([]);
     }

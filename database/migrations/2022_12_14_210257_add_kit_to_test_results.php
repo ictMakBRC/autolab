@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('test_results', function (Blueprint $table) {
+            $table->text('parameters')->nullable();
            $table->foreignId('kit_id')->nullable();
            $table->string('verified_lot')->nullable();
            $table->date('kit_expiry_date')->nullable();

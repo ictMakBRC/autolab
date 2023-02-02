@@ -238,7 +238,7 @@
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
                             @if ($sample->sample_is_for == 'Testing')
-                                <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
+                                <a href="{{ URL::signedRoute('attach-test-results', $sample_id) }}" type="button"
                                     class="btn btn-success radius-30 px-3">Process</a>
                             @else
                                 <a href="#" type="button" class="btn btn-success radius-30 px-3">Process</a>
