@@ -49,9 +49,13 @@ class TestComponent extends Component
 
     public $dynamicComments = [];
 
+    public $dynamicParameters = [];
+
     public $comments = [];
 
     public $measurable_result_uom;
+
+    public $result_presentation;
 
     public $toggleForm = false;
 
@@ -89,12 +93,16 @@ class TestComponent extends Component
         $this->dynamicComments = [
             ['comment' => 'comment'],
         ];
+
+        $this->dynamicParameters = [
+            ['parameter' => 'parameter'],
+        ];
     }
 
     public function updatedResultType()
     {
         if ($this->result_type === 'Text' || $this->result_type === 'File') {
-            $this->reset(['dynamicResults', 'measurable_result_uom', 'absolute_results']);
+            $this->reset(['dynamicResults', 'measurable_result_uom', 'absolute_results','dynamicParameters','result_presentation']);
         }
     }
 
@@ -113,7 +121,7 @@ class TestComponent extends Component
     {
         $results = [];
         foreach ($this->dynamicResults as $key => $result) {
-            if ($result['result'] != 'result') {
+            if ($result['result'] != 'result' && $result['result'] != '') {
                 array_push($results, $result['result']);
             }
         }
@@ -136,12 +144,35 @@ class TestComponent extends Component
     {
         $comments = [];
         foreach ($this->dynamicComments as $key => $comment) {
-            if ($comment['comment'] != 'comment') {
+            if ($comment['comment'] != 'comment' && $comment['comment'] != '') {
                 array_push($comments, $comment['comment']);
             }
         }
 
         return $comments;
+    }
+
+    public function addParameter()
+    {
+        $this->dynamicParameters[] = ['parameter' => 'parameter'];
+    }
+
+    public function removeParameter($index)
+    {
+        unset($this->dynamicParameters[$index]);
+        $this->dynamicParameters = array_values($this->dynamicParameters);
+    }
+
+    public function pushParameters()
+    {
+        $parameters = [];
+        foreach ($this->dynamicParameters as $key => $parameter) {
+            if ($parameter['parameter'] != 'parameter' && $parameter['parameter'] != '') {
+                array_push($parameters, $parameter['parameter']);
+            }
+        }
+
+        return $parameters;
     }
 
     public function storeTest()
@@ -166,6 +197,8 @@ class TestComponent extends Component
         $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
+        $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
+        $test->result_presentation = $this->result_presentation??null;
         $test->save();
 
         $this->resetTestInputs();
@@ -186,9 +219,11 @@ class TestComponent extends Component
         $this->precautions = $test->precautions;
         $this->result_type = $test->result_type;
         $this->measurable_result_uom = $test->measurable_result_uom;
+        $this->result_presentation = $test->result_presentation;
 
         $this->dynamicResults = [];
         $this->dynamicComments = [];
+        $this->dynamicParameters = [];
         if ($test->absolute_results != null) {
             foreach ($test->absolute_results as $key => $result) {
                 if (count($test->absolute_results)) {
@@ -196,10 +231,19 @@ class TestComponent extends Component
                 }
             }
         }
+
         if ($test->comments != null) {
             foreach ($test->comments as $key => $comment) {
                 if (count($test->comments)) {
                     array_push($this->dynamicComments, ['comment' => $comment]);
+                }
+            }
+        }
+
+        if ($test->parameters != null) {
+            foreach ($test->parameters as $key => $parameter) {
+                if (count($test->parameters)) {
+                    array_push($this->dynamicParameters, ['parameter' => $parameter]);
                 }
             }
         }
@@ -216,6 +260,7 @@ class TestComponent extends Component
             'result_type' => 'required|string',
             'status' => 'required|integer',
         ]);
+
         $test = Test::find($this->edit_id);
         $test->category_id = $this->category_id;
         $test->name = $this->name;
@@ -230,6 +275,8 @@ class TestComponent extends Component
         $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
+        $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
+        $test->result_presentation = $this->result_presentation??null;
         $test->update();
 
         $this->toggleForm = false;
@@ -239,7 +286,7 @@ class TestComponent extends Component
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments','dynamicParameters','result_presentation']);
     }
 
     public function deleteConfirmation($id)

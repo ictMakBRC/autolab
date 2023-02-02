@@ -32,6 +32,7 @@ class TestResult extends Model
         'test_id',
         'result',
         'attachment',
+        'parameters',
         'performed_by',
         'comment',
         'reviewed_by',
@@ -87,6 +88,10 @@ class TestResult extends Model
             // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
         );
     }
+
+    protected $casts = [
+        'parameters' => 'array',
+    ];
 
     public static function boot()
     {

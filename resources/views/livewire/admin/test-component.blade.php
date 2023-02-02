@@ -137,7 +137,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <hr>
+                                <hr class="mt-2">
 
                                 <div class="col-md-6">
                                     <h6>
@@ -169,11 +169,8 @@
                                                     id="button-addon2" wire:click.prevent="addResult">+</button>
                                                 @foreach ($dynamicResults as $index => $result)
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Enter Result"
-                                                            aria-label="Add another possible result"
-                                                            aria-describedby="button-addon2"
-                                                            wire:model="dynamicResults.{{ $index }}.result">
+                                                        <textarea type="text" class="form-control" placeholder="Enter Result" aria-label="Add another possible result"
+                                                            aria-describedby="button-addon2" wire:model.lazy="dynamicResults.{{ $index }}.result"> </textarea>
                                                         <button class="btn btn-outline-danger" type="button"
                                                             id="button-addon2"
                                                             wire:click.prevent="removeResult({{ $index }})">Delete</button>
@@ -212,11 +209,8 @@
                                                 id="button-addon2" wire:click.prevent="addComment">+</button>
                                             @foreach ($dynamicComments as $index => $comment)
                                                 <div class="input-group mb-3">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter Comment"
-                                                        aria-label="Add another possible Comment"
-                                                        aria-describedby="button-addon2"
-                                                        wire:model="dynamicComments.{{ $index }}.comment">
+                                                    <textarea type="text" class="form-control" placeholder="Enter Comment" aria-label="Add another possible Comment"
+                                                        aria-describedby="button-addon2" wire:model.lazy="dynamicComments.{{ $index }}.comment"></textarea>
                                                     <button class="btn btn-outline-danger" type="button"
                                                         id="button-addon2"
                                                         wire:click.prevent="removeComment({{ $index }})">Delete</button>
@@ -225,7 +219,59 @@
                                         </div>
                                     </div>
                                 </div>
+                                
 
+                                @if ($result_type == 'Absolute')
+                                <hr>
+                                    <div class="col-md-6">
+                                        <h6>
+                                            {{ __('Test Parameters') }}
+                                            {{-- Parameter:{{ var_export($dynamicParameters) }} --}}
+                                        </h6>
+                                        <div class="row">
+                                            <div id="test-comments" class="col-md-12">
+                                                <label class="form-label">{{ __('Parameters') }}</label>
+                                                <button class="btn btn-outline-success mb-1" type="button"
+                                                    id="button-addon2" wire:click.prevent="addParameter">+</button>
+                                                @foreach ($dynamicParameters as $index => $parameter)
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Enter Parameter"
+                                                            aria-label="Add another possible Parameter"
+                                                            aria-describedby="button-addon2"
+                                                            wire:model.lazy="dynamicParameters.{{ $index }}.parameter">
+                                                        <button class="btn btn-outline-danger" type="button"
+                                                            id="button-addon2"
+                                                            wire:click.prevent="removeParameter({{ $index }})">Delete</button>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+
+                                <div class="col-md-6">
+                                    <h6>
+                                        {{ __('Report Template') }}
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <label for="result_presentation"
+                                                class="form-label">{{ __('Result Presentation') }}</label>
+                                            <select id="result_presentation" class="form-select"
+                                                wire:model="result_presentation">
+                                                <option value="">Select</option>
+                                                <option value="Non-Tabular">Non-Tabular</option>
+                                                <option value="Tabular">Tabular</option>
+                                            </select>
+                                            @error('result_presentation')
+                                                <div class="text-danger text-small">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
                                         <x-button>{{ __('Save') }}</x-button>
@@ -291,8 +337,8 @@
                                                 @if (Auth::user()->hasPermission(['master-access']))
                                                     <a href="javascript:;"
                                                         class="action-ico btn btn-outline-danger mx-1"
-                                                        wire:click="deleteConfirmation({{ $test->id }})"
-                                                        ><i class="bi bi-trash-fill"></i></a>
+                                                        wire:click="deleteConfirmation({{ $test->id }})"><i
+                                                            class="bi bi-trash-fill"></i></a>
                                                 @endif
                                             </td>
                                         </tr>

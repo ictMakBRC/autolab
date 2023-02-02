@@ -25,12 +25,14 @@ class Test extends Model
         'absolute_results',
         'measurable_result_uom',
         'comments',
+        'parameters',
+        'result_presentation',
         'status',
         'created_by',
         'creator_lab',
     ];
 
-    protected $casts = ['absolute_results' => 'array', 'comments' => 'array'];
+    protected $casts = ['absolute_results' => 'array', 'comments' => 'array','parameters' => 'array'];
 
     public function category()
     {
