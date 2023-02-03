@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use GuzzleHttp\Client;
 use App\Models\TestResult;
 use Illuminate\Support\Facades\Response;
-use PDF;
 
 class ResultReportController extends Controller
 {
@@ -17,11 +18,12 @@ class ResultReportController extends Controller
     public function show($id)
     {
         $testResult = TestResult::with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
+        //return View('reports.sample-management.downloadReport', compact('testResult'));
         $pdf = PDF::loadView('reports.sample-management.downloadReport', compact('testResult'));
         $pdf->setPaper('a4', 'portrait');   //horizontal
         $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
         return  $pdf->stream($testResult->sample->participant->identity.rand().'.pdf');
-       
+
 
         // return $pdf->download($testResult->sample->participant->identity.rand().'.pdf');
     }
@@ -36,5 +38,26 @@ class ResultReportController extends Controller
         } else {
             echo 'File not found.';
         }
+    }
+
+    public function getCrsPatient()
+    {
+        $endpoint = "http://crs.brc.online/api/get-patient/";
+        $client = new Client();
+        $patient_no = 'BRC-10118P';
+        $token = "ABC";
+
+        $response = $client->request('GET', $endpoint, ['query' => [
+        'pat_no' => $patient_no,
+        // 'key2' => $value,
+        ]]);
+ 
+       
+        $participant = json_decode($response->getBody(), true);
+
+        foreach  ($participant as $value){
+            return $value['given_name'];
+        }
+        
     }
 }
