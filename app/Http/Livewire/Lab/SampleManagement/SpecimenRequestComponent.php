@@ -748,15 +748,14 @@ class SpecimenRequestComponent extends Component
     {
         $sample = Sample::where('id', $this->delete_id)->first();
         try {
-            if($sample->status=='Accessioned'){
+            if ($sample->status == 'Accessioned') {
                 $sample->delete();
                 $this->delete_id = '';
                 $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
-            }else{
+            } else {
                 $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
             }
-           
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
         }

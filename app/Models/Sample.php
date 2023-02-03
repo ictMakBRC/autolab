@@ -24,7 +24,7 @@ class Sample extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['sample_reception_id', 'participant_id', 'visit', 'sample_type_id', 'sample_no', 'sample_identity','parent_id','lab_no', 'volume', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
+    protected $fillable = ['sample_reception_id', 'participant_id', 'visit', 'sample_type_id', 'sample_no', 'sample_identity', 'parent_id', 'lab_no', 'volume', 'requested_by', 'date_requested', 'collected_by', 'date_collected',
         'study_id', 'sample_is_for', 'priority', 'tests_requested', 'test_count', 'tests_performed', 'date_acknowledged', 'request_acknowledged_by', 'status', 'is_isolate', 'created_by', 'creator_lab', ];
 
     protected $casts = [

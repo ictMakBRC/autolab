@@ -2,26 +2,30 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Sample;
-use Livewire\Component;
 use App\Helpers\Generate;
 use App\Models\Admin\Test;
-use App\Models\SampleType;
-use App\Models\SampleReception;
-use Illuminate\Support\Facades\DB;
 use App\Models\AliquotingAssignment;
+use App\Models\Sample;
+use App\Models\SampleReception;
+use App\Models\SampleType;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class SampleAliquotsComponent extends Component
 {
     public $aliquots;
+
     public $aliquot_id;
 
     // public $tests_performed = [];
     public $aliquots_performed = [];
+
     public $requestedAliquots;
 
     public $aliquotIdentities = [];
+
     public $tests_requested = [];
+
     public $tests;
 
     public $sample;
@@ -33,17 +37,27 @@ class SampleAliquotsComponent extends Component
     public $performed_by;
 
     public $volume;
+
     public $sample_is_for;
+
     public $priority;
+
     public $comment;
 
     public $sample_reception_id;
+
     public $participant_id;
+
     public $visit;
+
     public $requested_by;
+
     public $date_requested;
+
     public $collected_by;
+
     public $date_collected;
+
     public $study_id;
 
     public function mount($id)
@@ -51,19 +65,19 @@ class SampleAliquotsComponent extends Component
         $sample = Sample::findOrFail($id);
         $this->sample = $sample;
         $this->sample_id = $sample->id;
-        $this->sample_reception_id=$sample->sample_reception_id;
+        $this->sample_reception_id = $sample->sample_reception_id;
         $this->aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->orderBy('id', 'asc')->get();
 
-        foreach ($this->aliquots->pluck('id')->toArray() as $key=> $aliquot) {
-            $this->aliquotIdentities[$aliquot] = $sample->sample_identity.'-'.$key+1;
+        foreach ($this->aliquots->pluck('id')->toArray() as $key => $aliquot) {
+            $this->aliquotIdentities[$aliquot] = $sample->sample_identity.'-'.$key + 1;
         }
 
         $aliquotsPending = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
         if (count($aliquotsPending) > 0) {
             $this->requestedAliquots = $this->aliquots->whereIn('id', (array) $aliquotsPending)->values();
-            $this->aliquot_id=$this->requestedAliquots[0]->id ?? null;
-            $this->sample_identity=$this->aliquotIdentities[$this->aliquot_id];
+            $this->aliquot_id = $this->requestedAliquots[0]->id ?? null;
+            $this->sample_identity = $this->aliquotIdentities[$this->aliquot_id];
         } else {
             $this->requestedAliquots = collect([]);
             $this->reset('aliquot_id');
@@ -71,16 +85,16 @@ class SampleAliquotsComponent extends Component
 
         $this->aliquots_performed = (array) $sample->tests_performed;
         $this->performed_by = auth()->user()->id;
-        $this->tests=collect([]);
+        $this->tests = collect([]);
     }
 
     public function activateAliquotInput($id)
     {
         $this->aliquot_id = $id;
-        $this->sample_identity=$this->aliquotIdentities[$this->aliquot_id];
+        $this->sample_identity = $this->aliquotIdentities[$this->aliquot_id];
         $this->tests = collect([]);
         $this->tests_requested = [];
-        $this->sample_is_for='';
+        $this->sample_is_for = '';
     }
 
     public function updatedSampleIsFor()
@@ -168,8 +182,8 @@ class SampleAliquotsComponent extends Component
             $sampleReception->increment('samples_handled');
         });
 
-        $this->requestedAliquots=$this->requestedAliquots->where('id', '!=',$this->aliquot_id)->values();
-        $this->aliquot_id=$this->requestedAliquots[0]->id ?? null;
+        $this->requestedAliquots = $this->requestedAliquots->where('id', '!=', $this->aliquot_id)->values();
+        $this->aliquot_id = $this->requestedAliquots[0]->id ?? null;
         $this->tests_requested = [];
         $this->tests = collect([]);
     }
@@ -177,6 +191,7 @@ class SampleAliquotsComponent extends Component
     public function render()
     {
         $aliquotsRequested = $this->requestedAliquots ?? collect();
-        return view('livewire.lab.sample-management.sample-aliquots-component',compact('aliquotsRequested'));
+
+        return view('livewire.lab.sample-management.sample-aliquots-component', compact('aliquotsRequested'));
     }
 }

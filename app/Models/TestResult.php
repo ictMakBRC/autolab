@@ -61,6 +61,7 @@ class TestResult extends Model
     {
         return $this->belongsTo(Test::class, 'test_id', 'id');
     }
+
     public function kit()
     {
         return $this->belongsTo(Kit::class, 'kit_id', 'id');

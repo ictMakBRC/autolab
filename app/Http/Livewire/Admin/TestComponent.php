@@ -17,9 +17,9 @@ class TestComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'name';
+    public $orderBy = 'id';
 
-    public $orderAsc = true;
+    public $orderAsc = 0;
 
     public $category_name;
 
@@ -102,7 +102,7 @@ class TestComponent extends Component
     public function updatedResultType()
     {
         if ($this->result_type === 'Text' || $this->result_type === 'File') {
-            $this->reset(['dynamicResults', 'measurable_result_uom', 'absolute_results','dynamicParameters','result_presentation']);
+            $this->reset(['dynamicResults', 'measurable_result_uom', 'absolute_results', 'dynamicParameters', 'result_presentation']);
         }
     }
 
@@ -198,7 +198,7 @@ class TestComponent extends Component
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
-        $test->result_presentation = $this->result_presentation??null;
+        $test->result_presentation = $this->result_presentation ?? null;
         $test->save();
 
         $this->resetTestInputs();
@@ -276,7 +276,7 @@ class TestComponent extends Component
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
-        $test->result_presentation = $this->result_presentation??null;
+        $test->result_presentation = $this->result_presentation ?? null;
         $test->update();
 
         $this->toggleForm = false;
@@ -286,7 +286,7 @@ class TestComponent extends Component
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments','dynamicParameters','result_presentation']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'result_presentation']);
     }
 
     public function deleteConfirmation($id)

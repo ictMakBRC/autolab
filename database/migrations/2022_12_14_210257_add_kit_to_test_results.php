@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::table('test_results', function (Blueprint $table) {
             $table->text('parameters')->nullable();
-           $table->foreignId('kit_id')->nullable();
-           $table->string('verified_lot')->nullable();
-           $table->date('kit_expiry_date')->nullable();
+            $table->foreignId('kit_id')->nullable();
+            $table->string('verified_lot')->nullable();
+            $table->date('kit_expiry_date')->nullable();
         });
     }
 
@@ -29,7 +29,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('test_results', function (Blueprint $table) {
-            $table->dropColumn(['kit_id', 'verified_lot','kit_expiry_date']);
+            $table->dropColumn(['kit_id', 'verified_lot', 'kit_expiry_date']);
         });
     }
 };

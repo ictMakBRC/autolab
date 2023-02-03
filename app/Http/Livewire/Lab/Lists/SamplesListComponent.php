@@ -100,7 +100,7 @@ class SamplesListComponent extends Component
 
     public function storageDetails(Sample $sample)
     {
-        $this->sample=$sample;
+        $this->sample = $sample;
         $sample->load('storage', 'storage.freezer', 'storage.freezer.location');
         $this->sample_id = $sample->id;
         $this->sample_identity = $sample->sample_identity;

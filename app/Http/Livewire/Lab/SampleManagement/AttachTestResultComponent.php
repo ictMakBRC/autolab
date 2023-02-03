@@ -2,22 +2,16 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Models\Admin\Test;
 use App\Models\Kit;
-use App\Models\User;
-use App\Models\User;
 use App\Models\Sample;
-use Livewire\Component;
-use App\Models\Admin\Test;
-use App\Models\TestResult;
-use Livewire\WithFileUploads;
-use Livewire\Component;
-use App\Models\Admin\Test;
-use App\Models\TestResult;
-use Livewire\WithFileUploads;
 use App\Models\TestAssignment;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\DB;
+use App\Models\TestResult;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AttachTestResultComponent extends Component
 {
@@ -45,9 +39,7 @@ class AttachTestResultComponent extends Component
 
     public $comment;
 
-    public $testParameters=[];
-
-    public $testParameters=[];
+    public $testParameters = [];
 
     public $status;
 
@@ -55,7 +47,11 @@ class AttachTestResultComponent extends Component
 
     public $lab_no;
 
-    public $kit_expiry_date, $verified_lot, $kit_id;
+    public $kit_expiry_date;
+
+    public $verified_lot;
+
+    public $kit_id;
 
     public function mount($id)
     {
@@ -72,23 +68,20 @@ class AttachTestResultComponent extends Component
                 $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
             })
             ->orderBy('name', 'asc')->get();
-            
-            //Set the first test in the collection as active and load its parameters if present
-            
+
             //Set the first test in the collection as active and load its parameters if present
             $this->test_id = $this->requestedTests[0]->id ?? null;
-            $activeTest=$this->requestedTests->where('id',$this->test_id)->first();
+            $activeTest = $this->requestedTests->where('id', $this->test_id)->first();
 
-            if ($activeTest && $activeTest->parameters!=null) {
-                foreach ($activeTest->parameters as $key=> $parameter) {
+            if ($activeTest && $activeTest->parameters != null) {
+                foreach ($activeTest->parameters as $key => $parameter) {
                     $this->testParameters[$parameter] = '';
                 }
             }
-           
         } else {
             $this->requestedTests = collect([]);
-            $this->testParameters=[];
-            $this->testParameters=[];
+            $this->testParameters = [];
+            $this->testParameters = [];
             $this->reset('test_id');
         }
 
@@ -125,8 +118,8 @@ class AttachTestResultComponent extends Component
             }
         }
 
-        $this->testParameters= array_filter($this->testParameters, function($value) {
-            return $value !='';
+        $this->testParameters = array_filter($this->testParameters, function ($value) {
+            return $value != '';
         });
 
         DB::transaction(function () {
@@ -143,7 +136,7 @@ class AttachTestResultComponent extends Component
                     $testResult->result = $this->result;
                 }
             }
-    
+
             $testResult->attachment = $this->attachmentPath;
             $testResult->performed_by = $this->performed_by;
             $testResult->comment = $this->comment;
@@ -152,35 +145,35 @@ class AttachTestResultComponent extends Component
             $testResult->verified_lot = $this->verified_lot;
             $testResult->kit_expiry_date = $this->kit_expiry_date;
             $testResult->status = 'Pending Review';
-    
+
             $testResult->save();
-    
+
             array_push($this->tests_performed, "{$testResult->test_id}");
             $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
             $this->sample->update(['tests_performed' => $this->tests_performed]);
             $testAssignment->update(['status' => 'Test Done']);
-    
+
             if (count(array_diff($this->sample->tests_requested, $this->sample->tests_performed)) == 0) {
                 $this->sample->update(['status' => 'Tests Done']);
                 redirect()->route('test-request');
             }
-    
+
             if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
                 redirect()->route('test-request');
             }
         });
-     
-        $this->requestedTests=$this->requestedTests->where('id', '!=',$this->test_id)->values();
-        $this->test_id=$this->requestedTests[0]->id ?? null;
-        $this->testParameters=[];
 
-         //Set the first test in the collection as active and load its parameters if present
-         $activeTest=$this->requestedTests->where('id',$this->test_id)->first();
-         if ($activeTest && $activeTest->parameters!=null) {
-             foreach ($activeTest->parameters as $key=> $parameter) {
-                 $this->testParameters[$parameter] = '';
-             }
-         }
+        $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
+        $this->test_id = $this->requestedTests[0]->id ?? null;
+        $this->testParameters = [];
+
+        //Set the first test in the collection as active and load its parameters if present
+        $activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+        if ($activeTest && $activeTest->parameters != null) {
+            foreach ($activeTest->parameters as $key => $parameter) {
+                $this->testParameters[$parameter] = '';
+            }
+        }
         $this->resetResultInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }
@@ -193,8 +186,8 @@ class AttachTestResultComponent extends Component
 
     public function resetResultInputs()
     {
-        $this->reset(['result', 'link', 'attachment','comment', 'attachmentPath']);
-        $this->reset(['result', 'link', 'attachment','comment', 'attachmentPath']);
+        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath']);
+        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath']);
     }
 
     public function close()

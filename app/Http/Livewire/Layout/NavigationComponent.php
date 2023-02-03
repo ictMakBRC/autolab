@@ -106,11 +106,11 @@ class NavigationComponent extends Component
         }
 
         if (Auth::user()->hasPermission(['assign-test-requests'])) {
-            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting','Storage'])->whereIn('status', ['Accessioned', 'Processing'])->where(function($query){
+            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])->whereIn('status', ['Accessioned', 'Processing'])->where(function ($query) {
                 $query->whereNotNull('tests_requested')
                 ->where('test_count', '>', 0)
-                ->orWhere(function($query){
-                    $query->where('sample_is_for','Storage')
+                ->orWhere(function ($query) {
+                    $query->where('sample_is_for', 'Storage')
                     ->whereNull('tests_requested');
                 });
             })
