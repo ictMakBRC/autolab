@@ -212,18 +212,22 @@
                                                                                     Requested</strong>
                                                                             </h6>
                                                                             <hr>
-                                                                            <div class="col-md-12">
+                                                                            <div class="row col-md-12  mx-auto">
                                                                                 @foreach ($tests as $test)
+                                                                                <div class="col-md-3">
                                                                                     <div
-                                                                                        class="form-check form-check-inline mb-1">
-                                                                                        <label class="form-check-label"
-                                                                                            for="test{{ $test->id }}">{{ $test->name }}</label>
-                                                                                        <input class="form-check-input"
-                                                                                            type="checkbox"
-                                                                                            id="test{{ $test->id }}"
-                                                                                            value="{{ $test->id }}"
-                                                                                            wire:model='tests_requested'>
-                                                                                    </div>
+                                                                                    class="form-check form-check-inline mb-1">
+                                                                                    <label class="form-check-label"
+                                                                                        for="test{{ $test->id }}">{{ $test->name }}</label>
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        id="test{{ $test->id }}"
+                                                                                        value="{{ $test->id }}"
+                                                                                        wire:model='tests_requested'>
+                                                                                </div>
+                                                                                </div>
+
+                                                                                    
                                                                                 @endforeach
                                                                                 @error('tests_requested')
                                                                                     <div class="text-danger text-small">

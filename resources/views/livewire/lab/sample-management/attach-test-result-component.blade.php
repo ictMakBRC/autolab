@@ -11,7 +11,6 @@
                                             class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
                                             class="text-info">{{ $lab_no }}</span></h6>
                                 </h5>
-                                {{-- result:{{ $result }} comment:{{ $comment }} performed_by:{{ $performed_by }} --}}
                                 <div class="ms-auto">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-info">More...</button>
@@ -44,7 +43,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- @if (!$testsRequested->isEmpty()) --}}
                                             @foreach ($testsRequested as $test)
                                                 <tr>
                                                     <td>
@@ -60,6 +58,7 @@
                                                                 <div class="row">
                                                                     <div class="col-md-5">
                                                                         @if ($test->result_type == 'Absolute')
+                                                                        
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result</label>
                                                                                 <select class="form-select"
@@ -78,7 +77,9 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+
                                                                         @elseif($test->result_type == 'Text')
+
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result</label>
                                                                                 <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}"
@@ -88,7 +89,9 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+
                                                                         @elseif($test->result_type == 'Measurable')
+                                                                        
                                                                             <div class="mb-2">
                                                                                 <div class="form-group">
                                                                                     <label
@@ -113,7 +116,9 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+
                                                                         @elseif($test->result_type == 'File')
+
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result
                                                                                     Attachment</label>
@@ -126,7 +131,9 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+
                                                                         @elseif($test->result_type == 'Link')
+
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Result
                                                                                     Link(URL)</label>
@@ -139,6 +146,7 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+
                                                                         @endif
 
                                                                     </div>
@@ -168,6 +176,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="col-md-3">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Performed
@@ -188,13 +197,14 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
 
                                                                 {{-- PARAMETERS --}}
                                                                 @if ($test->parameters != null)
                                                                     <div class="row">
                                                                         <hr>
-                                                                        <h6>Parameters @json($testParameters)</h6>
+                                                                        <h6>Parameters</h6>
                                                                         @foreach ($test->parameters as $parameter)
                                                                             <div class="col-md-4">
                                                                                 <div class="mb-2">
@@ -207,6 +217,10 @@
                                                                                 </div>
                                                                             </div>
                                                                         @endforeach
+                                                                        @error('testParameters')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
                                                                     </div>
                                                                 @endif
 
@@ -214,6 +228,7 @@
                                                                 <div class="row">
                                                                     <hr>
                                                                     <h6>Kit Used</h6>
+
                                                                     <div class="col-md-4">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Kit</label>
@@ -233,6 +248,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="col-md-4">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Verified
@@ -246,6 +262,7 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
+
                                                                     <div class="col-md-4">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Kit Expiry

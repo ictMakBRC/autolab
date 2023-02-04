@@ -53,6 +53,8 @@ class AttachTestResultComponent extends Component
 
     public $kit_id;
 
+    public $activeTest;
+
     public function mount($id)
     {
         $sample = Sample::findOrFail($id);
@@ -71,10 +73,10 @@ class AttachTestResultComponent extends Component
 
             //Set the first test in the collection as active and load its parameters if present
             $this->test_id = $this->requestedTests[0]->id ?? null;
-            $activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+            $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
 
-            if ($activeTest && $activeTest->parameters != null) {
-                foreach ($activeTest->parameters as $key => $parameter) {
+            if ($this->activeTest && $this->activeTest->parameters != null) {
+                foreach ($this->activeTest->parameters as $key => $parameter) {
                     $this->testParameters[$parameter] = '';
                 }
             }
@@ -95,34 +97,51 @@ class AttachTestResultComponent extends Component
             'performed_by' => 'required|integer',
         ]);
 
-        if ($this->link != null) {
-            $this->validate([
-                'link' => 'required|url',
-            ]);
-        }
-
-        if ($this->attachment != null) {
-            $this->validate([
-                'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
-            ]);
-            $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
-            $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
+        if ($this->result==null && $this->link==null && $this->attachment==null) {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please enter/Attach results!']);
         } else {
-            $test = Test::findOrfail($this->test_id);
-            if ($test->result_type == 'File') {
-                $this->validate([
-                    'attachment' => ['required'],
+
+            if ($this->attachment != null) {
+                        $this->validate([
+                    'attachment' => 'mimes:pdf,xls,xlsx,csv,doc,docx|max:5000',
                 ]);
+                $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
+                $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
             } else {
-                $this->attachmentPath = null;
+                if ($this->activeTest->result_type == 'File') {
+                    $this->validate([
+                        'attachment' => ['required'],
+                    ]);
+                } else {
+                    $this->attachmentPath = null;
+                }
+            }
+
+            $this->testParameters = array_filter($this->testParameters, function ($value) {
+                return $value != '';
+            });
+
+            if ($this->activeTest->parameters!=null) {
+                    if (count($this->testParameters)==0) {
+                        // dd('no parameters');
+                        $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
+                        $this->validate([
+                            'testParameters' => ['required'],
+                        ]);
+                        //$this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
+                    } else {
+                        $this->saveResults();
+                    }
+            }else{
+                $this->saveResults();
             }
         }
+    }
 
-        $this->testParameters = array_filter($this->testParameters, function ($value) {
-            return $value != '';
-        });
-
+    public function saveResults()
+    {
         DB::transaction(function () {
+
             $testResult = new TestResult();
             $testResult->sample_id = $this->sample_id;
             $testResult->test_id = $this->test_id;
@@ -145,7 +164,6 @@ class AttachTestResultComponent extends Component
             $testResult->verified_lot = $this->verified_lot;
             $testResult->kit_expiry_date = $this->kit_expiry_date;
             $testResult->status = 'Pending Review';
-
             $testResult->save();
 
             array_push($this->tests_performed, "{$testResult->test_id}");
@@ -168,31 +186,33 @@ class AttachTestResultComponent extends Component
         $this->testParameters = [];
 
         //Set the first test in the collection as active and load its parameters if present
-        $activeTest = $this->requestedTests->where('id', $this->test_id)->first();
-        if ($activeTest && $activeTest->parameters != null) {
-            foreach ($activeTest->parameters as $key => $parameter) {
+        $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+        if ($this->activeTest && $this->activeTest->parameters != null) {
+            foreach ($this->activeTest->parameters as $key => $parameter) {
                 $this->testParameters[$parameter] = '';
             }
         }
+
         $this->resetResultInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }
 
+
     public function activateResultInput($id)
     {
-        $this->reset(['result', 'attachment', 'comment']);
+        $this->resetResultInputs();
+        $this->activeTest = $this->requestedTests->where('id', $id)->first();
         $this->test_id = $id;
     }
 
     public function resetResultInputs()
     {
-        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath']);
-        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath']);
+        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath','kit_id','verified_lot','kit_expiry_date']);
     }
 
     public function close()
     {
-        $this->reset(['result', 'attachment', 'performed_by', 'comment']);
+        $this->resetResultInputs();
     }
 
     public function render()

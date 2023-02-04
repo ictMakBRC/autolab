@@ -858,12 +858,17 @@ class SpecimenRequestComponent extends Component
     public function deleteData()
     {
         $sample = Sample::where('id', $this->delete_id)->first();
+        $sampleReception = SampleReception::where('id', $sample->sample_reception_id)->first();
+
         try {
             if($sample->status=='Accessioned'){
+
+                $sampleReception->decrement('samples_handled');
                 $sample->delete();
-                $this->delete_id = '';
+                $this->delete_id = null;
                 $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
+
             }else{
                 $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
             }
@@ -871,15 +876,6 @@ class SpecimenRequestComponent extends Component
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
         }
-        // try {
-        //     $sample = Sample::where('id', $this->delete_id)->first();
-        //     $sample->delete();
-        //     $this->delete_id = '';
-        //     $this->dispatchBrowserEvent('close-modal');
-        //     $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
-        // } catch(Exception $error) {
-        //     $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
-        // }
     }
 
     public function refresh()
