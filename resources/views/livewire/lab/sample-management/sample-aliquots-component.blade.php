@@ -149,7 +149,7 @@
                                                                     </div>
                                                                     <div class="mb-3 col-md-3">
                                                                         <label for="sample_is_for"
-                                                                            class="form-label">Sample is For?<span
+                                                                            class="form-label">Aliquot is For?<span
                                                                                 class="text-danger">*</span></label>
                                                                         <select class="form-select" id="sample_is_for"
                                                                             wire:model="sample_is_for">
@@ -184,7 +184,7 @@
                                                                                 {{ $message }}</div>
                                                                         @enderror
                                                                     </div>
-                                                                    <div class="mb-3 col-md-3">
+                                                                    {{-- <div class="mb-3 col-md-3">
                                                                         <label for="comment"
                                                                             class="form-label">Comment</label>
                                                                         <textarea wire:model.lazy="comment" rows="3" class="form-control" placeholder="{{ __('comment') }}"></textarea>
@@ -193,7 +193,7 @@
                                                                             <div class="text-danger text-small">
                                                                                 {{ $message }}</div>
                                                                         @enderror
-                                                                    </div>
+                                                                    </div> --}}
 
                                                                 </div>
 

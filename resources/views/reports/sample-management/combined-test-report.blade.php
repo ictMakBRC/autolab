@@ -132,10 +132,11 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card-header text-center text-danger">
+                    <div class="card-header text-center">
                         <img src="{{ asset('autolab-assets/images/headers/header.png') }}"
                             alt="Makerere University Logo" width="100%" height="200px">
-                        <h5> {{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</h5>
+                        <h5 class="text-success"> {{ Str::upper(auth()->user()->laboratory->laboratory_name) }}</h5>
+                        <h5 class="fw-bold text-danger"> Result Report</h5>
                         <table class="table mb-0 w-100">
                             <tbody>
                                 <tr class="text-center">

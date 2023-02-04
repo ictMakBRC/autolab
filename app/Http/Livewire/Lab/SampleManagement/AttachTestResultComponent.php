@@ -128,7 +128,6 @@ class AttachTestResultComponent extends Component
                         $this->validate([
                             'testParameters' => ['required'],
                         ]);
-                        //$this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
                     } else {
                         $this->saveResults();
                     }

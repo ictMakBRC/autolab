@@ -251,10 +251,10 @@
 
                                                                     <div class="col-md-4">
                                                                         <div class="mb-2">
-                                                                            <label class="form-label">Verified
+                                                                            <label class="form-label">Verified Kit
                                                                                 Lot</label>
-                                                                            <textarea wire:model.lazy="verified_lot" rows="1" class="form-control"
-                                                                                placeholder="{{ __('verified lot') }}"></textarea>
+                                                                            <input wire:model.lazy="verified_lot" class="form-control"
+                                                                                placeholder="{{ __('verified lot') }}">
 
                                                                             @error('verified_lot')
                                                                                 <div class="text-danger text-small">

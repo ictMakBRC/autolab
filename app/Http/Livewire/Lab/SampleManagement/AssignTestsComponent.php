@@ -186,7 +186,7 @@ class AssignTestsComponent extends Component
         $this->aliquots_requested = collect([]);
     }
 
-    public function render()
+    public function getSamples()
     {
         $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
         ->whereIn('status', ['Accessioned', 'Processing'])
@@ -200,11 +200,47 @@ class AssignTestsComponent extends Component
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
+        return $samples;
+    }
 
+    public function getSampleTasks()
+    {
+        $sampleTasks= Sample::where(['creator_lab' => auth()->user()->laboratory_id])
+        ->whereIn('status', ['Accessioned', 'Processing'])->get();
+
+        $counts['forTestingCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for === 'Testing';
+        })->count();
+        
+        // $partitioned = $sampleTasks->filter(function ($sample) {
+        //     return $sample->sample_is_for !== 'Testing';
+        // })->partition(function ($sample) {
+        //     return $sample->sample_is_for === 'Storage';
+        // });
+        
+        $counts['forAliquotingCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for == 'Aliquoting';
+        })->count();
+
+        $counts['forStorageCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for == 'Storage';
+        })->count();
+
+        return $counts;
+    }
+
+
+    public function render()
+    {
+        
+        $samples=$this->getSamples();
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
         $aliquots = $this->aliquots_requested;
+        $forTestingCount = $this->getSampleTasks()['forTestingCount'];
+        $forAliquotingCount = $this->getSampleTasks()['forAliquotingCount'];
+        $forStorageCount = $this->getSampleTasks()['forStorageCount'];
 
-        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots'));
+        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots','forTestingCount','forAliquotingCount','forStorageCount'));
     }
 }

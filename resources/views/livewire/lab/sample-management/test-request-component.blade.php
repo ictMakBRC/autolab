@@ -10,31 +10,31 @@
                                     <span class="text-danger fw-bold">{{ $sample_is_for }}</span> Tasks
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-success me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-success me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Testing')">
                                         @if ($sample_is_for === 'Testing')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bx bxs-flask"></i>Testing
+                                        <i class="bx bxs-flask"></i>Testing (<strong class="text-danger">{{$testAssignmentCount}}</strong>)
                                     </a>
-                                    <a type="button" class="btn btn-outline-info me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-info me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Aliquoting')">
                                         @if ($sample_is_for === 'Aliquoting')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bi bi-hourglass-split"></i>Aliquoting
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong class="text-danger">{{$aliquotingAssignmentCount}}</strong>)
                                     </a>
 
-                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Storage')">
                                         @if ($sample_is_for === 'Storage')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
 
-                                        <i class="bx bx-archive"></i> Storage
+                                        <i class="bx bx-archive"></i> Storage (<strong class="text-danger">{{$storageAssignmentCount}}</strong>)
                                     </a>
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
