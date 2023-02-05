@@ -133,14 +133,15 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
+                                        <th>Batch</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
                                         <th>Sample ID</th>
                                         <th>Lab No</th>
                                         <th>Facility</th>
                                         <th>Study</th>
                                         <th>For</th>
+                                        <th>Accessioned At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -186,6 +187,9 @@
                                                 @else
                                                     <span class="badge bg-warning">{{ $sample->sample_is_for }}</span>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                {{ date('d-m-Y', strtotime($sample->created_at)) }}
                                             </td>
                                             <td class="table-action">
                                                 @if ($sample->sample_is_for == 'Deffered')

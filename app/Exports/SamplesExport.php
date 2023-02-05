@@ -70,7 +70,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithSt
         return [
             '#',
             'Batch No',
-            'Participant ID',
+            'PID',
             'Sample Type',
             'Sample ID',
             'Lab No',

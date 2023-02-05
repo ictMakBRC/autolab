@@ -64,14 +64,14 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
+                                        <th>No</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
                                         <th>Sample ID</th>
                                         <th>Lab No</th>
                                         <th>Study</th>
-                                        <th>Requested By</th>
-                                        <th>Collected By</th>
+                                        <th>Requester</th>
+                                        <th>Collector</th>
                                         @if ($sample_is_for == 'Testing')
                                             <th> TestCount</th>
                                         @elseif($sample_is_for == 'Aliquoting')

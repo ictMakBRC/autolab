@@ -16,7 +16,8 @@
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bx bxs-flask"></i>Testing (<strong class="text-danger">{{$forTestingCount}}</strong>)
+                                        <i class="bx bxs-flask"></i>Testing (<strong
+                                            class="text-danger">{{ $forTestingCount }}</strong>)
                                     </a>
                                     <a type="button" class="btn btn-outline-info me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Aliquoting')">
@@ -24,7 +25,8 @@
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong class="text-danger">{{$forAliquotingCount}}</strong>)
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong
+                                            class="text-danger">{{ $forAliquotingCount }}</strong>)
                                     </a>
 
                                     <a type="button" class="btn btn-outline-warning me-2 fw-bold mb-1"
@@ -34,7 +36,8 @@
                                                 aria-hidden="true"></span>
                                         @endif
 
-                                        <i class="bx bx-archive"></i> Storage (<strong class="text-danger">{{$forStorageCount}}</strong>)
+                                        <i class="bx bx-archive"></i> Storage (<strong
+                                            class="text-danger">{{ $forStorageCount }}</strong>)
                                     </a>
 
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
@@ -65,14 +68,14 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
+                                        <th>Batch</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
                                         <th>Sample ID</th>
                                         <th>Lab No</th>
                                         <th>Study</th>
-                                        <th>Requested By</th>
-                                        <th>Collected By</th>
+                                        <th>Requester</th>
+                                        <th>Collector</th>
                                         <th>For</th>
                                         @if ($sample_is_for == 'Testing')
                                             <th> TestCount</th>
@@ -178,198 +181,217 @@
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
+        
+        @if ($sample && $sample->sample_is_for == 'Testing')
+            <div wire:ignore.self class="modal fade" id="view-tests" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
+                                    class="text-info">{{ $sample->sample_identity }}</span>) with Lab_No <span
+                                    class="text-info">{{ $sample->lab_no }}</span></h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                                wire:click="close()"></button>
+                        </div> <!-- end modal header -->
+                        <div class="row">
+                            <div class="mb-0">
 
-        <div wire:ignore.self class="modal fade" id="view-tests" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
-                                class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
-                                class="text-info">{{ $lab_no }}</span></h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                            wire:click="close()"></button>
-                    </div> <!-- end modal header -->
-                    <div class="row">
-                        <div class="mb-0">
-
-                            <div class="table-responsiv">
-                                <table class="table table-striped mb-0 w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>Test Requested</th>
-                                            <th>Assignment</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($tests as $key => $test)
+                                <div class="table-responsiv">
+                                    <table class="table table-striped mb-0 w-100">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <strong class="text-danger">Test-{{ $key + 1 }}</strong>
-                                                    <a href="javascript: void(0);" class="action-ico"
-                                                        wire:click="activateTest({{ $test->id }})"><strong
-                                                            class="text-success">{{ $test->name }}
-                                                        </strong></a>
-                                                </td>
-                                                <td>
-                                                    @if ($request_acknowledged_by)
-                                                        @if ($test->id === $test_id)
-                                                            <form wire:submit.prevent="assignTest">
-                                                                <div class="row">
-                                                                    <div class="col-md-8">
-                                                                        <div class="mb-2">
-                                                                            <label class="form-label">Assignee
-                                                                                @if ($backlog)
-                                                                                    (Backlog: <strong
-                                                                                        class="text-danger">{{ $backlog }}</strong>)
-                                                                                @endif
-                                                                            </label>
-                                                                            <select class="form-select"
-                                                                                wire:model="assignee">
-                                                                                <option selected value="">Select
-                                                                                </option>
-                                                                                @foreach ($users as $user)
-                                                                                    <option
-                                                                                        value='{{ $user->id }}'>
-                                                                                        {{ $user->fullName }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                            @error('assignee')
-                                                                                <div class="text-danger text-small">
-                                                                                    {{ $message }}</div>
-                                                                            @enderror
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-4 mt-4 text-start">
-                                                                        <x-button>{{ __('assign') }}</x-button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        @else
-                                                            <p>Please click Test to assign</p>
-                                                        @endif
-                                                    @else
-                                                        <p>Acknowledge to Assign</p>
-                                                    @endif
-                                                </td>
+                                                <th>Test Requested</th>
+                                                <th>Assignment @json($assignedTests)</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div> <!-- end preview-->
-                        </div>
-                        @if ($clinical_notes && $request_acknowledged_by)
-                            <div class="col-md-12">
-                                <div class="card-body text-center">
-                                    <div>
-                                        <h5 class="card-title">Clinical Notes</h5>
-                                    </div>
-                                    <p class="card-text">{{ $clinical_notes }}</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($tests as $key => $test)
+                                                <tr>
+                                                    <td>
+                                                        <strong class="text-danger">Test-{{ $key + 1 }}</strong>
+                                                        <a href="javascript: void(0);" class="action-ico"
+                                                            wire:click="activateTest({{ $test->id }})"><strong
+                                                                class="text-success">{{ $test->name }}
+                                                            </strong></a>
+                                                    </td>
+                                                    <td>
+                                                        @if ($sample->request_acknowledged_by)
+                                                            @if ($test->id === $test_id)
+                                                                <form wire:submit.prevent="assignTest">
+                                                                    <div class="row">
 
-                        @if (!$request_acknowledged_by)
-                            <a href="javascript: void(0);" wire:click="acknowledgeRequest({{ $sample_id }})"
-                                class="action-ico btn btn-success radius-30 px-3">
-                                <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
-                        @endif
-                        <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
-                            aria-label="Close">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                                                        <div class="col-md-8">
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Assignee
+                                                                                    @if ($backlog)
+                                                                                        (Backlog: <strong
+                                                                                            class="text-danger">{{ $backlog }}</strong>)
+                                                                                    @endif
+                                                                                </label>
+                                                                                <select class="form-select"
+                                                                                    wire:model="assignee">
+                                                                                    <option selected value="">
+                                                                                        Select
+                                                                                    </option>
+                                                                                    @foreach ($users as $user)
+                                                                                        <option
+                                                                                            value='{{ $user->id }}'>
+                                                                                            {{ $user->fullName }}
+                                                                                        </option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                @error('assignee')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
 
+                                                                        <div class="col-md-2 mt-4 text-start">
+                                                                            <x-button>{{ __('Assign') }}</x-button>
+                                                                        </div>
 
-        <div wire:ignore.self class="modal fade" id="view-aliquots" data-bs-backdrop="static"
-            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="staticBackdropLabel">
-                            @if ($sample_is_for == 'Aliquoting')
-                                Requested Aliquots
-                            @else
-                                Assign storage task
-                            @endif
-                            for sample (<span class="text-info">{{ $sample_identity }}</span>) with Lab_No <span
-                                class="text-info">{{ $lab_no }}</span>
-                        </h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                            wire:click="close()"></button>
-                    </div> <!-- end modal header -->
-                    <div class="row">
-                        <div class="mb-0">
-                            <div class="card">
-                                <div class="card-body">
-                                    @if ($sample_is_for == 'Aliquoting')
-                                        <ul class="list-group">
-                                            @foreach ($aliquots as $key => $aliquot)
-                                                <li class="list-group-item"><strong
-                                                        class="text-danger">Aliquot-{{ $key + 1 }}
-                                                    </strong>{{ $aliquot->type }}
-                                                </li>
+                                                                    </div>
+                                                                </form>
+                                                            @else
+                                                                <p>Please click Test to assign</p>
+                                                            @endif
+                                                        @else
+                                                            <p>Acknowledge to Assign</p>
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endforeach
-                                        </ul>
-                                    @endif
-
-                                    @if ($request_acknowledged_by)
-                                        <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="mb-2">
-                                                        <label class="form-label fw-bold">Assignee</label>
-                                                        <select class="form-select" wire:model="assignee">
-                                                            <option selected value="">Select
-                                                            </option>
-                                                            @foreach ($users as $user)
-                                                                <option value='{{ $user->id }}'>
-                                                                    {{ $user->fullName }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        @error('assignee')
-                                                            <div class="text-danger text-small">
-                                                                {{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4 mt-4 text-end">
-                                                    <x-button>{{ __('assign') }}</x-button>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    @else
-                                    @endif
-                                </div>
-
+                                        </tbody>
+                                    </table>
+                                </div> <!-- end preview-->
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        @if (!$request_acknowledged_by)
-                            <div class="d-flex align-items-center">
-                                <div class="fs-3 text-info"><i class="bi bi-info-circle-fill "></i>
-                                </div>
-                                <div class="ms-3 text-secondary">
-                                    <div>Acknowledge to Assign
+
+                            @if ($sample->clinical_notes && $sample->request_acknowledged_by)
+                                <div class="col-md-12">
+                                    <div class="card-body text-center">
+                                        <div>
+                                            <h5 class="card-title">Clinical Notes</h5>
+                                        </div>
+                                        <p class="card-text">{{ $sample->clinical_notes }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <a href="javascript: void(0);" wire:click="acknowledgeRequest({{ $sample_id }})"
-                                class="action-ico btn btn-success radius-30 px-3">
-                                <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
-                        @endif
-                        <button class="btn  btn-danger radius-30 px-3" wire:click="close()" data-bs-dismiss="modal"
-                            aria-label="Close">Close</button>
+                            @endif
+
+                        </div>
+
+                        <div class="modal-footer">
+                            @if ($assignee)
+                            <a href="javascript: void(0);" wire:click="assignAllTests"
+                            class="action-ico btn btn-info radius-30 px-3">Assign All</a>
+                            @endif
+                            @if (!$sample->request_acknowledged_by)
+                                <a href="javascript: void(0);" wire:click="acknowledgeRequest"
+                                    class="action-ico btn btn-success radius-30 px-3">
+                                    <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
+                            @endif
+                            <button class="btn  btn-danger radius-30 px-3" wire:click="close()"
+                                data-bs-dismiss="modal" aria-label="Close">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
+
+        @if (($sample && $sample->sample_is_for == 'Aliquoting') || $sample->sample_is_for == 'Storage')
+            <div wire:ignore.self class="modal fade" id="view-aliquots" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">
+                                @if ($sample->sample_is_for == 'Aliquoting')
+                                    Requested Aliquots
+                                @else
+                                    Assign storage task
+                                @endif
+                                for sample (<span class="text-info">{{ $sample->sample_identity }}</span>) with Lab_No
+                                <span class="text-info">{{ $sample->lab_no }}</span>
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
+                                wire:click="close()"></button>
+                        </div> <!-- end modal header -->
+
+                        <div class="row">
+                            <div class="mb-0">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        @if ($sample->sample_is_for == 'Aliquoting')
+                                            <ul class="list-group">
+                                                @foreach ($aliquots as $key => $aliquot)
+                                                    <li class="list-group-item"><strong
+                                                            class="text-danger">Aliquot-{{ $key + 1 }}
+                                                        </strong>{{ $aliquot->type }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+
+                                        @if ($sample->request_acknowledged_by)
+                                            <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
+                                                <div class="row">
+
+                                                    <div class="col-md-8">
+                                                        <div class="mb-2">
+                                                            <label class="form-label fw-bold">Assignee</label>
+                                                            <select class="form-select" wire:model="assignee">
+                                                                <option selected value="">Select
+                                                                </option>
+                                                                @foreach ($users as $user)
+                                                                    <option value='{{ $user->id }}'>
+                                                                        {{ $user->fullName }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('assignee')
+                                                                <div class="text-danger text-small">
+                                                                    {{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 mt-4 text-end">
+                                                        <x-button>{{ __('assign') }}</x-button>
+                                                    </div>
+
+                                                </div>
+                                            </form>
+                                        @else
+                                        @endif
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            @if (!$sample->request_acknowledged_by)
+                                <div class="d-flex align-items-center">
+                                    <div class="fs-3 text-info"><i class="bi bi-info-circle-fill "></i>
+                                    </div>
+                                    <div class="ms-3 text-secondary">
+                                        <div>Acknowledge to Assign
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="javascript: void(0);" wire:click="acknowledgeRequest"
+                                    class="action-ico btn btn-success radius-30 px-3">
+                                    <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
+                            @endif
+                            <button class="btn  btn-danger radius-30 px-3" wire:click="close()"
+                                data-bs-dismiss="modal" aria-label="Close">Close</button>
+                        </div>
+                    </div>x
+
+                </div>
+            </div>
+        @endif
 
         @push('scripts')
             <script>
