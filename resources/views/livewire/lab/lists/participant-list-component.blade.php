@@ -96,7 +96,7 @@
                                 <div class="mb-3 col-md-2">
                                     <label for="orderBy" class="form-label">OrderBy</label>
                                     <select wire:model="orderBy" class="form-select">
-                                        <option value="identity">Participant ID</option>
+                                        <option value="identity">PID</option>
                                         <option value="age">Age</option>
                                         <option value="address">Address</option>
                                         <option value="contact">Contact</option>
@@ -124,7 +124,7 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Participant ID</th>
+                                        <th>PID</th>
                                         <th>Entry Type</th>
                                         <th>Age</th>
                                         <th>Gender</th>

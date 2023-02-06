@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Helpers\Generate;
-use App\Models\Admin\Test;
-use App\Models\Collector;
-use App\Models\Participant;
-use App\Models\Requester;
-use App\Models\Sample;
-use App\Models\SampleReception;
-use App\Models\SampleType;
-use App\Models\Study;
 use Exception;
+use App\Models\Study;
+use App\Models\Sample;
+use GuzzleHttp\Client;
 use Livewire\Component;
+use App\Helpers\Generate;
+use App\Models\Collector;
+use App\Models\Requester;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
+use App\Models\Participant;
+use App\Models\SampleReception;
 
 class SpecimenRequestComponent extends Component
 {
@@ -145,6 +146,10 @@ class SpecimenRequestComponent extends Component
 
     public $aliquots;
 
+    public $patient_found = false;
+
+    public $patno;
+
     protected $validationAttributes = [
         'study_id' => 'study',
         'sample_type_id' => 'sample_type',
@@ -156,9 +161,9 @@ class SpecimenRequestComponent extends Component
         $this->validateOnly($fields, [
 
             'identity' => 'required|string',
-            'age' => 'required|integer|min:1',
+            //'age' => 'required|integer|min:1',
             'address' => 'required|string|max:40',
-            'gender' => 'required|string|max:6',
+            // 'gender' => 'required|string|max:6',
             'contact' => 'required|string',
             'nok_contact' => 'required|string',
             'nok_address' => 'required|string|max:40',
@@ -297,6 +302,78 @@ class SpecimenRequestComponent extends Component
         }
     }
 
+    public function updatedpatno()
+    {
+        // $endpoint = "http://crs.brc.online/api/get-patient/";
+        // $client = new Client();
+        $patient_no = $this->patno;
+        $token = "ABC";
+
+        // $response = $client->request('GET', $endpoint, ['query' => [
+        // 'pat_no' => $patient_no,
+        // 'token' => 'ASHS773HD8883HDXHDHY',
+        // ]]);
+
+        // $crsparticipant = json_decode($response->getBody(), true);
+
+
+        $client = new Client(['base_uri' => 'https://crs.co.ug/api/get-patient/', 'verify' => false]);
+        try {
+            $response = $client->request('GET', 'https://crs.co.ug/api/get-patient/', ['query' => [
+                'pat_no' => $patient_no,
+                'token' => 'ASHS773HD8883HDXHDHY',
+                ]]);
+
+                $crsparticipant = json_decode($response->getBody(), true);
+                if($crsparticipant != null){
+                foreach  ($crsparticipant as $participant){
+                    $this->entry_type = 'CRS Patient';
+                    $this->identity = $participant['pat_no'];
+                    $this->age = $participant['age'];
+                    $this->address = $participant['swab_district'];
+                    $this->gender = $participant['gender'];
+                    $this->contact = $participant['phone_number'];
+                    $this->nok_contact = $participant['phone_number'];
+                    $this->nok_address = $participant['patient_district'];
+                    $this->date_collected = $participant['collection_date'];
+                    $this->title = null;
+                    $this->nin_number = $participant['doc_no'];
+                    $this->surname = $participant['surname'];
+                    $this->first_name = $participant['given_name'];
+                    $this->other_name = $participant['other_name'];
+                    $this->nationality = $participant['nationality'];
+                    $this->district = $participant['patient_district'];
+                    $this->dob = $participant['dob'];
+                    $this->birth_place = null;
+
+                    $this->toggleForm = false;
+                    $this->patient_found= true;
+                    $this->activeParticipantTab = true;
+                    }
+
+                }else{
+                    $this->patient_found= false;
+                    $this->reset(['age', 'gender', 'contact', 'address',
+                    'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
+                    'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
+                    'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+                }
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $this->patient_found= false;
+            $this->reset(['age', 'gender', 'contact', 'address',
+            'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
+            'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
+            'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+
+        }
+
+
+
+
+
+    }
+
     public function storeParticipant()
     {
         if ($this->batch_sample_count == $this->batch_samples_handled) {
@@ -310,9 +387,9 @@ class SpecimenRequestComponent extends Component
                 if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
                     $this->validate([
                         'entry_type' => 'required|string',
-                        'age' => 'required|integer|min:1',
+                        //'age' => 'required|integer|min:1',
                         'address' => 'required|string|max:40',
-                        'gender' => 'required|string|max:6',
+                        // 'gender' => 'required|string|max:6',
                         'contact' => 'required|string',
                         'nok_contact' => 'required|string',
                         'nok_address' => 'required|string|max:40',
@@ -326,47 +403,81 @@ class SpecimenRequestComponent extends Component
                     ]);
                 }
             }
-            $participant = new Participant();
-            $patNo = Generate::participantNo();
-            $participant->participant_no = $patNo;
-            if ($this->entry_type == 'Other' || $this->entry_type == 'Client') {
-                $participant->identity = $patNo;
-            } else {
-                $participant->identity = $this->identity;
-            }
-            $participant->age = $this->age ?? null;
-            $participant->address = $this->address ?? null;
-            $participant->gender = $this->gender ?? null;
-            $participant->contact = $this->contact ?? null;
-            $participant->nok_contact = $this->nok_contact ?? null;
-            $participant->nok_address = $this->nok_address ?? null;
-            $participant->clinical_notes = $this->clinical_notes ?? null;
+                try{
+                $participant = new Participant();
+                $patNo = Generate::participantNo();
+                $participant->participant_no = $patNo;
+                if ($this->entry_type == 'Other' || $this->entry_type == 'Client') {
+                    $participant->identity = $patNo;
+                } else {
+                    $participant->identity = $this->identity;
+                }
+                $participant->age = $this->age ?? null;
+                $participant->address = $this->address ?? null;
+                $participant->gender = $this->gender ?? null;
+                $participant->contact = $this->contact ?? null;
+                $participant->nok_contact = $this->nok_contact ?? null;
+                $participant->nok_address = $this->nok_address ?? null;
+                $participant->clinical_notes = $this->clinical_notes ?? null;
 
-            $participant->title = $this->title ?? null;
-            $participant->nin_number = $this->nin_number ?? null;
-            $participant->surname = $this->surname ?? null;
-            $participant->first_name = $this->first_name ?? null;
-            $participant->other_name = $this->other_name ?? null;
-            $participant->nationality = $this->nationality ?? null;
-            $participant->district = $this->district ?? null;
-            $participant->dob = $this->dob ?? null;
-            $participant->birth_place = $this->birth_place ?? null;
-            $participant->religious_affiliation = $this->religious_affiliation ?? null;
-            $participant->occupation = $this->occupation ?? null;
-            $participant->civil_status = $this->civil_status ?? null;
-            $participant->email = $this->email ?? null;
-            $participant->nok = $this->nok ?? null;
-            $participant->nok_relationship = $this->nok_relationship ?? null;
-            $participant->facility_id = $this->facility_id;
-            $participant->entry_type = $this->entry_type;
+                $participant->title = $this->title ?? null;
+                $participant->nin_number = $this->nin_number ?? null;
+                $participant->surname = $this->surname ?? null;
+                $participant->first_name = $this->first_name ?? null;
+                $participant->other_name = $this->other_name ?? null;
+                $participant->nationality = $this->nationality ?? null;
+                $participant->district = $this->district ?? null;
+                $participant->dob = $this->dob ?? null;
+                $participant->birth_place = $this->birth_place ?? null;
+                $participant->religious_affiliation = $this->religious_affiliation ?? null;
+                $participant->occupation = $this->occupation ?? null;
+                $participant->civil_status = $this->civil_status ?? null;
+                $participant->email = $this->email ?? null;
+                $participant->nok = $this->nok ?? null;
+                $participant->nok_relationship = $this->nok_relationship ?? null;
+                $participant->facility_id = $this->facility_id;
+                $participant->entry_type = $this->entry_type;
 
-            $participant->save();
+                $participant->save();
 
-            $this->participant_id = $participant->id;
-            $this->entry_type = $participant->entry_type;
-            $this->activeParticipantTab = false;
-            $this->resetParticipantInputs();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
+                $this->participant_id = $participant->id;
+                $this->entry_type = $participant->entry_type;
+                $this->activeParticipantTab = false;
+                $this->resetParticipantInputs();
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
+                } catch(Exception $error) {
+                    $participant = Participant::where('identity',$this->identity)->first();
+                    $participant->identity = $this->identity;
+                    $participant->age = $this->age;
+                    $participant->address = $this->address;
+                    $participant->gender = $this->gender;
+                    $participant->contact = $this->contact;
+                    $participant->nok_contact = $this->nok_contact;
+                    $participant->nok_address = $this->nok_address;
+                    $participant->clinical_notes = $this->clinical_notes;
+
+                    $participant->title = $this->title;
+                    $participant->nin_number = $this->nin_number;
+                    $participant->surname = $this->surname;
+                    $participant->first_name = $this->first_name;
+                    $participant->other_name = $this->other_name;
+                    $participant->nationality = $this->nationality;
+                    $participant->district = $this->district;
+                    $participant->dob = $this->dob;
+                    $participant->birth_place = $this->birth_place;
+                    $participant->religious_affiliation = $this->religious_affiliation;
+                    $participant->occupation = $this->occupation;
+                    $participant->civil_status = $this->civil_status;
+                    $participant->email = $this->email;
+                    $participant->nok = $this->nok;
+                    $participant->nok_relationship = $this->nok_relationship;
+                    $participant->update();
+                    $this->participant_id = $participant->id;
+                    $this->entry_type = $participant->entry_type;
+                    $this->activeParticipantTab = false;
+                    $this->resetParticipantInputs();
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
+                }
         }
     }
 
@@ -746,12 +857,22 @@ class SpecimenRequestComponent extends Component
 
     public function deleteData()
     {
+        $sample = Sample::where('id', $this->delete_id)->first();
+        $sampleReception = SampleReception::where('id', $sample->sample_reception_id)->first();
+
         try {
-            $sample = Sample::where('id', $this->delete_id)->first();
-            $sample->delete();
-            $this->delete_id = '';
-            $this->dispatchBrowserEvent('close-modal');
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
+            if($sample->status=='Accessioned'){
+
+                $sampleReception->decrement('samples_handled');
+                $sample->delete();
+                $this->delete_id = null;
+                $this->dispatchBrowserEvent('close-modal');
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
+
+            }else{
+                $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
+            }
+
         } catch(Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
         }

@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     {{-- {{ $participant_id }} --}}
-                                    <span class="text-info">{{ $source_facility }}</span> Specimen Request for Batch
+                                    <span class="text-info">{{ $source_facility }}</span> Batch-
                                     <strong class="text-success">{{ $batch_no }}</strong>
                                     (<strong class="text-info">{{ $batch_samples_handled }}</strong>/<strong
                                         class="text-danger">{{ $batch_sample_count }}</strong>)
@@ -84,6 +84,7 @@
                                                 <label for="entry_type" class="form-label">Entry Type</label>
                                                 <select class="form-select" id="entry_type" wire:model="entry_type">
                                                     <option selected value="Participant">Participant/Isolate</option>
+                                                    <option selected value="CRS Patient">CRS Patient</option>
                                                     <option value="Client">Client</option>
                                                     <option value="Other">Other</option>
                                                 </select>
@@ -102,16 +103,42 @@
 
                                                     </label>
                                                     <input type="text" id="identity"
-                                                        class="form-control text-uppercase"
-                                                        onkeyup="this.value = this.value.toUpperCase();" size="14"
+                                                        class="form-control" size="14"
                                                         wire:model.lazy="identity"
                                                         @if ($entry_type == 'Client') disabled @endif>
                                                     @error('identity')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                            @endif
-                                            @if ($entry_type == 'Participant' || $entry_type == 'Client')
+                                                @endif
+                                                @if($entry_type == 'CRS Patient')
+                                                    <div class="col">
+                                                        <label for="patno" class="form-label">CRS Pat No.<span
+                                                            class="text-danger">*</span>
+                                                        </label>
+                                                        <input type="text" id="pat_no"
+                                                            class="form-control" size="14"
+                                                            wire:model.lazy="patno">
+                                                        @if ($patient_found)
+                                                            <span class="text-success">Found</span>
+                                                        @endif
+                                                        @error('patno')
+                                                            <div class="text-danger text-small">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="mb-2 col-md-2">
+                                                        <label for="identity" class="form-label">Participant ID<span
+                                                                class="text-danger">*</span>
+                                                        </label>
+                                                        <input type="text" id="identity"
+                                                            class="form-control" size="14"
+                                                            wire:model.lazy="identity">
+                                                        @error('identity')
+                                                            <div class="text-danger text-small">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+                                            @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'CRS Patient')
                                                 <div class="mb-3 col-md-1">
                                                     <label for="age" class="form-label">Age<span
                                                             class="text-danger">*</span></label>
@@ -134,7 +161,7 @@
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="mb-3 col-md-3">
+                                                <div class="mb-3 col">
                                                     <label for="address" class="form-label">Address<span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" id="address"
@@ -145,7 +172,7 @@
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                <div class="mb-3 col-md-2">
+                                                <div class="mb-2 col-md-2">
                                                     <label for="contact" class="form-label">Contact<span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" id="contact"
@@ -189,7 +216,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        @if ($entry_type == 'Participant' || $entry_type == 'Client')
+                                        @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'CRS Patient')
                                             <div class="row mx-auto">
                                                 <h6> <strong class="text-success">Optional Participant
                                                         Information</strong>
@@ -462,6 +489,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
                                             @if ($entry_type != 'Client')
 
                                                 <div class="mb-3 col-md-3">
@@ -489,6 +517,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_is_for" class="form-label">Sample is For?<span
                                                         class="text-danger">*</span></label>
@@ -554,6 +583,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
+                                            
                                             <div class="mb-2 col-md-2">
                                                 <div class="form-group">
                                                     <label for="volume"

@@ -162,12 +162,13 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Sample Batch</th>
+                                        <th>Sample</th>
                                         <th>Tracker</th>
                                         <th>Facility</th>
                                         <th>Study</th>
-                                        <th>Participant ID</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
+                                        <th>Sample ID</th>
                                         <th>Lab No</th>
                                         <th>Test</th>
                                         <th>TAT(HR<->MIN)</th>
@@ -208,6 +209,9 @@
 
                                             <td>
                                                 {{ $testResult->sample->sampleType->type }}
+                                            </td>
+                                            <td>
+                                                {{ $testResult->sample->sample_identity }}
                                             </td>
                                             <td class="text-success fw-bold">
                                                 {{ $testResult->sample->lab_no ?? 'N/A' }}

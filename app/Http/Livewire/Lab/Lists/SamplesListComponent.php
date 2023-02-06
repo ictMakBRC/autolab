@@ -75,6 +75,8 @@ class SamplesListComponent extends Component
 
     public $date_stored;
 
+    public $sample;
+
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
@@ -98,6 +100,7 @@ class SamplesListComponent extends Component
 
     public function storageDetails(Sample $sample)
     {
+        $this->sample = $sample;
         $sample->load('storage', 'storage.freezer', 'storage.freezer.location');
         $this->sample_id = $sample->id;
         $this->sample_identity = $sample->sample_identity;

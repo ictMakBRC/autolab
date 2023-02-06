@@ -213,7 +213,7 @@
                                                 <td>{{ date('d-m-Y H:i', strtotime($sampleReception->date_delivered)) }}
                                                 </td>
                                                 <td>{{ $sampleReception->samples_delivered }}</td>
-                                                <td>{{ $sampleReception->facility->name }}</td>
+                                                <td style="white-space: normal">{{ $sampleReception->facility->name }}</td>
                                                 <td>{{ $sampleReception->courier->name }}</td>
                                                 <td>{{ $sampleReception->samples_accepted }}</td>
                                                 <td>{{ $sampleReception->samples_rejected }}</td>

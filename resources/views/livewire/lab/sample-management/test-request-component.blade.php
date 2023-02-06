@@ -10,31 +10,31 @@
                                     <span class="text-danger fw-bold">{{ $sample_is_for }}</span> Tasks
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" class="btn btn-outline-success me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-success me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Testing')">
                                         @if ($sample_is_for === 'Testing')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bx bxs-flask"></i>Testing
+                                        <i class="bx bxs-flask"></i>Testing (<strong class="text-danger">{{$testAssignmentCount}}</strong>)
                                     </a>
-                                    <a type="button" class="btn btn-outline-info me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-info me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Aliquoting')">
                                         @if ($sample_is_for === 'Aliquoting')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bi bi-hourglass-split"></i>Aliquoting
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong class="text-danger">{{$aliquotingAssignmentCount}}</strong>)
                                     </a>
 
-                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold"
+                                    <a type="button" class="btn btn-outline-warning me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Storage')">
                                         @if ($sample_is_for === 'Storage')
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
 
-                                        <i class="bx bx-archive"></i> Storage
+                                        <i class="bx bx-archive"></i> Storage (<strong class="text-danger">{{$storageAssignmentCount}}</strong>)
                                     </a>
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
@@ -64,14 +64,14 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Batch No</th>
-                                        <th>Participant ID</th>
+                                        <th>No</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
                                         <th>Sample ID</th>
                                         <th>Lab No</th>
                                         <th>Study</th>
-                                        <th>Requested By</th>
-                                        <th>Collected By</th>
+                                        <th>Requester</th>
+                                        <th>Collector</th>
                                         @if ($sample_is_for == 'Testing')
                                             <th> TestCount</th>
                                         @elseif($sample_is_for == 'Aliquoting')
@@ -238,7 +238,7 @@
                     <div class="modal-footer">
                         @if ($request_acknowledged_by)
                             @if ($sample->sample_is_for == 'Testing')
-                                <a href="{{ route('attach-test-results', $sample_id) }}" type="button"
+                                <a href="{{ URL::signedRoute('attach-test-results', $sample_id) }}" type="button"
                                     class="btn btn-success radius-30 px-3">Process</a>
                             @else
                                 <a href="#" type="button" class="btn btn-success radius-30 px-3">Process</a>

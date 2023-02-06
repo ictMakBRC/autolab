@@ -68,7 +68,7 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($courier->created_at)) }}</td>
                                         <td class="table-action">
-                                            @if ($courier->facility->is_active == 0 || $courier->study->is_active == 0)
+                                            @if ($courier->facility->is_active == 0)
                                                 <a href="javascript: void(0);"
                                                     class="action-ico btn btn-outline-warning mx-1"
                                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title=""

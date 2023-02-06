@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
 use App\Models\Sample;
-use App\Models\SampleType;
-use App\Models\TestAssignment;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Models\TestAssignment;
+use App\Models\AliquotingAssignment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class TestRequestComponent extends Component
 {
@@ -83,15 +84,6 @@ class TestRequestComponent extends Component
         $this->dispatchBrowserEvent('view-tests');
     }
 
-    public function acknowledgeRequest(Sample $sample)
-    {
-        $sample->request_acknowledged_by = Auth::id();
-        $sample->date_acknowledged = now();
-        $sample->status = 'Processing';
-        $sample->update();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Request Updated successfully!']);
-    }
-
     public function close()
     {
         $this->tests_requested = collect([]);
@@ -99,7 +91,7 @@ class TestRequestComponent extends Component
         $this->reset(['sample_id', 'sample_identity', 'lab_no', 'request_acknowledged_by']);
     }
 
-    public function render()
+    public function getSamples()
     {
         $samples = Sample::search($this->search, ['Assigned', 'Processing'])
         ->whereIn('status', ['Assigned', 'Processing'])
@@ -117,6 +109,33 @@ class TestRequestComponent extends Component
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
-        return view('livewire.lab.sample-management.test-request-component', compact('samples'));
+        return $samples;
+    }
+
+    public function getAssignments()
+    {
+        $counts['testAssignmentCount']=TestAssignment::where(['assignee' => auth()->user()->id, 'status' => 'Assigned'])->count();
+        
+        $counts['aliquotingAssignmentCount']=AliquotingAssignment::where(['assignee' => auth()->user()->id, 'status' => 'Assigned'])
+        ->whereHas('sample', function (Builder $query) {
+            $query->where('sample_is_for', 'Aliquoting');
+        })->count();
+
+        $counts['storageAssignmentCount']=AliquotingAssignment::where(['assignee' => auth()->user()->id, 'status' => 'Assigned'])
+        ->whereHas('sample', function (Builder $query) {
+            $query->where('sample_is_for', 'Storage');
+        })->count();
+
+        return $counts;
+    }
+
+    public function render()
+    {
+        $samples=$this->getSamples();
+        $testAssignmentCount=$this->getAssignments()['testAssignmentCount'];
+        $aliquotingAssignmentCount=$this->getAssignments()['aliquotingAssignmentCount'];
+        $storageAssignmentCount=$this->getAssignments()['storageAssignmentCount'];
+
+        return view('livewire.lab.sample-management.test-request-component', compact('samples','testAssignmentCount','aliquotingAssignmentCount','storageAssignmentCount'));
     }
 }

@@ -220,7 +220,7 @@
                                     <tr>
                                         <td colspan="">
                                             <strong class="text-inverse">Collection Date:
-                                            </strong>{{$testResult->sample->date_collected?date('d-m-Y H:i', strtotime($testResult->sample->date_collected)):'N/A'}}
+                                            </strong>{{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
                                         </td>
                                         <td>
                                             <strong class="text-inverse">Date Received:
@@ -232,16 +232,43 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">
-                                            <strong class="text-inverse">Result:
-                                            </strong>
-                                            @if ($testResult->result)
-                                                {{ $testResult->result }}
-                                            @else
-                                                <a href="{{ route('attachment.download', $testResult->id) }}">See
-                                                    Attachment</a>
-                                            @endif
-                                        </td>
+                                        @if ($testResult->test->result_presentation == 'Tabular')
+                                            <table class="table nowrap w-100 table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (array_keys($testResult->parameters) as $key)
+                                                            <th>
+                                                                {{ $key }}
+                                                            </th>
+                                                        @endforeach
+                                                        <th>
+                                                            Result
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        @foreach (array_values($testResult->parameters) as $parameter)
+                                                            <td>
+                                                                {{ $parameter }}
+                                                            </td>
+                                                        @endforeach
+                                                        <td>
+                                                            {{ $testResult->result }}
+                                                        </td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        @else
+                                            <td colspan="3">
+                                                <strong class="text-inverse">Result:
+                                                </strong>
+                                                @if ($testResult->result)
+                                                    {{ $testResult->result }}
+                                                @else
+                                                    <a href="{{ route('attachment.download', $testResult->id) }}">See
+                                                        Attachment</a>
+                                                @endif
+                                            </td>
+                                        @endif
                                     </tr>
                                 </tbody>
                             </table>

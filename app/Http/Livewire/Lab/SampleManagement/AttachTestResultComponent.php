@@ -9,6 +9,7 @@ use App\Models\TestAssignment;
 use App\Models\TestResult;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -38,13 +39,21 @@ class AttachTestResultComponent extends Component
 
     public $comment;
 
+    public $testParameters = [];
+
     public $status;
 
     public $sample_identity;
 
     public $lab_no;
 
-    public $kit_expiry_date, $verified_lot, $kit_id;
+    public $kit_expiry_date;
+
+    public $verified_lot;
+
+    public $kit_id;
+
+    public $activeTest;
 
     public function mount($id)
     {
@@ -61,9 +70,20 @@ class AttachTestResultComponent extends Component
                 $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
             })
             ->orderBy('name', 'asc')->get();
+
+            //Set the first test in the collection as active and load its parameters if present
             $this->test_id = $this->requestedTests[0]->id ?? null;
+            $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+
+            if ($this->activeTest && $this->activeTest->parameters != null) {
+                foreach ($this->activeTest->parameters as $key => $parameter) {
+                    $this->testParameters[$parameter] = '';
+                }
+            }
         } else {
             $this->requestedTests = collect([]);
+            $this->testParameters = [];
+            $this->testParameters = [];
             $this->reset('test_id');
         }
 
@@ -77,87 +97,121 @@ class AttachTestResultComponent extends Component
             'performed_by' => 'required|integer',
         ]);
 
-        if ($this->link != null) {
-            $this->validate([
-                'link' => 'required|url',
-            ]);
-        }
-
-        if ($this->attachment != null) {
-            $this->validate([
-                'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
-            ]);
-            $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
-            $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
+        if ($this->result==null && $this->link==null && $this->attachment==null) {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please enter/Attach results!']);
         } else {
-            $test = Test::findOrfail($this->test_id);
-            if ($test->result_type == 'File') {
-                $this->validate([
-                    'attachment' => ['required'],
+
+            if ($this->attachment != null) {
+                        $this->validate([
+                    'attachment' => 'mimes:pdf,xls,xlsx,csv,doc,docx|max:5000',
                 ]);
+                $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
+                $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
             } else {
-                $this->attachmentPath = null;
+                if ($this->activeTest->result_type == 'File') {
+                    $this->validate([
+                        'attachment' => ['required'],
+                    ]);
+                } else {
+                    $this->attachmentPath = null;
+                }
+            }
+
+            $this->testParameters = array_filter($this->testParameters, function ($value) {
+                return $value != '';
+            });
+
+            if ($this->activeTest->parameters!=null) {
+                    if (count($this->testParameters)==0) {
+                        // dd('no parameters');
+                        $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
+                        $this->validate([
+                            'testParameters' => ['required'],
+                        ]);
+                    } else {
+                        $this->saveResults();
+                    }
+            }else{
+                $this->saveResults();
             }
         }
+    }
 
-        $testResult = new TestResult();
-        $testResult->sample_id = $this->sample_id;
-        $testResult->test_id = $this->test_id;
-        if ($this->link != null) {
-            $testResult->result = $this->link;
-        } else {
-            $test = Test::findOrfail($this->test_id);
-            if ($test->result_type == 'Measurable') {
-                $testResult->result = $this->result.''.$test->measurable_result_uom;
+    public function saveResults()
+    {
+        DB::transaction(function () {
+
+            $testResult = new TestResult();
+            $testResult->sample_id = $this->sample_id;
+            $testResult->test_id = $this->test_id;
+            if ($this->link != null) {
+                $testResult->result = $this->link;
             } else {
-                $testResult->result = $this->result;
+                $test = Test::findOrfail($this->test_id);
+                if ($test->result_type == 'Measurable') {
+                    $testResult->result = $this->result.''.$test->measurable_result_uom;
+                } else {
+                    $testResult->result = $this->result;
+                }
             }
-        }
 
-        $testResult->attachment = $this->attachmentPath;
-        $testResult->performed_by = $this->performed_by;
-        $testResult->comment = $this->comment;
-        $testResult->kit_id = $this->kit_id;
-        $testResult->verified_lot = $this->verified_lot;
-        $testResult->kit_expiry_date = $this->kit_expiry_date;
-        $testResult->status = 'Pending Review';
+            $testResult->attachment = $this->attachmentPath;
+            $testResult->performed_by = $this->performed_by;
+            $testResult->comment = $this->comment;
+            $testResult->parameters = count($this->testParameters) ? $this->testParameters : null;
+            $testResult->kit_id = $this->kit_id;
+            $testResult->verified_lot = $this->verified_lot;
+            $testResult->kit_expiry_date = $this->kit_expiry_date;
+            $testResult->status = 'Pending Review';
+            $testResult->save();
 
-        $testResult->save();
+            array_push($this->tests_performed, "{$testResult->test_id}");
+            $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
+            $this->sample->update(['tests_performed' => $this->tests_performed]);
+            $testAssignment->update(['status' => 'Test Done']);
 
-        array_push($this->tests_performed, "{$testResult->test_id}");
-        $associatedSample = Sample::findOrfail($this->sample_id);
-        $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
-        $associatedSample->update(['tests_performed' => $this->tests_performed]);
-        $testAssignment->update(['status' => 'Test Done']);
+            if (count(array_diff($this->sample->tests_requested, $this->sample->tests_performed)) == 0) {
+                $this->sample->update(['status' => 'Tests Done']);
+                redirect()->route('test-request');
+            }
 
-        if (count(array_diff($associatedSample->tests_requested, $associatedSample->tests_performed)) == 0) {
-            $associatedSample->update(['status' => 'Tests Done']);
-            redirect()->route('test-request');
-        }
+            if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
+                redirect()->route('test-request');
+            }
+        });
 
-        if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
-            redirect()->route('test-request');
+        $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
+        $this->test_id = $this->requestedTests[0]->id ?? null;
+        $this->testParameters = [];
+
+        //Set the first test in the collection as active and load its parameters if present
+        $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+        if ($this->activeTest && $this->activeTest->parameters != null) {
+            foreach ($this->activeTest->parameters as $key => $parameter) {
+                $this->testParameters[$parameter] = '';
+            }
         }
 
         $this->resetResultInputs();
-        $this->mount($associatedSample->id);
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }
 
+
     public function activateResultInput($id)
     {
-        $this->reset(['result', 'attachment', 'comment']);
+        $this->resetResultInputs();
+        $this->activeTest = $this->requestedTests->where('id', $id)->first();
         $this->test_id = $id;
     }
 
     public function resetResultInputs()
     {
-        $this->reset(['result', 'link', 'attachment', 'performed_by', 'comment', 'attachmentPath']);
+        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath','kit_id','verified_lot','kit_expiry_date']);
     }
 
     public function close()
     {
-        $this->reset(['result', 'attachment', 'performed_by', 'comment']);
+        $this->resetResultInputs();
     }
 
     public function render()

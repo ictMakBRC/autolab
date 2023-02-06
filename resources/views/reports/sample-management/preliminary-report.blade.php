@@ -76,6 +76,32 @@
                         </td>
                     </tr>
                     <tr>
+                        @if ($testResults->test->result_presentation=='Tabular')
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        @foreach (array_keys($testResults->parameters) as $key)
+                                        <th>
+                                            {{$key}}
+                                        </th>
+                                        @endforeach
+                                        <th>
+                                            Result
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        @foreach (array_values($testResults->parameters) as $parameter)
+                                        <td>
+                                            {{$parameter}}
+                                        </td>
+                                        @endforeach
+                                        <td>
+                                            {{ $testResults->result }}
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        @else
                         <td colspan="3">
                             <strong class="text-inverse">Result:
                             </strong>
@@ -85,6 +111,9 @@
                                 <a href="{{ route('attachment.download', $testResults->id) }}">See Attachment</a>
                             @endif
                         </td>
+                        @endif
+
+                       
                     </tr>
                 </tbody>
             </table>
@@ -357,6 +386,47 @@
                                                                     @enderror
                                                                 </div>
                                                             </div>
+                                                            {{-- KIT USED --}}
+                                                            <div class="col-md-5">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Kit Used</label>
+                                                                    <select class="form-select"
+                                                                        wire:model="kit_id">
+                                                                        <option selected value="">Select
+                                                                        </option>
+                                                                        @foreach ($kits as $kit)
+                                                                            <option
+                                                                                value='{{ $kit->id }}'>
+                                                                                {{ $kit->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    @error('kit_id')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Verified Lot</label>
+                                                                        <textarea wire:model.lazy="verified_lot" rows="1" class="form-control" placeholder="{{ __('verified lot') }}"></textarea>
+
+                                                                    @error('verified_lot')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="mb-2">
+                                                                    <label class="form-label">Kit expiry date</label>
+                                                                       <input type="date" name="kit_expiry_date" class="form-control" id="kit_expiry_date" wire:model="kit_expiry_date" required>
+                                                                    @error('kit_expiry_date')
+                                                                        <div class="text-danger text-small">
+                                                                            {{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
                                                             {{-- <div class="col-md-3">
                                                                 <div class="mb-2">
                                                                     <label class="form-label">Performed
@@ -374,7 +444,7 @@
                                                                         @enderror
                                                                 </div>
                                                             </div> --}}
-                                                            
+
                                                             <div class="col-md-1 mt-4">
                                                                 <x-button>{{ __('Save') }}</x-button>
                                                             </div>
