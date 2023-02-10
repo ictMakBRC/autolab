@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('resultReports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');
         Route::get('rejectedResults', RejectedResultsComponent::class)->middleware('permission:enter-results')->name('rejected-results');
         Route::get('result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
+        Route::get('result/{id}/print-report', [ResultReportController::class, 'print'])->name('print-result-report');
         Route::get('result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 
@@ -120,6 +121,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
             Route::get('testRpt/{testResult}/searchResults', [SearchResultsController::class, 'testReportSearchResults'])->name('report-search-results');
             Route::get('combinedSamplesTestRpt/{sampleIds?}', [SearchResultsController::class, 'combinedSampleTestReport'])->name('combined-sample-test-report');
             Route::get('combinedTestResultsRpt/{resultIds?}', [SearchResultsController::class, 'combinedTestResultsReport'])->name('combined-test-results-report');
+            Route::get('comboTestResultsRpt/{resultIds?}', [SearchResultsController::class, 'comboReport'])->name('combo-report');
         });
     });
 

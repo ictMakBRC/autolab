@@ -24,19 +24,13 @@ class AssignTestsComponent extends Component
 
     public $orderAsc = true;
 
+    public $sample;
+
     public $sample_is_for = 'Testing';
 
     public $tests_requested;
 
     public $aliquots_requested;
-
-    public $request_acknowledged_by;
-
-    public $sample_identity;
-
-    public $clinical_notes;
-
-    public $lab_no;
 
     public $sample_id;
 
@@ -79,29 +73,24 @@ class AssignTestsComponent extends Component
 
     public function viewTests(Sample $sample)
     {
-        $this->reset(['tests_requested', 'request_acknowledged_by']);
+        $this->reset(['tests_requested']);
+        $this->sample = $sample;
         $this->assignedTests = TestAssignment::where('sample_id', $sample->id)->get()->pluck('test_id')->toArray();
         $tests = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests ?? []))->get();
         $this->tests_requested = $tests;
         $this->test_id = $tests[0]->id;
-        $this->sample_identity = $sample->sample_identity;
-        $this->lab_no = $sample->lab_no;
-        $this->clinical_notes = $sample->participant->clinical_notes;
         $this->sample_id = $sample->id;
-        $this->request_acknowledged_by = $sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('view-tests');
     }
 
     public function viewAliquots(Sample $sample)
     {
-        $this->reset(['aliquots_requested', 'request_acknowledged_by']);
+        $this->reset(['aliquots_requested']);
+        $this->sample = $sample;
         $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->orderBy('type', 'asc')->get();
         $this->aliquots_requested = $aliquots;
-        $this->sample_identity = $sample->sample_identity;
-        $this->lab_no = $sample->lab_no;
         $this->sample_id = $sample->id;
-        $this->request_acknowledged_by = $sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('view-aliquots');
     }
@@ -111,6 +100,7 @@ class AssignTestsComponent extends Component
         $this->validate([
             'assignee' => 'required|integer',
         ]);
+        
         $isExist = TestAssignment::select('*')
         ->where('sample_id', $this->sample_id)
         ->where('test_id', $this->test_id)
@@ -126,20 +116,46 @@ class AssignTestsComponent extends Component
             $test_assignment->assignee = $this->assignee;
             $test_assignment->save();
 
-            $sample = Sample::where('id', $this->sample_id)->first();
-            $this->assignedTests = TestAssignment::where('sample_id', $this->sample_id)->get()->pluck('test_id')->toArray();
-            if (array_diff($sample->tests_requested, $this->assignedTests) == []) {
-                $sample->update(['status' => 'Assigned']);
-                // $this->refresh();
+            array_push($this->assignedTests,$this->test_id);
+            if (array_diff($this->sample->tests_requested, $this->assignedTests) == []) {
+                $this->sample->update(['status' => 'Assigned']);
                 $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
             } else {
-                $this->tests_requested = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests))->get();
+                $this->tests_requested = $this->tests_requested->where('id','!=',$this->test_id)->values();
                 $this->test_id = $this->tests_requested[0]->id;
                 $this->reset(['assignee', 'backlog']);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
             }
         }
+    }
+
+    public function assignAllTests()
+    {
+        $this->validate([
+            'assignee' => 'required|integer',
+        ]);
+
+        foreach ($this->tests_requested  as $test) {
+            TestAssignment::updateOrCreate(
+                ['sample_id'=>$this->sample_id,'test_id'=>$test->id],
+                ['assignee'=>$this->assignee]
+            );
+            array_push($this->assignedTests,$test->id);
+        }
+
+        if (array_diff($this->sample->tests_requested, $this->assignedTests) == []) {
+            $this->sample->update(['status' => 'Assigned']);
+            $this->reset(['assignee', 'backlog']);
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
+        } else {
+            $this->tests_requested = $this->tests_requested->where('id','!=',$this->test_id)->values();
+            $this->test_id = $this->tests_requested[0]->id;
+            $this->reset(['assignee', 'backlog']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
+        }
+
     }
 
     public function assignAliquotingTasks()
@@ -169,24 +185,23 @@ class AssignTestsComponent extends Component
         }
     }
 
-    public function acknowledgeRequest(Sample $sample)
+    public function acknowledgeRequest()
     {
-        $sample->request_acknowledged_by = Auth::id();
-        $sample->date_acknowledged = now();
-        $sample->status = 'Processing';
-        $sample->update();
-        $this->request_acknowledged_by = $sample->request_acknowledged_by;
+        $this->sample->request_acknowledged_by = Auth::id();
+        $this->sample->date_acknowledged = now();
+        $this->sample->status = 'Processing';
+        $this->sample->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Updated successfully!']);
     }
 
     public function close()
     {
-        $this->reset(['sample_id', 'sample_identity', 'lab_no', 'assignee', 'test_id', 'clinical_notes']);
+        $this->reset(['sample_id','assignee', 'test_id']);
         $this->tests_requested = collect([]);
         $this->aliquots_requested = collect([]);
     }
 
-    public function render()
+    public function getSamples()
     {
         $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
         ->whereIn('status', ['Accessioned', 'Processing'])
@@ -200,11 +215,41 @@ class AssignTestsComponent extends Component
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
+        return $samples;
+    }
 
+    public function getSampleTasks()
+    {
+        $sampleTasks= Sample::where(['creator_lab' => auth()->user()->laboratory_id])
+        ->whereIn('status', ['Accessioned', 'Processing'])->get();
+
+        $counts['forTestingCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for === 'Testing';
+        })->count();
+        
+        $counts['forAliquotingCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for == 'Aliquoting';
+        })->count();
+
+        $counts['forStorageCount'] = $sampleTasks->filter(function ($sample) {
+            return $sample->sample_is_for == 'Storage';
+        })->count();
+
+        return $counts;
+    }
+
+
+    public function render()
+    {
+        
+        $samples=$this->getSamples();
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
         $aliquots = $this->aliquots_requested;
+        $forTestingCount = $this->getSampleTasks()['forTestingCount'];
+        $forAliquotingCount = $this->getSampleTasks()['forAliquotingCount'];
+        $forStorageCount = $this->getSampleTasks()['forStorageCount'];
 
-        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots'));
+        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots','forTestingCount','forAliquotingCount','forStorageCount'));
     }
 }

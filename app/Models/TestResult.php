@@ -32,6 +32,7 @@ class TestResult extends Model
         'test_id',
         'result',
         'attachment',
+        'parameters',
         'performed_by',
         'comment',
         'reviewed_by',
@@ -60,6 +61,7 @@ class TestResult extends Model
     {
         return $this->belongsTo(Test::class, 'test_id', 'id');
     }
+
     public function kit()
     {
         return $this->belongsTo(Kit::class, 'kit_id', 'id');
@@ -87,6 +89,10 @@ class TestResult extends Model
             // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
         );
     }
+
+    protected $casts = [
+        'parameters' => 'array',
+    ];
 
     public static function boot()
     {

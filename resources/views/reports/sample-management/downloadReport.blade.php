@@ -55,6 +55,10 @@
             padding-bottom: 5px;
             border-block-start-style: outset;
         }
+
+        #parameters td {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -64,22 +68,28 @@
         {{-- <img src="{{ asset('autolab-assets/images/headers/header-min.png') }}" alt="Makerere University Logo" width="100%"
             style="vertical-align:middle;"
             onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';"> --}}
-            <div style="text-align: center; line-height: 2px">
-                <table width="100%" style="text-align: center; line-height: 1px; width:100%; margin-bottom:-16px">
-                    <tr style="padding: 0px; margin:0px">
-                        <td style="text-align: right ;padding: 0px; margin:0px" width="40%"><h1>MAKERERE</h1></td>
-                        <td style="padding:0px; margin-top:0px ; padding-bottom: 15px; " width="10%"><img src="{{ asset('autolab-assets/images/headers/logo.png') }}" alt="Makerere University Logo" width="90px"
-                            style="vertical-align:middle;">
-                        </td>
-                        <td style="text-align: left; padding: 0px; margin:0px" width="40%"><h1>UNIVERSITY</h1></td>
-                    </tr>
-                </table>
-                <h2><b>COLLEGE OF HEALTH SCIENCES</b></h2>
-                <h3><b>School of Biomedical Sciences</b></h3>
-                <h3><b>Department of Immunology and Molecular Biology</b></h3>
-                <em><h2 style="color:rgb(8, 219, 131)">
-                    {{ auth()->user()->laboratory->laboratory_name}}</h2></em>
-            </div>
+        <div style="text-align: center; line-height: 2px">
+            <table width="100%" style="text-align: center; line-height: 1px; width:100%; margin-bottom:-16px">
+                <tr style="padding: 0px; margin:0px">
+                    <td style="text-align: right ;padding: 0px; margin:0px" width="40%">
+                        <h1>MAKERERE</h1>
+                    </td>
+                    <td style="padding:0px; margin-top:0px ; padding-bottom: 15px; " width="10%"><img
+                            src="{{ asset('autolab-assets/images/headers/logo.png') }}" alt="Makerere University Logo"
+                            width="90px" style="vertical-align:middle;">
+                    </td>
+                    <td style="text-align: left; padding: 0px; margin:0px" width="40%">
+                        <h1>UNIVERSITY</h1>
+                    </td>
+                </tr>
+            </table>
+            <h2><b>COLLEGE OF HEALTH SCIENCES</b></h2>
+            <h3><b>School of Biomedical Sciences</b></h3>
+            <h3><b>Department of Immunology and Molecular Biology</b></h3>
+            <em>
+                <h2 style="color:rgb(8, 219, 131)"> Genomics, Molecular and Immunology Laboratories </h2>
+            </em>
+        </div>
 
 
         <hr style="height:0.6px; width:100%; color:#6C757D;">
@@ -95,7 +105,7 @@
             <tr>
                 <td style="width:50%">
                     <div>
-                         <br>
+                        <br>
                         <b>Lab No: </b>
                         <font> {{ $testResult->sample->lab_no }}</font><br>
                         <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample ID:</b>
@@ -128,7 +138,9 @@
             <tbody>
                 {{-- SAMPLE AND TEST DETAILS --}}
                 <tr class="btop">
-                    <td class="btop"> <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}<div></td>
+                    <td class="btop">
+                        <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}<div>
+                    </td>
                     <td class="btop" style="text-align: right"><strong>Sample
                             Type:</strong>{{ $testResult->sample->sampleType->type ?? 'N/A' }}</td>
                 </tr>
@@ -138,12 +150,13 @@
             <tbody>
                 <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 10px; margin-bottom: 10px">
                     <td class="btop"><strong>Collection Date:</strong> <br>
-                        {{$testResult->sample->date_collected?date('d-m-Y H:i', strtotime($testResult->sample->date_collected)):'N/A'}}</td>
+                        {{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
+                    </td>
                     <td class="btop" style="text-align: center"><strong>Date Received:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>
                     <td class="btop" style="text-align: right"><strong>Result Date:</strong>
-                        <br>{{ $testResult->created_at }}
+                        <br>{{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
                     </td>
                 </tr>
             </tbody>
@@ -153,23 +166,58 @@
             <tbody>
                 {{-- RESULT AND BARCODE --}}
                 <tr>
-                    <td class="btop" style="width:60%; color:#1A2232">
-                        <div><b style="font-size: 18px">Results:</b>
-                        </em>
-                            @if ($testResult->result)
-                               <em>{{ $testResult->result }}</em>
-                            @else
-                                <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
-                            @endif
-                    </em>
-                </div>
-                    </td>
-                    <td class="btop" style="width:40%; text-align:right">
-                        <b>Result Date:</b>
-
-                            {{ $testResult->created_at }}
-
-                    </td>
+                    @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
+                        <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
+                            <thead>
+                                <tr>
+                                    @foreach (array_keys($testResult->parameters) as $key)
+                                        <th>
+                                            {{ $key }}
+                                        </th>
+                                    @endforeach
+                                    <th>
+                                        Result
+                                    </th>
+                                </tr>
+                                <tr>
+                                    @foreach (array_values($testResult->parameters) as $parameter)
+                                        <td>
+                                            {{ $parameter }}
+                                        </td>
+                                    @endforeach
+                                    <td>
+                                        {{ $testResult->result }}
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    @elseif($testResult->test->result_presentation == 'Non-Tabular' && $testResult->parameters)
+                        <td class="btop" style="width:60%; color:#1A2232">
+                            <div><b style="font-size: 18px">Results:</b>
+                                @if ($testResult->result)
+                                    <span>{{ $testResult->result }}</span>
+                                @else
+                                    <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
+                                @endif
+                                <br>
+                                @foreach ($testResult->parameters as $key => $parameter)
+                                    <i>{{ $key }}</i> :{{ $parameter }}<br>
+                                @endforeach
+                            </div>
+                        </td>
+                    @else
+                        <td class="btop" style="width:60%; color:#1A2232">
+                            <div><b style="font-size: 18px">Results:</b>
+                                </em>
+                                @if ($testResult->result)
+                                    <em>{{ $testResult->result }}</em>
+                                @else
+                                    <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
+                                @endif
+                                </em>
+                            </div>
+                        </td>
+                    @endif
                 </tr>
                 <br>
             </tbody>
@@ -183,10 +231,10 @@
                         <div
                             style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
                             <div><b style="font-size: 15px">Comments:</b>
-                            <p style="font-size: 13px"> <em>{{ $testResult->comment }}</em> <br>
-                            </p>
-                            <br>
-                        </div>
+                                <p style="font-size: 13px"> <em>{{ $testResult->comment }}</em> <br>
+                                </p>
+                                <br>
+                            </div>
                     </td>
                     <td class="btop" style="width:20%">
                         <div style="float: right;">
@@ -211,8 +259,10 @@
             <tbody>
                 <tr style="font-size:9px;">
                     <td><b>Kit Used:</b> {{ $testResult->kit->name ?? 'N/A' }}</td>
-                    <td style="text-align: center;"><b>Verified Kit Lot:</b> {{ $testResult->verified_lot ?? 'N/A' }}</td>
-                    <td style="text-align: right"><b>Kit Expiry Date:</b> {{ $testResult->kit_expiry_date ?? 'N/A' }}</td>
+                    <td style="text-align: center;"><b>Verified Kit Lot:</b> {{ $testResult->verified_lot ?? 'N/A' }}
+                    </td>
+                    <td style="text-align: right"><b>Kit Expiry Date:</b> {{ $testResult->kit_expiry_date ?? 'N/A' }}
+                    </td>
                 </tr>
                 <br>
                 {{-- SIGNATORIES --}}

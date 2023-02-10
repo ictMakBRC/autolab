@@ -18,9 +18,9 @@ class SampleTypeComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'type';
+    public $orderBy = 'id';
 
-    public $orderAsc = true;
+    public $orderAsc = 0;
 
     public $type;
 
@@ -70,10 +70,7 @@ class SampleTypeComponent extends Component
         $sampleType->possible_aliquots = count($this->possible_aliquots) > 0 ? $this->possible_aliquots : null;
         $sampleType->save();
 
-        $this->status = '';
-        $this->type = '';
-        $this->possible_tests = [];
-        // $this->dispatchBrowserEvent('close-modal');
+        $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type created successfully!']);
     }
 
@@ -88,20 +85,6 @@ class SampleTypeComponent extends Component
         $this->possible_aliquots = $sampleType->possible_aliquots ?? [];
 
         $this->toggleForm = true;
-    }
-
-    public function refresh()
-    {
-        return redirect(request()->header('Referer'));
-    }
-
-    public function resetInputs()
-    {
-        $this->status = '';
-        $this->type = '';
-        $this->possible_tests = [];
-        $this->possible_aliquots = [];
-        // $this->can_be_aliquot='';
     }
 
     public function updateData()
@@ -120,6 +103,20 @@ class SampleTypeComponent extends Component
         $this->toggleForm = false;
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Type updated successfully!']);
+    }
+
+    public function refresh()
+    {
+        return redirect(request()->header('Referer'));
+    }
+
+    public function resetInputs()
+    {
+        $this->status = '';
+        $this->type = '';
+        $this->possible_tests = [];
+        $this->possible_aliquots = [];
+        // $this->can_be_aliquot='';
     }
 
     public function deleteConfirmation($id)

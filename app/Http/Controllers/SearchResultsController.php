@@ -55,7 +55,6 @@ class SearchResultsController extends Controller
 
     public function combinedTestResultsReport($resultIds)
     {
-        // return $resultIds;
         $samples = Sample::whereHas('testResult', function ($query) use ($resultIds) {
             $query->whereIn('id', array_unique(explode('-', $resultIds)));
         })->with(['sampleReception', 'sampleReception.facility', 'sampleReception.courier', 'sampleReception.receiver', 'participant',
@@ -66,5 +65,13 @@ class SearchResultsController extends Controller
         $qrCodeContent = implode('|', $samples->pluck('sample_identity')->toArray());
 
         return view('reports.sample-management.combined-test-report', compact('samples', 'qrCodeContent'));
+    }
+
+    public function comboReport($resultIds)
+    {
+        $testResults=TestResult::whereIn('id',array_unique(explode('-', $resultIds)))->with(['kit','performer','reviewer','approver','test', 'sample', 'sample.participant', 'sample.sampleReception',  'sample.participant.facility:id,name','sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester'])->get();
+        $qrCodeContent = implode('|', $testResults->pluck('tracker')->toArray());
+
+        return view('reports.sample-management.combo-report', compact('testResults', 'qrCodeContent'));
     }
 }

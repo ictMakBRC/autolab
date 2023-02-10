@@ -27,6 +27,9 @@ return new class extends Migration
             $table->text('absolute_results')->nullable();
             $table->string('measurable_result_uom')->nullable();
             $table->text('comments')->nullable();
+            $table->text('parameters')->nullable();
+            $table->string('parameter_uom')->nullable();
+            $table->string('result_presentation');
             $table->boolean('status')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('creator_lab')->nullable();

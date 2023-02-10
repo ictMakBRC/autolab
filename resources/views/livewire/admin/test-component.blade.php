@@ -41,7 +41,8 @@
                         @else
                         wire:submit.prevent="updateTest" @endif>
                             <div class="row">
-                                <div class="mb-2 col-md-2">
+
+                                <div class="mb-2 col-md-4">
                                     <label for="category" class="form-label">{{ __('Category') }}</label>
                                     <select wire:model='category_id' class="form-select" id="category">
                                         <option selected value="">Select</option>
@@ -53,14 +54,16 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-2 col-md-4">
+
+                                <div class="mb-2 col-md-8">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" id="name" class="form-control" wire:model.lazy="name">
                                     @error('name')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-2 col-md-2">
+
+                                <div class="mb-2 col-md-4">
                                     <label for="short_code" class="form-label">Short Code</label>
                                     <input type="text" id="short_code" class="form-control"
                                         wire:model.lazy="short_code">
@@ -68,6 +71,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-2 col-md-2">
                                     <div class="form-group">
                                         <label for="tat" class="form-label">{{ __('TAT') }}</label>
@@ -85,6 +89,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-2 col-md-2">
                                     <div class="form-group">
                                         <label for="price" class="form-label">{{ __('Price') }}</label>
@@ -102,6 +107,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-2 col-md-2">
                                     <label for="reference_range_min" class="form-label">Min-Ref range</label>
                                     <input type="number" step="any" wire:model.lazy='reference_range_min'
@@ -110,6 +116,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-2 col-md-2">
                                     <label for="reference_range_max" class="form-label">Max-Ref range</label>
                                     <input type="number" step="any" wire:model.lazy='reference_range_max'
@@ -118,6 +125,16 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="col-md-10">
+                                    <label for="precautions" class="form-label">{{ __('Precautions') }}</label>
+                                    <textarea name="precautions" id="precautions" rows="1" wire:model.lazy='precautions' class="form-control"
+                                        placeholder="{{ __('Precautions') }}"></textarea>
+                                    @error('precautions')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-3 col-md-2">
                                     <label for="isActive" class="form-label">Status</label>
                                     <select class="form-select" id="isActive" wire:model="status">
@@ -129,15 +146,8 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="precautions" class="form-label">{{ __('Precautions') }}</label>
-                                    <textarea name="precautions" id="precautions" rows="2" wire:model.lazy='precautions' class="form-control"
-                                        placeholder="{{ __('Precautions') }}"></textarea>
-                                    @error('precautions')
-                                        <div class="text-danger text-small">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <hr>
+
+                                <hr class="mt-2">
 
                                 <div class="col-md-6">
                                     <h6>
@@ -145,6 +155,7 @@
                                         {{-- Absolute results:{{ var_export($absolute_results) }} --}}
                                     </h6>
                                     <div class="row">
+
                                         <div
                                             class=" 
                                         @if ($result_type === 'Measurable' || $result_type === 'Absolute') col-md-4
@@ -162,24 +173,24 @@
                                                 <option value="Link">Link</option>
                                             </select>
                                         </div>
+
                                         @if ($result_type === 'Absolute')
+
                                             <div id="resultoption" class="col-md-8 mb-2">
                                                 <label for="results" class="form-label">{{ __('Results') }}</label>
                                                 <button class="btn btn-outline-success mb-1" type="button"
                                                     id="button-addon2" wire:click.prevent="addResult">+</button>
                                                 @foreach ($dynamicResults as $index => $result)
                                                     <div class="input-group mb-3">
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Enter Result"
-                                                            aria-label="Add another possible result"
-                                                            aria-describedby="button-addon2"
-                                                            wire:model="dynamicResults.{{ $index }}.result">
+                                                        <textarea type="text" class="form-control" placeholder="Enter Result" aria-label="Add another possible result"
+                                                            aria-describedby="button-addon2" wire:model.lazy="dynamicResults.{{ $index }}.result"> </textarea>
                                                         <button class="btn btn-outline-danger" type="button"
                                                             id="button-addon2"
                                                             wire:click.prevent="removeResult({{ $index }})">Delete</button>
                                                     </div>
                                                 @endforeach
                                             </div>
+
                                         @endif
                                         @if ($result_type === 'Measurable')
                                             <div id="uom" class="col-md-8 mb-2">
@@ -206,26 +217,93 @@
                                         {{-- Comments:{{ var_export($comments) }} --}}
                                     </h6>
                                     <div class="row">
+
                                         <div id="test-comments" class="col-md-12">
                                             <label class="form-label">{{ __('Comments') }}</label>
                                             <button class="btn btn-outline-success mb-1" type="button"
                                                 id="button-addon2" wire:click.prevent="addComment">+</button>
                                             @foreach ($dynamicComments as $index => $comment)
                                                 <div class="input-group mb-3">
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter Comment"
-                                                        aria-label="Add another possible Comment"
-                                                        aria-describedby="button-addon2"
-                                                        wire:model="dynamicComments.{{ $index }}.comment">
+                                                    <textarea type="text" class="form-control" placeholder="Enter Comment" aria-label="Add another possible Comment"
+                                                        aria-describedby="button-addon2" wire:model.lazy="dynamicComments.{{ $index }}.comment"></textarea>
                                                     <button class="btn btn-outline-danger" type="button"
                                                         id="button-addon2"
                                                         wire:click.prevent="removeComment({{ $index }})">Delete</button>
                                                 </div>
                                             @endforeach
                                         </div>
+
                                     </div>
                                 </div>
 
+
+                                @if ($result_type == 'Absolute')
+                                    <hr>
+                                    <div class="col-md-8">
+                                        <h6>
+                                            {{ __('Test Parameters') }}
+                                        </h6>
+                                        <div class="row">
+
+                                            <div id="test-parameters" class="col-md-8">
+                                                <label class="form-label">{{ __('Parameters') }}</label>
+                                                <button class="btn btn-outline-success mb-1" type="button"
+                                                    id="button-addon2" wire:click.prevent="addParameter">+</button>
+                                                @foreach ($dynamicParameters as $index => $parameter)
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Enter Parameter"
+                                                            aria-label="Add another possible Parameter"
+                                                            aria-describedby="button-addon2"
+                                                            wire:model.lazy="dynamicParameters.{{ $index }}.parameter">
+                                                        <button class="btn btn-outline-danger" type="button"
+                                                            id="button-addon2"
+                                                            wire:click.prevent="removeParameter({{ $index }})">Delete</button>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                           <div id="parameters_uom" class="col-md-4 mb-2">
+                                                <label for="parameter_uom"
+                                                    class="form-label">{{ __('Parameter Unit of Measure') }}</label>
+                                                <div class="input-group form-group">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            {{ __('Unit') }}
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control"
+                                                        id="parameter_uom"
+                                                        wire:model.lazy="parameter_uom">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <h6>
+                                            {{ __('Report Template') }}
+                                        </h6>
+                                        <div class="row">
+
+                                            <div class="col-md-12 mb-2">
+                                                <label for="result_presentation"
+                                                    class="form-label">{{ __('Result Presentation') }}</label>
+                                                <select id="result_presentation" class="form-select"
+                                                    wire:model="result_presentation">
+                                                    <option value="">Select</option>
+                                                    <option value="Non-Tabular">Non-Tabular</option>
+                                                    <option value="Tabular">Tabular</option>
+                                                </select>
+                                                @error('result_presentation')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
                                         <x-button>{{ __('Save') }}</x-button>
@@ -233,7 +311,6 @@
                                         <x-button>{{ __('Update') }}</x-button>
                                     @endif
                                 </div>
-
                             </div>
                             <!-- end row-->
                         </form>
@@ -265,7 +342,6 @@
                                         <th>Price</th>
                                         <th>Status</th>
                                         <th>Action</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -291,8 +367,8 @@
                                                 @if (Auth::user()->hasPermission(['master-access']))
                                                     <a href="javascript:;"
                                                         class="action-ico btn btn-outline-danger mx-1"
-                                                        wire:click="deleteConfirmation({{ $test->id }})"
-                                                        ><i class="bi bi-trash-fill"></i></a>
+                                                        wire:click="deleteConfirmation({{ $test->id }})"><i
+                                                            class="bi bi-trash-fill"></i></a>
                                                 @endif
                                             </td>
                                         </tr>

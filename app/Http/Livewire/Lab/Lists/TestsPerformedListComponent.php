@@ -54,32 +54,6 @@ class TestsPerformedListComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public function updatedFacilityId()
-    {
-        if ($this->facility_id != 0) {
-            $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
-        }
-    }
-
-    public function combinedTestResultsReport()
-    {
-        $resultIds = '';
-        if (count($this->combinedResultsList) >= 2) {
-            $sameStudyCheck = Sample::whereNotNull('study_id')->whereHas('testResult', function ($query) {
-                $query->whereIn('id', array_unique($this->combinedResultsList));
-            })->get()->pluck('study_id')->toArray();
-
-            if (count(array_unique($sameStudyCheck)) == 1) {
-                shuffle($this->combinedResultsList);
-                $resultIds = implode('-', array_unique($this->combinedResultsList));
-                $this->dispatchBrowserEvent('loadCombinedTestResultsReport', ['url' => URL::signedRoute('combined-test-results-report', ['resultIds' => $resultIds])]);
-                $this->combinedResultsList = [];
-            } else {
-                $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Result Report is only possible for results of the same study!']);
-            }
-        }
-    }
-
     public function mount()
     {
         $this->studies = collect([]);
@@ -91,6 +65,40 @@ class TestsPerformedListComponent extends Component
             return (new TestResultsExport($this->resultIds))->download('Tests_Performed_'.date('Y-m-d').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No performed Tests selected for export!']);
+        }
+    }
+
+    public function updatedFacilityId()
+    {
+        if ($this->facility_id != 0) {
+            $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
+        }
+    }
+
+    public function combinedTestResultsReport()
+    {
+        $resultIds = '';
+        if (count($this->combinedResultsList) >= 2) {
+
+            $testResults = TestResult::whereIn('id',array_unique($this->combinedResultsList))->get();
+            $sampleIds = $testResults->pluck('sample_id')->toArray();
+            $samples = Sample::where('id',array_unique($sampleIds) )->get();
+
+            $sameStudyCheck = $samples->pluck('study_id')->toArray();
+            $sameSampleTypeCheck = $samples->pluck('sample_type_id')->toArray();
+            $sameTestCheck = $testResults->pluck('test_id')->toArray();
+            $samePerformerCheck = $testResults->pluck('performed_by')->toArray();
+
+            if (count(array_unique($sameStudyCheck)) == 1 && count(array_unique($sameSampleTypeCheck)) == 1 && count(array_unique($sameTestCheck)) == 1 && count(array_unique($samePerformerCheck)) == 1) {
+                
+                shuffle($this->combinedResultsList);
+                $resultIds = implode('-', array_unique($this->combinedResultsList));
+                $this->dispatchBrowserEvent('loadCombinedTestResultsReport', ['url' => URL::signedRoute('combo-report', ['resultIds' => $resultIds])]);
+                $this->combinedResultsList = [];
+
+            } else {
+                $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Result Report is only possible for results of the same study, sample, test, and performer!']);
+            }
         }
     }
 

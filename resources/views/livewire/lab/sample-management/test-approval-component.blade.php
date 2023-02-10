@@ -38,10 +38,10 @@
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Sample Batch</th>
+                                            <th>Batch</th>
                                             <th>Tracker</th>
                                             <th>Study</th>
-                                            <th>Participant ID</th>
+                                            <th>PID</th>
                                             <th>Sample</th>
                                             <th>Test</th>
                                             <th>TAT(HR<->MIN)</th>

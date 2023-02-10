@@ -76,6 +76,32 @@
                         </td>
                     </tr>
                     <tr>
+                        @if ($testResults->test->result_presentation=='Tabular')
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        @foreach (array_keys($testResults->parameters) as $key)
+                                        <th>
+                                            {{$key}}
+                                        </th>
+                                        @endforeach
+                                        <th>
+                                            Result
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        @foreach (array_values($testResults->parameters) as $parameter)
+                                        <td>
+                                            {{$parameter}}
+                                        </td>
+                                        @endforeach
+                                        <td>
+                                            {{ $testResults->result }}
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        @else
                         <td colspan="3">
                             <strong class="text-inverse">Result:
                             </strong>
@@ -85,6 +111,9 @@
                                 <a href="{{ route('attachment.download', $testResults->id) }}">See Attachment</a>
                             @endif
                         </td>
+                        @endif
+
+                       
                     </tr>
                 </tbody>
             </table>

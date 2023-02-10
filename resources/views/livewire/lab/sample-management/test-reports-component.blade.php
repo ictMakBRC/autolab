@@ -49,11 +49,13 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Sample Batch</th>
+                                        <th>Batch</th>
                                         <th>Tracker</th>
                                         <th>Study</th>
-                                        <th>Participant ID</th>
+                                        <th>PID</th>
                                         <th>Sample</th>
+                                        <th>Sample ID</th>
+                                        <th>Lab No</th>
                                         <th>Test</th>
                                         <th>TAT(HR<->MIN)</th>
                                         <th>Requester</th>
@@ -100,6 +102,12 @@
                                                 <input type="checkbox" value="{{ $testResult->sample->id }}"
                                                     class="me-2 float-end" wire:model="combinedSamplesList">
                                             </td>
+                                            <td>
+                                                {{ $testResult->sample->sample_identity }}
+                                            </td>
+                                            <td class="text-success fw-bold">
+                                                {{ $testResult->sample->lab_no ?? 'N/A' }}
+                                            </td>
 
                                             <td>
                                                 {{ $testResult->test->name }}
@@ -128,6 +136,11 @@
                                                     class="action-ico btn btn-outline-info"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-arrow-down-square"></i></a>
+
+                                                <a target="_blank" href="{{ route('print-result-report', $testResult->id) }}" type="button"
+                                                    class="action-ico btn btn-outline-info"
+                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                        class="bi bi-printer"></i></a>
                                             </td>
                                         </tr>
                                     @empty
