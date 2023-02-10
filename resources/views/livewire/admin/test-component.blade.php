@@ -146,7 +146,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <hr class="mt-2">
 
                                 <div class="col-md-6">
@@ -193,7 +193,6 @@
 
                                         @endif
                                         @if ($result_type === 'Measurable')
-
                                             <div id="uom" class="col-md-8 mb-2">
                                                 <label for="measurable_result_uom"
                                                     class="form-label">{{ __('Unit of Measure') }}</label>
@@ -208,7 +207,6 @@
                                                         wire:model.lazy="measurable_result_uom">
                                                 </div>
                                             </div>
-
                                         @endif
                                     </div>
                                 </div>
@@ -237,17 +235,17 @@
 
                                     </div>
                                 </div>
-                                
+
 
                                 @if ($result_type == 'Absolute')
-                                <hr>
-                                    <div class="col-md-6">
+                                    <hr>
+                                    <div class="col-md-8">
                                         <h6>
                                             {{ __('Test Parameters') }}
                                         </h6>
                                         <div class="row">
 
-                                            <div id="test-comments" class="col-md-12">
+                                            <div id="test-parameters" class="col-md-8">
                                                 <label class="form-label">{{ __('Parameters') }}</label>
                                                 <button class="btn btn-outline-success mb-1" type="button"
                                                     id="button-addon2" wire:click.prevent="addParameter">+</button>
@@ -265,31 +263,46 @@
                                                 @endforeach
                                             </div>
 
+                                           <div id="parameters_uom" class="col-md-4 mb-2">
+                                                <label for="parameter_uom"
+                                                    class="form-label">{{ __('Parameter Unit of Measure') }}</label>
+                                                <div class="input-group form-group">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            {{ __('Unit') }}
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" class="form-control"
+                                                        id="parameter_uom"
+                                                        wire:model.lazy="parameter_uom">
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
 
-                                <div class="col-md-6">
-                                    <h6>
-                                        {{ __('Report Template') }}
-                                    </h6>
-                                    <div class="row">
-                                        
-                                        <div class="col-md-12 mb-2">
-                                            <label for="result_presentation"
-                                                class="form-label">{{ __('Result Presentation') }}</label>
-                                            <select id="result_presentation" class="form-select"
-                                                wire:model="result_presentation">
-                                                <option value="">Select</option>
-                                                <option value="Non-Tabular">Non-Tabular</option>
-                                                <option value="Tabular">Tabular</option>
-                                            </select>
-                                            @error('result_presentation')
-                                                <div class="text-danger text-small">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <div class="col-md-4">
+                                        <h6>
+                                            {{ __('Report Template') }}
+                                        </h6>
+                                        <div class="row">
 
+                                            <div class="col-md-12 mb-2">
+                                                <label for="result_presentation"
+                                                    class="form-label">{{ __('Result Presentation') }}</label>
+                                                <select id="result_presentation" class="form-select"
+                                                    wire:model="result_presentation">
+                                                    <option value="">Select</option>
+                                                    <option value="Non-Tabular">Non-Tabular</option>
+                                                    <option value="Tabular">Tabular</option>
+                                                </select>
+                                                @error('result_presentation')
+                                                    <div class="text-danger text-small">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                        </div>
                                     </div>
-                                </div>
                                 @endif
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
@@ -298,7 +311,6 @@
                                         <x-button>{{ __('Update') }}</x-button>
                                     @endif
                                 </div>
-
                             </div>
                             <!-- end row-->
                         </form>
@@ -330,7 +342,6 @@
                                         <th>Price</th>
                                         <th>Status</th>
                                         <th>Action</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>

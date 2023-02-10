@@ -122,14 +122,15 @@ class AttachTestResultComponent extends Component
             });
 
             if ($this->activeTest->parameters!=null) {
-                    if (count($this->testParameters)==0) {
+                    if (count($this->testParameters) == count($this->activeTest->parameters)) {
                         // dd('no parameters');
+                        $this->saveResults();
+                        
+                    } else {
                         $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
                         $this->validate([
                             'testParameters' => ['required'],
                         ]);
-                    } else {
-                        $this->saveResults();
                     }
             }else{
                 $this->saveResults();

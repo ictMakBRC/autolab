@@ -182,7 +182,7 @@
             </div> <!-- end card -->
         </div><!-- end col-->
         
-        @if ($sample && $sample->sample_is_for == 'Testing')
+        @if ($sample && $sample?->sample_is_for == 'Testing')
             <div wire:ignore.self class="modal fade" id="view-tests" data-bs-backdrop="static" data-bs-keyboard="false"
                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -216,7 +216,7 @@
                                                             </strong></a>
                                                     </td>
                                                     <td>
-                                                        @if ($sample->request_acknowledged_by)
+                                                        @if ($sample?->request_acknowledged_by)
                                                             @if ($test->id === $test_id)
                                                                 <form wire:submit.prevent="assignTest">
                                                                     <div class="row">
@@ -268,7 +268,7 @@
                                 </div> <!-- end preview-->
                             </div>
 
-                            @if ($sample->clinical_notes && $sample->request_acknowledged_by)
+                            @if ($sample?->clinical_notes && $sample?->request_acknowledged_by)
                                 <div class="col-md-12">
                                     <div class="card-body text-center">
                                         <div>
@@ -299,7 +299,7 @@
             </div>
         @endif
 
-        @if (($sample && $sample->sample_is_for == 'Aliquoting') || $sample->sample_is_for == 'Storage')
+        @if (($sample && $sample?->sample_is_for == 'Aliquoting') || $sample?->sample_is_for == 'Storage')
             <div wire:ignore.self class="modal fade" id="view-aliquots" data-bs-backdrop="static"
                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
@@ -323,7 +323,7 @@
                                 <div class="card">
                                     <div class="card-body">
 
-                                        @if ($sample->sample_is_for == 'Aliquoting')
+                                        @if ($sample?->sample_is_for == 'Aliquoting')
                                             <ul class="list-group">
                                                 @foreach ($aliquots as $key => $aliquot)
                                                     <li class="list-group-item"><strong
@@ -334,7 +334,7 @@
                                             </ul>
                                         @endif
 
-                                        @if ($sample->request_acknowledged_by)
+                                        @if ($sample?->request_acknowledged_by)
                                             <form wire:submit.prevent="assignAliquotingTasks" class="mt-2">
                                                 <div class="row">
 

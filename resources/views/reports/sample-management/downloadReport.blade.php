@@ -87,8 +87,7 @@
             <h3><b>School of Biomedical Sciences</b></h3>
             <h3><b>Department of Immunology and Molecular Biology</b></h3>
             <em>
-                <h2 style="color:rgb(8, 219, 131)">
-                    {{ auth()->user()->laboratory->laboratory_name }}</h2>
+                <h2 style="color:rgb(8, 219, 131)"> Genomics, Molecular and Immunology Laboratories </h2>
             </em>
         </div>
 
@@ -157,7 +156,7 @@
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>
                     <td class="btop" style="text-align: right"><strong>Result Date:</strong>
-                        <br>{{ $testResult->created_at }}
+                        <br>{{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
                     </td>
                 </tr>
             </tbody>
@@ -167,7 +166,7 @@
             <tbody>
                 {{-- RESULT AND BARCODE --}}
                 <tr>
-                    @if ($testResult->test->result_presentation == 'Tabular')
+                    @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
                         <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
                             <thead>
                                 <tr>
@@ -192,6 +191,20 @@
                                 </tr>
                             </thead>
                         </table>
+                    @elseif($testResult->test->result_presentation == 'Non-Tabular' && $testResult->parameters)
+                        <td class="btop" style="width:60%; color:#1A2232">
+                            <div><b style="font-size: 18px">Results:</b>
+                                @if ($testResult->result)
+                                    <span>{{ $testResult->result }}</span>
+                                @else
+                                    <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
+                                @endif
+                                <br>
+                                @foreach ($testResult->parameters as $key => $parameter)
+                                    <i>{{ $key }}</i> :{{ $parameter }}<br>
+                                @endforeach
+                            </div>
+                        </td>
                     @else
                         <td class="btop" style="width:60%; color:#1A2232">
                             <div><b style="font-size: 18px">Results:</b>
@@ -203,12 +216,6 @@
                                 @endif
                                 </em>
                             </div>
-                        </td>
-                        <td class="btop" style="width:40%; text-align:right">
-                            <b>Result Date:</b>
-
-                            {{ $testResult->created_at }}
-
                         </td>
                     @endif
                 </tr>

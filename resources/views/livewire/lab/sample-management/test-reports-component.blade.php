@@ -136,6 +136,11 @@
                                                     class="action-ico btn btn-outline-info"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-arrow-down-square"></i></a>
+
+                                                <a target="_blank" href="{{ route('print-result-report', $testResult->id) }}" type="button"
+                                                    class="action-ico btn btn-outline-info"
+                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                        class="bi bi-printer"></i></a>
                                             </td>
                                         </tr>
                                     @empty

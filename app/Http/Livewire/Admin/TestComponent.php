@@ -54,6 +54,7 @@ class TestComponent extends Component
     public $comments = [];
 
     public $measurable_result_uom;
+    public $parameter_uom;
 
     public $result_presentation;
 
@@ -198,6 +199,7 @@ class TestComponent extends Component
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
+        $test->parameter_uom = $this->parameter_uom ?? null;
         $test->result_presentation = $this->result_presentation ?? null;
         $test->save();
 
@@ -220,6 +222,7 @@ class TestComponent extends Component
         $this->result_type = $test->result_type;
         $this->measurable_result_uom = $test->measurable_result_uom;
         $this->result_presentation = $test->result_presentation;
+        $this->parameter_uom=$test->parameter_uom;
 
         $this->dynamicResults = [];
         $this->dynamicComments = [];
@@ -277,6 +280,7 @@ class TestComponent extends Component
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->result_presentation = $this->result_presentation ?? null;
+        $test->parameter_uom = $this->parameter_uom ?? null;
         $test->update();
 
         $this->toggleForm = false;
@@ -286,7 +290,7 @@ class TestComponent extends Component
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'result_presentation']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'result_presentation','parameter_uom']);
     }
 
     public function deleteConfirmation($id)

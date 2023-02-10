@@ -27,6 +27,7 @@ class Test extends Model
         'comments',
         'parameters',
         'result_presentation',
+        'parameter_uom',
         'status',
         'created_by',
         'creator_lab',
