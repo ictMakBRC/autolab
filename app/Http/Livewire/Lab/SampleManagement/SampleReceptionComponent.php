@@ -21,9 +21,9 @@ class SampleReceptionComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'batch_no';
+    public $orderBy = 'id';
 
-    public $orderAsc = true;
+    public $orderAsc = 0;
 
     public $batch_no;
 
