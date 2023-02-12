@@ -202,7 +202,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Test Requested</th>
-                                                <th>Assignment @json($assignedTests)</th>
+                                                <th>Assignment</th>
                                             </tr>
                                         </thead>
                                         <tbody>
