@@ -187,10 +187,14 @@ class AssignTestsComponent extends Component
 
     public function acknowledgeRequest()
     {
-        $this->sample->request_acknowledged_by = Auth::id();
-        $this->sample->date_acknowledged = now();
-        $this->sample->status = 'Processing';
-        $this->sample->update();
+        // $this->sample->request_acknowledged_by = Auth::id();
+        // $this->sample->date_acknowledged = now();
+        // $this->sample->status = 'Processing';
+        $this->sample->update([
+        'request_acknowledged_by'=>Auth::id(),
+        'date_acknowledged'=>now(),
+        'status'=>'Processing']);
+
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Updated successfully!']);
     }
 
