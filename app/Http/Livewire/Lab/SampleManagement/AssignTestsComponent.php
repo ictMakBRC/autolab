@@ -32,6 +32,8 @@ class AssignTestsComponent extends Component
 
     public $aliquots_requested;
 
+    public $request_acknowledged_by;
+
     public $sample_id;
 
     public $test_id;
@@ -74,12 +76,14 @@ class AssignTestsComponent extends Component
     public function viewTests(Sample $sample)
     {
         $this->reset(['tests_requested']);
+        $this->sample = null;
         $this->sample = $sample;
         $this->assignedTests = TestAssignment::where('sample_id', $sample->id)->get()->pluck('test_id')->toArray();
         $tests = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests ?? []))->get();
         $this->tests_requested = $tests;
         $this->test_id = $tests[0]->id;
         $this->sample_id = $sample->id;
+        $this->request_acknowledged_by=$sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('view-tests');
     }
@@ -91,6 +95,7 @@ class AssignTestsComponent extends Component
         $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->orderBy('type', 'asc')->get();
         $this->aliquots_requested = $aliquots;
         $this->sample_id = $sample->id;
+        $this->request_acknowledged_by=$sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('view-aliquots');
     }
@@ -194,6 +199,7 @@ class AssignTestsComponent extends Component
         'request_acknowledged_by'=>Auth::id(),
         'date_acknowledged'=>now(),
         'status'=>'Processing']);
+        $this->request_acknowledged_by=$this->sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Updated successfully!']);
     }
