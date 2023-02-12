@@ -282,7 +282,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            @if ($assignee)
+                            @if ($assignee && $request_acknowledged_by)
                             <a href="javascript: void(0);" wire:click="assignAllTests"
                             class="action-ico btn btn-info radius-30 px-3">Assign All</a>
                             @endif
