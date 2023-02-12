@@ -286,7 +286,7 @@
                             <a href="javascript: void(0);" wire:click="assignAllTests"
                             class="action-ico btn btn-info radius-30 px-3">Assign All</a>
                             @endif
-                            @if ($request_acknowledged_by)
+                            @if (!$request_acknowledged_by)
                                 <a href="javascript: void(0);" wire:click="acknowledgeRequest"
                                     class="action-ico btn btn-success radius-30 px-3">
                                     <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
@@ -371,7 +371,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            @if ($request_acknowledged_by)
+                            @if (!$request_acknowledged_by)
                                 <div class="d-flex align-items-center">
                                     <div class="fs-3 text-info"><i class="bi bi-info-circle-fill "></i>
                                     </div>
