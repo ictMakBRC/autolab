@@ -16,7 +16,7 @@ class AssignTestsComponent extends Component
 {
     use WithPagination;
 
-    public $perPage = 10;
+    public $perPage = 50;
 
     public $search = '';
 
@@ -105,7 +105,7 @@ class AssignTestsComponent extends Component
         $this->validate([
             'assignee' => 'required|integer',
         ]);
-        
+
         $isExist = TestAssignment::select('*')
         ->where('sample_id', $this->sample_id)
         ->where('test_id', $this->test_id)
@@ -236,7 +236,7 @@ class AssignTestsComponent extends Component
         $counts['forTestingCount'] = $sampleTasks->filter(function ($sample) {
             return $sample->sample_is_for === 'Testing';
         })->count();
-        
+
         $counts['forAliquotingCount'] = $sampleTasks->filter(function ($sample) {
             return $sample->sample_is_for == 'Aliquoting';
         })->count();
@@ -251,7 +251,7 @@ class AssignTestsComponent extends Component
 
     public function render()
     {
-        
+
         $samples=$this->getSamples();
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
