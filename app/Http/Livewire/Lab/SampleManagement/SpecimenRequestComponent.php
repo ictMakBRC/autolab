@@ -321,7 +321,7 @@ class SpecimenRequestComponent extends Component
         try {
             $response = $client->request('GET', 'https://crs.co.ug/api/get-patient/', ['query' => [
                 'pat_no' => $patient_no,
-                'token' => 'ASHS773HD8883HDXHDHY',
+                'token' => 'ASHS773HD8883HDXHDHY7654545465',
                 ]]);
 
                 $crsparticipant = json_decode($response->getBody(), true);
@@ -356,7 +356,7 @@ class SpecimenRequestComponent extends Component
                     $this->reset(['age', 'gender', 'contact', 'address',
                     'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
                     'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
-                    'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+                    'occupation', 'civil_status', 'nok', 'nok_relationship','entry_type' ]);
                 }
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
@@ -364,7 +364,7 @@ class SpecimenRequestComponent extends Component
             $this->reset(['age', 'gender', 'contact', 'address',
             'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
             'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
-            'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+            'occupation', 'civil_status', 'nok', 'nok_relationship', 'entry_type']);
 
         }
 
@@ -840,7 +840,7 @@ class SpecimenRequestComponent extends Component
         $this->reset(['identity', 'age', 'gender', 'contact', 'address',
             'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
             'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation', 'participantMatch',
-            'occupation', 'civil_status', 'nok', 'nok_relationship', 'matched_participant_id', ]);
+            'occupation', 'civil_status', 'nok', 'nok_relationship', 'matched_participant_id', 'entry_type']);
     }
 
     public function resetSampleInformationInputs()
