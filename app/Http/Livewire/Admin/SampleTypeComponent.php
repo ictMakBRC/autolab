@@ -43,7 +43,7 @@ class SampleTypeComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'type' => 'required|unique:sample_types',
+            'type' => 'required|string',
         ]);
     }
 
@@ -60,7 +60,7 @@ class SampleTypeComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'type' => 'required|unique:sample_types',
+            'type' => 'required|string',
         ]);
 
         $sampleType = new SampleType();

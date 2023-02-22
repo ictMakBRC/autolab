@@ -16,7 +16,7 @@ class AssignTestsComponent extends Component
 {
     use WithPagination;
 
-    public $perPage = 10;
+    public $perPage = 50;
 
     public $search = '';
 
