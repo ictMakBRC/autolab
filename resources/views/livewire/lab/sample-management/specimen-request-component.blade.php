@@ -156,6 +156,7 @@
                                                         <option selected value="">Select</option>
                                                         <option value='Male'>Male</option>
                                                         <option value='Female'>Female</option>
+                                                        <option value='N/A'>N/A</option>
                                                     </select>
                                                     @error('gender')
                                                         <div class="text-danger text-small">{{ $message }}</div>
@@ -583,7 +584,7 @@
                                                     <div class="text-danger text-small">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            
+
                                             <div class="mb-2 col-md-2">
                                                 <div class="form-group">
                                                     <label for="volume"
