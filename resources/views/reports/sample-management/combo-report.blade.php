@@ -18,6 +18,22 @@
             -webkit-tap-highlight-color: transparent
         }
 
+        a:link {
+        text-decoration: none;
+        color: #44a847;
+        }
+
+        a:visited {
+        text-decoration: none;
+        }
+
+        a:hover {
+        text-decoration: underline;
+        }
+
+        a:active {
+        text-decoration: underline;
+        }
         .report-wrapper{
             width: 70%;
             height: auto;
@@ -358,6 +374,18 @@
                             </p>
                         </td>
                         <td style="color:#6C757D"> Page <span class="page">1</span> of <span class="topage">1</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <p style="text-align:center; font-style: italic; font-size:10px; color:#4CAF50">
+                      
+                                <strong>Get Touch With Us</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
+                         
+                                Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
+                          
+                                Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a>
+                            </p>
+                        </td>
                     </tr>
                 </table>
             </footer>

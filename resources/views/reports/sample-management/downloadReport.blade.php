@@ -30,6 +30,22 @@
             height: 1px
         }
 
+        a:link {
+        text-decoration: none;
+        color: #44a847;
+        }
+
+        a:visited {
+        text-decoration: none;
+        }
+
+        a:hover {
+        text-decoration: underline;
+        }
+
+        a:active {
+        text-decoration: underline;
+        }
         .text_centered {
             position: absolute;
             top: 56%;
@@ -305,25 +321,33 @@
             </tbody>
         </table>
         <footer>
-            <table width="100%" style=" position: fixed; bottom: 0;">
+            <table width="100%" style=" position: fixed; bottom: 0; text-align:center; font-size:10px; color:#4CAF50">
 
+                
                 <tr>
                     <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50">Printed By: <font>
-                                {{ Auth::user()->name }} </font>
-                        </p>
+                        <p>
+                        
+                          <strong>GMI LABS;</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
+                   
+                          Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
+                    
+                          Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a>
+                      </p>
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Print Date:
-                            {{ date('l d-M-Y H:i:s') }}</font>
-                        </p>
-                    </td>
-                    <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Printed
+                        <p style="text-align:center; font-style: italic; font-size:8px; color:#4CAF50 ; bottom: 0;  right: 0;        
+                        position: fixed;">Printed By: <font>
+                                {{ Auth::user()->name }} </font> |
+                        Print Date:
+                            {{ date('l d-M-Y H:i:s') }}</font> |
+                        Printed
                             {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
                                 [{{ $testResult->tracker }}]
                             @endif
-                            </font>
+                           
                         </p>
                     </td>
                 </tr>
@@ -334,6 +358,7 @@
 
                   </tr>
                 </table> --}}
+             
         </footer>
     </div>
 
