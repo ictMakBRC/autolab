@@ -93,7 +93,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $sample->participant->identity }}
+                                                {{ $sample->participant->identity??"N/A" }}
                                             </td>
                                             <td>
                                                 {{ $sample->sampleType->type }}
