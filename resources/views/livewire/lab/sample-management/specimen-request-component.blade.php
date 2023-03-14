@@ -148,6 +148,14 @@
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+                                                <div class="mb-3 col-md-1">
+                                                    <label for="age" class="form-label">Months</label>
+                                                    <input type="text" id="months" class="form-control"
+                                                        wire:model.lazy="months">
+                                                    @error('months')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                                 <div class="mb-3 col-md-2">
                                                     <label for="gender" class="form-label">Gender<span
                                                             class="text-danger">*</span></label>

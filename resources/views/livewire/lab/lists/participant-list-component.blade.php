@@ -154,7 +154,10 @@
                                                 {{ $participant->entry_type }}
                                             </td>
                                             <td>
-                                                {{ $participant->age??'N/A' }}
+                                                @if ($participant->age != null) {{ $participant->age}} yrs
+                                                @elseif ($participant->months != null)
+                                                 &nbsp; {{ $participant->months}} Months
+                                                @endif
                                             </td>
                                             <td>
                                                 {{ $participant->gender??'N/A' }}

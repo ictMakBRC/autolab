@@ -95,6 +95,8 @@ class SpecimenRequestComponent extends Component
 
     public $dob;
 
+    public $months;
+
     public $nationality;
 
     public $district;
@@ -161,9 +163,10 @@ class SpecimenRequestComponent extends Component
         $this->validateOnly($fields, [
 
             'identity' => 'required|string',
-            //'age' => 'required|integer|min:1',
+            'age' => 'nullable|integer|min:1',
+            'months' => 'nullable|integer|min:1|max:11',
             'address' => 'required|string|max:40',
-            // 'gender' => 'required|string|max:6',
+            'gender' => 'nullable|string|max:6',
             'contact' => 'required|string',
             'nok_contact' => 'required|string',
             'nok_address' => 'required|string|max:40',
@@ -257,6 +260,7 @@ class SpecimenRequestComponent extends Component
             // $this->entry_type = $participant->entry_type;
             $this->identity = $participant->identity;
             $this->age = $participant->age;
+            $this->months = $participant->months;
             $this->address = $participant->address;
             $this->gender = $participant->gender;
             $this->contact = $participant->contact;
@@ -264,7 +268,7 @@ class SpecimenRequestComponent extends Component
             $this->nok_address = $participant->nok_address;
             $this->clinical_notes = $participant->clinical_notes;
         } else {
-            $this->reset(['age', 'gender', 'contact', 'address',
+            $this->reset(['age', 'months' ,'gender', 'contact', 'address',
                 'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
                 'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
                 'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
@@ -387,9 +391,10 @@ class SpecimenRequestComponent extends Component
                 if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
                     $this->validate([
                         'entry_type' => 'required|string',
-                        //'age' => 'required|integer|min:1',
+                        'age' => 'nullable|integer|min:1',
+                        'months' => 'nullable|integer|min:1|max:11',
                         'address' => 'required|string|max:40',
-                        // 'gender' => 'required|string|max:6',
+                        'gender' => 'nullable|string|max:6',
                         'contact' => 'required|string',
                         'nok_contact' => 'required|string',
                         'nok_address' => 'required|string|max:40',
@@ -413,6 +418,7 @@ class SpecimenRequestComponent extends Component
                     $participant->identity = $this->identity;
                 }
                 $participant->age = $this->age ?? null;
+                $participant->months = $this->months ?? null;
                 $participant->address = $this->address ?? null;
                 $participant->gender = $this->gender ?? null;
                 $participant->contact = $this->contact ?? null;
@@ -449,6 +455,7 @@ class SpecimenRequestComponent extends Component
                     $participant = Participant::where('identity',$this->identity)->first();
                     $participant->identity = $this->identity;
                     $participant->age = $this->age;
+                    $participant->months = $this->months ?? null;
                     $participant->address = $this->address;
                     $participant->gender = $this->gender;
                     $participant->contact = $this->contact;
@@ -486,6 +493,7 @@ class SpecimenRequestComponent extends Component
         $this->entry_type = $participant->entry_type;
         $this->identity = $participant->identity;
         $this->age = $participant->age;
+        $this->months = $participant->months;
         $this->address = $participant->address;
         $this->gender = $participant->gender;
         $this->contact = $participant->contact;
@@ -520,9 +528,10 @@ class SpecimenRequestComponent extends Component
             if ($this->entry_type == 'Participant' || $this->entry_type == 'Client') {
                 $this->validate([
                     'entry_type' => 'required|string',
-                    'age' => 'required|integer|min:1',
+                    'age' => 'nullable|integer|min:1',
+                    'months' => 'nullable|integer|min:1|max:11',
                     'address' => 'required|string|max:40',
-                    'gender' => 'required|string|max:6',
+                    'gender' => 'nullable|string|max:6',
                     'contact' => 'required|string',
                     'nok_contact' => 'required|string',
                     'nok_address' => 'required|string|max:40',
@@ -540,6 +549,7 @@ class SpecimenRequestComponent extends Component
         $participant = Participant::find($this->participant_id);
         $participant->identity = $this->identity;
         $participant->age = $this->age;
+        $participant->months = $this->months;
         $participant->address = $this->address;
         $participant->gender = $this->gender;
         $participant->contact = $this->contact;
@@ -837,7 +847,7 @@ class SpecimenRequestComponent extends Component
 
     public function resetParticipantInputs()
     {
-        $this->reset(['identity', 'age', 'gender', 'contact', 'address',
+        $this->reset(['identity', 'age', 'months', 'gender', 'contact', 'address',
             'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
             'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation', 'participantMatch',
             'occupation', 'civil_status', 'nok', 'nok_relationship', 'matched_participant_id', 'patno']);
