@@ -157,6 +157,7 @@
                                                 @if ($participant->age != null) {{ $participant->age}} yrs
                                                 @elseif ($participant->months != null)
                                                  &nbsp; {{ $participant->months}} Months
+                                                 @else N/A
                                                 @endif
                                             </td>
                                             <td>

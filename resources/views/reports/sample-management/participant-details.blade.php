@@ -171,8 +171,8 @@
                                                 <strong class="text-inverse">Participant ID:
                                                 </strong>{{ $participant->identity ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Age:
-                                                </strong>{{ $participant->age ?? 'N/A' }}<br>
-                                                <strong class="text-inverse">Gender:
+                                                </strong>@if ($participant->age != null) {{ $participant->age}}yrs &nbsp; @elseif ($participant->months != null)
+                                                 {{ $participant->months}}months @else N/A @endif 
                                                 </strong>{{ $participant->gender ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Contact:
                                                 </strong>{{ $participant->contact ?? 'N/A' }}<br>
@@ -298,13 +298,13 @@
                                                     </strong>{{ date('d-m-Y H:i', strtotime($result->created_at)) }}
                                                 </td>
                                                 <td>
-                                                    {{ $result->performer ? $result->performer->fullName : 'N/A' }}
+                                                    {{ $result->performer ? $result->performer->fullName??'' : 'N/A' }}
                                                 </td>
                                                 <td>
-                                                    {{ $result->performer ? $result->reviewer->fullName : 'N/A' }}
+                                                    {{ $result->performer ? $result->reviewer->fullName??'' : 'N/A' }}
                                                 </td>
                                                 <td>
-                                                    {{ $result->performer ? $result->approver->fullName : 'N/A' }}
+                                                    {{ $result->performer ? $result->approver->fullName??'' : 'N/A' }}
                                                 </td>
                                             </tr>
                                         @empty

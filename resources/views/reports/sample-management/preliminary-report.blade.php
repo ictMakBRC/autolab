@@ -25,7 +25,8 @@
                         <strong class="text-inverse">Sample ID: </strong>{{ $testResults->sample->sample_identity }}<br>
                         <strong class="text-inverse">Name:
                         </strong>{{ $testResults->sample->participant->surname ?? 'N/A' }}<br>
-                        <strong class="text-inverse">Age: </strong>{{ $testResults->sample->participant->age }}<b>
+                        <strong class="text-inverse">Age: </strong>@if ($testResults->sample->participant->age != null) {{ $testResults->sample->participant->age}}yrs @elseif ($testResults->sample->participant->months != null)
+                        &nbsp; {{ $testResults->sample->participant->months}} Months @else N/A @endif <b>
                             Gender: </b>{{ $testResults->sample->participant->gender }}<br>
                         <strong class="text-inverse">Study Name:
                         </strong>{{ $testResults->sample->study->name ?? 'N/A' }}<br>

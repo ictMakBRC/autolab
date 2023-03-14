@@ -147,7 +147,9 @@
                             <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample ID:</b>
                             {{ $testResult->sample->sample_identity }}<br>
                             <b>Name:</b> {{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
-                            <b>Age:</b> {{ $testResult->sample->participant->age ?? 'N/A' }} <b>Gender:</b>
+                            <b>Age:</b> @if ($testResult->sample->participant->age != null) {{ $testResult->sample->participant->age}}yrs &nbsp; @elseif ($testResult->sample->participant->months != null)
+                             {{ $testResult->sample->participant->months}}months @else N/A @endif  
+                            <b>Gender:</b>
                             {{ $testResult->sample->participant->gender ?? 'N/A' }}<br>
                             <b>Address:</b> {{ $testResult->sample->participant->address ?? 'N/A' }}<br>
                             <b>Study Name:</b> {{ $testResult->sample->study->name ?? 'N/A' }}<br>
