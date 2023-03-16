@@ -130,6 +130,8 @@ class SpecimenRequestComponent extends Component
 
     public $sample_identity;
 
+    public $lastSampleId = false;
+
     public $sample_is_for;
 
     public $priority;
@@ -171,6 +173,7 @@ class SpecimenRequestComponent extends Component
             'nok_contact' => 'required|string',
             'nok_address' => 'required|string|max:40',
             'clinical_notes' => 'string|required',
+            'sample_identity' => 'required|string|unique:samples',
         ]);
     }
 
@@ -640,6 +643,16 @@ class SpecimenRequestComponent extends Component
         }
     }
 
+    // public function updatedSampleIdentity()
+    // {
+    //     $sample = Sample::where('sample_identity', $this->sample_identity)->first();
+    //     if($sample){
+    //     $this->lastSampleId = $sample->sample_identity;
+    //     }else{
+    //         $this->lastSampleId = false;
+    //     }
+    // }
+
     public function saveSampleInformation()
     {
         $this->validate([
@@ -654,16 +667,19 @@ class SpecimenRequestComponent extends Component
         if ($this->sample_is_for == 'Testing' || $this->sample_is_for == 'Deffered') {
             $this->validate([
                 'tests_requested' => 'array|required',
+                'sample_identity' => 'required|string|unique:samples',
             ]);
         } elseif ($this->sample_is_for == 'Aliquoting') {
             $this->validate([
                 'aliquots_requested' => 'array|required',
+                'sample_identity' => 'required|string|unique:samples',
             ]);
         }
 
         if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
+                'sample_identity' => 'required|string|unique:samples',
                 'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
