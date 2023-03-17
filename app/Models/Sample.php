@@ -169,6 +169,7 @@ class Sample extends Model
             : static::query()
                 ->where('creator_lab', auth()->user()->laboratory_id)
                 ->where('sample_identity', trim($search))
+                ->where('sample_no', trim($search))
                 ->orWhere('lab_no', trim($search));
     }
 }

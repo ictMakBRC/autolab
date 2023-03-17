@@ -77,6 +77,8 @@ class SamplesListComponent extends Component
 
     public $sample;
 
+    public $search;
+
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
@@ -122,7 +124,7 @@ class SamplesListComponent extends Component
 
     public function filterSamples()
     {
-        $samples = Sample::select('*')->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'participant.facility', 'sampleType:id,type', 'study:id,name', 'sampleReception'])
+        $samples = Sample::targetSearch($this->search)->select('*')->where('creator_lab', auth()->user()->laboratory_id)->with(['participant', 'participant.facility', 'sampleType:id,type', 'study:id,name', 'sampleReception'])
                     ->when($this->facility_id != 0, function ($query) {
                         $query->whereHas('participant', function ($query) {
                             $query->where('facility_id', $this->facility_id);

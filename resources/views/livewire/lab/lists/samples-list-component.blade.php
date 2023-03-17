@@ -91,7 +91,7 @@
                                         <label for="to_date" class="form-label">End Date</label>
                                         <input id="to_date" type="date" class="form-control" wire:model="to_date">
                                     </div>
-                                    <div class="mb-3 col-md-2">
+                                    <div class="mb-2 col-md-2">
                                         <label for="perPage" class="form-label">Per Page</label>
                                         <select wire:model="perPage" class="form-select" id="perPage">
                                             <option value="10">10</option>
@@ -120,6 +120,10 @@
                                             <option value="1">Asc</option>
                                             <option value="0">Desc</option>
                                         </select>
+                                    </div>
+                                    <div class=" col-md-2 ms-auto position-relative">
+                                        <label for="search" class="form-label">Search</label>
+                                        <input wire:model.debounce.300ms="search" class="form-control " type="text" placeholder="search">
                                     </div>
                                 </div>
                                 <!-- end row-->
