@@ -154,6 +154,14 @@ class TestResult extends Model
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
+                    ->whereHas('sample', function ($query) use ($search) {
+                        $query->where('lab_no',$search);
+                    });
+                }
+            )
+            ->orWhere(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
                     ->whereHas('sample.requester', function ($query) use ($search) {
                         $query->where('name', 'like', '%'.$search.'%');
                     });
