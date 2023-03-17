@@ -88,7 +88,7 @@
                                                     {{ $testResult->sample->sampleType->type }}
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->sample->lab_no }}
+                                                    {{ $testResult->sample->lab_no??'' }}
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('result-report', $testResult->id) }}"
