@@ -43,6 +43,7 @@
                                             <th>Study</th>
                                             <th>PID</th>
                                             <th>Sample</th>
+                                            <th>Lab no</th>
                                             <th>Test</th>
                                             <th>TAT(HR<->MIN)</th>
                                             <th>Requester</th>
@@ -85,6 +86,9 @@
 
                                                 <td>
                                                     {{ $testResult->sample->sampleType->type }}
+                                                </td>
+                                                <td>
+                                                    {{ $testResult->sample->lab_no }}
                                                 </td>
 
                                                 <td>
