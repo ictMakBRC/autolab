@@ -33,7 +33,68 @@
                 <div class="card-body">
                     @if (!$testsRequested->isEmpty())
                         <div class="row">
-                            <div class="mb-0">
+                            <div class="col-md-12">
+                                <table class="table table-striped mb-0 w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ auth()->user()->laboratory->laboratory_name }}</th>
+                                            <th>SOURCE FACILITY</th>
+                                            <th>SAMPLE DATA</th>
+                                            <th>PARTICIPANT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong class="text-inverse">Entry Type: </strong>
+                                                {{ $sample->participant->entry_type }}<br>
+                                                <strong class="text-inverse">Entry Date:
+                                                </strong>{{ date('d-m-Y H:i', strtotime($sample->participant->created_at??'NA')) }}<br>
+                                                <strong class="text-inverse">Sample Count:
+                                                </strong>{{ $sample->participant->sample_count??'N/A' }}<br>
+                                                <strong class="text-inverse">Test Count:
+                                                </strong>{{ $sample->participant->test_result_count??'N/A' }}
+                                            </td>
+                                            <td>
+                                                <strong class="text-inverse">Name: </strong>
+                                                {{ $sample->participant->facility->name??'N/A' }}<br>
+                                                <strong class="text-inverse">Study: </strong>
+                                                {{ $sample->participant->study->name??'N/A' }}
+                                            </td>                                            
+                                            <td>
+                                                <strong class="text-inverse">Sample Id: </strong>
+                                                {{ $sample->sample_identity??'N/A' }}<br>
+                                                <strong class="text-inverse">Lab  No: </strong>
+                                                {{ $sample->lab_no??'N/A' }}
+                                            </td>
+                                            <td>
+                                                <strong class="text-inverse">Participant ID:
+                                                </strong>{{ $sample->participant->identity ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Age:
+                                                </strong>@if ($sample->participant->age != null) {{ $sample->participant->age}}yrs &nbsp; @elseif ($sample->participant->months != null)
+                                                 {{ $sample->participant->months}}months @else N/A @endif 
+                                                </strong>{{ $sample->participant->gender ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Contact:
+                                                </strong>{{ $sample->participant->contact ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Address:
+                                                </strong>{{ $sample->participant->address ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Kin Contact:
+                                                </strong>{{ $sample->participant->nok_contact ?? 'N/A' }}
+                                            </td>
+                                        </tr>
+                                        @if ($sample->participant->clinical_notes)
+                                            <tr>
+                                                <td colspan="3">
+                                                    <strong class="text-inverse">Clinical Notes
+                                                    </strong>
+                                                    <p>{{ $sample->participant->clinical_notes }}</p>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12 mb-0">
                                 <div class="table-responsive">
                                     <table class="table table-striped mb-0 w-100">
                                         <thead>

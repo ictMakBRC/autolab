@@ -57,7 +57,7 @@ class AttachTestResultComponent extends Component
 
     public function mount($id)
     {
-        $sample = Sample::findOrFail($id);
+        $sample = Sample::with('participant')->findOrFail($id);
         $this->sample = $sample;
         $this->sample_id = $sample->id;
         $this->sample_identity = $sample->sample_identity;
@@ -136,7 +136,7 @@ class AttachTestResultComponent extends Component
                 $this->saveResults();
             }
         }
-    }
+    } 
 
     public function saveResults()
     {
