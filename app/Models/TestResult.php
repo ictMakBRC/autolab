@@ -153,7 +153,8 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query
+                    // ->where('status', $status)
                     ->whereHas('sample', function ($query) use ($search) {
                         $query->where('lab_no',$search);
                     });
