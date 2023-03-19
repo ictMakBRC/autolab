@@ -34,6 +34,8 @@ class RejectedResultsComponent extends Component
 
     public $test;
 
+    public $testParameters;
+
     public $comment;
 
     protected $paginationTheme = 'bootstrap';
@@ -116,15 +118,34 @@ class RejectedResultsComponent extends Component
         $testResult->reviewer_comment = null;
         $testResult->approver_comment = null;
         $testResult->comment = $this->comment;
+        $testResult->parameters = count($this->testParameters) ? $this->testParameters : null;
         $testResult->kit_id = $this->kit_id;
         $testResult->verified_lot = $this->verified_lot;
         $testResult->kit_expiry_date = $this->kit_expiry_date;
-        $testResult->status = 'Pending Review';
+        // $testResult->status = 'Pending Review';
 
-        $testResult->update();
+        // $currentParameters=$this->testParameters;
+        $currentParameters = array_filter($this->testParameters, function ($value) {
+            return $value != null;
+        });
 
-        $this->viewReport = false;
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+        if ($this->test->parameters!=null) {
+                if (count($currentParameters) == count($this->test->parameters)) {
+                    $testResult->update();
+                    $this->viewReport = false;
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+                    
+                } else {
+                    $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
+                    $this->validate([
+                        'testParameters' => ['required'],
+                    ]);
+                }
+        }else{
+            $testResult->update();
+            $this->viewReport = false;
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+        }
     }
 
     public function viewPreliminaryReport(TestResult $testResult)
@@ -134,6 +155,12 @@ class RejectedResultsComponent extends Component
         $this->result = $testResult->result;
         $this->comment = $testResult->comment;
         $this->test = Test::findOrFail($testResult->test_id);
+        $this->testParameters=$testResult->parameters;
+        $this->kit_id=$testResult->kit_id;
+        $this->verified_lot=$testResult->verified_lot;
+        $this->kit_expiry_date=$testResult->kit_expiry_date;
+
+        // dd($this->parameters);
         $this->viewReport = true;
     }
 

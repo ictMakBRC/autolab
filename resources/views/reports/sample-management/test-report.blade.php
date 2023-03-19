@@ -286,7 +286,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            @if ($testResult->performer->signature)
+                                            @if ($testResult->performer?->signature)
                                                 <img src="{{ asset('storage/' . $testResult->performer->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
@@ -296,24 +296,24 @@
                                             {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
                                         </td>
                                         <td>
-                                            @if ($testResult->reviewer->signature)
+                                            @if ($testResult->reviewer?->signature)
                                                 <img src="{{ asset('storage/' . $testResult->reviewer->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
                                             <hr>
                                             <strong>Rewiewed By</strong><br>
 
-                                            {{ $testResult->reviewer->fullName }}
+                                            {{ $testResult->reviewer?->fullName }}
                                         </td>
                                         <td>
-                                            @if ($testResult->approver->signature)
+                                            @if ($testResult->approver?->signature)
                                                 <img src="{{ asset('storage/' . $testResult->approver->signature) }}"
                                                     alt="" height="5%" width="30%"><br>
                                             @endif
                                             <hr>
                                             <strong>Approved By</strong><br>
 
-                                            {{ $testResult->approver->fullName }}
+                                            {{ $testResult->approver?->fullName }}
                                         </td>
                                         <td>
                                             {{ QrCode::size(84)->generate(
