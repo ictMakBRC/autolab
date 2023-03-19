@@ -122,9 +122,8 @@ class RejectedResultsComponent extends Component
         $testResult->kit_id = $this->kit_id;
         $testResult->verified_lot = $this->verified_lot;
         $testResult->kit_expiry_date = $this->kit_expiry_date;
-        // $testResult->status = 'Pending Review';
+        $testResult->status = 'Pending Review';
 
-        // $currentParameters=$this->testParameters;
         $currentParameters = array_filter($this->testParameters, function ($value) {
             return $value != null;
         });
