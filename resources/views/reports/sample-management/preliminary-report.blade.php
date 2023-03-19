@@ -87,9 +87,9 @@
                         <strong class="text-inverse">Result Date:
                         </strong>{{ $testResults->created_at }}
                     </td>
-                </tr>
+                </tr> 
                 <tr>
-                    @if ($testResults->test->result_presentation == 'Tabular')
+                    @if ($testResults->parameters !=null && $testResults->test->result_presentation == 'Tabular')
                     <table class="table nowrap w-100 table-bordered">
                         <thead>
                             <tr>
