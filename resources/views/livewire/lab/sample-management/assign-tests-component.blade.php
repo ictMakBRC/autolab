@@ -143,20 +143,22 @@
                                                 @if ($sample->sample_is_for == 'Testing')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewTests({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-info" data-bs-toggle="modal"
-                                                         title="Assign"  data-bs-target="#view-tests" ><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-info" 
+                                                        data-bs-toggle="modal" title="Assign"
+                                                        data-bs-target="#view-tests"><i class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="modal" title="Assign"
-                                                        data-bs-target="view-aliquots"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-success"   
+                                                        data-bs-toggle="modal" title="Assign"
+                                                        data-bs-target="#view-aliquots"><i class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Storage')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
                                                         class="btn btn-outline-success" data-bs-toggle="modal" title="Assign"
-                                                        data-bs-target="view-aliquots"><i class="bi bi-list"></i>
+                                                        data-bs-target="#view-aliquots"><i class="bi bi-list"></i>
                                                     </a>
                                                 @endif
                                             </td>
@@ -186,8 +188,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
-                                    class="text-info">{{ $sample->sample_identity }}</span>) with Lab_No <span
-                                    class="text-info">{{ $sample->lab_no }}</span></h6>
+                                    class="text-info">{{ $sampleId }}</span>) with Lab_No <span
+                                    class="text-info">{{ $labNo }}</span></h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                                 wire:click="close()"></button>
                         </div> <!-- end modal header -->
@@ -283,7 +285,7 @@
                             <a href="javascript: void(0);" wire:click="assignAllTests"
                             class="action-ico btn btn-info radius-30 px-3">Assign All</a>
                             @endif
-                            @if (!$request_acknowledged_by)
+                            @if (!$request_acknowledged_by && $sampleId)
                                 <a href="javascript: void(0);" wire:click="acknowledgeRequest"
                                     class="action-ico btn btn-success radius-30 px-3">
                                     <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>

@@ -43,6 +43,8 @@ class AssignTestsComponent extends Component
     public $assignedTests;
 
     public $backlog;
+    public $labNo;
+    public $sampleId;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -78,11 +80,15 @@ class AssignTestsComponent extends Component
         $this->reset(['tests_requested']);
         $this->sample = null;
         $this->sample = $sample;
+        
         $this->assignedTests = TestAssignment::where('sample_id', $sample->id)->get()->pluck('test_id')->toArray();
         $tests = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests ?? []))->get();
         $this->tests_requested = $tests;
         $this->test_id = $tests[0]->id;
         $this->sample_id = $sample->id;
+        // dd($this->sample->lab_no);
+        $this->labNo=$this->sample->lab_no;
+        $this->sampleId=$this->sample->sample_identity;
         $this->request_acknowledged_by=$sample->request_acknowledged_by;
 
         // $this->dispatchBrowserEvent('view-tests');
@@ -206,7 +212,7 @@ class AssignTestsComponent extends Component
 
     public function close()
     {
-        $this->reset(['sample_id','assignee', 'test_id']);
+        $this->reset(['sample_id','assignee', 'test_id','sampleId','labNo']);
         $this->tests_requested = collect([]);
         $this->aliquots_requested = collect([]);
     }
