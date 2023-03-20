@@ -188,8 +188,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
-                                    class="text-info">{{ $sampleId }}</span>) with Lab_No <span
-                                    class="text-info">{{ $labNo }}</span></h6>
+                                    class="text-info">{{ $sampleId??'...' }}</span>) with Lab_No <span
+                                    class="text-info">{{ $labNo??'...' }}</span></h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                                 wire:click="close()"></button>
                         </div> <!-- end modal header -->
@@ -289,10 +289,10 @@
                                 <a href="javascript: void(0);" wire:click="acknowledgeRequest"
                                     class="action-ico btn btn-success radius-30 px-3">
                                     <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
-                                    @else
-                                   <small class="text-success">Loading data please wait......</small> 
                             @endif
-
+                            @if (!$sampleId)
+                                    <h6 class="text-success">Loading data please wait......</h6> 
+                            @endif
                             <button class="btn  btn-danger radius-30 px-3" wire:click="close()"
                                 data-bs-dismiss="modal" aria-label="Close">Close</button>
                         </div>
