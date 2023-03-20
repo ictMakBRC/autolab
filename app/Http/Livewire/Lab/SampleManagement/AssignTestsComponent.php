@@ -215,6 +215,7 @@ class AssignTestsComponent extends Component
         $this->reset(['sample_id','assignee', 'test_id','sampleId','labNo']);
         $this->tests_requested = collect([]);
         $this->aliquots_requested = collect([]);
+        $this->reset(['tests_requested']);
     }
 
     public function getSamples()
