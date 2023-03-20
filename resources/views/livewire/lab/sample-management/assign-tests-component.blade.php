@@ -289,7 +289,10 @@
                                 <a href="javascript: void(0);" wire:click="acknowledgeRequest"
                                     class="action-ico btn btn-success radius-30 px-3">
                                     <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
+                                    @else
+                                   <small class="text-success">Loading data please wait......</small> 
                             @endif
+
                             <button class="btn  btn-danger radius-30 px-3" wire:click="close()"
                                 data-bs-dismiss="modal" aria-label="Close">Close</button>
                         </div>
