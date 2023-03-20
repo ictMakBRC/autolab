@@ -143,23 +143,20 @@
                                                 @if ($sample->sample_is_for == 'Testing')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewTests({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-info" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Assign"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-info" data-bs-toggle="modal"
+                                                         title="Assign"  data-bs-target="#view-tests" ><i class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Assign"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-success" data-bs-toggle="modal" title="Assign"
+                                                        data-bs-target="view-aliquots"><i class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Storage')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom" title=""
-                                                        data-bs-original-title="Assign"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-success" data-bs-toggle="modal" title="Assign"
+                                                        data-bs-target="view-aliquots"><i class="bi bi-list"></i>
                                                     </a>
                                                 @endif
                                             </td>

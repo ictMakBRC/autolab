@@ -85,7 +85,7 @@ class AssignTestsComponent extends Component
         $this->sample_id = $sample->id;
         $this->request_acknowledged_by=$sample->request_acknowledged_by;
 
-        $this->dispatchBrowserEvent('view-tests');
+        // $this->dispatchBrowserEvent('view-tests');
     }
 
     public function viewAliquots(Sample $sample)
@@ -97,7 +97,7 @@ class AssignTestsComponent extends Component
         $this->sample_id = $sample->id;
         $this->request_acknowledged_by=$sample->request_acknowledged_by;
 
-        $this->dispatchBrowserEvent('view-aliquots');
+        // $this->dispatchBrowserEvent('view-aliquots');
     }
 
     public function assignTest()
