@@ -538,7 +538,7 @@
                                             </td> --}}
                                             <td>
                                                 {{-- @if ($participant->created_by == auth()->user()->id) --}}
-                                                <button class="btn btn-sm btn-outline-danger"
+                                                <button class="btn btn-sm btn-outline-primary"
                                                 wire:click="editParticipant({{ $participant->id }})"><i
                                                     class="bi bi-pencil"></i></button>
                                                 {{-- @endif --}}
