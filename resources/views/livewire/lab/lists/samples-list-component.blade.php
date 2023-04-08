@@ -197,25 +197,25 @@
                                             </td>
                                             <td class="table-action">
                                                 @if ($sample->sample_is_for == 'Deffered')
-                                                    <button class="btn btn-outline-danger"
+                                                    <button class="btn btn-sm btn-outline-danger"
                                                         wire:click="recallSampleConfirmation({{ $sample->id }})"><i
                                                             class="bi bi-arrow-90deg-left"></i></button>
                                                 @elseif($sample->sample_is_for == 'Testing')
                                                     <a href="{{ URL::signedRoute('sample-search-results', ['sample' => $sample->id]) }}"
-                                                        type="button" class="btn btn-outline-success"
+                                                        type="button" class="btn btn-sm btn-outline-success"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View Details"
                                                         target="_blank"><i class="bi bi-eye"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="{{ URL::signedRoute('sample-search-results', $sample->id) }}"
-                                                        type="button" class="btn btn-outline-info"
+                                                        type="button" class="btn btn-sm btn-outline-info"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="View Aliquots"
                                                         target="_blank"><i class="bi bi-hourglass-split"></i></a>
                                                 @else
                                                     <a href="javascript:;"
-                                                        class="action-ico btn btn-outline-warning mx-1"
+                                                        class="action-ico btn-sm btn btn-outline-warning mx-1"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                         title="" data-bs-original-title="Storage Details"
                                                         aria-label="Views"
@@ -223,7 +223,11 @@
                                                         data-bs-target="#storage-details"><i
                                                             class="bx bx-archive"></i></a>
                                                 @endif
-
+                                              @if ($sample->created_by == auth()->user()->id  && $sample->status !='Tests Done' || Auth::user()->hasPermission(['review-results']))
+                                                <button class="btn btn-sm btn-outline-primary"
+                                                wire:click="editSample({{$sample->id }})" data-bs-toggle="modal"  data-bs-target="#edit-sample-modal"><i
+                                                    class="bi bi-pencil"></i></button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -245,6 +249,38 @@
 
     </div>
 
+
+        {{-- =============EDIT SAMPLE INFORMATION====================== --}}
+
+        <div wire:ignore.self class="modal fade" id="edit-sample-modal"  tabindex="-1" data-backdrop="static"
+        data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Sample Id</h5>
+                    <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                
+                <form action="" wire:submit.prevent='updateSample'>
+                        <div class="modal-body pt-4 pb-4">
+                            
+                            <label for="name" class="form-label">Sample Id</label>
+                            <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
+                            @error('sample_identity')
+                            <div class="text-danger text-small">{{ __($message) }}</div>
+                            @enderror
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-success">Update</button>
+                            <button class="btn btn-sm btn-danger" type="reset" wire:click="cancel()" data-bs-dismiss="modal"
+                                aria-label="Close">Cancel</button>
+
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     {{-- //SAMPLE RECALL CONFIRMATION MODAL --}}
 
@@ -346,6 +382,7 @@
             window.addEventListener('close-modal', event => {
                 $('#recall-confirmation-modal').modal('hide');
                 $('#storage-details').modal('hide');
+                $('#edit-sample-modal').modal('hide');
             });
 
             window.addEventListener('show-storage-details', event => {

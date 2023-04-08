@@ -79,6 +79,8 @@ class SamplesListComponent extends Component
 
     public $search;
 
+    public $edit_id;
+
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
@@ -188,6 +190,30 @@ class SamplesListComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Batch Samples Successfully recalled for testing!']);
     }
 
+    public function editSample($id)
+    {
+        $this->edit_id = $id;
+       $data = Sample::where(['id' => $id, 'creator_lab' => auth()->user()->creator_lab])->first();
+       if($data){
+        $this->sample_identity = $data->sample_identity;
+       }else{
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample can not be accessed!']);
+       }
+    }
+
+    public function updateSample()
+    {
+        $this->validate([
+            'sample_identity' => 'required|unique:samples,sample_identity,'.$this->edit_id.'',
+        ]);
+        Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->update(['sample_identity' => $this->sample_identity]);
+        $this->edit_id = '';
+        $this->sample_identity = '';
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample id Successfully updated!']);
+    }
+
     public function refresh()
     {
         return redirect(request()->header('Referer'));
@@ -195,7 +221,7 @@ class SamplesListComponent extends Component
 
     public function cancel()
     {
-        $this->reset(['recall_id', 'sample_id']);
+        $this->reset(['recall_id', 'sample_id', 'edit_id','sample_identity']);
     }
 
     public function render()
