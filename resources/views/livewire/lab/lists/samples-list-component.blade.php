@@ -264,12 +264,28 @@
                 
                 <form action="" wire:submit.prevent='updateSample'>
                         <div class="modal-body pt-4 pb-4">
-                            
-                            <label for="name" class="form-label">Sample Id</label>
-                            <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
-                            @error('sample_identity')
-                            <div class="text-danger text-small">{{ __($message) }}</div>
-                            @enderror
+                            <div class="form-group mb-1">
+                                <label for="name" class="form-label">Sample Id</label>
+                                <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
+                                @error('sample_identity')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-1">
+                                <label for="lab_no" class="form-label">Lab Number</label>
+                                <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
+                                @error('lab_no')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="form-label">Sample Sataus</label>
+                                <input type="text" readonly class="form-control" required wire:model.lazy='status'>
+                                @error('status')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                                @enderror
+                            </div>
+                          
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-sm btn-success">Update</button>

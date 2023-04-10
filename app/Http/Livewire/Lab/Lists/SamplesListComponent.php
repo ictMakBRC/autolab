@@ -81,6 +81,10 @@ class SamplesListComponent extends Component
 
     public $edit_id;
 
+    public $lab_no;
+
+    public $status;
+
     public function updatedFacilityId()
     {
         if ($this->facility_id != 0) {
@@ -196,6 +200,8 @@ class SamplesListComponent extends Component
        $data = Sample::where(['id' => $id, 'creator_lab' => auth()->user()->creator_lab])->first();
        if($data){
         $this->sample_identity = $data->sample_identity;
+        $this->lab_no = $data->lab_no;
+        $this->status = $data->status;
        }else{
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample can not be accessed!']);

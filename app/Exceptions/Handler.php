@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
         // Handle TokenMismatchException
         if ($exception instanceof TokenMismatchException) {
             // Custom logic to handle CSRF token mismatch
-            return redirect()->back()->withInput()->with('error', 'CSRF token has expired. Please try again.'); // Example: Redirect back with an error message
+            return redirect()->back()->withInput()->with('error', 'Your Session has expired. Please login to continue.'); // Example: Redirect back with an error message
         }
 
         return parent::render($request, $exception);
