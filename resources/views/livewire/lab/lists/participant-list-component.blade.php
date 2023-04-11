@@ -537,11 +537,11 @@
                                                 {{ $participant->test_result_count}}
                                             </td> --}}
                                             <td>
-                                                {{-- @if ($participant->created_by == auth()->user()->id) --}}
+                                                @if ($participant->created_by == auth()->user()->id || Auth::user()->hasPermission(['review-results']))
                                                 <button class="btn btn-sm btn-outline-primary"
                                                 wire:click="editParticipant({{ $participant->id }})"><i
                                                     class="bi bi-pencil"></i></button>
-                                                {{-- @endif --}}
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
