@@ -96,7 +96,7 @@
                                 @foreach (array_keys($testResults->parameters) as $key)
                                 <th>
                                     {{ $key }}
-                                </th>
+                                </th> 
                                 @endforeach
                                 <th>
                                     Result
@@ -114,6 +114,21 @@
                             </tr>
                         </thead>
                     </table>
+
+                    @elseif($testResults->parameters !=null && $testResults->test->result_presentation == 'Non-Tabular')
+                        <td class="btop" style="width:60%; color:#1A2232">
+                            <div><b style="font-size: 18px">Results:</b>
+                                @if ($testResults->result)
+                                    <span>{{ $testResults->result }}</span>
+                                @else
+                                    <a href="{{ route('attachment.download', $testResults->id) }}">See Attachment</a>
+                                @endif
+                                <br>
+                                @foreach ($testResults->parameters as $key => $parameter)
+                                    <i>{{ $key }}</i> :{{ $parameter }}<br>
+                                @endforeach
+                            </div>
+                        </td>
                     @else
                     <td colspan="3">
                         <strong class="text-inverse">Result:
