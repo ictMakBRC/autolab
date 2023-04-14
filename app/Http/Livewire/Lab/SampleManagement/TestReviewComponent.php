@@ -85,7 +85,7 @@ class TestReviewComponent extends Component
             $testResults = $this->testResult->load(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name']);
         } else {
             $testResults = TestResult::resultSearch($this->search, 'Pending Review')
-            ->where('status', 'Pending Review')
+            ->where(['status'=>'Pending Review','creator_lab'=>auth()->user()->laboratory_id])
             ->with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
