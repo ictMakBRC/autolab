@@ -2,13 +2,14 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\Sample;
 use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithStyles, WithProperties
@@ -54,6 +55,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithSt
 
         return [
             $this->count,
+            Carbon::parse($sample->sampleReception->date_delivered)->format('d-m-Y'),
             $sample->sampleReception->batch_no,
             $sample->participant->identity,
             $sample->sampleType->type,
@@ -69,6 +71,7 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithSt
     {
         return [
             '#',
+            'Date Delivered',
             'Batch No',
             'PID',
             'Sample Type',
