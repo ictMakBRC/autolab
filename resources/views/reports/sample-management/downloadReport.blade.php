@@ -186,6 +186,15 @@
                     @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
                         <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
                             <thead>
+                                @if ($testResult->test->parameter_uom)
+                                <tr>
+                                    <th colspan="{{count($testResult->parameters)+1}}">
+                                        {{$testResult->test->parameter_uom}}
+                                    </th>
+                                    
+                                </tr>
+                                @endif
+
                                 <tr>
                                     @foreach (array_keys($testResult->parameters) as $key)
                                         <th>

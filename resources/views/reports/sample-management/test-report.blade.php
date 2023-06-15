@@ -235,6 +235,14 @@
                                         @if ($testResult->test->result_presentation == 'Tabular')
                                             <table class="table nowrap w-100 table-bordered">
                                                 <thead>
+                                                    @if ($testResult->test->parameter_uom)
+                                                    <tr>
+                                                        <th colspan="{{count($testResult->parameters)+1}}">
+                                                            {{$testResult->test->parameter_uom}}
+                                                        </th>
+                                                        
+                                                    </tr>
+                                                    @endif
                                                     <tr>
                                                         @foreach (array_keys($testResult->parameters) as $key)
                                                             <th>
