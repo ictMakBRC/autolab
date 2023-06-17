@@ -141,7 +141,7 @@
                                 Approval<x-count-badge>{{ $testsPendindApprovalCount }}</x-count-badge></a>
                         @endif
 
-                        @if (Auth::user()->hasPermission(['view-result-reports']))
+                        @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('result-amendment') }}" class="list-group-item"><i
                                     class="bi bi-pencil"></i>Result Amendment</a>
                         @endif
