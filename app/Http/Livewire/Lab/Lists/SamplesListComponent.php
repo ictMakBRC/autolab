@@ -223,8 +223,8 @@ class SamplesListComponent extends Component
 
         $this->edit_id = null;
         $this->sample_identity = null;
-        $this->sample_facility_id=0;
-        $this->sample_study_id=0;
+        $this->sample_facility_id=null;
+        $this->sample_study_id=null;
         $this->studies=collect([]);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample id Successfully updated!']);
