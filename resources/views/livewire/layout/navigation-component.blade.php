@@ -142,6 +142,11 @@
                         @endif
 
                         @if (Auth::user()->hasPermission(['view-result-reports']))
+                            <a href="{{ route('result-amendment') }}" class="list-group-item"><i
+                                    class="bi bi-pencil"></i>Result Amendment</a>
+                        @endif
+
+                        @if (Auth::user()->hasPermission(['view-result-reports']))
                             <a href="{{ route('test-reports') }}" class="list-group-item"><i
                                     class="bi bi-file-earmark-text"></i>Result
                                 Reports<x-count-badge>{{ $testReportsCount }}</x-count-badge></a>

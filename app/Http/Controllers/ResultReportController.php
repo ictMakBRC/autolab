@@ -37,6 +37,14 @@ class ResultReportController extends Controller
        
     }
 
+    public function viewOriginallyAmendedResult($id)
+    {
+        $testResult = json_decode(TestResult::where('id', $id)->first()->original_results);
+        //return View('reports.sample-management.downloadReport', compact('testResult'));
+        return View('reports.sample-management.print-report', compact('testResult'));
+       
+    }
+
     public function download($id)
     {
         $result = TestResult::findOrFail($id);

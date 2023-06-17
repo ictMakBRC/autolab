@@ -69,10 +69,17 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
-                                                        target="_blank"><strong
-                                                            class="text-info">{{ $testResult->tracker }}</strong>
-                                                    </a>
+                                                    @if ($testResult->amended_state)
+                                                        <a href="{{ route('print-original-report', $testResult->id) }}"
+                                                            target="_blank"><strong
+                                                                class="text-warning" title="AMENDED">{{ $testResult->tracker }}</strong>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
+                                                            target="_blank"><strong
+                                                                class="text-info">{{ $testResult->tracker }}</strong>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     {{ $testResult->sample->study->name ?? 'N/A' }}

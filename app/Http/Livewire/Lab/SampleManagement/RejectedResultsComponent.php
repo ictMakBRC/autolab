@@ -34,7 +34,7 @@ class RejectedResultsComponent extends Component
 
     public $test;
 
-    public $testParameters;
+    public $testParameters=[];
 
     public $comment;
 
@@ -153,8 +153,8 @@ class RejectedResultsComponent extends Component
         $this->testResultId = $testResult->id;
         $this->result = $testResult->result;
         $this->comment = $testResult->comment;
-        $this->test = Test::findOrFail($testResult->test_id);
-        $this->testParameters=$testResult->parameters;
+        $this->test = $testResult->test;
+        $this->testParameters=$testResult->parameters??[];
         $this->kit_id=$testResult->kit_id;
         $this->verified_lot=$testResult->verified_lot;
         $this->kit_expiry_date=$testResult->kit_expiry_date;

@@ -132,7 +132,10 @@
             <h3 style="text-align:center; font-size:20px"><b>
                     @if ($testResult->status != 'Approved')
                         <span style="color: crimson">Perliminary</span>
-                    @endif Result Report
+                    @endif Result Report 
+                    @if ($testResult->amended_state)
+                        (<strong style="color: crimson">AMENDED</strong>)
+                    @endif
                 </b> </h3>
         </div>
         {{-- PARTICIPANT AND REQUESTER --}}
@@ -203,8 +206,14 @@
             <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
                 <tbody>
                     {{-- RESULT AND BARCODE --}}
+                    @if ($testResult->parameters && $testResult->amended_state)
+                        @php
+                            $testResult->parameters=json_decode(json_encode($testResult->parameters),true);
+                        @endphp
+                    @endif
                     <tr>
                         @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
+                           
                             <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
                                 <thead>
                                     @if ($testResult->test->parameter_uom)
@@ -322,7 +331,7 @@
                             <strong>Performed By: </strong><br>
 
 
-                            {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
+                            {{ $testResult->performer ? $testResult->performer->first_name.' '.$testResult->performer->surname.' '.$testResult->performer->other_name : 'N/A' }}
 
                         </td>
                         <td class="btop">
@@ -334,7 +343,7 @@
                             <br>
                             <strong>Reviewed By: </strong><br>
 
-                            {{ $testResult->reviewer ? $testResult->reviewer->fullName : 'N/A' }}
+                            {{ $testResult->reviewer ? $testResult->reviewer->first_name.' '.$testResult->reviewer->surname.' '.$testResult->reviewer->other_name : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
@@ -345,7 +354,7 @@
                             <br>
                             <strong>Approved by: </strong> <br>
 
-                            {{ $testResult->approver ? $testResult->approver->fullName : 'N/A' }}
+                            {{ $testResult->approver ? $testResult->approver->first_name.' '.$testResult->approver->surname.' '.$testResult->approver->other_name : 'N/A' }}
                         </td>
                     </tr>
                 </tbody>
@@ -377,7 +386,7 @@
                         <td colspan="3">
                             <p style="text-align:center; font-style: italic; font-size:10px; color:#4CAF50">
                       
-                                <strong>Get Touch With Us</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
+                                <strong>Contact us on</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
                          
                                 Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
                           

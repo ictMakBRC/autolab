@@ -113,6 +113,9 @@
                 @if ($testResult->status != 'Approved')
                     <span style="color: crimson">Perliminary</span>
                 @endif Result Report
+                @if ($testResult->amended_state)
+                (<strong style="color: crimson">AMENDED</strong>)
+                @endif
             </b> </h3>
     </div>
     {{-- PARTICIPANT AND REQUESTER --}}

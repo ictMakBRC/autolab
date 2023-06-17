@@ -223,7 +223,7 @@
                                                         data-bs-target="#storage-details"><i
                                                             class="bx bx-archive"></i></a>
                                                 @endif
-                                              @if ($sample->created_by == auth()->user()->id  && $sample->status !='Tests Done' || Auth::user()->hasPermission(['review-results']))
+                                              @if (($sample->created_by == auth()->user()->id  && $sample->status !='Tests Done') || Auth::user()->hasPermission(['review-results']))
                                                 <button class="btn btn-sm btn-outline-primary"
                                                 wire:click="editSample({{$sample->id }})" data-bs-toggle="modal"  data-bs-target="#edit-sample-modal"><i
                                                     class="bi bi-pencil"></i></button>

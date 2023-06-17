@@ -50,6 +50,13 @@ class TestResult extends Model
         'platform_id',
         'verified_lot',
         'kit_expiry_date',
+
+        'amended_state',
+        'amendment_type',
+        'original_results',
+        'amendment_comment',
+        'amended_by',
+        'amended_at',
     ];
 
     public function sample()

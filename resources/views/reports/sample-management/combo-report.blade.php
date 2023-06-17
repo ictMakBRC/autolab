@@ -379,7 +379,7 @@
                         <td colspan="3">
                             <p style="text-align:center; font-style: italic; font-size:10px; color:#4CAF50">
                       
-                                <strong>Get Touch With Us</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
+                                <strong>Contact us on</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
                          
                                 Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
                           

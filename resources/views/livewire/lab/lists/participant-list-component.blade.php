@@ -479,7 +479,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($participants as $key => $participant)
-                                        <tr class="{{$activeRow==$participant->id?'bg-info':''}}" wire:click="$set('activeRow',{{$participant->id}})">
+                                        <tr>
                                             <td>{{ $key + 1 }}</td>
                                            
                                             <td>
@@ -538,7 +538,7 @@
                                             </td> --}}
                                             <td>
                                                 @if ($participant->created_by == auth()->user()->id || Auth::user()->hasPermission(['review-results']))
-                                                <button class="btn btn-sm btn-outline-primary"
+                                                <button class="btn btn-sm btn-outline-success"
                                                 wire:click="editParticipant({{ $participant->id }})"><i
                                                     class="bi bi-pencil"></i></button>
                                                 @endif
