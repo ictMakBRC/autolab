@@ -257,7 +257,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update Sample Id</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Update Sample</h5>
                     <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -265,7 +265,7 @@
                 <form action="" wire:submit.prevent='updateSample'>
                         <div class="modal-body pt-4 pb-4">
                             <div class="form-group mb-1">
-                                <label for="name" class="form-label">Sample Id</label>
+                                <label for="name" class="form-label">Sample ID</label>
                                 <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
                                 @error('sample_identity')
                                 <div class="text-danger text-small">{{ __($message) }}</div>

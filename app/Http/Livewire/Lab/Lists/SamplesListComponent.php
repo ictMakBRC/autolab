@@ -221,13 +221,10 @@ class SamplesListComponent extends Component
         $sample->update(['sample_identity' => str_replace(' ', '', trim($this->sample_identity)),'study_id'=>$this->sample_study_id]);
         $sample->participant->update(['study_id'=>$this->sample_study_id]);
 
-        $this->edit_id = null;
-        $this->sample_identity = null;
-        $this->sample_facility_id=0;
-        $this->sample_study_id=0;
+        $this->reset(['edit_id', 'sample_identity', 'sample_facility_id','sample_study_id']);
         $this->studies=collect([]);
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample id Successfully updated!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information Successfully updated!']);
     }
 
     public function refresh()
