@@ -157,8 +157,6 @@ class ResultAmendmentComponent extends Component
         $this->participant->address = $this->address;
         $this->participant->gender = $this->gender;
         $this->participant->update();
-
-        // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
     }
 
     public function updateSampleInformation()
@@ -173,8 +171,6 @@ class ResultAmendmentComponent extends Component
         $this->sample->study_id = $this->study_id ?? null;
         $this->sample->sample_identity = str_replace(' ', '', trim($this->sample_identity));
         $this->sample->update();
-
-        // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Data updated successfully!']);
     }
 
     public function updateResult()
@@ -196,8 +192,6 @@ class ResultAmendmentComponent extends Component
 
         $this->testResults->status = 'Pending Review';
         $this->testResults->update();
-
-        // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
     }
 
     public function refresh()

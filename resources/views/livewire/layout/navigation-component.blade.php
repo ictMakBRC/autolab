@@ -95,7 +95,7 @@
                                 class="list-group-item {{ Request::routeIs('specimen-request') ? 'active' : '' }}"><i
                                     class="bi bi-receipt"></i>Accessioning</a>
                         @endif
-                        
+
                         @if (Auth::user()->hasPermission(['assign-test-requests']))
                             <a href="{{ route('test-request-assignment') }}" class="list-group-item"><i
                                     class="bi bi-file-medical"></i>Assign
@@ -105,20 +105,20 @@
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-list-task"></i>My
-                                Tasks<x-count-badge>{{ $testAssignedCount+$AliquotingAssignedCount  }}</x-count-badge></a>
+                                Tasks<x-count-badge>{{ $testAssignedCount + $AliquotingAssignedCount }}</x-count-badge>
+                                </a>
 
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
                                     class="bi bi-file-earmark-medical"></i>Entering Results</a>
                             <a href="javascript: void(0);"
-                            class="list-group-item {{ Request::routeIs('attach-aliquots') ? 'active' : '' }}"><i
-                                class="bi bi-hourglass-split"></i>Aliquoting</a>
+                                class="list-group-item {{ Request::routeIs('attach-aliquots') ? 'active' : '' }}"><i
+                                    class="bi bi-hourglass-split"></i>Aliquoting</a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['enter-results']))
-                        <a href="{{ route('rejected-results') }}"
-                            class="list-group-item"><i
-                                class="bi bi-exclamation-triangle-fill text-danger"></i>Rejected Results
+                            <a href="{{ route('rejected-results') }}" class="list-group-item"><i
+                                    class="bi bi-exclamation-triangle-fill text-danger"></i>Rejected Results
                                 <span class="badge bg-danger pill float-end">{{ $rejectedResultsCount }}</span>
                             </a>
                         @endif
@@ -175,8 +175,8 @@
                         @if (Auth::user()->hasPermission(['access-settings']))
                             <a href="{{ route('freezer-location') }}" class="list-group-item"><i
                                     class="bi bi-geo-alt-fill"></i>Freezer Locations</a>
-                                    <a href="{{ route('freezers') }}" class="list-group-item"><i
-                                        class="bi bi-thermometer-snow"></i>Freezers</a>
+                            <a href="{{ route('freezers') }}" class="list-group-item"><i
+                                    class="bi bi-thermometer-snow"></i>Freezers</a>
                         @endif
                     </div>
                 </div>
@@ -266,7 +266,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <div class="tab-pane fade" id="pills-user-profile">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">

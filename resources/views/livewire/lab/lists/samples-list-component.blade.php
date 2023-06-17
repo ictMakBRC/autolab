@@ -123,7 +123,8 @@
                                     </div>
                                     <div class=" col-md-2 ms-auto position-relative">
                                         <label for="search" class="form-label">Search</label>
-                                        <input wire:model.debounce.300ms="search" class="form-control " type="text" placeholder="search">
+                                        <input wire:model.debounce.300ms="search" class="form-control "
+                                            type="text" placeholder="search">
                                     </div>
                                 </div>
                                 <!-- end row-->
@@ -223,10 +224,13 @@
                                                         data-bs-target="#storage-details"><i
                                                             class="bx bx-archive"></i></a>
                                                 @endif
-                                              @if (($sample->created_by == auth()->user()->id  && $sample->status !='Tests Done') || Auth::user()->hasPermission(['review-results']))
-                                                <button class="btn btn-sm btn-outline-primary"
-                                                wire:click="editSample({{$sample->id }})" data-bs-toggle="modal"  data-bs-target="#edit-sample-modal"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                @if (
+                                                    ($sample->created_by == auth()->user()->id && $sample->status != 'Tests Done') ||
+                                                        Auth::user()->hasPermission(['review-results']))
+                                                    <button class="btn btn-sm btn-outline-primary"
+                                                        wire:click="editSample({{ $sample->id }})"
+                                                        data-bs-toggle="modal" data-bs-target="#edit-sample-modal"><i
+                                                            class="bi bi-pencil"></i></button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -250,9 +254,9 @@
     </div>
 
 
-        {{-- =============EDIT SAMPLE INFORMATION====================== --}}
+    {{-- =============EDIT SAMPLE INFORMATION====================== --}}
 
-        <div wire:ignore.self class="modal fade" id="edit-sample-modal"  tabindex="-1" data-backdrop="static"
+    <div wire:ignore.self class="modal fade" id="edit-sample-modal" tabindex="-1" data-backdrop="static"
         data-keyboard="false" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -261,48 +265,48 @@
                     <button type="button" class="btn-close" wire:click="cancel()" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                
-                <form action="" wire:submit.prevent='updateSample'>
-                        <div class="modal-body pt-4 pb-4">
-                            <div class="form-group mb-1">
-                                <label for="name" class="form-label">Sample ID</label>
-                                <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
-                                @error('sample_identity')
-                                <div class="text-danger text-small">{{ __($message) }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-1">
-                                <label for="sample_study" class="form-label">Study</label>
-                                <select class="form-select" id="sample_study" wire:model="sample_study_id">
-                                    <option selected value="0">All</option>
-                                    @forelse ($studies as $study)
-                                        <option value='{{ $study->id }}'>{{ $study->name }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
-                            <div class="form-group mb-1">
-                                <label for="lab_no" class="form-label">Lab Number</label>
-                                <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
-                                @error('lab_no')
-                                <div class="text-danger text-small">{{ __($message) }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="status" class="form-label">Sample Status</label>
-                                <input type="text" readonly class="form-control" required wire:model.lazy='status'>
-                                @error('status')
-                                <div class="text-danger text-small">{{ __($message) }}</div>
-                                @enderror
-                            </div>
-                          
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm btn-success">Update</button>
-                            <button class="btn btn-sm btn-danger" type="reset" wire:click="cancel()" data-bs-dismiss="modal"
-                                aria-label="Close">Cancel</button>
 
+                <form action="" wire:submit.prevent='updateSample'>
+                    <div class="modal-body pt-4 pb-4">
+                        <div class="form-group mb-1">
+                            <label for="name" class="form-label">Sample ID</label>
+                            <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
+                            @error('sample_identity')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                            @enderror
                         </div>
+                        <div class="form-group mb-1">
+                            <label for="sample_study" class="form-label">Study</label>
+                            <select class="form-select" id="sample_study" wire:model="sample_study_id">
+                                <option selected value="0">All</option>
+                                @forelse ($studies as $study)
+                                    <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="lab_no" class="form-label">Lab Number</label>
+                            <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
+                            @error('lab_no')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="status" class="form-label">Sample Status</label>
+                            <input type="text" readonly class="form-control" required wire:model.lazy='status'>
+                            @error('status')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                            @enderror
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-success">Update</button>
+                        <button class="btn btn-sm btn-danger" type="reset" wire:click="cancel()"
+                            data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+
+                    </div>
                 </form>
             </div>
         </div>
@@ -333,11 +337,11 @@
         </div>
     </div>
     @if ($sample != null)
-    {{-- VIEW STORAGE DETAILS --}}
-    <div wire:ignore.self class="modal fade" id="storage-details" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            {{-- @if ($sample != null) --}}
+        {{-- VIEW STORAGE DETAILS --}}
+        <div wire:ignore.self class="modal fade" id="storage-details" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                {{-- @if ($sample != null) --}}
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Sample (<span
@@ -399,9 +403,9 @@
 
                     </div>
                 </div> <!-- end modal content-->
-            {{-- @endif --}}
-        </div> <!-- end modal dialog-->
-    </div> <!-- end modal-->
+                {{-- @endif --}}
+            </div> <!-- end modal dialog-->
+        </div> <!-- end modal-->
     @endif
     @push('scripts')
         <script>
