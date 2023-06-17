@@ -112,7 +112,7 @@ class ResultAmendmentComponent extends Component
                 $this->study_id=$this->sample->study_id;
                 $this->sample_identity=$this->sample->sample_identity;
 
-                $this->studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->with('requester:id,name')->orderBy('name', 'asc')->get();
+                $this->studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
 
                 $this->toggleEditForms=false;
             } else {
@@ -151,7 +151,7 @@ class ResultAmendmentComponent extends Component
             'gender' => 'nullable|string|max:6',
         ]);
 
-        $this->participant->identity = $this->identity;
+        $this->participant->identity = str_replace(' ', '', trim($this->identity));
         $this->participant->age = $this->age;
         $this->participant->months = $this->months;
         $this->participant->address = $this->address;
@@ -171,7 +171,7 @@ class ResultAmendmentComponent extends Component
 
         $this->sample->date_collected = $this->date_collected;
         $this->sample->study_id = $this->study_id ?? null;
-        $this->sample->sample_identity = $this->sample_identity;
+        $this->sample->sample_identity = str_replace(' ', '', trim($this->sample_identity));
         $this->sample->update();
 
         // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Data updated successfully!']);

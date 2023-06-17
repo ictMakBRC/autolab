@@ -272,6 +272,16 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-1">
+                                <label for="sample_study" class="form-label">Study</label>
+                                <select class="form-select" id="sample_study" wire:model="sample_study_id">
+                                    <option selected value="0">All</option>
+                                    @forelse ($studies as $study)
+                                        <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+                            <div class="form-group mb-1">
                                 <label for="lab_no" class="form-label">Lab Number</label>
                                 <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
                                 @error('lab_no')
@@ -279,7 +289,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="status" class="form-label">Sample Sataus</label>
+                                <label for="status" class="form-label">Sample Status</label>
                                 <input type="text" readonly class="form-control" required wire:model.lazy='status'>
                                 @error('status')
                                 <div class="text-danger text-small">{{ __($message) }}</div>

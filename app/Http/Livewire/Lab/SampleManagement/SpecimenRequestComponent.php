@@ -418,7 +418,7 @@ class SpecimenRequestComponent extends Component
                 if ($this->entry_type == 'Other' || $this->entry_type == 'Client') {
                     $participant->identity = $patNo;
                 } else {
-                    $participant->identity = $this->identity;
+                    $participant->identity = str_replace(' ', '', trim($this->identity));
                 }
                 $participant->age = $this->age ?? null;
                 $participant->months = $this->months ?? null;
@@ -550,7 +550,7 @@ class SpecimenRequestComponent extends Component
         }
 
         $participant = Participant::find($this->participant_id);
-        $participant->identity = $this->identity;
+        $participant->identity = str_replace(' ', '', trim($this->identity));
         $participant->age = $this->age;
         $participant->months = $this->months;
         $participant->address = $this->address;
@@ -703,7 +703,7 @@ class SpecimenRequestComponent extends Component
         $sample->collected_by = $this->collected_by;
         $sample->date_collected = $this->date_collected;
         $sample->study_id = $this->study_id ?? null;
-        $sample->sample_identity = $this->sample_identity;
+        $sample->sample_identity = str_replace(' ', '', trim($this->sample_identity));
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
 
@@ -837,7 +837,7 @@ class SpecimenRequestComponent extends Component
         $sample->collected_by = $this->collected_by;
         $sample->date_collected = $this->date_collected;
         $sample->study_id = $this->study_id ?? null;
-        $sample->sample_identity = $this->sample_identity;
+        $sample->sample_identity = str_replace(' ', '', trim($this->sample_identity));
         $sample->sample_is_for = $this->sample_is_for;
         $sample->priority = $this->priority;
         $sample->is_isolate = $this->is_isolate;

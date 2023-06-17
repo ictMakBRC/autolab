@@ -80,6 +80,8 @@ class SamplesListComponent extends Component
     public $search;
 
     public $edit_id;
+    public $sample_study_id;
+    public $sample_facility_id;
 
     public $lab_no;
 
@@ -194,18 +196,20 @@ class SamplesListComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Batch Samples Successfully recalled for testing!']);
     }
 
-    public function editSample($id)
+    public function editSample(Sample $sample)
     {
-        $this->edit_id = $id;
-       $data = Sample::where(['id' => $id, 'creator_lab' => auth()->user()->creator_lab])->first();
-       if($data){
-        $this->sample_identity = $data->sample_identity;
-        $this->lab_no = $data->lab_no;
-        $this->status = $data->status;
-       }else{
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample can not be accessed!']);
-       }
+        if($sample){
+                $this->edit_id = $sample->id;
+                $this->sample_identity = $sample->sample_identity;
+                $this->lab_no = $sample->lab_no;
+                $this->sample_study_id = $sample->study_id;
+                $this->status = $sample->status;
+                $this->sample_facility_id=$sample->participant->facility_id;
+                $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->sample_facility_id)->get();
+        }else{
+                $this->dispatchBrowserEvent('close-modal');
+                $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample can not be accessed!']);
+        }
     }
 
     public function updateSample()
@@ -213,9 +217,15 @@ class SamplesListComponent extends Component
         $this->validate([
             'sample_identity' => 'required|unique:samples,sample_identity,'.$this->edit_id.'',
         ]);
-        Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->update(['sample_identity' => $this->sample_identity]);
-        $this->edit_id = '';
-        $this->sample_identity = '';
+        $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
+        $sample->update(['sample_identity' => str_replace(' ', '', trim($this->sample_identity)),'study_id'=>$this->sample_study_id]);
+        $sample->participant->update(['study_id'=>$this->sample_study_id]);
+
+        $this->edit_id = null;
+        $this->sample_identity = null;
+        $this->sample_facility_id=0;
+        $this->sample_study_id=0;
+        $this->studies=collect([]);
         $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample id Successfully updated!']);
     }
