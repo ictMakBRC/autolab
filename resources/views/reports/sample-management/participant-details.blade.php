@@ -229,7 +229,7 @@
                                                     <strong class="text-success">Lab No:
                                                     </strong>{{ $sample->lab_no }}<br>
                                                     <strong class="text-inverse">Tests Requested:
-                                                    </strong>{{ count($sample->tests_requested) }}<br>
+                                                    </strong>{{ count($sample->tests_requested??[]) }}<br>
                                                     <strong class="text-inverse">Tests Performed:
                                                     </strong>{{ count($sample->tests_performed ?? []) }}
                                                 </td>
