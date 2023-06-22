@@ -84,7 +84,13 @@ class ResultAmendmentComponent extends Component
     public function getResultDetails()
     {
         if ($this->result_tracker) {
-            $testResult = TestResult::where(['tracker'=>$this->result_tracker,'status'=>'approved','creator_lab'=>auth()->user()->laboratory_id,'performed_by'=>auth()->user()->id,'amended_state'=>false])->with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])->first();
+
+            $testResult = TestResult::where(['tracker'=>$this->result_tracker,'status'=>'approved','creator_lab'=>auth()->user()->laboratory_id,'amended_state'=>false])->with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])
+            ->when(!auth()->user()->hasPermission(['review-results']), function ($query) {
+                $query->where('performed_by',auth()->user()->id);
+            })
+            ->first();
+            
             if ($testResult) {
 
                 $this->testResults=$testResult;
