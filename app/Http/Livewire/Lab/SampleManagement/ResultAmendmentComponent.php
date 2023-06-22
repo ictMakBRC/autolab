@@ -90,7 +90,6 @@ class ResultAmendmentComponent extends Component
                 $query->where('performed_by',auth()->user()->id);
             })
             ->with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])
-
             ->first();
             
             if ($testResult) {
