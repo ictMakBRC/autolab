@@ -102,7 +102,12 @@
                         </td>
                         <td>
                             <strong class="text-inverse">Result Date:
-                            </strong>{{ $testResults->created_at }}
+                            </strong>    
+                            @if ($testResult->amended_state)
+                                {{ date('d-m-Y H:i', strtotime($testResult->amended_at)) }}
+                            @else
+                                {{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
+                            @endif
                         </td>
                     </tr>
                     <tr>

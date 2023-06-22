@@ -176,7 +176,12 @@
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>
                     <td class="btop" style="text-align: right"><strong>Result Date:</strong>
-                        <br>{{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
+                        <br>    
+                        @if ($testResult->amended_state)
+                            {{ date('d-m-Y H:i', strtotime($testResult->amended_at)) }}
+                        @else
+                            {{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
+                        @endif
                     </td>
                 </tr>
             </tbody>
