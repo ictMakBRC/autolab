@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('resultReview', TestReviewComponent::class)->middleware('permission:review-results')->name('test-review');
         Route::get('resultApproval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
 
-        Route::get('resultAmendment', ResultAmendmentComponent::class)->middleware('permission:approve-results')->name('result-amendment');
+        Route::get('resultAmendment', ResultAmendmentComponent::class)->name('result-amendment');
         Route::get('result/{id}/original-report', [ResultReportController::class, 'viewOriginallyAmendedResult'])->name('print-original-report');
 
         Route::get('resultReports', TestReportsComponent::class)->middleware('permission:approve-results')->name('test-reports');
