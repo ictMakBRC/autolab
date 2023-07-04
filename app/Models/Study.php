@@ -33,7 +33,7 @@ class Study extends Model
 
     public function requester()
     {
-        return $this->hasOne(Requester::class, 'study_id', 'id')->latest();
+        return $this->hasOne(Requester::class, 'study_id', 'id');
     }
 
     public static function boot()

@@ -589,7 +589,7 @@ class SpecimenRequestComponent extends Component
             $this->participant_id = $participant->id;
             $this->entry_type = $participant->entry_type;
             $this->study_id = $participant->study_id ?? '';
-            $this->requested_by = $participant->study ? $participant->study->requester->id : '';
+            $this->requested_by = $participant->study ? $participant->study?->requester?->id : '';
             $this->activeParticipantTab = false;
         }
     }
