@@ -373,7 +373,8 @@ class SampleReceptionComponent extends Component
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->latest()->get();
 
         $sampleReceptions = SampleReception::search($this->search)
-        ->where(['creator_lab'=>auth()->user()->laboratory_id,'created_by'=> auth()->user()->id])
+        ->when(!auth()->user()->hasRole(['admin']), function ($query) {
+        $query->where(['creator_lab'=>auth()->user()->laboratory_id,'created_by'=> auth()->user()->id]);})
         // ->where(function (Builder $query) {
         //     $query->whereRaw('samples_accepted != samples_handled');
         //     ->orWhereHas('sample', function (Builder $query) {
