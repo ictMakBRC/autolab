@@ -216,7 +216,7 @@ class SamplesListComponent extends Component
     {
         $this->validate([
             'sample_identity' => 'required|unique:samples,sample_identity,'.$this->edit_id.'',
-            'study_id' => 'required|!integer',
+            'study_id' => 'required|integer',
         ]);
         $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
         $sample->update(['sample_identity' => str_replace(' ', '', trim($this->sample_identity)),'study_id'=>$this->sample_study_id]);
