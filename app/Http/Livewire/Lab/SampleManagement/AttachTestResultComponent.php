@@ -66,11 +66,8 @@ class AttachTestResultComponent extends Component
 
         if (count($testsPendingResults) > 0) {
             $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)
-            ->when(!auth()->user()->hasPermission(['view-all']), function ($query) {
-                $query->where(['assignee' => auth()->user()->id]);
-            })
             ->whereHas('testAssignment', function (Builder $query) {
-                $query->where(['sample_id' => $this->sample_id, 'status' => 'Assigned']);
+                $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
             })
             ->orderBy('name', 'asc')->get();
 

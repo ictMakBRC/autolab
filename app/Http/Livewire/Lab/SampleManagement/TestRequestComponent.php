@@ -97,16 +97,13 @@ class TestRequestComponent extends Component
         ->whereIn('status', ['Assigned', 'Processing'])
         ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
         ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-        ->when(!auth()->user()->hasPermission(['view-all']), function ($query) {
-            $query->where(['assignee' => auth()->user()->id]);
-        })
         ->when($this->sample_is_for == 'Testing', function ($query) {
             $query->whereHas('testAssignment', function (Builder $query) {
-                $query->where(['status' => 'Assigned']);
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
             });
         }, function ($query) {
             $query->whereHas('aliquotingAssignment', function (Builder $query) {
-                $query->where(['status' => 'Assigned']);
+                $query->where(['assignee' => auth()->user()->id, 'status' => 'Assigned']);
             });
         })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
