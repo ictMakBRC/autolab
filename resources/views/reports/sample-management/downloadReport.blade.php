@@ -342,12 +342,12 @@
             <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
                 <tr>
                     <td colspan="2" style="width: 80%; text-alighn:left">
-                        <h6 style="color:green;  ">
-                          This laboratory is certified by SANAS(South African National Accreditation System) and holds accreditation #M0857 
-                        </h6>
+                        <p style="color:green;  ">
+                          This laboratory is certified by South African National Accreditation System(SANAS) and holds accreditation #M0857 
+                        </p>
                 </td>
                     <td style="width: 20%">
-                        <img width="48%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
+                        <img width="50%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
                     </td>
                 </tr>
                 <tr>
