@@ -343,7 +343,7 @@
                 <tr>
                     <td colspan="2" style="width: 80%; font-size:10px; text-alighn:left">
                         <p style="color:green;  ">
-                          This laboratory is certified by South African National Accreditation System(SANAS) and holds accreditation #M0857 
+                          This laboratory is certified by South African National Accreditation System (SANAS) and holds accreditation #M0857 
                         </p>
                 </td>
                     <td style="width: 20%">
