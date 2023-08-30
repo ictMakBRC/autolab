@@ -341,7 +341,7 @@
         <footer style=" position: fixed; bottom: 0;">
             <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
                 <tr>
-                    <td colspan="2" style="width: 80%; text-alighn:left">
+                    <td colspan="2" style="width: 80%; font-size:10px; text-alighn:left">
                         <p style="color:green;  ">
                           This laboratory is certified by South African National Accreditation System(SANAS) and holds accreditation #M0857 
                         </p>
