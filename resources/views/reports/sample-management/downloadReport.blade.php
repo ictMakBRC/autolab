@@ -338,45 +338,59 @@
                 </tr>
             </tbody>
         </table>
-        <footer>
-            <table width="100%" style=" position: fixed; bottom: 0; text-align:center; font-size:10px; color:#4CAF50">
-
-                
+        <footer style=" position: fixed; bottom: 0;">
+            <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
                 <tr>
-                    <td>
-                        <p>
-                        
-                          <strong>GMI LABS;</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
-                   
-                          Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
-                    
-                          Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a>
-                      </p>
+                    <td colspan="2" style="width: 80%; text-alighn:left">
+                        <h6 style="color:green;  ">
+                          This laboratory is certified by SANAS(South African National Accreditation System) and holds accreditation #M0857 
+                        </h6>
+                </td>
+                    <td style="width: 20%">
+                        <img width="48%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p style="text-align:center; font-style: italic; font-size:8px; color:#4CAF50 ; bottom: 0;  right: 0;        
-                        position: fixed;">Printed By: <font>
-                                {{ Auth::user()->name }} </font> |
-                        Print Date:
-                            {{ date('l d-M-Y H:i:s') }}</font> |
-                        Printed
+                        <p style="text-align:center; font-size:10px; color:#4CAF50">Printed By: <font>
+                                {{ Auth::user()->name }} </font>
+                        </p>
+                    </td>
+                    <td>
+                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Print Date:
+                            {{ date('l d-M-Y H:i:s') }}</font>
+                        </p>
+                    </td>
+                    <td>
+                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Printed
                             {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
                                 [{{ $testResult->tracker }}]
                             @endif
-                           
+                            </font>
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="3">
+                        <p style="text-align:center; font-style: italic; font-size:10px; color:#4CAF50">
+                  
+                            <strong>Contact us on</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
+                     
+                            Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
+                      
+                            Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a>
+                        </p>
+                    </td>
+                </tr>
+              
             </table>
+        
             {{-- <table style="border-bottom: 0.2px solid #6C757D; width: 100%">
-                  <tr>
+                <tr>
                     <td  style="color:#6C757D">  Page <span class="page">1</span> of <span class="topage">1</span></td>
 
-                  </tr>
+                </tr>
                 </table> --}}
-             
         </footer>
     </div>
 
