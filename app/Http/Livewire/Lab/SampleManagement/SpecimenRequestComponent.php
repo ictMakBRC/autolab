@@ -456,6 +456,7 @@ class SpecimenRequestComponent extends Component
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
                 } catch(Exception $error) {
                     $participant = Participant::where('identity',$this->identity)->first();
+                    if($participant){                        
                     $participant->identity = $this->identity;
                     $participant->age = $this->age;
                     $participant->months = $this->months ?? null;
@@ -487,6 +488,9 @@ class SpecimenRequestComponent extends Component
                     $this->activeParticipantTab = false;
                     $this->resetParticipantInputs();
                     $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
+                    }else{
+                        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Participant Data not updateds!']);
+                    }
                 }
         }
     }
