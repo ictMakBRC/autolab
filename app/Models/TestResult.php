@@ -130,6 +130,30 @@ class TestResult extends Model
                     });
                 }
             )
+            ->where(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample', function ($query) use ($search) {
+                        $query->where('sample_identity', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->where(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample', function ($query) use ($search) {
+                        $query->where('sample_no', 'like', '%'.$search.'%');
+                    });
+                }
+            )
+            ->where(
+                function ($query) use ($search, $status) {
+                    $query->where('status', $status)
+                    ->whereHas('sample', function ($query) use ($search) {
+                        $query->where('lab_no', 'like', '%'.$search.'%');
+                    });
+                }
+            )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
