@@ -4,7 +4,7 @@
         <tr>
                 <td colspan="2" style="width: 70%; font-size:10px; text-align:left">
                     <p style="color:green;  ">
-                      This laboratory is ccredited by the South African National Accreditation System (SANAS)
+                      This laboratory is accredited by the South African National Accreditation System (SANAS)
                     </p>
             </td>
             <td style="width: 30%;text-align:right">
