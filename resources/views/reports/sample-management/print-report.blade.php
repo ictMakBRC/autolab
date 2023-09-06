@@ -302,11 +302,11 @@
                             <div style="float: right;">
                                 <br>
                                 {{ QrCode::size(84)->generate(
-                                    $testResult->tracker .
+                                     $testResult->tracker .
                                         '|' .
-                                        $testResult->sample?->participant?->identity .
+                                        ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
                                         '|' .
-                                        $testResult->sample?->sample_identity,
+                                        ($testResult->sample ? $testResult->sample->sample_identity : ''),
                                 ) }}
                             </div>
                         </td>
