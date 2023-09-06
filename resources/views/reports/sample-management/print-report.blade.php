@@ -374,7 +374,7 @@
                                 </p>
                         </td>
                         <td style="width: 20%">
-                            <img width="48%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
+                            <img width="70%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
                         </td>
                     </tr>
                     <tr>
