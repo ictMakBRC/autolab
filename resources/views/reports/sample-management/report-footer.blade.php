@@ -31,12 +31,12 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3">
-                <p style="text-align:center; font-style: italic; font-size:10px; color:#070707">         
+            <td colspan="3"style="text-align:center; font-style: italic; font-size:10px; color:#070707">
+                <p>         
                     
-                    Website: <a href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |               
-                    Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a> | 
-                    Telephone: <a href="tel:+256 414674494">+256 414674494</a>
+                    Website: <a style="color:#070707" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |               
+                    Email: <a style="color:#070707" href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a> | 
+                    Telephone: <a style="color:#070707" href="tel:+256 414674494">+256 414674494</a>
                 </p>
             </td>
         </tr>
