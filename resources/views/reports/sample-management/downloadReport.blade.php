@@ -338,60 +338,7 @@
                 </tr>
             </tbody>
         </table>
-        <footer style=" position: fixed; bottom: 0;">
-            <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
-                <tr>
-                    <td colspan="2" style="width: 80%; font-size:10px; text-alighn:left">
-                        <p style="color:green;  ">
-                          This laboratory is certified by South African National Accreditation System (SANAS) and holds accreditation #M0857 
-                        </p>
-                </td>
-                    <td style="width: 20%">
-                        <img width="70%" style="margin-right:18px;" src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50">Printed By: <font>
-                                {{ Auth::user()->name }} </font>
-                        </p>
-                    </td>
-                    <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Print Date:
-                            {{ date('l d-M-Y H:i:s') }}</font>
-                        </p>
-                    </td>
-                    <td>
-                        <p style="text-align:center; font-size:10px; color:#4CAF50"> Printed
-                            {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
-                                [{{ $testResult->tracker }}]
-                            @endif
-                            </font>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <p style="text-align:center; font-style: italic; font-size:10px; color:#4CAF50">
-                  
-                            <strong>Contact us on</strong> Tel: <a href="tel:+256 0414674494">0414674494</a> |
-                     
-                            Website: <a style="color: #44a847" href="https://gmi.mak.ac.ug">www.gmi.mak.ac.ug</a> |
-                      
-                            Email: <a href="mailto:makbrc.chs@mak.ac.ug">makbrc.chs@mak.ac.ug</a>
-                        </p>
-                    </td>
-                </tr>
-              
-            </table>
-        
-            {{-- <table style="border-bottom: 0.2px solid #6C757D; width: 100%">
-                <tr>
-                    <td  style="color:#6C757D">  Page <span class="page">1</span> of <span class="topage">1</span></td>
-
-                </tr>
-                </table> --}}
-        </footer>
+        @include('reports.sample-management.report-footer')
     </div>
 
 
