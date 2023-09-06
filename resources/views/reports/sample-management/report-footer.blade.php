@@ -8,12 +8,12 @@
                     </p>
             </td>
             <td style="width: 30%;text-align:right">
-                <img width="50%" style="margin-right:8px; " src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
+                <img width="50%" style="margin-right:1px; " src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
             </td>
         </tr>
         <tr>
             <td>
-                <p style="text-align:center; font-size:10px; color:#4CAF50">Printed By: <font>
+                <p style="text-align:left; font-size:10px; color:#4CAF50">Printed By: <font>
                         {{ Auth::user()->name }} </font>
                 </p>
             </td>
@@ -23,7 +23,7 @@
                 </p>
             </td>
             <td>
-                <p style="text-align:center; font-size:10px; color:#4CAF50"> Printed
+                <p style="text-align:right; font-size:10px; color:#4CAF50"> Printed
                     {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
                         [{{ $testResult->tracker }}]
                     @endif
