@@ -301,13 +301,19 @@
                         <td class="btop" style="width:20%">
                             <div style="float: right;">
                                 <br>
-                                {{ QrCode::size(84)->generate(
-                                     $testResult->tracker .
-                                        '|' .
-                                        ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
-                                        '|' .
-                                        ($testResult->sample ? $testResult->sample->sample_identity : ''),
-                                ) }}
+                                @php
+                                    try {
+                                        echo QrCode::size(84)->generate(
+                                            $testResult->tracker .
+                                                '|' .
+                                                ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
+                                                '|' .
+                                                ($testResult->sample ? $testResult->sample->sample_identity : ''),
+                                        ) ;
+                                    } catch (\Throwable $e) {
+                                       echo QrCode::size(84)->generate($testResult->tracker);
+                                    }
+                                @endphp
                             </div>
                         </td>
                     </tr>

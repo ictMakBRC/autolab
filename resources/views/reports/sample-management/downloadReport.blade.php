@@ -273,15 +273,25 @@
                     <td class="btop" style="width:20%">
                         <div style="float: right;">
                             <br>
-                            <img src="data:image/png;base64, {!! base64_encode(
-                                QrCode::format('svg')->size(84)->generate(
+                            <img src="data:image/png;base64, 
+                            @php
+                                try {
+                                    $qrCode = QrCode::format('svg')->size(84)->generate(
                                         $testResult->tracker .
                                         '|' .
                                         ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
                                         '|' .
-                                        ($testResult->sample ? $testResult->sample->sample_identity : ''),
-                                    ),
-                            ) !!} ">
+                                        ($testResult->sample ? $testResult->sample->sample_identity : '')
+                                    );
+
+                                    echo base64_encode($qrCode);
+                                } catch (\Throwable $e) {
+                                    $qrCode = QrCode::format('svg')->size(84)->generate($testResult->tracker);
+                                    echo base64_encode($qrCode);
+                                }
+                            @endphp
+
+                            ">
                         </div>
                     </td>
                 </tr>
