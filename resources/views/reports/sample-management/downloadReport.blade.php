@@ -277,9 +277,9 @@
                                 QrCode::format('svg')->size(84)->generate(
                                         $testResult->tracker .
                                             '|' .
-                                            $testResult->sample->participant->identity .
+                                            $testResult->sample?->participant?->identity .
                                             '|' .
-                                            $testResult->sample->sample_identity,
+                                            $testResult->sample?->sample_identity,
                                     ),
                             ) !!} ">
                         </div>
