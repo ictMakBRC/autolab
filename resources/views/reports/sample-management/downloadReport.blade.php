@@ -276,10 +276,10 @@
                             <img src="data:image/png;base64, {!! base64_encode(
                                 QrCode::format('svg')->size(84)->generate(
                                         $testResult->tracker .
-                                            '|' .
-                                            $testResult->sample?->participant?->identity .
-                                            '|' .
-                                            $testResult->sample?->sample_identity,
+                                        '|' .
+                                        ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
+                                        '|' .
+                                        ($testResult->sample ? $testResult->sample->sample_identity : ''),
                                     ),
                             ) !!} ">
                         </div>
