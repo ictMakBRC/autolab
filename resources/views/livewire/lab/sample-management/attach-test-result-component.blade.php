@@ -65,7 +65,11 @@
                                                 <strong class="text-inverse">Sample Id: </strong>
                                                 {{ $sample->sample_identity??'N/A' }}<br>
                                                 <strong class="text-inverse">Lab  No: </strong>
-                                                {{ $sample->lab_no??'N/A' }}
+                                                {{ $sample->lab_no??'N/A' }}<br>
+                                                <strong class="text-inverse">Collection Date: </strong>
+                                                {{ $sample->date_collected??'N/A' }}<br>
+                                                <strong class="text-inverse">Request Date: </strong>
+                                                {{ $sample->date_requested??'N/A' }}
                                             </td>
                                             <td>
                                                 <strong class="text-inverse">Participant ID:
