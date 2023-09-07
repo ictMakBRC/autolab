@@ -267,15 +267,15 @@
                 </div>
 
                 <form action="" wire:submit.prevent='updateSample'>
-                    <div class="modal-body pt-4 pb-4">
-                        <div class="form-group mb-1">
+                    <div class="modal-body pt-4 pb-4 row">
+                        <div class="form-group mb-1 col-md-6">
                             <label for="name" class="form-label">Sample ID</label>
                             <input type="text" class="form-control" required wire:model.lazy='sample_identity'>
                             @error('sample_identity')
                                 <div class="text-danger text-small">{{ __($message) }}</div>
                             @enderror
                         </div>
-                        <div class="form-group mb-1">
+                        <div class="form-group mb-1 col-md-6">
                             <label for="sample_study" class="form-label">Study</label>
                             <select class="form-select" id="sample_study" wire:model="sample_study_id">
                                 <option selected value="0">All</option>
@@ -285,14 +285,25 @@
                                 @endforelse
                             </select>
                         </div>
-                        <div class="form-group mb-1">
+                        <div class="form-group mb-1 col-md-6">
+                            <label for="date_requested" class="form-label">Request Date</label>
+                            <input type="date" class="form-control" min="{{$date_collected}}" required wire:model.lazy='date_requested'>
+                            @error('date_requested')
+                                <div class="text-danger text-small">{{ __($message) }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1 col-md-6">
+                            <label for="date_collected" class="form-label">Collection Date/Time</label>
+                            <input id="date_collected" max="{{$date_requested}}" class="form-control" type="datetime-local"  wire:model="date_collected">
+                        </div>
+                        <div class="form-group mb-1 col-md-6">
                             <label for="lab_no" class="form-label">Lab Number</label>
                             <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
                             @error('lab_no')
                                 <div class="text-danger text-small">{{ __($message) }}</div>
                             @enderror
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-md-6">
                             <label for="status" class="form-label">Sample Status</label>
                             <input type="text" readonly class="form-control" required wire:model.lazy='status'>
                             @error('status')
