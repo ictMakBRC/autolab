@@ -208,7 +208,7 @@
                     </tr>
                 </tbody>
             </table>
-            <hr style="height:0.6px; width:100%; color:#6C757D; display:none">
+            {{-- <hr style="height:0.6px; width:100%; color:#ffffff00; display:none"> --}}
             <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
                 <tbody>
                     {{-- RESULT AND BARCODE --}}

@@ -106,8 +106,6 @@
                 <h2 style="color:rgb(8, 219, 131)"> Genomics, Molecular and Immunology Laboratories </h2>
             </em>
         </div>
-
-
         <hr style="height:0.6px; width:100%; color:#6C757D;">
         <h3 style="text-align:center; font-size:20px"><b>
                 @if ($testResult->status != 'Approved')
@@ -116,7 +114,8 @@
                 @if ($testResult->amended_state)
                 (<strong style="color: crimson">AMENDED</strong>)
                 @endif
-            </b> </h3>
+            </b> 
+        </h3>
     </div>
     {{-- PARTICIPANT AND REQUESTER --}}
     <div style="font-size:16px; margin-top:0px;">
@@ -157,7 +156,7 @@
         <table class="table dt-responsive nowrap" width="100%">
             <tbody>
                 {{-- SAMPLE AND TEST DETAILS --}}
-                <tr class="btop">
+                <tr class="btop" style="border-top: 0.5px solid rgb(f, f, f);">
                     <td class="btop">
                         <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}<div>
                     </td>
@@ -168,14 +167,14 @@
         </table>
         <table class="table dt-responsive nowrap" width="100%">
             <tbody>
-                <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 10px; margin-bottom: 10px">
-                    <td class="btop"><strong>Collection Date:</strong> <br>
+                <tr style="border-bottom: 0.5px solid rgb(f, f, f); border-top: 0.5px solid rgb(f, f, f); margin-top: 10px; margin-bottom: 10px">
+                    <td class="btop" style="text-align: center"><strong>Collection Date:</strong> <br>
                         {{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
                     </td>
                     <td class="btop" style="text-align: center"><strong>Date Received:</strong> <br>
                         {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                     </td>
-                    <td class="btop" style="text-align: right"><strong>Result Date:</strong>
+                    <td class="btop" style="text-align: center"><strong>Result Date:</strong>
                         <br>    
                         @if ($testResult->amended_state)
                             {{ date('d-m-Y H:i', strtotime($testResult->amended_at)) }}
@@ -186,7 +185,7 @@
                 </tr>
             </tbody>
         </table>
-        <hr style="height:0.6px; width:100%; color:#6C757D; display:none">
+        {{-- <hr style="height:0.6px; width:100%; color:#6C757D; display:none"> --}}
         <table class="table dt-responsive nowrap" width="100%">
             <tbody>
                 {{-- RESULT AND BARCODE --}}
