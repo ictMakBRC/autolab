@@ -2,13 +2,13 @@
 
     <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
          <tr>
-                <td colspan="3" style="width: 70%; font-size:10px; text-align:center">
-                    
-                <img width="160px" style="margin-right:1px; " src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
+                <td colspan="2" style="width: 70%; font-size:10px; text-align:left">
                     <p style="color:green;  ">
                       This laboratory is accredited by the South African National Accreditation System (SANAS)
                     </p>
-           
+            </td>
+            <td style="width: 30%;text-align:right">
+                <img width="50%" style="margin-right:1px; " src="{{asset('autolab-assets/images/sanas.png')}}" alt="SANAS#M0857" >
             </td>
         </tr> 
         <tr>
