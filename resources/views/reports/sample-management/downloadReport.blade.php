@@ -84,7 +84,7 @@
         {{-- <img src="{{ asset('autolab-assets/images/headers/header-min.png') }}" alt="Makerere University Logo" width="100%"
             style="vertical-align:middle;"
             onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';"> --}}
-        <div style="text-align: center; line-height: 2px">
+        <div style="text-align: center; line-height: 2px; border-bottom: 0.5px solid rgb(f, f, f);">
             <table width="100%" style="text-align: center; line-height: 1px; width:100%; margin-bottom:-16px">
                 <tr style="padding: 0px; margin:0px">
                     <td style="text-align: right ;padding: 0px; margin:0px" width="40%">
@@ -99,14 +99,12 @@
                     </td>
                 </tr>
             </table>
-            <h2><b>COLLEGE OF HEALTH SCIENCES</b></h2>
-            <h3><b>School of Biomedical Sciences</b></h3>
-            <h3><b>Department of Immunology and Molecular Biology</b></h3>
-            <em>
-                <h2 style="color:rgb(8, 219, 131)"> Genomics, Molecular and Immunology Laboratories </h2>
-            </em>
+            <h2>COLLEGE OF HEALTH SCIENCES</h2>
+            <h3>School of Biomedical Sciences</h3>
+            <h3>Department of Immunology and Molecular Biology</h3>
+            <h3 style="color:rgb(8, 219, 131)">Genomics, Molecular and Immunology Laboratories</h2>
         </div>
-        <hr style="height:0.6px; width:100%; color:#6C757D;">
+        {{-- <hr style="height:0.6px; width:100%; color:#6C757D;"> --}}
         <h3 style="text-align:center; font-size:20px"><b>
                 @if ($testResult->status != 'Approved')
                     <span style="color: crimson">Perliminary</span>
@@ -158,10 +156,9 @@
                 {{-- SAMPLE AND TEST DETAILS --}}
                 <tr class="btop" style="border-top: 0.5px solid rgb(f, f, f);">
                     <td class="btop">
-                        <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}<div>
+                        <div><b>Test Requested: </b>{{ $testResult->test->name ?? 'N/A' }}<div>
                     </td>
-                    <td class="btop" style="text-align: right"><strong>Sample
-                            Type:</strong>{{ $testResult->sample->sampleType->type ?? 'N/A' }}</td>
+                    <td class="btop"><strong>Sample Type: </strong>{{ $testResult->sample->sampleType->type ?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
