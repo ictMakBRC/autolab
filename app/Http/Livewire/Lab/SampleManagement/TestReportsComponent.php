@@ -23,8 +23,10 @@ class TestReportsComponent extends Component
 
     public $combinedSamplesList = [];
 
+    public $status = 'Approved';
     protected $paginationTheme = 'bootstrap';
 
+  
     public function combinedTestReport()
     {
         $sampleIds = '';
@@ -66,12 +68,12 @@ class TestReportsComponent extends Component
 
     public function render()
     {
-        $testResults = TestResult::resultSearch($this->search, 'Approved')
-            ->where('status', 'Approved')
+        $testResults = TestResult::resultSearch($this->search, $this->status)
+            ->where('status', $this->status)
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
-            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-            ->paginate($this->perPage);
+            ->orderBy($this->orderBy, $this->orderAsc ? 'desc' : 'asc')
+            ->paginate($this->perPage); 
 
         return view('livewire.lab.sample-management.test-reports-component', compact('testResults'));
     }

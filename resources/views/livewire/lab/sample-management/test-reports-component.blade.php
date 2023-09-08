@@ -41,6 +41,14 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="d-flex align-items-center ml-4 me-2">
+                            <label for="orderBy" class="text-nowrap mr-2 mb-0">Status</label>
+                            <select wire:model="status" class="form-select">
+                                <option value="Approved">Approved</option>
+                                <option value="Reviewed">Reviewed</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                        </div>
                     </x-table-utilities>
 
                     <div class="tab-content">
@@ -140,6 +148,7 @@
                                                 <span class="badge bg-success">{{ $testResult->status }}</span>
                                             </td>
                                             <td class="action-ico">
+                                                @if ($status == 'Approved')
                                                 <a target="_blank" href="{{ route('result-report', $testResult->id) }}" type="button"
                                                     class="action-ico btn btn-outline-info me-2"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
@@ -149,6 +158,10 @@
                                                     class="action-ico btn btn-outline-success"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-printer"></i></a>
+                                                    
+                                                @else
+                                                    
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
