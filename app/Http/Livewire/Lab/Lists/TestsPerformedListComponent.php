@@ -175,7 +175,7 @@ class TestsPerformedListComponent extends Component
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $tests = Test::where('creator_lab', auth()->user()->laboratory_id)->orderBy('name', 'asc')->get();
-        $testResults = $this->filterTests()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        $testResults = $this->filterTests()->orderBy($this->orderBy, $this->orderAsc ? 'desc' : 'asc')
         ->paginate($this->perPage);
 
         return view('livewire.lab.lists.tests-performed-list-component', compact('testResults', 'facilities', 'sampleTypes', 'tests', 'users'));
