@@ -288,7 +288,7 @@
             <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
                 <tbody>
                     {{-- COMMENT --}}
-                    <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 20px">
+                    <tr style="border-bottom: 0px solid rgb(f, f, f); margin-top: 20px">
                         <td colspan="3" class="btop" style="width:80%">
                             <div
                                 style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
@@ -300,7 +300,6 @@
                         </td>
                         <td class="btop" style="width:20%">
                             <div style="float: right;">
-                                <br>
                                 @php
                                     try {
                                         echo QrCode::size(84)->generate(
@@ -319,7 +318,6 @@
                     </tr>
                 </tbody>
             </table>
-            <br>
             <br>
             <table class="table dt-responsive nowrap" width="100%" style="text-align: center; ">
                 <tbody>
@@ -341,10 +339,9 @@
                             _____________________
                             <br>
                             <strong>Performed By: </strong><br>
-
-
-                            {{ $testResult->performer ? $testResult->performer->first_name.' '.$testResult->performer->surname.' '.$testResult->performer->other_name : 'N/A' }}
-
+    
+    
+                            {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
@@ -354,8 +351,8 @@
                             _____________________
                             <br>
                             <strong>Reviewed By: </strong><br>
-
-                            {{ $testResult->reviewer ? $testResult->reviewer->first_name.' '.$testResult->reviewer->surname.' '.$testResult->reviewer->other_name : 'N/A' }}
+    
+                            {{ $testResult->reviewer ? $testResult->reviewer->fullName : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
@@ -365,8 +362,8 @@
                             _____________________
                             <br>
                             <strong>Approved by: </strong> <br>
-
-                            {{ $testResult->approver ? $testResult->approver->first_name.' '.$testResult->approver->surname.' '.$testResult->approver->other_name : 'N/A' }}
+    
+                            {{ $testResult->approver ? $testResult->approver->fullName : 'N/A' }}
                         </td>
                     </tr>
                 </tbody>

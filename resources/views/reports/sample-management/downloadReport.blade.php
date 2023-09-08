@@ -260,7 +260,7 @@
         <table class="table dt-responsive nowrap" width="100%">
             <tbody>
                 {{-- COMMENT --}}
-                <tr style="border-bottom: 0.5px solid rgb(f, f, f); margin-top: 20px">
+                <tr style="border-bottom: 0px solid rgb(f, f, f); margin-top: 20px">
                     <td colspan="3" class="btop" style="width:80%">
                         <div
                             style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
@@ -272,7 +272,6 @@
                     </td>
                     <td class="btop" style="width:20%">
                         <div style="float: right;">
-                            <br>
                             <img src="data:image/png;base64, 
                             @php
                                 try {
@@ -297,7 +296,6 @@
                 </tr>
             </tbody>
         </table>
-        <br>
         <br>
         <table class="table dt-responsive nowrap" width="100%" style="text-align: center; ">
             <tbody>
