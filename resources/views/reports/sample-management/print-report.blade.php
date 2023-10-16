@@ -194,7 +194,7 @@
                             {{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
                         </td>
                         <td class="btop" style="text-align: center"><strong>Date Received:</strong> <br>
-                            {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
+                            {{ date('d-m-Y H:i', strtotime($testResult->sample->sample_reception->date_delivered ?? 'N/A')) }}
                         </td>
                         <td class="btop" style="text-align: right"><strong>Result Date:</strong>
                             <br>
@@ -224,7 +224,7 @@
                                 <thead>
                                     @if ($testResult->test->parameter_uom)
                                     <tr>
-                                        <th colspan="{{count($testResult->parameters)+1}}">
+                                        <th colspan="{{count(get_object_vars($testResult->parameters))+1}}">
                                             {{$testResult->test->parameter_uom}}
                                         </th>
                                         
@@ -232,7 +232,7 @@
                                     @endif
                                 
                                     <tr>
-                                        @foreach (array_keys($testResult->parameters) as $key)
+                                        @foreach (array_keys(get_object_vars($testResult->parameters)) as $key)
                                             <th>
                                                 {{ $key }}
                                             </th>
@@ -242,7 +242,7 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        @foreach (array_values($testResult->parameters) as $parameter)
+                                        @foreach (array_values(get_object_vars($testResult->parameters)) as $parameter)
                                             <td>
                                                 {{ $parameter }}
                                             </td>
@@ -333,7 +333,7 @@
                     <tr>
                         <td class="btop">
                             @if ($testResult->performer->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->performer->signature ?? '') }}" alt=""
+                                <img src="{{ asset('storage/' . $testResult->performer?->signature ?? '') }}" alt=""
                                     height="5%" width="30%"><br>
                             @endif
                             _____________________
@@ -341,29 +341,29 @@
                             <strong>Performed By: </strong><br>
     
     
-                            {{ $testResult->performer ? $testResult->performer->fullName : 'N/A' }}
+                            {{ $testResult->performer ? $testResult->performer?->first_name." ".$testResult->performer->surname : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->reviewer->signature ?? '') }}" alt=""
+                                <img src="{{ asset('storage/' . $testResult->reviewer?->signature ?? '') }}" alt=""
                                     height="5%" width="30%"><br>
                             @endif
                             _____________________
                             <br>
                             <strong>Reviewed By: </strong><br>
     
-                            {{ $testResult->reviewer ? $testResult->reviewer->fullName : 'N/A' }}
+                            {{ $testResult->reviewer ? $testResult->reviewer?->first_name." ".$testResult->reviewer->surname : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->approver->signature ?? '') }}" alt=""
+                                <img src="{{ asset('storage/' . $testResult->approver?->signature ?? '') }}" alt=""
                                     height="5%" width="30%"><br>
                             @endif
                             _____________________
                             <br>
                             <strong>Approved by: </strong> <br>
     
-                            {{ $testResult->approver ? $testResult->approver->fullName : 'N/A' }}
+                            {{ $testResult->approver ? $testResult->approver?->first_name." ".$testResult->approver->surname : 'N/A' }}
                         </td>
                     </tr>
                 </tbody>

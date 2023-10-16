@@ -162,7 +162,7 @@
                                         <div class="col">
                                             <div class="mb-2">
                                                 <label class="form-label">Verified Lot</label>
-                                                <textarea wire:model.lazy="verified_lot" rows="1" class="form-control" placeholder="{{ __('verified lot') }}" readonly></textarea>
+                                                <textarea wire:model.lazy="verified_lot" rows="1" class="form-control" placeholder="{{ __('verified lot') }}"></textarea>
 
                                                 @error('verified_lot')
                                                     <div class="text-danger text-small">
@@ -175,7 +175,7 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Kit expiry date</label>
                                                 <input type="date" name="kit_expiry_date" class="form-control"
-                                                    id="kit_expiry_date" wire:model="kit_expiry_date" readonly>
+                                                    id="kit_expiry_date" wire:model="kit_expiry_date">
                                                 @error('kit_expiry_date')
                                                     <div class="text-danger text-small">
                                                         {{ $message }}</div>

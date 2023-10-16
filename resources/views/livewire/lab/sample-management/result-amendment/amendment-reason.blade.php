@@ -9,8 +9,8 @@
                     <label for="amendment_type" class="form-label">Amendment type</label>
                     <select class="form-select" id="amendment_type" wire:model="amendment_type">
                         <option selected value="">Select</option>
-                        {{-- <option value="Pre-result-issuance">Pre result issuance</option> --}}
                         <option value="Post-result-issuance">Post result issuance</option>
+                        <option value="Pre-result-issuance">Pre result issuance</option>
                     </select>
                     @error('amendment_type')
                         <div class="text-danger text-small">{{ $message }}</div>

@@ -189,6 +189,9 @@ class ResultAmendmentComponent extends Component
         $this->testResults->reviewer_comment = null;
         $this->testResults->approver_comment = null;
 
+        $this->testResults->kit_expiry_date = $this->kit_expiry_date;
+        $this->testResults->verified_lot = $this->verified_lot;
+
         $this->testResults->amended_state = true;
         $this->testResults->amendment_type = $this->amendment_type;
         $this->testResults->amendment_comment = $this->amendment_comment;

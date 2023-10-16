@@ -174,7 +174,6 @@ class RejectedResultsComponent extends Component
             $testResults = $this->testResult->load(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name']);
         } else {
             $testResults = TestResult::resultSearch($this->search, 'Rejected')
-            ->where('status', 'Rejected')
             ->where(['status' => 'Rejected', 'performed_by' => auth()->user()->id])
             ->with(['test', 'sample', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
