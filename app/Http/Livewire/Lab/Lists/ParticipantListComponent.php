@@ -231,7 +231,6 @@ class ParticipantListComponent extends Component
         $participant->email = $this->email;
         $participant->nok = $this->nok;
         $participant->nok_relationship = $this->nok_relationship;
-        dd($participant);
         $participant->update();
 
         $this->participant_id = $participant->id;
