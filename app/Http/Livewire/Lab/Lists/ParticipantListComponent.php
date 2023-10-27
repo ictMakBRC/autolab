@@ -204,10 +204,14 @@ class ParticipantListComponent extends Component
                 ]);
             }
         }
-
+        $age = $this->age;
+        if($this->age<1){
+            $age = null;
+        }
+        // dd($age);
         $participant = Participant::find($this->participant_id);
         $participant->identity = $this->identity;
-        $participant->age = $this->age??null;
+        $participant->age = $age??null;
         $participant->months = $this->months;
         $participant->address = $this->address;
         $participant->gender = $this->gender;
@@ -231,6 +235,7 @@ class ParticipantListComponent extends Component
         $participant->email = $this->email;
         $participant->nok = $this->nok;
         $participant->nok_relationship = $this->nok_relationship;
+        // dd($participant);
         $participant->update();
 
         $this->participant_id = $participant->id;
