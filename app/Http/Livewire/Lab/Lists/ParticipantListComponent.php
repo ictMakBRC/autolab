@@ -9,6 +9,7 @@ use App\Models\Sample;
 use App\Models\Study;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Ramsey\Uuid\Type\Integer;
 
 class ParticipantListComponent extends Component
 {
@@ -49,7 +50,7 @@ class ParticipantListComponent extends Component
 
      public $patient_id;
  
-     public int $age;
+     public $age;
  
      public $gender;
  

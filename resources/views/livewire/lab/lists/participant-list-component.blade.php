@@ -180,7 +180,7 @@
                                     <div class="mb-3 col-md-1">
                                         <label for="age" class="form-label">Age<span
                                                 class="text-danger">*</span></label>
-                                        <input type="number" id="age" class="form-control"
+                                        <input type="text" id="age" class="form-control"
                                             wire:model.lazy="age">
                                         @error('age')
                                             <div class="text-danger text-small">{{ $message }}</div>
