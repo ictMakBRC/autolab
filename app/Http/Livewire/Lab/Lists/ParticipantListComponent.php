@@ -49,7 +49,7 @@ class ParticipantListComponent extends Component
 
      public $patient_id;
  
-     public $age;
+     public int $age;
  
      public $gender;
  
