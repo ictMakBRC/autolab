@@ -206,7 +206,7 @@ class ParticipantListComponent extends Component
 
         $participant = Participant::find($this->participant_id);
         $participant->identity = $this->identity;
-        $participant->age = $this->age;
+        $participant->age = $this->age??null;
         $participant->months = $this->months;
         $participant->address = $this->address;
         $participant->gender = $this->gender;
