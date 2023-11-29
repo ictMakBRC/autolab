@@ -113,6 +113,24 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label for="lot_no" class="form-label">Lot Number</label>
+                                    <input type="text" id="lot_no" class="form-control" name="lot_no"
+                                        wire:model.lazy="lot_no">
+                                    @error('lot_no')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="exp" class="form-label">Expiry date</label>
+                                    <input type="date" id="expiry_date" class="form-control" name="expiry_date"
+                                        wire:model.lazy="expiry_date">
+                                    @error('expiry_date')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
                                     <label for="platform_id" class="form-label">Platform</label>
                                     <select class="form-select" id="platform_id" wire:model="platform_id">
                                         <option selected value="">Select</option>

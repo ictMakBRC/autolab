@@ -106,7 +106,7 @@
                             <a href="{{ route('test-request') }}" class="list-group-item"><i
                                     class="bi bi-list-task"></i>My
                                 Tasks<x-count-badge>{{ $testAssignedCount + $AliquotingAssignedCount }}</x-count-badge>
-                                </a>
+                            </a>
 
                             <a href="javascript: void(0);"
                                 class="list-group-item {{ Request::routeIs('attach-test-results') ? 'active' : '' }}"><i
@@ -141,6 +141,14 @@
                                 Approval<x-count-badge>{{ $testsPendindApprovalCount }}</x-count-badge></a>
                         @endif
 
+                        @if (Auth::user()->hasPermission(['review-results']))
+                       
+                        <a href="{{ route('tests-rejected') }}" class="list-group-item"><i
+                                class="bi bi-exclamation-triangle-fill text-warning"></i>All Rejected Results
+                            <span class="badge bg-warning pill float-end">{{ $testsRejectedCount }}</span>
+                        </a>
+                    @endif
+
                         @if (Auth::user()->hasPermission(['enter-results']))
                             <a href="{{ route('result-amendment') }}" class="list-group-item"><i
                                     class="bi bi-pencil"></i>Result Amendment</a>
@@ -155,6 +163,9 @@
                         @if (Auth::user()->hasPermission(['view-participant-info']))
                             <a href="{{ route('samples-list') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
+                                </x-count-badge></a>
+                                <a href="{{ route('samples-count') }}" class="list-group-item"><i
+                                    class="bx bxs-vial"></i>Sample Reports<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a>
                             <a href="{{ route('tests-performed-list') }}" class="list-group-item"><i
                                     class="bx bxs-flask"></i>Tests Performed <x-count-badge>{{ $testsPerformedCount }}

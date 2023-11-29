@@ -44,6 +44,8 @@ use App\Http\Livewire\Lab\SampleManagement\ResultAmendmentComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestRejectedComponent;
+use App\Http\Livewire\Reports\GeneralReportComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +61,7 @@ use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 // Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate']);
 Route::get('user/account', UserProfileComponent::class)->name('user.account')->middleware('auth');
-Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
+Route::group(['middleware' => ['auth', 'suspended_user']], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::group(['middleware' => ['permission:access-settings'], 'prefix' => 'settings'], function () {
             Route::get('testCategories', TestCategoryComponent::class)->name('categories');
@@ -102,6 +104,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('sample/{id}/aliquots', SampleAliquotsComponent::class)->middleware(['permission:enter-results', 'signed'])->name('attach-aliquots');
         Route::get('sample/{id}/store', StoreSamplesComponent::class)->middleware(['permission:enter-results', 'signed'])->name('store-sample');
         Route::get('resultReview', TestReviewComponent::class)->middleware('permission:review-results')->name('test-review');
+        Route::get('resultRejected', TestRejectedComponent::class)->middleware('permission:review-results')->name('tests-rejected');
         Route::get('resultApproval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
 
         Route::get('resultAmendment', ResultAmendmentComponent::class)->name('result-amendment');
@@ -115,6 +118,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 
         Route::get('samplesList', SamplesListComponent::class)->middleware('permission:view-participant-info')->name('samples-list');
+        Route::get('samplesCount', GeneralReportComponent::class)->middleware('permission:view-participant-info')->name('samples-count');
         Route::get('testsPerformedList', TestsPerformedListComponent::class)->middleware('permission:view-participant-info')->name('tests-performed-list');
 
         Route::get('crs/patient/load', [ResultReportController::class, 'getCrsPatient'])->name('loadcrsPatient');

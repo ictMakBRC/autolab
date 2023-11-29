@@ -80,6 +80,8 @@ class NavigationComponent extends Component
 
     public $rejectedResultsCount;
 
+    public $testsRejectedCount;
+
     protected $listeners = ['updateNav'];
 
     public function mount()
@@ -119,6 +121,7 @@ class NavigationComponent extends Component
 
         if (Auth::user()->hasPermission(['review-results'])) {
             $this->testsPendindReviewCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Pending Review')->count();
+            $this->testsRejectedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Rejected')->count();
         }
 
         if (Auth::user()->hasPermission(['approve-results'])) {
