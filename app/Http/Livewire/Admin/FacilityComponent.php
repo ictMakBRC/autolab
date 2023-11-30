@@ -45,6 +45,7 @@ class FacilityComponent extends Component
 
     public $delete_id;
     public $edit_id;
+    public $selected_facility;
 
     public $exportIds = [];
     // public $count=0;
@@ -129,7 +130,7 @@ class FacilityComponent extends Component
     public function updatedTargetFacilityId()
     {
         if ($this->target_facility_id) {
-            $facility = Facility::where('id',$this->target_facility_id)->first();
+          $this->selected_facility =  $facility = Facility::where('id',$this->target_facility_id)->first();
             $this->associated_studies = array_unique(array_merge($this->associated_studies, $facility->associated_studies??[]));
         }
     }
@@ -141,11 +142,12 @@ class FacilityComponent extends Component
         ]);
 
         if ($this->target_facility_id) {
+            // dd($this->associated_studies);
             $facility = Facility::findOrFail($this->target_facility_id);
             $facility->update([
                 'associated_studies'=>array_unique(array_merge($this->associated_studies, $facility->associated_studies??[])),
             ]);
-
+            // dd($facility);
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility Information successfully updated!']);
         }

@@ -164,9 +164,9 @@
                             <a href="{{ route('samples-list') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a>
-                                <a href="{{ route('samples-count') }}" class="list-group-item"><i
+                                {{-- <a href="{{ route('samples-count') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Sample Reports<x-count-badge>{{ $samplesCount }}
-                                </x-count-badge></a>
+                                </x-count-badge></a> --}}
                             <a href="{{ route('tests-performed-list') }}" class="list-group-item"><i
                                     class="bx bxs-flask"></i>Tests Performed <x-count-badge>{{ $testsPerformedCount }}
                                 </x-count-badge></a>

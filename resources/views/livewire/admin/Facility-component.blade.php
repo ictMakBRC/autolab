@@ -80,6 +80,10 @@
                                                     wire:click="deleteConfirmation({{ $facility->id }})"
                                                     class="action-ico btn btn-outline-danger mx-1">
                                                     <i class="bi bi-trash"></i></a>
+                                                    <a href="javascript: void(0);" wire:click="$set('target_facility_id',{{ $facility->id }})" 
+                                                    data-bs-toggle="modal" data-bs-target="#associate_study"
+                                                    class="action-ico btn btn-outline-danger mx-1">
+                                                    <i class="bi bi-check"></i></a>
                                             @endif
                                         </td>
                                     </tr>
@@ -327,17 +331,9 @@
                     <form wire:submit.prevent="associateStudiesToFacility">
                         <div class="row">
                             <div class="mb-3 col-md-12">
-                                <label for="target_facility_id" class="form-label">Facility Name</label>
-                                <select class="form-select" id="target_facility_id" wire:model="target_facility_id">
-                                    <option selected value="">Select</option>
-                                    @forelse ($facilities as $facility)
-                                        <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                                @error('target_facility_id')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
+                                @if ($selected_facility)
+                                    <h5>Associate Studies to {{ $selected_facility->name }} </h5>
+                                @endif
                             </div>
                             <hr>
                             @forelse ($studies as $study)
