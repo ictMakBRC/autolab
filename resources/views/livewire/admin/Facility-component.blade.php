@@ -13,7 +13,7 @@
                                     data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                     data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                 @if (!$facilities->isEmpty())
-                                    <a type="button" class="btn btn-outline-info mx-1" data-bs-toggle="modal"
+                                    <a type="button" class="btn d-none btn-outline-info mx-1" data-bs-toggle="modal"
                                         data-bs-target="#associate_study">Associate Study to facility</a>
                                 @endif
                                 @if (!$facilities->isEmpty())
