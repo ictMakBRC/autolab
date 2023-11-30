@@ -31,6 +31,10 @@ class Facility extends Model
         return $this->belongsTo(Facility::class, 'parent_id', 'id');
     }
 
+    protected $casts = [
+        'associated_studies' => 'array',
+    ];
+
     public static function boot()
     {
         parent::boot();

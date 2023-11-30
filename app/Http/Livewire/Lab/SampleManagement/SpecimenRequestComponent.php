@@ -7,6 +7,7 @@ use App\Models\Study;
 use App\Models\Sample;
 use GuzzleHttp\Client;
 use Livewire\Component;
+use App\Models\Facility;
 use App\Helpers\Generate;
 use App\Models\Collector;
 use App\Models\Requester;
@@ -251,9 +252,19 @@ class SpecimenRequestComponent extends Component
 
     public function updatedIdentity()
     {
-        $participant = Participant::where(['identity' => $this->identity, 'facility_id' => $this->facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies)->orWhere(function ($query) {
+        $facility = Facility::findOrFail($this->facility_id);
+
+        $participant = Participant::where(['identity' => $this->identity, 'facility_id' => $this->facility_id])
+        ->whereIn('study_id', auth()->user()->laboratory->associated_studies)
+        ->orWhere(function ($query) {
             $query->where(['identity' => $this->identity, 'facility_id' => $this->facility_id, 'creator_lab' => auth()->user()->laboratory_id]);
-        })->first();
+        })
+        ->orWhere(function ($query)use($facility) {
+            $query->where(['identity' => $this->identity])->whereHas('study',function($query) use($facility){
+                $query->whereIn('id',$facility->associated_studies??[]);
+            });
+        })
+        ->first();
 
         if ($participant) {
             $lastSampleEntry = Sample::where(['participant_id' => $participant->id, 'creator_lab' => auth()->user()->laboratory_id])->latest()->first();

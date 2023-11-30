@@ -12,7 +12,10 @@
                                 <a type="button" class="btn btn-outline-info mx-1" wire:click="refresh()"
                                     data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                     data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
-
+                                @if (!$facilities->isEmpty())
+                                    <a type="button" class="btn btn-outline-info mx-1" data-bs-toggle="modal"
+                                        data-bs-target="#associate_study">Associate Study to facility</a>
+                                @endif
                                 @if (!$facilities->isEmpty())
                                     <a type="button" class="btn btn-info mx-1" data-bs-toggle="modal"
                                         data-bs-target="#associate">Associate</a>
@@ -310,6 +313,58 @@
         </div> <!-- end modal dialog-->
     </div> <!-- end modal-->
 
+
+    {{-- ASSOCIATE STUDY TO FACILITY --}}
+    <div wire:ignore.self class="modal fade" id="associate_study" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Associate Studies to Facility</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body">
+                    <form wire:submit.prevent="associateStudiesToFacility">
+                        <div class="row">
+                            <div class="mb-3 col-md-12">
+                                <label for="target_facility_id" class="form-label">Facility Name</label>
+                                <select class="form-select" id="target_facility_id" wire:model="target_facility_id">
+                                    <option selected value="">Select</option>
+                                    @forelse ($facilities as $facility)
+                                        <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                                @error('target_facility_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+                            @forelse ($studies as $study)
+                                <div class="col-md-4 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ $study->id }}"
+                                            id="associated_studies{{ $study->id }}" checked
+                                            wire:model="associated_studies">
+                                        <label class="form-check-label"
+                                            for="associated_studies{{ $study->id }}">{{ $study->name }}</label>
+                                    </div>
+                                </div>
+                            @empty
+                            @endforelse
+                        </div>
+                        <!-- end row-->
+                        <div class="modal-footer">
+                            <x-button class="btn-success">{{ __('Save') }}</x-button>
+                            <x-button type="button" class="btn btn-danger" wire:click="close()"
+                                data-bs-dismiss="modal">{{ __('Close') }}</x-button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div> <!-- end modal-->
+
     @push('scripts')
         <script>
             window.addEventListener('close-modal', event => {
@@ -317,6 +372,7 @@
                 $('#editfacility').modal('hide');
                 $('#delete_modal').modal('hide');
                 $('#associate').modal('hide');
+                $('#associate_study').modal('hide');
                 $('#show-delete-confirmation-modal').modal('hide');
             });
 
