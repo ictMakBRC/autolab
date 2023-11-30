@@ -82,7 +82,7 @@
                                                     <i class="bi bi-trash"></i></a>
                                                     <a href="javascript: void(0);" wire:click="$set('target_facility_id',{{ $facility->id }})" 
                                                     data-bs-toggle="modal" data-bs-target="#associate_study"
-                                                    class="action-ico btn btn-outline-danger mx-1">
+                                                    class="action-ico btn-sm btn btn-outline-info mx-1">
                                                     <i class="bi bi-check"></i></a>
                                             @endif
                                         </td>
