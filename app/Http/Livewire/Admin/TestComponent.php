@@ -44,6 +44,7 @@ class TestComponent extends Component
     public $result_type;
 
     public $dynamicResults = [];
+    public $dynamicTests = [];
 
     public $absolute_results = [];
 
@@ -98,6 +99,10 @@ class TestComponent extends Component
         $this->dynamicParameters = [
             ['parameter' => 'parameter'],
         ];
+
+        $this->dynamicTests = [
+            ['Test' => 'test'],
+        ];
     }
 
     public function updatedResultType()
@@ -128,6 +133,29 @@ class TestComponent extends Component
         }
 
         return $results;
+    }
+
+    public function addTest()
+    {
+        $this->dynamicTests[] = ['Test' => ' '];
+    }
+
+    public function removeTest($index)
+    {
+        unset($this->dynamicTests[$index]);
+        $this->dynamicTests = array_values($this->dynamicTests);
+    }
+
+    public function pushTests()
+    {
+        $tests = [];
+        foreach ($this->dynamicTests as $key => $test) {
+            if ($test['test'] != 'test' && $test['test'] != '') {
+                array_push($tests, $test['test']);
+            }
+        }
+
+        return $tests;
     }
 
     public function addComment()
@@ -180,8 +208,10 @@ class TestComponent extends Component
     {
         $this->validate([
             'category_id' => 'required|integer',
+            'status' => 'required',
             'name' => 'required|string',
             'price' => 'required|numeric',
+            // 'sub_tests' => 'nullable|array',
             'result_type' => 'required|string',
         ]);
         $test = new Test();
@@ -198,6 +228,8 @@ class TestComponent extends Component
         $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
+        if($this->result_type=='Multiple'){
+        $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;}
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->parameter_uom = $this->parameter_uom ?? null;
         $test->result_presentation = $this->result_presentation ?? null;
@@ -231,6 +263,13 @@ class TestComponent extends Component
             foreach ($test->absolute_results as $key => $result) {
                 if (count($test->absolute_results)) {
                     array_push($this->dynamicResults, ['result' => $result]);
+                }
+            }
+        }
+        if ($test->sub_tests != null) {
+            foreach ($test->sub_tests as $key => $sub_test) {
+                if (count($test->sub_tests)) {
+                    array_push($this->dynamicTests, ['test' => $sub_test]);
                 }
             }
         }
@@ -277,6 +316,9 @@ class TestComponent extends Component
         $test->result_type = $this->result_type;
         $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
+        if($this->result_type=='Multiple'){
+        $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;
+        }
         $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
         $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->result_presentation = $this->result_presentation ?? null;
@@ -290,7 +332,7 @@ class TestComponent extends Component
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'result_presentation','parameter_uom']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'dynamicTests','result_presentation','parameter_uom']);
     }
 
     public function deleteConfirmation($id)

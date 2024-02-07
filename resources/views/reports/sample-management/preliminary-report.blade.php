@@ -110,6 +110,31 @@
                             @endif
                         </td>
                     </tr>
+                    @if ($testResults->test->result_type === 'Multiple')
+                        <tr>
+                            <table class="table nowrap w-100 table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Test</th>
+                                        <th>Result</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                   @php
+                                        $test_results = json_decode($testResults->result, true);
+                                   @endphp
+                                        @foreach ($test_results as $result)
+                                            <tr>
+                                                <td>{{ $result['test'] }}</td>
+                                                <td>{{ $result['result'] }}</td>
+                                                <td>{{ $result['comment'] }}</td>
+                                            </tr>
+                                        @endforeach 
+                                </tbody>
+                            </table>
+                        </tr>
+                    @else
                     <tr>
                         @if ($testResults->parameters != null && $testResults->test->result_presentation == 'Tabular')
                             <table class="table nowrap w-100 table-bordered">
@@ -172,16 +197,18 @@
                             </td>
                         @endif
                     </tr>
+                        
+                    @endif
                 </tbody>
             </table>
         </div>
-
+        @if ($testResults->test->result_type != 'Multiple')
         <div class="row bg-light align-items-center m-0">
             <strong class="text-inverse">Comments:</strong>
             <p>{{ $testResults->comment }}</p>
         </div>
         <!--end row-->
-
+        @endif
         <hr>
         <div class="row row-cols-1 row-cols-lg-3">
             <div class="col"><b>Kit Used:</b> {{ $testResult->kit->name ?? 'N/A' }}</div>

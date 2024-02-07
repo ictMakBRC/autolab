@@ -171,6 +171,7 @@
                                                 <option value="Absolute">Absolute</option>
                                                 <option value="Measurable">Measurable</option>
                                                 <option value="Link">Link</option>
+                                                <option value="Multiple">Multiple</option>
                                             </select>
                                         </div>
 
@@ -187,6 +188,24 @@
                                                         <button class="btn btn-outline-danger" type="button"
                                                             id="button-addon2"
                                                             wire:click.prevent="removeResult({{ $index }})">Delete</button>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                        @endif
+                                        @if ($result_type === 'Multiple')
+
+                                            <div id="testoption" class="col-md-8 mb-2">
+                                                <label for="results" class="form-label">{{ __('Sub Tests') }}</label>
+                                                <button class="btn btn-outline-success mb-1" type="button"
+                                                    id="button-addon2" wire:click.prevent="addTest">+</button>
+                                                @foreach ($dynamicTests as $index => $test)
+                                                    <div class="input-group mb-3">
+                                                        <textarea type="text" class="form-control" placeholder="Enter subtest" aria-label="Add another sub test"
+                                                            aria-describedby="button-addon2" wire:model.lazy="dynamicTests.{{ $index }}.test"> </textarea>
+                                                        <button class="btn btn-outline-danger" type="button"
+                                                            id="button-addon2"
+                                                            wire:click.prevent="removeTest({{ $index }})">Delete</button>
                                                     </div>
                                                 @endforeach
                                             </div>

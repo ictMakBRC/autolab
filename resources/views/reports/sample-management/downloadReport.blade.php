@@ -183,6 +183,32 @@
             </tbody>
         </table>
         {{-- <hr style="height:0.6px; width:100%; color:#6C757D; display:none"> --}}
+        @if ($testResult->test->result_type === 'Multiple')
+        <tr>
+            <table style="text-align: left" class="table dt-responsive nowrap" width="100%" border="1"
+                id="parameters">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Result</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: left">
+                    @php
+                        $test_results = json_decode($testResult->result, true);
+                    @endphp
+                    @foreach ($test_results as $result)
+                        <tr style="text-align: left">
+                            <td style="text-align: left">{{ $result['test'] }}</td>
+                            <td style="text-align: left">{{ $result['result'] }}</td>
+                            <td style="text-align: left">{{ $result['comment'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </tr>
+    @else
         <table class="table dt-responsive nowrap" width="100%">
             <tbody>
                 {{-- RESULT AND BARCODE --}}
@@ -292,6 +318,7 @@
                 </tr>
             </tbody>
         </table>
+    @endif
         <br>
         <table class="table dt-responsive nowrap" width="100%" style="text-align: center; ">
             <tbody>
