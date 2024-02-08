@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('facilities', function (Blueprint $table) {
-            $table->text('associated_studies')->nullable()->after('parent_id');
+            // $table->text('associated_studies')->nullable()->after('parent_id');
         });
     }
 
