@@ -49,34 +49,40 @@
                                                 <strong class="text-inverse">Entry Type: </strong>
                                                 {{ $sample->participant->entry_type }}<br>
                                                 <strong class="text-inverse">Entry Date:
-                                                </strong>{{ date('d-m-Y H:i', strtotime($sample->participant->created_at??'NA')) }}<br>
+                                                </strong>{{ date('d-m-Y H:i', strtotime($sample->participant->created_at ?? 'NA')) }}<br>
                                                 <strong class="text-inverse">Sample Count:
-                                                </strong>{{ $sample->participant->sample_count??'N/A' }}<br>
+                                                </strong>{{ $sample->participant->sample_count ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Test Count:
-                                                </strong>{{ $sample->participant->test_result_count??'N/A' }}
+                                                </strong>{{ $sample->participant->test_result_count ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 <strong class="text-inverse">Name: </strong>
-                                                {{ $sample->participant->facility->name??'N/A' }}<br>
+                                                {{ $sample->participant->facility->name ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Study: </strong>
-                                                {{ $sample->participant->study->name??'N/A' }}
-                                            </td>                                            
+                                                {{ $sample->participant->study->name ?? 'N/A' }}
+                                            </td>
                                             <td>
                                                 <strong class="text-inverse">Sample Id: </strong>
-                                                {{ $sample->sample_identity??'N/A' }}<br>
-                                                <strong class="text-inverse">Lab  No: </strong>
-                                                {{ $sample->lab_no??'N/A' }}<br>
+                                                {{ $sample->sample_identity ?? 'N/A' }}<br>
+                                                <strong class="text-inverse">Lab No: </strong>
+                                                {{ $sample->lab_no ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Collection Date: </strong>
-                                                {{ $sample->date_collected??'N/A' }}<br>
+                                                {{ $sample->date_collected ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Request Date: </strong>
-                                                {{ $sample->date_requested??'N/A' }}
+                                                {{ $sample->date_requested ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 <strong class="text-inverse">Participant ID:
                                                 </strong>{{ $sample->participant->identity ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Age:
-                                                </strong>@if ($sample->participant->age != null) {{ $sample->participant->age}}yrs &nbsp; @elseif ($sample->participant->months != null)
-                                                 {{ $sample->participant->months}}months @else N/A @endif 
+                                                </strong>
+                                                @if ($sample->participant->age != null)
+                                                    {{ $sample->participant->age }}yrs &nbsp;
+                                                @elseif ($sample->participant->months != null)
+                                                    {{ $sample->participant->months }}months
+                                                @else
+                                                    N/A
+                                                @endif
                                                 </strong>{{ $sample->participant->gender ?? 'N/A' }}<br>
                                                 <strong class="text-inverse">Contact:
                                                 </strong>{{ $sample->participant->contact ?? 'N/A' }}<br>
@@ -121,127 +127,164 @@
                                                             <form wire:submit.prevent="storeTestResults()"
                                                                 class="me-2">
                                                                 <div class="row">
-                                                                    <div class="col-md-5">
-                                                                        @if ($test->result_type == 'Absolute')
-                                                                        
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Result</label>
-                                                                                <select class="form-select"
-                                                                                    id="result"
-                                                                                    wire:model.lazy="result">
-                                                                                    <option selected value="">
-                                                                                        Select</option>
-                                                                                    @foreach ($test->absolute_results as $result)
-                                                                                        <option
-                                                                                            value='{{ $result }}'>
-                                                                                            {{ $result }}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                                @error('result')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
-                                                                            </div>
-
-                                                                        @elseif($test->result_type == 'Text')
-
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Result</label>
-                                                                                <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}"
-                                                                                    wire:model.lazy="result"></textarea>
-                                                                                @error('result')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
-                                                                            </div>
-
-                                                                        @elseif($test->result_type == 'Measurable')
-                                                                        
-                                                                            <div class="mb-2">
-                                                                                <div class="form-group">
-                                                                                    <label
-                                                                                        class="form-label">Result</label>
-                                                                                    <div
-                                                                                        class="input-group form-group mb-2">
-                                                                                        <input type="number"
-                                                                                            step="0.001"
-                                                                                            class="form-control"
-                                                                                            id="result"
-                                                                                            wire:model.lazy='result'>
-                                                                                        <div class="input-group-append">
-                                                                                            <span
-                                                                                                class="input-group-text">
-                                                                                                {{ $test->measurable_result_uom }}
-                                                                                            </span>
+                                                                    @if ($test->result_type == 'Multiple')
+                                                                        <div class="col-9">
+                                                                            <div class="row">
+                                                                                <hr>
+                                                                                <h6>Tests</h6>
+                                                                                @foreach ($test->sub_tests as $key=> $sub_test)
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="mb-2">
+                                                                                            {{-- <label class="form-label">{{ $sub_test }}</label> --}}
+                                                                                                <input type="text" readonly wire:model="testResults.{{ $key }}.test" 
+                                                                                                required value="{{ $sub_test }}">
+                                                                                            <input type="text"
+                                                                                                required
+                                                                                                class="form-control"
+                                                                                                wire:model="testResults.{{ $key }}.result"
+                                                                                                {{-- wire:model.lazy="subTestResults.{{ $sub_test }}" --}}
+                                                                                                placeholder="Enter test {{ $sub_test }} results">
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                @error('result')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="mb-2">
+                                                                                            <label
+                                                                                                class="form-label">{{ $sub_test }} Comment</label>
+                                                                                            <textarea type="text" required class="form-control" 
+                                                                                            {{-- wire:model.lazy="subTestResultComment.{{ $sub_test }}" --}}
+                                                                                            wire:model="testResults.{{ $key }}.comment"
+
+                                                                                                placeholder="Enter {{ $sub_test }} comments"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    @error('subTestResults')
+                                                                                        <div class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                @endforeach
                                                                             </div>
-
-                                                                        @elseif($test->result_type == 'File')
-
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Result
-                                                                                    Attachment</label>
-                                                                                <input type="file"
-                                                                                    class="form-control"
-                                                                                    wire:model="attachment"
-                                                                                    placeholder="Attach file">
-                                                                                @error('attachment')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
-                                                                            </div>
-
-                                                                        @elseif($test->result_type == 'Link')
-
-                                                                            <div class="mb-2">
-                                                                                <label class="form-label">Result
-                                                                                    Link(URL)</label>
-                                                                                <input type="text"
-                                                                                    class="form-control"
-                                                                                    wire:model.lazy="link"
-                                                                                    placeholder="Enter valid link">
-                                                                                @error('link')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
-                                                                            </div>
-
-                                                                        @endif
-
-                                                                    </div>
-
-                                                                    {{-- COMMENTS --}}
-                                                                    <div class="col-md-4">
-                                                                        <div class="mb-2">
-                                                                            <label class="form-label">Comment</label>
-                                                                            @if ($test->comments != null)
-                                                                                <select class="form-select"
-                                                                                    id="comment" wire:model="comment">
-                                                                                    <option selected value="">
-                                                                                        Select</option>
-                                                                                    @foreach ($test->comments as $comment)
-                                                                                        <option
-                                                                                            value='{{ $comment }}'>
-                                                                                            {{ $comment }}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            @else
-                                                                                <textarea wire:model.lazy="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}"></textarea>
-                                                                            @endif
-                                                                            @error('comment')
-                                                                                <div class="text-danger text-small">
-                                                                                    {{ $message }}</div>
-                                                                            @enderror
                                                                         </div>
-                                                                    </div>
+                                                                    @else
+                                                                        <div class="col-md-5">
+                                                                            @if ($test->result_type == 'Absolute')
+                                                                                <div class="mb-2">
+                                                                                    <label
+                                                                                        class="form-label">Result</label>
+                                                                                    <select class="form-select"
+                                                                                        id="result"
+                                                                                        wire:model.lazy="result">
+                                                                                        <option selected value="">
+                                                                                            Select</option>
+                                                                                        @foreach ($test->absolute_results as $result)
+                                                                                            <option
+                                                                                                value='{{ $result }}'>
+                                                                                                {{ $result }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                    @error('result')
+                                                                                        <div class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            @elseif($test->result_type == 'Text')
+                                                                                <div class="mb-2">
+                                                                                    <label
+                                                                                        class="form-label">Result</label>
+                                                                                    <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}"
+                                                                                        wire:model.lazy="result"></textarea>
+                                                                                    @error('result')
+                                                                                        <div class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            @elseif($test->result_type == 'Measurable')
+                                                                                <div class="mb-2">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="form-label">Result</label>
+                                                                                        <div
+                                                                                            class="input-group form-group mb-2">
+                                                                                            <input type="number"
+                                                                                                step="0.001"
+                                                                                                class="form-control"
+                                                                                                id="result"
+                                                                                                wire:model.lazy='result'>
+                                                                                            <div
+                                                                                                class="input-group-append">
+                                                                                                <span
+                                                                                                    class="input-group-text">
+                                                                                                    {{ $test->measurable_result_uom }}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    @error('result')
+                                                                                        <div class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            @elseif($test->result_type == 'File')
+                                                                                <div class="mb-2">
+                                                                                    <label class="form-label">Result
+                                                                                        Attachment</label>
+                                                                                    <input type="file"
+                                                                                        class="form-control"
+                                                                                        wire:model="attachment"
+                                                                                        placeholder="Attach file">
+                                                                                    @error('attachment')
+                                                                                        <div
+                                                                                            class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            @elseif($test->result_type == 'Link')
+                                                                                <div class="mb-2">
+                                                                                    <label class="form-label">Result
+                                                                                        Link(URL)</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control"
+                                                                                        wire:model.lazy="link"
+                                                                                        placeholder="Enter valid link">
+                                                                                    @error('link')
+                                                                                        <div
+                                                                                            class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            @endif
 
+                                                                        </div>
+
+                                                                        {{-- COMMENTS --}}
+                                                                        <div class="col-md-4">
+                                                                            <div class="mb-2">
+                                                                                <label
+                                                                                    class="form-label">Comment</label>
+                                                                                @if ($test->comments != null)
+                                                                                    <select class="form-select"
+                                                                                        id="comment"
+                                                                                        wire:model="comment">
+                                                                                        <option selected
+                                                                                            value="">
+                                                                                            Select</option>
+                                                                                        @foreach ($test->comments as $comment)
+                                                                                            <option
+                                                                                                value='{{ $comment }}'>
+                                                                                                {{ $comment }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                @else
+                                                                                    <textarea wire:model.lazy="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}"></textarea>
+                                                                                @endif
+                                                                                @error('comment')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
                                                                     <div class="col-md-3">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Performed
@@ -283,9 +326,9 @@
                                                                             </div>
                                                                         @endforeach
                                                                         @error('testParameters')
-                                                                                    <div class="text-danger text-small">
-                                                                                        {{ $message }}</div>
-                                                                                @enderror
+                                                                            <div class="text-danger text-small">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
                                                                     </div>
                                                                 @endif
 
@@ -318,7 +361,8 @@
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Verified Kit
                                                                                 Lot</label>
-                                                                            <input wire:model.lazy="verified_lot" class="form-control"
+                                                                            <input wire:model.lazy="verified_lot"
+                                                                                class="form-control"
                                                                                 placeholder="{{ __('verified lot') }}">
 
                                                                             @error('verified_lot')
@@ -345,7 +389,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <x-button class="me-0">{{ __('Save') }}</x-button>
+                                                                    <x-button
+                                                                        class="me-0">{{ __('Save') }}</x-button>
                                                                 </div>
                                                             </form>
                                                         @else

@@ -17,36 +17,39 @@
             -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent
         }
+
         a:link {
-        text-decoration: none;
-        color: #44a847;
+            text-decoration: none;
+            color: #44a847;
         }
 
         a:visited {
-        text-decoration: none;
+            text-decoration: none;
         }
 
         a:hover {
-        text-decoration: underline;
+            text-decoration: underline;
         }
 
         a:active {
-        text-decoration: underline;
+            text-decoration: underline;
         }
-        .report-wrapper{
+
+        .report-wrapper {
             width: 70%;
             height: auto;
             margin: auto;
             border: 1px solid #cbcbcb;
-            background: white;            
+            background: white;
         }
-        @media print{
-            .report-wrapper{
+
+        @media print {
+            .report-wrapper {
                 width: 100%;
                 height: auto;
                 margin: 2px auto;
                 border: 0px;
-                background: white;            
+                background: white;
             }
         }
 
@@ -111,8 +114,8 @@
                             <h1>MAKERERE</h1>
                         </td>
                         <td style="padding:0px; margin-top:0px ; padding-bottom: 15px; " width="10%"><img
-                                src="{{ asset('autolab-assets/images/headers/logo.png') }}" alt="Makerere University Logo"
-                                width="90px" style="vertical-align:middle;">
+                                src="{{ asset('autolab-assets/images/headers/logo.png') }}"
+                                alt="Makerere University Logo" width="90px" style="vertical-align:middle;">
                         </td>
                         <td style="text-align: left; padding: 0px; margin:0px" width="40%">
                             <h1>UNIVERSITY</h1>
@@ -132,7 +135,7 @@
             <h3 style="text-align:center; font-size:20px"><b>
                     @if ($testResult->status != 'Approved')
                         <span style="color: crimson">Perliminary</span>
-                    @endif Result Report 
+                    @endif Result Report
                     @if ($testResult->amended_state)
                         (<strong style="color: crimson">AMENDED</strong>)
                     @endif
@@ -147,11 +150,18 @@
                             <br>
                             <b>Lab No: </b>
                             <font> {{ $testResult->sample->lab_no }}</font><br>
-                            <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample ID:</b>
+                            <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample
+                                ID:</b>
                             {{ $testResult->sample->sample_identity }}<br>
                             <b>Name:</b> {{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
-                            <b>Age:</b> @if ($testResult->sample->participant->age != null) {{ $testResult->sample->participant->age}}yrs &nbsp; @elseif ($testResult->sample->participant->months != null)
-                             {{ $testResult->sample->participant->months}}months @else N/A @endif  
+                            <b>Age:</b>
+                            @if ($testResult->sample->participant->age != null)
+                                {{ $testResult->sample->participant->age }}yrs &nbsp;
+                            @elseif ($testResult->sample->participant->months != null)
+                                {{ $testResult->sample->participant->months }}months
+                            @else
+                                N/A
+                            @endif
                             <b>Gender:</b>
                             {{ $testResult->sample->participant->gender ?? 'N/A' }}<br>
                             <b>Address:</b> {{ $testResult->sample->participant->address ?? 'N/A' }}<br>
@@ -180,7 +190,8 @@
                     {{-- SAMPLE AND TEST DETAILS --}}
                     <tr class="btop">
                         <td class="btop">
-                            <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}<div>
+                            <div><b style="font-size: 18px">Test Requested:</b>{{ $testResult->test->name ?? 'N/A' }}
+                                <div>
                         </td>
                         <td class="btop" style="text-align: right"><strong>Sample
                                 Type:</strong>{{ $testResult->sample->sampleType->type ?? 'N/A' }}</td>
@@ -194,7 +205,7 @@
                             {{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
                         </td>
                         <td class="btop" style="text-align: center"><strong>Date Received:</strong> <br>
-                             {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
+                            {{ date('d-m-Y H:i', strtotime($testResult->sample->sample_reception->date_delivered ?? 'N/A')) }}
                         </td>
                         <td class="btop" style="text-align: right"><strong>Result Date:</strong>
                             <br>
@@ -209,124 +220,148 @@
                 </tbody>
             </table>
             {{-- <hr style="height:0.6px; width:100%; color:#ffffff00; display:none"> --}}
-            <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
-                <tbody>
-                    {{-- RESULT AND BARCODE --}}
-                    @if ($testResult->parameters && $testResult->amended_state)
-                        @php
-                            $testResult->parameters=json_decode(json_encode($testResult->parameters),true);
-                        @endphp
-                    @endif
-                    <tr>
-                        @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
-                           
-                            <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
-                                <thead>
-                                    @if ($testResult->test->parameter_uom)
-                                    <tr>
-                                      
-                                        <th colspan="{{ count(get_object_vars((object)$testResult->parameters)) + 1 }}">
-                                            {{$testResult->test->parameter_uom}}
-                                        </th>
-                                        
-                                    </tr>
-                                    @endif
-                                
-                                    <tr>
-                                        @foreach (array_keys(get_object_vars((object)$testResult->parameters)) as $key)
-                                            <th>
-                                                {{ $key }}
-                                            </th>
-                                        @endforeach
-                                        <th>
-                                            Result
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        @foreach (array_values(get_object_vars((object)$testResult->parameters)) as $parameter)
-                                            <td>
-                                                {{ $parameter }}
-                                            </td>
-                                        @endforeach
-                                        <td>
-                                            {{ $testResult->result }}
-                                        </td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        @elseif($testResult->test->result_presentation == 'Non-Tabular' && $testResult->parameters)
-                            <td class="btop" style="width:60%; color:#1A2232">
-                                <div><b style="font-size: 18px">Results:</b>
-                                    @if ($testResult->result)
-                                        <span>{{ $testResult->result }}</span>
-                                    @else
-                                        <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
-                                    @endif
-                                    <br>
-                                    @foreach ($testResult->parameters as $key => $parameter)
-                                        <i>{{ $key }}</i> :{{ $parameter }}<br>
-                                    @endforeach
-                                </div>
-                            </td>
-                        @else
-                            <td class="btop" style="width:60%; color:#1A2232">
-                                <div><b style="font-size: 18px">Results:</b>
-                                    </em>
-                                    @if ($testResult->result)
-                                        <em>{{ $testResult->result }}</em>
-                                    @else
-                                        <a href="{{ route('attachment.download', $testResult->id) }}">See Attachment</a>
-                                    @endif
-                                    </em>
-                                </div>
-                            </td>
+            @if ($testResult->test->result_type === 'Multiple')
+                <tr>
+                    <table style="text-align: left" class="table dt-responsive nowrap" width="100%" border="1"
+                        id="parameters">
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Result</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: left">
+                            @php
+                                $test_results = json_decode($testResult->result, true);
+                            @endphp
+                            @foreach ($test_results as $result)
+                                <tr style="text-align: left">
+                                    <td style="text-align: left">{{ $result['test'] }}</td>
+                                    <td style="text-align: left">{{ $result['result'] }}</td>
+                                    <td style="text-align: left">{{ $result['comment'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </tr>
+            @else
+                <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
+                    <tbody>
+                        {{-- RESULT AND BARCODE --}}
+                        @if ($testResult->parameters && $testResult->amended_state)
+                            @php
+                                $testResult->parameters = json_decode(json_encode($testResult->parameters), true);
+                            @endphp
                         @endif
-                    </tr>
-                    <br>
-                </tbody>
-            </table>
+                        <tr>
+                            @if ($testResult->test->result_presentation == 'Tabular' && $testResult->parameters)
 
-            <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
-                <tbody>
-                    {{-- COMMENT --}}
-                    <tr style="border-bottom: 0px solid rgb(f, f, f); margin-top: 20px">
-                        <td colspan="3" class="btop" style="width:80%">
-                            <div
-                                style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
-                                <div><b style="font-size: 15px">Comments:</b>
-                                    <p style="font-size: 13px"> <em>{{ $testResult->comment }}</em> <br>
-                                    </p>
-                                    <br>
+                                <table class="table dt-responsive nowrap" width="100%" border="1" id="parameters">
+                                    <thead>
+                                        @if ($testResult->test->parameter_uom)
+                                            <tr>
+                                                <th colspan="{{ count(get_object_vars($testResult->parameters)) + 1 }}">
+                                                    {{ $testResult->test->parameter_uom }}
+                                                </th>
+
+                                            </tr>
+                                        @endif
+
+                                        <tr>
+                                            @foreach (array_keys(get_object_vars($testResult->parameters)) as $key)
+                                                <th>
+                                                    {{ $key }}
+                                                </th>
+                                            @endforeach
+                                            <th>
+                                                Result
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            @foreach (array_values(get_object_vars($testResult->parameters)) as $parameter)
+                                                <td>
+                                                    {{ $parameter }}
+                                                </td>
+                                            @endforeach
+                                            <td>
+                                                {{ $testResult->result }}
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            @elseif($testResult->test->result_presentation == 'Non-Tabular' && $testResult->parameters)
+                                <td class="btop" style="width:60%; color:#1A2232">
+                                    <div><b style="font-size: 18px">Results:</b>
+                                        @if ($testResult->result)
+                                            <span>{{ $testResult->result }}</span>
+                                        @else
+                                            <a href="{{ route('attachment.download', $testResult->id) }}">See
+                                                Attachment</a>
+                                        @endif
+                                        <br>
+                                        @foreach ($testResult->parameters as $key => $parameter)
+                                            <i>{{ $key }}</i> :{{ $parameter }}<br>
+                                        @endforeach
+                                    </div>
+                                </td>
+                            @else
+                                <td class="btop" style="width:60%; color:#1A2232">
+                                    <div><b style="font-size: 18px">Results:</b>
+                                        </em>
+                                        @if ($testResult->result)
+                                            <em>{{ $testResult->result }}</em>
+                                        @else
+                                            <a href="{{ route('attachment.download', $testResult->id) }}">See
+                                                Attachment</a>
+                                        @endif
+                                        </em>
+                                    </div>
+                                </td>
+                            @endif
+                        </tr>
+                        <br>
+                    </tbody>
+                </table>
+
+                <table class="table dt-responsive nowrap" width="100%" style="text-align: left">
+                    <tbody>
+                        {{-- COMMENT --}}
+                        <tr style="border-bottom: 0px solid rgb(f, f, f); margin-top: 20px">
+                            <td colspan="3" class="btop" style="width:80%">
+                                <div
+                                    style="display:block; border: 1px solid rgb(221, 213, 213); border-radius: 4px; padding-right:10px; padding-left:10px; line-height:1">
+                                    <div><b style="font-size: 15px">Comments:</b>
+                                        <p style="font-size: 13px"> <em>{{ $testResult->comment }}</em> <br>
+                                        </p>
+                                        <br>
+                                    </div>
+                            </td>
+                            <td class="btop" style="width:20%">
+                                <div style="float: right;">
+                                    @php
+                                        try {
+                                            echo QrCode::size(84)->generate($testResult->tracker . '|' . ($testResult->sample->participant ? $testResult->sample->participant->identity : '') . '|' . ($testResult->sample ? $testResult->sample->sample_identity : ''));
+                                        } catch (\Throwable $e) {
+                                            echo QrCode::size(84)->generate($testResult->tracker);
+                                        }
+                                    @endphp
                                 </div>
-                        </td>
-                        <td class="btop" style="width:20%">
-                            <div style="float: right;">
-                                @php
-                                    try {
-                                        echo QrCode::size(84)->generate(
-                                            $testResult->tracker .
-                                                '|' .
-                                                ($testResult->sample->participant ? $testResult->sample->participant->identity : '') .
-                                                '|' .
-                                                ($testResult->sample ? $testResult->sample->sample_identity : ''),
-                                        ) ;
-                                    } catch (\Throwable $e) {
-                                       echo QrCode::size(84)->generate($testResult->tracker);
-                                    }
-                                @endphp
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            @endif
             <br>
             <table class="table dt-responsive nowrap" width="100%" style="text-align: center; ">
                 <tbody>
                     <tr style="font-size:9px;">
                         <td><b>Kit Used:</b> {{ $testResult->kit->name ?? 'N/A' }}</td>
-                        <td style="text-align: center;"><b>Verified Kit Lot:</b> {{ $testResult->verified_lot ?? 'N/A' }}
+                        <td style="text-align: center;"><b>Verified Kit Lot:</b>
+                            {{ $testResult->verified_lot ?? 'N/A' }}
                         </td>
-                        <td style="text-align: right"><b>Kit Expiry Date:</b> {{ $testResult->kit_expiry_date ?? 'N/A' }}
+                        <td style="text-align: right"><b>Kit Expiry Date:</b>
+                            {{ $testResult->kit_expiry_date ?? 'N/A' }}
                         </td>
                     </tr>
                     <br>
@@ -334,46 +369,45 @@
                     <tr>
                         <td class="btop">
                             @if ($testResult->performer->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->performer?->signature ?? '') }}" alt=""
-                                    height="5%" width="30%"><br>
+                                <img src="{{ asset('storage/' . $testResult->performer?->signature ?? '') }}"
+                                    alt="" height="5%" width="30%"><br>
                             @endif
                             _____________________
                             <br>
                             <strong>Performed By: </strong><br>
-    
-    
-                            {{ $testResult->performer ? $testResult->performer?->fullName : 'N/A' }}
+
+
+                            {{ $testResult->performer ? $testResult->performer?->first_name . ' ' . $testResult->performer->surname : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->reviewer?->signature ?? '') }}" alt=""
-                                    height="5%" width="30%"><br>
+                                <img src="{{ asset('storage/' . $testResult->reviewer?->signature ?? '') }}"
+                                    alt="" height="5%" width="30%"><br>
                             @endif
                             _____________________
                             <br>
                             <strong>Reviewed By: </strong><br>
-    
-                            {{ $testResult->reviewer ? $testResult->reviewer?->fullName : 'N/A' }}
+
+                            {{ $testResult->reviewer ? $testResult->reviewer?->first_name . ' ' . $testResult->reviewer->surname : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
-                                <img src="{{ asset('storage/' . $testResult->approver?->signature ?? '') }}" alt=""
-                                    height="5%" width="30%"><br>
+                                <img src="{{ asset('storage/' . $testResult->approver?->signature ?? '') }}"
+                                    alt="" height="5%" width="30%"><br>
                             @endif
                             _____________________
                             <br>
                             <strong>Approved by: </strong> <br>
-    
-                            {{ $testResult->approver ? $testResult->approver?->fullName : 'N/A' }}
+
+                            {{ $testResult->approver ? $testResult->approver?->first_name . ' ' . $testResult->approver->surname : 'N/A' }}
                         </td>
                     </tr>
                 </tbody>
             </table>
-         @include('reports.sample-management.report-footer')
+            @include('reports.sample-management.report-footer')
         </div>
     </div>
 
-        <em  style="position: fixed; bottom: 0;">1 of 1</em>
     <script type='text/php'>
         if (isset($pdf))
         {

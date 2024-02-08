@@ -74,7 +74,16 @@ class AttachTestResultComponent extends Component
             //Set the first test in the collection as active and load its parameters if present
             $this->test_id = $this->requestedTests[0]->id ?? null;
             $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
-
+            if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests){
+                foreach ($this->activeTest->sub_tests as $testName) {
+                    $this->testResults[] = [
+                        'test' => $testName,
+                        'result' => '', // Initially empty
+                        'comment' => '', // Initially empty
+                    ];
+                }
+                // dd( $this->testResults);
+            }
             if ($this->activeTest && $this->activeTest->parameters != null) {
                 foreach ($this->activeTest->parameters as $key => $parameter) {
                     $this->testParameters[$parameter] = '';
@@ -91,13 +100,14 @@ class AttachTestResultComponent extends Component
         $this->performed_by = auth()->user()->id;
     }
 
+    public $testResults = [];
     public function storeTestResults()
     {
         $this->validate([
             'performed_by' => 'required|integer',
         ]);
 
-        if ($this->result==null && $this->link==null && $this->attachment==null) {
+        if ($this->result==null && $this->link==null && $this->attachment==null && $this->testResults==null) {
             $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please enter/Attach results!']);
         } else {
 
@@ -137,24 +147,29 @@ class AttachTestResultComponent extends Component
             }
         }
     } 
-
     public function saveResults()
     {
         DB::transaction(function () {
 
+            
             $testResult = new TestResult();
             $testResult->sample_id = $this->sample_id;
             $testResult->test_id = $this->test_id;
             if ($this->link != null) {
                 $testResult->result = $this->link;
-            } else {
+            }
+             else {
                 $test = Test::findOrfail($this->test_id);
                 if ($test->result_type == 'Measurable') {
                     $testResult->result = $this->result.''.$test->measurable_result_uom;
+                }
+                if ($test->result_type == 'Multiple'){
+                    $testResult->result =  json_encode($this->testResults);
+
                 } else {
                     $testResult->result = $this->result;
                 }
-            }
+            }           
 
             $testResult->attachment = $this->attachmentPath;
             $testResult->performed_by = $this->performed_by;
@@ -203,6 +218,16 @@ class AttachTestResultComponent extends Component
         $this->resetResultInputs();
         $this->activeTest = $this->requestedTests->where('id', $id)->first();
         $this->test_id = $id;
+        if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests){
+            foreach ($this->activeTest->sub_tests as $testName) {
+                $this->testResults[] = [
+                    'test' => $testName,
+                    'result' => '', // Initially empty
+                    'comment' => '', // Initially empty
+                ];
+            }
+            // dd( $this->testResults);
+        }
     }
 
     public function resetResultInputs()

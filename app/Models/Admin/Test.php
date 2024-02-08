@@ -33,7 +33,7 @@ class Test extends Model
         'creator_lab',
     ];
 
-    protected $casts = ['absolute_results' => 'array', 'comments' => 'array', 'parameters' => 'array'];
+    protected $casts = ['absolute_results' => 'array', 'comments' => 'array', 'parameters' => 'array','sub_tests' => 'array'];
 
     public function category()
     {

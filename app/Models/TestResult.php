@@ -58,7 +58,6 @@ class TestResult extends Model
         'amended_by',
         'amended_at',
     ];
-
     public function sample()
     {
         return $this->belongsTo(Sample::class, 'sample_id', 'id');
@@ -99,6 +98,7 @@ class TestResult extends Model
 
     protected $casts = [
         'parameters' => 'array',
+        'results'=>'array',
     ];
 
     public static function boot()

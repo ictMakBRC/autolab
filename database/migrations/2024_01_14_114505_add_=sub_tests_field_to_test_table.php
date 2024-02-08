@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('facilities', function (Blueprint $table) {
-            // $table->text('associated_studies')->nullable()->after('parent_id');
+        Schema::table('tests', function (Blueprint $table) {
+            $table->json('sub_tests')->nullable()->after('parameters');
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facilitIes');
+        Schema::dropIfExists('tests');
     }
 };
