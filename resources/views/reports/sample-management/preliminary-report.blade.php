@@ -117,6 +117,7 @@
                                     <tr>
                                         <th>Test</th>
                                         <th>Result</th>
+                                        <th>Ct Value</th>
                                         <th>Comment</th>
                                     </tr>
                                 </thead>
