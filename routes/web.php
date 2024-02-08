@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
         Route::get('resultAmendment', ResultAmendmentComponent::class)->name('result-amendment');
         Route::get('result/{id}/original-report', [ResultReportController::class, 'viewOriginallyAmendedResult'])->name('print-original-report');
 
-        Route::get('resultReports', TestReportsComponent::class)->middleware('permission:approve-results')->name('test-reports');
+        Route::get('resultReports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');
         Route::get('rejectedResults', RejectedResultsComponent::class)->middleware('permission:enter-results')->name('rejected-results');
         Route::get('result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
         Route::get('result/{id}/print-report', [ResultReportController::class, 'print'])->name('print-result-report');

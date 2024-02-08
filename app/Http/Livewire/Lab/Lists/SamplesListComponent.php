@@ -224,6 +224,7 @@ class SamplesListComponent extends Component
         ]);
         if($this->date_requested>=$this->date_collected){        
             $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
+            if($sample){
             $sample->update([
             'sample_identity' => str_replace(' ', '', trim($this->sample_identity)),
             'study_id'=>$this->sample_study_id,
@@ -232,13 +233,18 @@ class SamplesListComponent extends Component
             'date_collected'=>$this->date_collected
             ]);
             $sample->participant->update(['study_id'=>$this->sample_study_id]);
+
+                
+            }else{
+                 $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Sample not found!']);
+            }
+        }else{
+            $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Request date must be greater than collection date!']);
+        }
             $this->reset(['edit_id', 'sample_identity', 'sample_facility_id','sample_study_id']);
             $this->studies=collect([]);
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information Successfully updated!']);
-        }else{
-            $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Request date must be greater than collection date!']);
-        }
        
     }
 
