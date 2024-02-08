@@ -261,7 +261,7 @@
                                     <thead>
                                         @if ($testResult->test->parameter_uom)
                                             <tr>
-                                                <th colspan="{{ count(get_object_vars($testResult->parameters)) + 1 }}">
+                                                <th colspan="{{ count(get_object_vars((object)$testResult->parameters)) + 1 }}">
                                                     {{ $testResult->test->parameter_uom }}
                                                 </th>
 
@@ -269,7 +269,7 @@
                                         @endif
 
                                         <tr>
-                                            @foreach (array_keys(get_object_vars($testResult->parameters)) as $key)
+                                            @foreach (array_keys(get_object_vars((object)$testResult->parameters)) as $key)
                                                 <th>
                                                     {{ $key }}
                                                 </th>
@@ -279,7 +279,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            @foreach (array_values(get_object_vars($testResult->parameters)) as $parameter)
+                                            @foreach (array_values(get_object_vars((object)$testResult->parameters)) as $parameter)
                                                 <td>
                                                     {{ $parameter }}
                                                 </td>
@@ -377,7 +377,7 @@
                             <strong>Performed By: </strong><br>
 
 
-                            {{ $testResult->performer ? $testResult->performer?->first_name . ' ' . $testResult->performer->surname : 'N/A' }}
+                            {{ $testResult->performer ? $testResult->performer?->fullName : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
@@ -388,7 +388,7 @@
                             <br>
                             <strong>Reviewed By: </strong><br>
 
-                            {{ $testResult->reviewer ? $testResult->reviewer?->first_name . ' ' . $testResult->reviewer->surname : 'N/A' }}
+                            {{ $testResult->reviewer ? $testResult->reviewer?->fullName : 'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
@@ -399,7 +399,7 @@
                             <br>
                             <strong>Approved by: </strong> <br>
 
-                            {{ $testResult->approver ? $testResult->approver?->first_name . ' ' . $testResult->approver->surname : 'N/A' }}
+                            {{ $testResult->approver ? $testResult->approver?->fullName : 'N/A' }}
                         </td>
                     </tr>
                 </tbody>
