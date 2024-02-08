@@ -205,7 +205,7 @@
                             {{ $testResult->sample->date_collected ? date('d-m-Y H:i', strtotime($testResult->sample->date_collected)) : 'N/A' }}
                         </td>
                         <td class="btop" style="text-align: center"><strong>Date Received:</strong> <br>
-                            {{ date('d-m-Y H:i', strtotime($testResult->sample->sample_reception->date_delivered ?? 'N/A')) }}
+                            {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered ?? 'N/A')) }}
                         </td>
                         <td class="btop" style="text-align: right"><strong>Result Date:</strong>
                             <br>
