@@ -126,9 +126,10 @@
                                    @endphp
                                         @foreach ($test_results as $result)
                                             <tr>
-                                                <td>{{ $result['test'] }}</td>
-                                                <td>{{ $result['result'] }}</td>
-                                                <td>{{ $result['comment'] }}</td>
+                                                <td>{{ $result['test']??'N/A' }}</td>
+                                                <td>{{ $result['result']??'N/A' }}</td>
+                                                <td>{{ $result['CtValue']??'N/A' }}</td>
+                                                <td>{{ $result['comment']??'N/A' }}</td>
                                             </tr>
                                         @endforeach 
                                 </tbody>

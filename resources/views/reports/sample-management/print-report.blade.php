@@ -239,6 +239,7 @@
                                 <tr style="text-align: left">
                                     <td style="text-align: left">{{ $result['test'] }}</td>
                                     <td style="text-align: left">{{ $result['result'] }}</td>
+                                    <td style="text-align: left">{{ $result['CtValue'] }}</td>
                                     <td style="text-align: left">{{ $result['comment'] }}</td>
                                 </tr>
                             @endforeach
