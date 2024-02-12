@@ -29,6 +29,7 @@ class KitComponent extends Component
     public $is_active;
 
     public $delete_id;
+    public $edit_id;
 
     protected $paginationTheme = 'bootstrap';
 
