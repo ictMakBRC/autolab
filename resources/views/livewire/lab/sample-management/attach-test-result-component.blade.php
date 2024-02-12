@@ -133,17 +133,27 @@
                                                                                 <hr>
                                                                                 <h6>Tests</h6>
                                                                                 @foreach ($test->sub_tests as $key=> $sub_test)
-                                                                                    <div class="col-md-6">
+                                                                                    <div class="col-md-4">
                                                                                         <div class="mb-2">
                                                                                             {{-- <label class="form-label">{{ $sub_test }}</label> --}}
-                                                                                                <input type="text" readonly wire:model="testResults.{{ $key }}.test" 
+                                                                                                <input class="form-label" type="text" style="border: none; outline: none;  background-color: transparent;" readonly wire:model="testResults.{{ $key }}.test" 
                                                                                                 required value="{{ $sub_test }}">
                                                                                             <input type="text"
                                                                                                 required
                                                                                                 class="form-control"
                                                                                                 wire:model="testResults.{{ $key }}.result"
                                                                                                 {{-- wire:model.lazy="subTestResults.{{ $sub_test }}" --}}
-                                                                                                placeholder="Enter test {{ $sub_test }} results">
+                                                                                                placeholder="{{ $sub_test }} results">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-2">
+                                                                                        <div class="mb-2">
+                                                                                            <label class="form-label">Ct Value</label>
+                                                                                            <input type="text"
+                                                                                                required
+                                                                                                class="form-control"
+                                                                                                wire:model="testResults.{{ $key }}.CtValue"
+                                                                                                placeholder="Ct Value">
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="col-md-6">
