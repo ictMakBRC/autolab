@@ -228,6 +228,7 @@
                             <tr>
                                 <th>Test</th>
                                 <th>Result</th>
+                                <th>Ct Value</th>
                                 <th>Comment</th>
                             </tr>
                         </thead>
@@ -237,9 +238,10 @@
                             @endphp
                             @foreach ($test_results as $result)
                                 <tr style="text-align: left">
-                                    <td style="text-align: left">{{ $result['test'] }}</td>
-                                    <td style="text-align: left">{{ $result['result'] }}</td>
-                                    <td style="text-align: left">{{ $result['comment'] }}</td>
+                                    <td style="text-align: left">{{ $result['test']??'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['result']??'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['CtValue']??'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['comment']??'N/A' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

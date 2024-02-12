@@ -223,6 +223,8 @@ class AttachTestResultComponent extends Component
                 $this->testResults[] = [
                     'test' => $testName,
                     'result' => '', // Initially empty
+                    'result' => '', // Initially empty
+                    'CtValue' => '', // Initially empty
                     'comment' => '', // Initially empty
                 ];
             }
