@@ -31,7 +31,7 @@
                         <div class="row mb-0">
                             <form>
                                 <div class="row">
-                                    <div class="mb-3 col-md-3">
+                                    <div class="mb-3 col-md-2">
                                         <label for="facility_id" class="form-label">Facility</label>
                                         <select class="form-select" id="facility_id" wire:model="facility_id">
                                             <option selected value="0">All</option>
@@ -41,7 +41,7 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    <div class="mb-3 col-md-3">
+                                    <div class="mb-3 col-md-2">
                                         <label for="study" class="form-label">Study</label>
                                         <select class="form-select" id="study" wire:model="study_id">
                                             <option selected value="0">All</option>
@@ -105,6 +105,16 @@
                                                 <option value='{{ $user->id }}'>
                                                     {{ $user->fullName }}</option>
                                             @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select class="form-select" id="status" wire:model='status'>
+                                            <option selected value="0">All</option>
+                                            <option value="Approved">Approved</option>
+                                            <option value="Reviewed">Reviewed</option>
+                                            <option value="Rejected">Rejected</option>
+                                            <option value="Pending Review">Pending Review</option>
                                         </select>
                                     </div>
 
