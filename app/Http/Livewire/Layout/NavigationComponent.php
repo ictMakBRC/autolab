@@ -130,7 +130,7 @@ class NavigationComponent extends Component
 
         if (Auth::user()->hasPermission(['view-result-reports'])) {
             $this->testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
-            $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
+            $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->count();
         }
 
         if (Auth::user()->hasPermission(['manage-users'])) {
