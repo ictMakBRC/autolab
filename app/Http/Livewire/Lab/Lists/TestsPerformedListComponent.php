@@ -47,6 +47,8 @@ class TestsPerformedListComponent extends Component
     public $export;
 
     public $studies;
+    
+    public $status;
 
     public $resultIds = [];
 
@@ -104,7 +106,7 @@ class TestsPerformedListComponent extends Component
 
     public function filterTests()
     {
-        $results = TestResult::select('*')->where(['creator_lab' => auth()->user()->laboratory_id, 'status' => 'Approved'])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
+        $results = TestResult::select('*')->where(['creator_lab' => auth()->user()->laboratory_id])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
                     ->when($this->facility_id != 0, function ($query) {
                         $query->whereHas('sample.sampleReception', function ($query) {
                             $query->where('facility_id', $this->facility_id);
@@ -138,6 +140,11 @@ class TestsPerformedListComponent extends Component
                     })
                     ->when($this->reviewed_by != 0, function ($query) {
                         $query->where('reviewed_by', $this->reviewed_by);
+                    }, function ($query) {
+                        return $query;
+                    })
+                    ->when($this->status != 0, function ($query) {
+                        $query->where('status', $this->status);
                     }, function ($query) {
                         return $query;
                     })
