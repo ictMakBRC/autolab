@@ -40,9 +40,9 @@ class ResultReportController extends Controller
     public function viewOriginallyAmendedResult($id)
     {
         $testResult = json_decode(TestResult::where('id', $id)->first()->original_results);
-
+        // dd($testResult);
         //return View('reports.sample-management.downloadReport', compact('testResult'));
-        return View('reports.sample-management.print-report', compact('testResult'));
+        return View('reports.sample-management.print-original-report', compact('testResult'));
        
     }
 

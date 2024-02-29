@@ -171,7 +171,7 @@
                                                 <option value="Absolute">Absolute</option>
                                                 <option value="Measurable">Measurable</option>
                                                 <option value="Link">Link</option>
-                                                <option value="Multiple">Multiple</option>
+                                                {{-- <option value="Multiple">Multiple</option> --}}
                                             </select>
                                         </div>
 

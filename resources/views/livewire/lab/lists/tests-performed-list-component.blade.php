@@ -125,7 +125,8 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="to_date" class="form-label">End Date</label>
-                                        <input id="to_date" type="date" class="form-control" wire:model="to_date">
+                                        <input id="to_date" type="date" class="form-control"
+                                            wire:model="to_date">
                                     </div>
                                     <div class="mb-3 col-md-1">
                                         <label for="perPage" class="form-label">Per Page</label>
@@ -161,8 +162,8 @@
                         </div>
                         @if (count($combinedResultsList) >= 2)
                             You have selected <strong class="text-success">{{ count($combinedResultsList) }}</strong>
-                            Test Results(s) for the combined Result report (<a href="javascript:;" class="text-danger fw-bold"
-                                wire:click="$set('combinedResultsList',[])">Clear All</a>)
+                            Test Results(s) for the combined Result report (<a href="javascript:;"
+                                class="text-danger fw-bold" wire:click="$set('combinedResultsList',[])">Clear All</a>)
                         @endif
                     </div>
 
@@ -201,8 +202,8 @@
                                             <td>
                                                 @if ($testResult->amended_state)
                                                     <a href="{{ route('print-original-report', $testResult->id) }}"
-                                                        target="_blank"><strong
-                                                            class="text-warning" title="AMENDED">{{ $testResult->tracker }}</strong>
+                                                        target="_blank"><strong class="text-warning"
+                                                            title="AMENDED">{{ $testResult->tracker }}</strong>
                                                     </a>
                                                 @else
                                                     <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
@@ -239,7 +240,9 @@
                                                     class="me-2 float-end" wire:model="combinedResultsList">
                                             </td>
                                             <td>
-                                                <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
+                                                <span
+                                                    class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span>
+                                                ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at) . 'min' }})
                                             </td>
                                             <td>
                                                 {{ $testResult->sample->requester->name }}
@@ -251,18 +254,19 @@
                                                 <span class="badge bg-success">{{ $testResult->status }}</span>
                                             </td>
                                             <td class="action-ico">
-                                                <a disabled href="{{ route('result-report', $testResult->id) }}"
-                                                    type="button" data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom" title=""
-                                                    data-bs-original-title="Result Report"
-                                                    class="action-ico d-none btn btn-outline-info d-none"
-                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                        class="bi bi-arrow-down-square"></i></a>
+                                                @if ($testResult->status == 'Approved')
+                                                    <a href="{{ route('result-report', $testResult->id) }}"
+                                                        type="button" data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom" title=""
+                                                        data-bs-original-title="Result Report"
+                                                        class="action-ico btn btn-outline-info"
+                                                        wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                            class="bi bi-arrow-down-square"></i></a>
+                                                            <small class="badge bg-info">{{ $testResult->download_count }}</small>
 
-                                                        <a target="_blank" href="{{ route('print-result-report', $testResult->id) }}" type="button"
-                                                            class="action-ico btn btn-outline-info"
-                                                            wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                                class="bi bi-printer"></i></a>
+                                                @else
+                                                    NA
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty

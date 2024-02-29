@@ -149,8 +149,8 @@
                                             </td>
                                             <td class="action-ico">
                                                 @if ($status == 'Approved')
-                                                <a disabled target="_blank" href="{{ route('result-report', $testResult->id) }}" type="button"
-                                                    class="action-ico btn btn-outline-info me-2 d-none "
+                                                <a target="_blank" href="{{ route('result-report', $testResult->id) }}" type="button"
+                                                    class="action-ico btn btn-outline-info me-2"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-arrow-down-square"></i></a>
 
@@ -158,6 +158,7 @@
                                                     class="action-ico btn btn-outline-success"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-printer"></i></a>
+                                                        <small class="badge bg-info">{{ $testResult->download_count }}</small>
                                                     
                                                 @else
                                                     
