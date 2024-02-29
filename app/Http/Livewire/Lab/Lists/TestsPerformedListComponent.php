@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Exports\TestResultsExport;
-use App\Models\Admin\Test;
-use App\Models\Facility;
-use App\Models\Sample;
-use App\Models\SampleType;
-use App\Models\Study;
-use App\Models\TestResult;
 use App\Models\User;
-use Illuminate\Support\Facades\URL;
+use App\Models\Study;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use App\Exports\TestResultsExport;
+use Illuminate\Support\Facades\URL;
+use App\Exports\TestPerformedExport;
 
 class TestsPerformedListComponent extends Component
 {
@@ -47,7 +48,7 @@ class TestsPerformedListComponent extends Component
     public $export;
 
     public $studies;
-    
+
     public $status;
 
     public $resultIds = [];
@@ -64,7 +65,7 @@ class TestsPerformedListComponent extends Component
     public function export()
     {
         if (count($this->resultIds) > 0) {
-            return (new TestResultsExport($this->resultIds))->download('Tests_Performed_'.date('Y-m-d').'_'.now()->toTimeString().'.xlsx');
+            return (new TestPerformedExport($this->resultIds))->download('Tests_Performed_'.date('Y-m-d').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Oops! No performed Tests selected for export!']);
         }
