@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Admin\Test;
+use App\Models\Lab\SampleManagement\TestResultAmendment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,6 +64,12 @@ class TestResult extends Model
         return $this->belongsTo(Sample::class, 'sample_id', 'id');
     }
 
+    public function testResultAmendment()
+    {
+        return $this->hasMany(TestResultAmendment::class, 'test_result_id', 'id');
+    }
+
+    
     public function test()
     {
         return $this->belongsTo(Test::class, 'test_id', 'id');

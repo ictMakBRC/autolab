@@ -35,6 +35,7 @@
                                 class="action-ico btn btn-outline-success mx-1">
                                 <i class="bi bi-search"></i>Load Details</a>
                         </div>
+                        <button wire:click='copyAmended'>Copy</button>
                     </div>
                 </div> <!-- end card body-->
             </div> <!-- end card -->
