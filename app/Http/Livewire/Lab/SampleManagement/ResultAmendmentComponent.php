@@ -15,6 +15,7 @@ use Livewire\WithPagination;
 use App\Models\SampleReception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Lab\SampleManagement\TestResultAmendment;
 
 class ResultAmendmentComponent extends Component
 {
@@ -85,7 +86,7 @@ class ResultAmendmentComponent extends Component
     {
         if ($this->result_tracker) {
 
-            $testResult = TestResult::where(['tracker'=>$this->result_tracker,'status'=>'approved','creator_lab'=>auth()->user()->laboratory_id,'amended_state'=>false])
+            $testResult = TestResult::where(['tracker'=>$this->result_tracker,'status'=>'approved','creator_lab'=>auth()->user()->laboratory_id])
             ->when(!auth()->user()->hasPermission(['review-results']), function ($query) {
                 $query->where('performed_by',auth()->user()->id);
             })
@@ -144,8 +145,25 @@ class ResultAmendmentComponent extends Component
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Results amended successfully!']);
         });
 
-
     }
+
+    public function copyAmended()
+    {   
+        $testResults = TestResult::where(['amended_state'=>1, 'copied'=>0])->get();
+        foreach($testResults as $testResult){
+            $testAmendment = new TestResultAmendment();
+            $testAmendment->test_result_id = $testResult->id;
+            $testAmendment->amendment_type = $testResult->amendment_type;
+            $testAmendment->amendment_comment = $testResult->amendment_comment;
+            $testAmendment->original_results = $testResult->original_results;
+            $testAmendment->amended_by = $testResult->amended_by;
+            $testAmendment->save();
+            $testResult->copied =1;
+            $testResult->update();
+        }
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Results amended successfully!']);
+    }
+
 
     public function updateParticipant()
     {
@@ -255,6 +273,14 @@ class ResultAmendmentComponent extends Component
 
         $this->testResults->status = 'Pending Review';
         $this->testResults->update();
+
+        $testAmendment = new TestResultAmendment();
+        $testAmendment->test_result_id = $this->testResults->id;
+        $testAmendment->amendment_type = $this->amendment_type;
+        $testAmendment->amendment_comment = $this->amendment_comment;
+        $testAmendment->original_results = $this->originalResults->toJson();
+        $testAmendment->amended_by = auth()->user()->id;
+        $testAmendment->save();
 
         $currentParameters = array_filter($this->testParameters, function ($value) {
             return $value != null;
