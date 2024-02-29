@@ -106,7 +106,7 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    <textarea wire:model.lazy="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}" readonly></textarea>
+                                                    <textarea wire:model.lazy="comment" rows="2" class="form-control" placeholder="{{ __('comment') }}" ></textarea>
                                                 @endif
                                                 @error('comment')
                                                     <div class="text-danger text-small">
