@@ -60,7 +60,7 @@
                         @if ($toggleEditForms)
                             <div class="alert border-0 bg-light-info show">
                                 <div
-                                    class="d-flex align-items-center text-danger">
+                                    class="d-flex align-items-center text-warning">
                                     <div class="fs-3"><i class="bi bi-exclamation-triangle-fill"></i>
                                     </div>
                                     <div class="ms-3">

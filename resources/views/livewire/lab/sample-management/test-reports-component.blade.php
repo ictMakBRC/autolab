@@ -158,6 +158,7 @@
                                                     class="action-ico btn btn-outline-success"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-printer"></i></a>
+                                                        <small class="badge bg-info">{{ $testResult->download_count }}</small>
                                                     
                                                 @else
                                                     
