@@ -153,7 +153,7 @@ class ResultAmendmentComponent extends Component
         $this->validate([
             'identity' => 'required|string',
             'age' => 'nullable|integer|min:1',
-            'months' => 'nullable|integer|min:1|max:11',
+            'months' => 'nullable|integer|min:0|max:11',
             'address' => 'required|string|max:40',
             'gender' => 'nullable|string|max:6',
         ]);
