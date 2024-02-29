@@ -182,6 +182,59 @@ class ResultAmendmentComponent extends Component
 
     public function updateResult()
     {
+       
+        // dd('Doenen');
+        // $this->performed_by = auth()->user()->id;
+        // $this->validate([
+        //     'performed_by' => 'required|integer',
+        // ]);/
+
+        if ($this->link != null) {
+            $this->validate([
+                'link' => 'required|url',
+            ]);
+        }
+
+        if ($this->attachment != null) {
+            $this->validate([
+                'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
+            ]);
+            $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
+            $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
+
+            if (file_exists(storage_path('app/').$this->testResults->attachment)) {
+                @unlink(storage_path('app/').$this->testResult->attachment);
+            }
+        } else {
+            if ($this->test->result_type == 'File') {
+                $this->validate([
+                    'attachment' => ['required'],
+                ]);
+            } else {
+                $this->attachmentPath = null;
+            }
+        }
+
+        if ($this->link != null) {
+            $this->testResult->result = $this->link;
+        } else {
+            if ($this->test->result_type == 'Measurable') {
+                if ($this->testResult->result == $this->result) {
+                    $this->testResult->result = $this->result;
+                } else {
+                    $this->testResult->result = $this->result.''.$this->measurable_result_uom;
+                }
+            } else {
+                $this->testResult->result = $this->result;
+            }
+        }
+
+        $this->testResults->attachment = $this->attachmentPath;
+        // $this->testResults->performed_by = $this->performed_by;
+        $this->testResults->comment = $this->comment;
+        $this->testResults->parameters = count($this->testParameters) ? $this->testParameters : null;
+        $this->testResults->kit_id = $this->kit_id;
+
         $this->testResults->reviewed_by = null;
         $this->testResults->reviewed_at = null;
         $this->testResults->approved_by = null;
@@ -202,6 +255,26 @@ class ResultAmendmentComponent extends Component
 
         $this->testResults->status = 'Pending Review';
         $this->testResults->update();
+
+        $currentParameters = array_filter($this->testParameters, function ($value) {
+            return $value != null;
+        });
+
+        if ($this->test->parameters!=null) {
+                if (count($currentParameters) == count($this->test->parameters)) {
+                    $this->testResult->update();
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+                    
+                } else {
+                    $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
+                    $this->validate([
+                        'testParameters' => ['required'],
+                    ]);
+                }
+        }else{
+            $this->testResult->update();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+        }
     }
 
     public function refresh()

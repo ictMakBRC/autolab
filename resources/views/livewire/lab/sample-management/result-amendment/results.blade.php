@@ -24,7 +24,7 @@
                                                 <div class="mb-2">
                                                     <label class="form-label">Result</label>
                                                     <select class="form-select" id="result"
-                                                        wire:model.lazy="result" disabled>
+                                                        wire:model.lazy="result" >
                                                         <option selected value="">
                                                             Select</option>
                                                         @foreach ($test->absolute_results as $result)
@@ -41,7 +41,7 @@
                                                 <div class="mb-2">
                                                     <label class="form-label">Result</label>
                                                     <textarea rows="2" class="form-control" placeholder="{{ __('Enter Free text Results') }}"
-                                                        wire:model.lazy="result" readonly></textarea>
+                                                        wire:model.lazy="result" ></textarea>
                                                     @error('result')
                                                         <div class="text-danger text-small">
                                                             {{ $message }}</div>
@@ -53,7 +53,7 @@
                                                         <label class="form-label">Result</label>
                                                         <div class="input-group form-group mb-2">
                                                             <input type="number" step="0.001" class="form-control"
-                                                                id="result" wire:model.lazy='result' readonly>
+                                                                id="result" wire:model.lazy='result' >
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">
                                                                     {{ $test->measurable_result_uom }}
@@ -71,7 +71,7 @@
                                                     <label class="form-label">Result
                                                         Attachment</label>
                                                     <input type="file" class="form-control" wire:model="attachment"
-                                                        placeholder="Attach file" readonly>
+                                                        placeholder="Attach file" >
                                                     @error('attachment')
                                                         <div class="text-danger text-small">
                                                             {{ $message }}</div>
@@ -96,7 +96,7 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Comment</label>
                                                 @if ($test->comments != null)
-                                                    <select class="form-select" id="comment" wire:model="comment" disabled>
+                                                    <select class="form-select" id="comment" wire:model="comment" >
                                                         <option selected value="">
                                                             Select</option>
                                                         @foreach ($test->comments as $comment)
@@ -126,7 +126,7 @@
                                                         <label class="form-label">{{ $parameter }}</label>
                                                         <input type="text" class="form-control"
                                                             wire:model.lazy="testParameters.{{ $parameter }}"
-                                                            placeholder="{{ $value }}" readonly>
+                                                            placeholder="{{ $value }}" >
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -144,7 +144,7 @@
                                         <div class="col">
                                             <div class="mb-2">
                                                 <label class="form-label">Kit Used</label>
-                                                <select class="form-select" wire:model="kit_id" disabled>
+                                                <select class="form-select" wire:model="kit_id" >
                                                     <option selected value="">Select
                                                     </option>
                                                     @foreach ($kits as $kit)
