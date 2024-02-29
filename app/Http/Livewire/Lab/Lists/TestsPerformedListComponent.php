@@ -14,6 +14,7 @@ use Livewire\WithPagination;
 use App\Exports\TestResultsExport;
 use Illuminate\Support\Facades\URL;
 use App\Exports\TestPerformedExport;
+use App\Models\Lab\SampleManagement\TestResultAmendment;
 
 class TestsPerformedListComponent extends Component
 {
@@ -51,6 +52,8 @@ class TestsPerformedListComponent extends Component
 
     public $status;
 
+    public $amendedResults;
+
     public $resultIds = [];
 
     public $combinedResultsList = [];
@@ -60,6 +63,7 @@ class TestsPerformedListComponent extends Component
     public function mount()
     {
         $this->studies = collect([]);
+        $this->amendedResults = collect([]);
     }
 
     public function export()
@@ -76,6 +80,15 @@ class TestsPerformedListComponent extends Component
         if ($this->facility_id != 0) {
             $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
         }
+    }
+
+    public function viewAmended($id){
+        $this->amendedResults = TestResultAmendment::where('test_result_id', $id)->with('amendedBy','testResult')->get();
+        // dd($this->amendedResults);
+    }
+    
+    public function close()  {
+        $this->amendedResults = collect([]);
     }
 
     public function combinedTestResultsReport()

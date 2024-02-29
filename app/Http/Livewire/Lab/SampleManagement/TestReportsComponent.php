@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Exports\ReportExport;
 use App\Models\Sample;
-use App\Models\TestResult;
-use Illuminate\Support\Facades\URL;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use App\Exports\ReportExport;
+use Illuminate\Support\Facades\URL;
+use App\Models\Lab\SampleManagement\TestResultAmendment;
 
 class TestReportsComponent extends Component
 {
@@ -24,8 +25,12 @@ class TestReportsComponent extends Component
     public $combinedSamplesList = [];
 
     public $status = 'Approved';
+    public $amendedResults;
     protected $paginationTheme = 'bootstrap';
 
+    function mount()  {
+        $this->amendedResults = collect([]);
+    }
   
     public function combinedTestReport()
     {
@@ -42,6 +47,15 @@ class TestReportsComponent extends Component
                 $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Test Report is only possible for samples of the same study!']);
             }
         }
+    }
+    
+    public function viewAmended($id){
+        $this->amendedResults = TestResultAmendment::where('test_result_id', $id)->with('amendedBy','testResult')->get();
+        
+    }
+    
+    public function close()  {
+        $this->amendedResults = collect([]);
     }
 
     // public function export($id)

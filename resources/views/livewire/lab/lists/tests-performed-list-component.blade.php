@@ -201,9 +201,11 @@
                                             </td>
                                             <td>
                                                 @if ($testResult->amended_state)
-                                                    <a href="{{ route('print-original-report', $testResult->id) }}"
-                                                        target="_blank"><strong class="text-warning"
-                                                            title="AMENDED">{{ $testResult->tracker }}</strong>
+                                                    <a href="javascript:void(0)"
+                                                        wire:click='viewAmended({{ $testResult->id }})'
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#amendedResults"><strong class="text-warning"
+                                                            title="SHOW AMENDED">{{ $testResult->tracker }}</strong>
                                                     </a>
                                                 @else
                                                     <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
@@ -262,8 +264,8 @@
                                                         class="action-ico btn btn-outline-info"
                                                         wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                             class="bi bi-arrow-down-square"></i></a>
-                                                            <small class="badge bg-info">{{ $testResult->download_count }}</small>
-
+                                                    <small
+                                                        class="badge bg-info">{{ $testResult->download_count }}</small>
                                                 @else
                                                     NA
                                                 @endif
@@ -284,14 +286,22 @@
                     </div> <!-- end tab-content-->
                 </div> <!-- end card body-->
             </div> <!-- end card -->
-        </div><!-- end col-->
 
-    </div>
-    @push('scripts')
-        <script>
-            window.addEventListener('loadCombinedTestResultsReport', event => {
-                window.open(`${event.detail.url}`, '_blank').focus();
-            });
-        </script>
-    @endpush
+
+            {{-- VIEW amendement details modal --}}
+                @include('livewire.lab.lists.show-amended-results')
+           <!-- end modal dialog-->
+        </div> <!-- end modal-->
+
+
+    </div><!-- end col-->
+
+</div>
+@push('scripts')
+    <script>
+        window.addEventListener('loadCombinedTestResultsReport', event => {
+            window.open(`${event.detail.url}`, '_blank').focus();
+        });
+    </script>
+@endpush
 </div>
