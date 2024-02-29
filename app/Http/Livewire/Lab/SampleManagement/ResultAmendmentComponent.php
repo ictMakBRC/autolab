@@ -157,9 +157,9 @@ class ResultAmendmentComponent extends Component
             $testAmendment->amendment_comment = $testResult->amendment_comment;
             $testAmendment->original_results = $testResult->original_results;
             $testAmendment->amended_by = $testResult->amended_by;
-            $testAmendment->save();
+            // $testAmendment->save();
             $testResult->copied =1;
-            $testResult->update();
+            // $testResult->update();
         }
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Results amended successfully!']);
     }
