@@ -91,10 +91,12 @@
                                             </td>
                                             <td>
                                                 @if ($testResult->amended_state)
-                                                    <a href="{{ route('print-original-report', $testResult->id) }}"
-                                                        target="_blank"><strong
-                                                            class="text-warning" title="AMENDED">{{ $testResult->tracker }}</strong>
-                                                    </a>
+                                                <a href="javascript:void(0)"
+                                                    wire:click='viewAmended({{ $testResult->id }})'
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#amendedResults"><strong class="text-warning"
+                                                        title="SHOW AMENDED">{{ $testResult->tracker }}</strong>
+                                                </a>
                                                 @else
                                                     <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
                                                         target="_blank"><strong
@@ -182,6 +184,9 @@
             </div> <!-- end card -->
         </div><!-- end col-->
 
+         {{-- VIEW amendement details modal --}}
+            @include('livewire.lab.lists.show-amended-results')
+         <!-- end modal dialog-->
     </div>
 
     @push('scripts')

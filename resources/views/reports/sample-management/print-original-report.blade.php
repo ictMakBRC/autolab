@@ -380,8 +380,8 @@
                             <br>
                             <strong>Performed By: </strong><br>
 
-
-                            {{ $testResult->performer?->fullName ??'N/A' }}
+                            
+                            {{ $testResult->performer?->surname.' '.$testResult->performer?->first_name.' '.$testResult->performer?->other_name ??'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
@@ -392,7 +392,7 @@
                             <br>
                             <strong>Reviewed By: </strong><br>
 
-                            {{ $testResult->reviewer?->fullName?? 'N/A' }}
+                            {{ $testResult->reviewer?->surname.' '.$testResult->reviewer?->first_name.' '.$testResult->reviewer?->other_name ??'N/A' }}
                         </td>
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
@@ -403,7 +403,8 @@
                             <br>
                             <strong>Approved by: </strong> <br>
 
-                            {{ $testResult->approver?->fullName ?? 'N/A' }}
+                            {{ $testResult->approver?->surname.' '.$testResult->approver?->first_name.' '.$testResult->approver?->other_name ??'N/A' }}
+
                         </td>
                     </tr>
                 </tbody>

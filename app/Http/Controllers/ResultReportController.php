@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lab\SampleManagement\TestResultAmendment;
 use PDF;
 use GuzzleHttp\Client;
 use App\Models\TestResult;
@@ -39,7 +40,7 @@ class ResultReportController extends Controller
 
     public function viewOriginallyAmendedResult($id)
     {
-        $testResult = json_decode(TestResult::where('id', $id)->first()->original_results);
+        $testResult = json_decode(TestResultAmendment::where('id', $id)->first()->original_results);
         // dd($testResult);
         //return View('reports.sample-management.downloadReport', compact('testResult'));
         return View('reports.sample-management.print-original-report', compact('testResult'));
