@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
-use App\Exports\SamplesExport;
-use App\Models\Facility;
-use App\Models\Sample;
-use App\Models\SampleType;
-use App\Models\Study;
 use App\Models\User;
+use App\Models\Study;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Facility;
+use App\Models\Requester;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Exports\SamplesExport;
 
 class SamplesListComponent extends Component
 {
@@ -82,10 +83,12 @@ class SamplesListComponent extends Component
     public $edit_id;
     public $sample_study_id;
     public $sample_facility_id;
+    public $requested_by;
 
     public $lab_no;
 
     public $status;
+    public $requesters;
 
     public function updatedFacilityId()
     {
@@ -97,6 +100,7 @@ class SamplesListComponent extends Component
     public function mount()
     {
         $this->studies = collect([]);
+        $this->requesters = collect([]);
     }
 
     public function export()
@@ -200,15 +204,18 @@ class SamplesListComponent extends Component
     public $date_requested;
     public function editSample(Sample $sample)
     {
+        // $this->cancel();
         if($sample){
                 $this->edit_id = $sample->id;
                 $this->sample_identity = $sample->sample_identity;
                 $this->lab_no = $sample->lab_no;
+                $this->requested_by = $sample->requested_by;
                 $this->date_collected = $sample->date_collected;
                 $this->date_requested = $sample->date_requested;
                 $this->sample_study_id = $sample->study_id;
                 $this->status = $sample->status;
                 $this->sample_facility_id=$sample->participant->facility_id;
+                $this->updatedSampleFacilityId();
                 $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->sample_facility_id)->get();
         }else{
                 $this->dispatchBrowserEvent('close-modal');
@@ -216,26 +223,37 @@ class SamplesListComponent extends Component
         }
     }
 
+    function updatedSampleFacilityId(){
+        $this->requesters = Requester::where(['facility_id' => $this->sample_facility_id])->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
+    }
+
     public function updateSample()
     {
         $this->validate([
             'sample_identity' => 'required|unique:samples,sample_identity,'.$this->edit_id.'',
             'study_id' => 'required|integer',
+            'requested_by' => 'required|integer',
         ]);
-        if($this->date_requested>=$this->date_collected){        
+        if($this->date_collected<=$this->date_requested){        
             $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
+            if($sample){
             $sample->update([
             'sample_identity' => str_replace(' ', '', trim($this->sample_identity)),
-            'study_id'=>$this->sample_study_id,
+            'requested_by'=>$this->requested_by,
             'study_id'=>$this->sample_study_id,
             'date_requested'=>$this->date_requested,
             'date_collected'=>$this->date_collected
             ]);
             $sample->participant->update(['study_id'=>$this->sample_study_id]);
-            $this->reset(['edit_id', 'sample_identity', 'sample_facility_id','sample_study_id']);
+            $this->reset(['edit_id', 'sample_identity', 'sample_facility_id','sample_study_id','requested_by','date_requested','date_collected']);
             $this->studies=collect([]);
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information Successfully updated!']);
+        }else{
+            $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'You have no right to edit this sample!']);
+            $this->cancel();
+            $this->dispatchBrowserEvent('close-modal');
+        }
         }else{
             $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Request date must be greater than collection date!']);
         }
@@ -249,7 +267,7 @@ class SamplesListComponent extends Component
 
     public function cancel()
     {
-        $this->reset(['recall_id', 'sample_id', 'edit_id','sample_identity']);
+        $this->reset(['recall_id', 'sample_id', 'edit_id','sample_identity','sample_facility_id','requested_by']);
     }
 
     public function render()
