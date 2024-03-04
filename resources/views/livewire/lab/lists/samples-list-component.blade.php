@@ -277,8 +277,8 @@
                         </div>
                         <div class="form-group mb-1 col-md-6">
                             <label for="sample_study" class="form-label">Study</label>
-                            <select class="form-select" id="sample_study" wire:model="sample_study_id">
-                                <option selected value="0">All</option>
+                            <select class="form-select" id="sample_study" required wire:model="sample_study_id">
+                                <option  value=" ">All</option>
                                 @forelse ($studies as $study)
                                     <option value='{{ $study->id }}'>{{ $study->name }}</option>
                                 @empty
@@ -286,24 +286,34 @@
                             </select>
                         </div>
                         <div class="form-group mb-1 col-md-6">
+                            <label for="sample_study" class="form-label">Requested By</label>
+                            <select required class="form-select" id="v" wire:model="requested_by">
+                                <option  value=" ">All</option>
+                                @forelse ($requesters as $requester)
+                                    <option value='{{ $requester->id }}'>{{ $requester->name }}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
+                        <div class="form-group mb-1 col-md-6">
+                            <label for="date_collected" class="form-label">Collection Date/Time</label>
+                            <input id="date_collected" max="{{$date_requested}}" class="form-control" type="datetime-local"  wire:model="date_collected">
+                        </div>
+                        <div class="form-group mb-1 col-md-4">
                             <label for="date_requested" class="form-label">Request Date</label>
                             <input type="date" class="form-control" min="{{$date_collected}}" required wire:model.lazy='date_requested'>
                             @error('date_requested')
                                 <div class="text-danger text-small">{{ __($message) }}</div>
                             @enderror
                         </div>
-                        <div class="form-group mb-1 col-md-6">
-                            <label for="date_collected" class="form-label">Collection Date/Time</label>
-                            <input id="date_collected" max="{{$date_requested}}" class="form-control" type="datetime-local"  wire:model="date_collected">
-                        </div>
-                        <div class="form-group mb-1 col-md-6">
+                        <div class="form-group mb-1 col-md-4">
                             <label for="lab_no" class="form-label">Lab Number</label>
                             <input type="text" readonly class="form-control" required wire:model.lazy='lab_no'>
                             @error('lab_no')
                                 <div class="text-danger text-small">{{ __($message) }}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="status" class="form-label">Sample Status</label>
                             <input type="text" readonly class="form-control" required wire:model.lazy='status'>
                             @error('status')
