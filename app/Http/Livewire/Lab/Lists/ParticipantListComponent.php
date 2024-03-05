@@ -208,11 +208,15 @@ class ParticipantListComponent extends Component
         if($this->age<1){
             $age = null;
         }
+        $months = $this->months;
+        if($this->months<1){
+            $months = null;
+        }
         // dd($age);
         $participant = Participant::find($this->participant_id);
         $participant->identity = $this->identity;
         $participant->age = $age??null;
-        $participant->months = $this->months;
+        $participant->months = $months;
         $participant->address = $this->address;
         $participant->gender = $this->gender;
         $participant->contact = $this->contact;
