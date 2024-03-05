@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Lab\Lists;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Study;
 use App\Models\Sample;
@@ -234,7 +235,9 @@ class SamplesListComponent extends Component
             'study_id' => 'required|integer',
             'requested_by' => 'required|integer',
         ]);
-        if($this->date_collected<=$this->date_requested){        
+        $RequestDate = Carbon::createFromFormat('Y-m-d', $this->date_requested)->addHours(3);
+
+        if($this->date_collected<=$RequestDate){        
             $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
             if($sample){
             $sample->update([
