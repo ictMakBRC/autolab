@@ -1,6 +1,6 @@
-<footer style="width: 100%; position: fixed; bottom: 0;">
+<footer style="width: 100%; position: fixed; bottom: 0;  line-height: 0.2;">
 
-    <table width="100%" style="margin-top:0.1px; margin-bottom:0.1px; padding:1px">
+    <table width="100%" style="margin-top:0.1px; margin-bottom:-8px; padding:1px">
          <tr>
                 <td colspan="3" style="width: 70%; font-size:10px; text-align:center">
                     

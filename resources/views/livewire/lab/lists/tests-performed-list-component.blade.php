@@ -257,15 +257,16 @@
                                             </td>
                                             <td class="action-ico">
                                                 @if ($testResult->status == 'Approved')
-                                                    <a href="{{ route('result-report', $testResult->id) }}"
+                                                    <a  href="{{ route('print-result-report', $testResult->id) }}"
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Result Report"
-                                                        class="action-ico btn btn-outline-info"
+                                                        class="action-ico btn btn-outline-info btn-sm"
                                                         wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                            class="bi bi-arrow-down-square"></i></a>
+                                                            class="bi bi-printer"></i>
                                                     <small
                                                         class="badge bg-info">{{ $testResult->download_count }}</small>
+                                                    </a>
                                                 @else
                                                     NA
                                                 @endif

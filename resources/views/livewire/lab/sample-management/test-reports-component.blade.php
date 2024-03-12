@@ -152,16 +152,16 @@
                                             <td class="action-ico">
                                                 @if ($status == 'Approved')
                                                 <a target="_blank" href="{{ route('result-report', $testResult->id) }}" type="button"
-                                                    class="action-ico btn btn-outline-info me-2"
+                                                    class=" d-none action-ico btn btn-outline-info me-2"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                         class="bi bi-arrow-down-square"></i></a>
 
                                                 <a target="_blank" href="{{ route('print-result-report', $testResult->id) }}" type="button"
-                                                    class="action-ico btn btn-outline-success"
+                                                    class="action-ico btn btn-outline-success btn-sm"
                                                     wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                        class="bi bi-printer"></i></a>
+                                                        class="bi bi-printer"></i>
                                                         <small class="badge bg-info">{{ $testResult->download_count }}</small>
-                                                    
+                                                </a>
                                                 @else
                                                     
                                                 @endif

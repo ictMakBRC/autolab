@@ -11,7 +11,7 @@
             font-family: Nunito, sans-serif;
             font-size: .8rem;
             font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.3;
             color: #000000;
             background-color: #ffffff;
             -webkit-text-size-adjust: 100%;
@@ -103,11 +103,11 @@
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
     <div class="report-wrapper">
-        <div class="row">
+        <div class="row" style="margin-top: -3px">
             {{-- <img src="{{ asset('autolab-assets/images/headers/header-min.png') }}" alt="Makerere University Logo" width="100%"
                 style="vertical-align:middle;"
                 onerror="this.onerror=null;this.src='{{ asset('images/photos/20220130105722.jpg') }}';"> --}}
-            <div style="text-align: center; line-height: 2px">
+            <div style="text-align: center; line-height: 1.7px">
                 <table width="100%" style="text-align: center; line-height: 1px; width:100%; margin-bottom:-16px">
                     <tr style="padding: 0px; margin:0px">
                         <td style="text-align: right ;padding: 0px; margin:0px" width="40%">
@@ -184,7 +184,7 @@
                 </tr>
             </table>
         </div>
-        <div class="col-12 table-responsive" style="font-size:15px; margin-top:20px; text-align: center">
+        <div class="col-12 table-responsive" style="font-size:15px; margin-top:20px; text-align: left">
             <table class="table dt-responsive nowrap" width="100%">
                 <tbody>
                     {{-- SAMPLE AND TEST DETAILS --}}
@@ -354,7 +354,6 @@
                     </tbody>
                 </table>
             @endif
-            <br>
             <table class="table dt-responsive nowrap" width="100%" style="text-align: center; ">
                 <tbody>
                     <tr style="font-size:9px;">
