@@ -371,7 +371,7 @@
                         <td class="btop">
                             @if ($testResult->performer->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->performer?->signature ?? '') }}"
-                                    alt="" height="5%" width="30%"><br>
+                                    alt=""  width="120px"><br>
                             @endif
                             _____________________
                             <br>
@@ -383,7 +383,7 @@
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->reviewer?->signature ?? '') }}"
-                                    alt="" height="5%" width="30%"><br>
+                                    alt=""  width="120px"><br>
                             @endif
                             _____________________
                             <br>
@@ -394,7 +394,7 @@
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->approver?->signature ?? '') }}"
-                                    alt="" height="5%" width="30%"><br>
+                                    alt=""  width="120px"><br>
                             @endif
                             _____________________
                             <br>
