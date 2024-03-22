@@ -355,7 +355,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if ($test)
+                    @if (isset($test) && $test)
                         <div class="row">
                             <div class="mb-0">
                                 <div class="table-responsive">
