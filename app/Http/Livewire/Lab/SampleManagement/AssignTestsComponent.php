@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
-use App\Models\AliquotingAssignment;
-use App\Models\Sample;
-use App\Models\SampleType;
-use App\Models\TestAssignment;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\SampleType;
 use Livewire\WithPagination;
+use App\Models\TestAssignment;
+use App\Models\AliquotingAssignment;
+use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendGeneralNotificationJob;
+use Illuminate\Support\Facades\URL;
 
 class AssignTestsComponent extends Component
 {
@@ -124,7 +126,7 @@ class AssignTestsComponent extends Component
             $test_assignment = new TestAssignment();
             $test_assignment->sample_id = $this->sample_id;
             $test_assignment->test_id = $this->test_id;
-            $test_assignment->assignee = $this->assignee;
+            $test_assignment->assignee = $this->assignee; 
             $test_assignment->save();
 
             array_push($this->assignedTests,$this->test_id);
@@ -138,6 +140,19 @@ class AssignTestsComponent extends Component
                 $this->reset(['assignee', 'backlog']);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
             }
+
+            $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'You have been assigned a new test, please login and do the necessary requirement',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' => $this->assignee,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
         }
     }
 
@@ -154,7 +169,18 @@ class AssignTestsComponent extends Component
             );
             array_push($this->assignedTests,$test->id);
         }
-
+        $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'You have been assigned a new test, please login and do the necessary requirement',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' => $this->assignee,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
         if (array_diff($this->sample->tests_requested, $this->assignedTests) == []) {
             $this->sample->update(['status' => 'Assigned']);
             $this->reset(['assignee', 'backlog']);

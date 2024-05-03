@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\TestResult;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendGeneralNotificationJob;
 
 class TestApprovalComponent extends Component
 {
@@ -42,6 +44,18 @@ class TestApprovalComponent extends Component
         $testResult->status = 'Approved';
         $testResult->approver_comment = $this->approver_comment;
         $testResult->update();
+        $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'Your test has been approved, please login and do the necessary requirement',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' =>  $testResult->created_by,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
         $this->emit('updateNav', 'testsPendindApprovalCount');
 
         $this->reset('approver_comment');
@@ -63,6 +77,18 @@ class TestApprovalComponent extends Component
         $this->emit('updateNav', 'testsPendindApprovalCount');
 
         $this->reset('approver_comment');
+         $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'Your test has been Rejected, please login and do the necessary requirement',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' =>  $testResult->created_by,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);
     }
