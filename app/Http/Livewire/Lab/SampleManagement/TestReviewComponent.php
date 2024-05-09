@@ -56,7 +56,7 @@ class TestReviewComponent extends Component
             'body' => 'You have a pending test Lab No#'.$testResult?->sample?->lab_no.' to Approve, please login and do the necessary action',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
-            'user_id' => $testResult->laboratory->test_reviewer??1,
+            'user_id' => $testResult->laboratory->test_approver??1,
         ];
         try {
             $email = SendGeneralNotificationJob::dispatch($details);
