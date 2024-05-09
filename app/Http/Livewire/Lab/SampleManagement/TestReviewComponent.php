@@ -53,7 +53,7 @@ class TestReviewComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have a pending test Lab No#'.$testResult?->sample?->lab_no.' to Approve, please login and do the necessary action',
+            'body' => 'You have a pending test Lab No#'.$testResult?->sample?->lab_no.' to Approve, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $testResult->laboratory->test_approver??1,
@@ -83,7 +83,7 @@ class TestReviewComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'Your test result Lab No#'.$testResult?->sample?->lab_no.' has been Rejected at review level, please login and do the necessary action',
+            'body' => 'Your test result Lab No#'.$testResult?->sample?->lab_no.' has been Rejected at review level, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' =>  $testResult->created_by,

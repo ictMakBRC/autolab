@@ -47,7 +47,7 @@ class TestApprovalComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'Your test Result Lab No#'.$testResult?->sample?->lab_no.' has been approved, please login and do the necessary action',
+            'body' => 'Your test Result Lab No#'.$testResult?->sample?->lab_no.' has been approved, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' =>  $testResult->created_by,
@@ -80,7 +80,7 @@ class TestApprovalComponent extends Component
          $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'Your test result Lab No#'.$testResult?->sample?->lab_no.' has been Rejected, please login and do the necessary action',
+            'body' => 'Your test result Lab No#'.$testResult?->sample?->lab_no.' has been Rejected, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' =>  $testResult->created_by,

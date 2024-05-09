@@ -214,7 +214,7 @@ class AttachTestResultComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have a pending test Lab No#'.$this->myTest?->sample?->lab_no.' to review, please login and do the necessary action',
+            'body' => 'You have a pending test Lab No#'.$this->myTest?->sample?->lab_no.' to review, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->myTest->laboratory->test_reviewer??1,

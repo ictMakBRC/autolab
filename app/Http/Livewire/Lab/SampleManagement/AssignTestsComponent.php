@@ -144,7 +144,7 @@ class AssignTestsComponent extends Component
             $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have been assigned a new test Lab No#'.$test_assignment->sample->lab_no.', please login and do the necessary action',
+            'body' => 'You have been assigned a new test Lab No#'.$test_assignment->sample->lab_no.', Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->assignee,
@@ -175,7 +175,7 @@ class AssignTestsComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have been assigned a multiple tests #'.$labNos.', please login and do the necessary action',
+            'body' => 'You have been assigned a multiple tests #'.$labNos.', Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->assignee,
