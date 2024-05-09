@@ -156,25 +156,26 @@ class AssignTestsComponent extends Component
         }
     }
 
-    public $myTests = [];
+  
     public function assignAllTests()
     {
         $this->validate([
             'assignee' => 'required|integer',
         ]);
-
+        $assigned = [];
         foreach ($this->tests_requested  as $test) {
            $myTest = TestAssignment::updateOrCreate(
                 ['sample_id'=>$this->sample_id,'test_id'=>$test->id],
                 ['assignee'=>$this->assignee]
             );
             array_push($this->assignedTests,$test->id);
-            $this->myTests = array_push($test->sample->lab_no);
+            $assigned = ['Lab No' => $myTest->sample->lab_no,];
         }
+        $labNos = json_encode($assigned);
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have been assigned a multiple tests #'.$this->myTests.', please login and do the necessary action',
+            'body' => 'You have been assigned a multiple tests #'.$labNos.', please login and do the necessary action',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->assignee,
