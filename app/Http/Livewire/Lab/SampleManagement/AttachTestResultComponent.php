@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Admin\Test;
 use App\Models\Kit;
-use App\Models\Sample;
-use App\Models\TestAssignment;
-use App\Models\TestResult;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Sample;
 use Livewire\Component;
+use App\Models\Admin\Test;
+use App\Models\TestResult;
 use Livewire\WithFileUploads;
+use App\Models\TestAssignment;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use App\Jobs\SendGeneralNotificationJob;
+use Illuminate\Database\Eloquent\Builder;
 
 class AttachTestResultComponent extends Component
 {
@@ -147,12 +149,13 @@ class AttachTestResultComponent extends Component
             }
         }
     } 
+    public $myTest;
     public function saveResults()
     {
         DB::transaction(function () {
 
             
-            $testResult = new TestResult();
+           $this->myTest = $testResult = new TestResult();
             $testResult->sample_id = $this->sample_id;
             $testResult->test_id = $this->test_id;
             if ($this->link != null) {
@@ -208,6 +211,18 @@ class AttachTestResultComponent extends Component
             }
         }
 
+        $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'You have a pending test Lab No#'.$this->myTest?->sample?->lab_no.' to review, please login and do the necessary action',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' => $this->myTest->laboratory->test_reviewer??1,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
         $this->resetResultInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }

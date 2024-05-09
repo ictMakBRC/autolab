@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\TestResult;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\TestResult;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendGeneralNotificationJob;
 
 class TestReviewComponent extends Component
 {
@@ -48,6 +50,18 @@ class TestReviewComponent extends Component
         $this->reset('reviewer_comment');
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);
+        $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'You have a pending test Lab No#'.$testResult?->sample?->lab_no.' to Approve, please login and do the necessary action',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' => $testResult->laboratory->test_reviewer??1,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
     }
 
     public function markAsDeclined(TestResult $testResult)
@@ -66,6 +80,18 @@ class TestReviewComponent extends Component
         $this->reset('reviewer_comment');
         $this->viewReport = false;
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully.!']);
+        $details = [
+            'subject' => 'Auto-Lab Test',
+            'greeting' => 'Hello, I hope this email finds you well',
+            'body' => 'Your test result Lab No#'.$testResult?->sample?->lab_no.' has been Rejected at review level, please login and do the necessary action',
+            'actiontext' => 'Click Here for more details',
+            'actionurl' => URL::signedRoute('test-request'),
+            'user_id' =>  $testResult->created_by,
+        ];
+        try {
+            $email = SendGeneralNotificationJob::dispatch($details);
+        } catch (\Throwable $th) {
+        }
     }
 
     public function viewPreliminaryReport(TestResult $testResult)
