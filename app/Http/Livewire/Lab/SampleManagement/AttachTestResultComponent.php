@@ -155,7 +155,8 @@ class AttachTestResultComponent extends Component
         DB::transaction(function () {
 
             
-           $this->myTest = $testResult = new TestResult();
+            $testResult = new TestResult();
+           
             $testResult->sample_id = $this->sample_id;
             $testResult->test_id = $this->test_id;
             if ($this->link != null) {
@@ -183,7 +184,6 @@ class AttachTestResultComponent extends Component
             $testResult->kit_expiry_date = $this->kit_expiry_date;
             $testResult->status = 'Pending Review';
             $testResult->save();
-
             array_push($this->tests_performed, "{$testResult->test_id}");
             $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
             $this->sample->update(['tests_performed' => $this->tests_performed]);
@@ -197,6 +197,7 @@ class AttachTestResultComponent extends Component
             if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
                 redirect()->route('test-request');
             }
+            
         });
 
         $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
@@ -214,10 +215,10 @@ class AttachTestResultComponent extends Component
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have a pending test Lab No#'.$this->myTest?->sample?->lab_no.' to review, Please log in and take the necessary actions.',
+            'body' => 'You have a pending test Lab No#'.$this->sample?->lab_no.' to review, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
-            'user_id' => $this->myTest->laboratory->test_reviewer??1,
+            'user_id' => $this->sample->laboratory->test_reviewer??1,
         ];
         try {
             $email = SendGeneralNotificationJob::dispatch($details);

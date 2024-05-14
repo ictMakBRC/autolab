@@ -85,6 +85,11 @@ class TestResult extends Model
         return $this->belongsTo(User::class, 'performed_by', 'id');
     }
 
+    public function laboratory()
+    {
+        return $this->belongsTo(Laboratory::class, 'creator_lab', 'id');
+    }
+
     public function reviewer()
     {
         return $this->belongsTo(User::class, 'reviewed_by', 'id');
@@ -93,6 +98,12 @@ class TestResult extends Model
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
+    
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     protected function createdAt(): Attribute
