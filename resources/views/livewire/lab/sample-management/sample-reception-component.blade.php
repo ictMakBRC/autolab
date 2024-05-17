@@ -137,6 +137,17 @@
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb- col-md-1">
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" value="1"
+                                                id="is_paternity" checked wire:model="is_paternity">
+                                            <label class="form-check-label" for="is_paternity">Is paternity
+                                                Test?</label>
+                                        </div>
+                                        @error('is_paternity')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="mb-1 col-md-4">
                                         <label for="comment" class="form-label">Comment</label>
                                         <textarea type="text" id="comment" class="form-control" wire:model.lazy="comment"></textarea>

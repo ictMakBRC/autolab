@@ -44,6 +44,7 @@ use App\Http\Livewire\Lab\SampleManagement\ResultAmendmentComponent;
 use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
 use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
+use App\Http\Livewire\Lab\SampleManagement\PaternitySpecimenRequest;
 use App\Http\Livewire\Lab\SampleManagement\TestRejectedComponent;
 use App\Http\Livewire\Reports\GeneralReportComponent;
 
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
     Route::group(['prefix' => 'samplemgt'], function () {
         Route::get('reception', SampleReceptionComponent::class)->middleware('permission:create-reception-info')->name('samplereception');
         Route::get('batch/{batch}/specimen-req', SpecimenRequestComponent::class)->middleware('permission:accession-samples')->name('specimen-request');
+        Route::get('batch/{batch}/paternity-req', PaternitySpecimenRequest::class)->middleware('permission:accession-samples')->name('paternity-test-reception');
         Route::get('testAssignment', AssignTestsComponent::class)->middleware('permission:assign-test-requests')->name('test-request-assignment');
         Route::get('testRequests', TestRequestComponent::class)->middleware('permission:acknowledge-test-request')->name('test-request');
         Route::get('sample/{id}/testResults', AttachTestResultComponent::class)->middleware('permission:enter-results', 'signed')->name('attach-test-results');

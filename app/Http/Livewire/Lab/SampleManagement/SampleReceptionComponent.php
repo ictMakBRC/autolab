@@ -108,6 +108,8 @@ class SampleReceptionComponent extends Component
 
     public $studies;
 
+    public $is_paternity = false;
+
     protected $paginationTheme = 'bootstrap';
 
     public function updatingSearch()
@@ -200,10 +202,14 @@ class SampleReceptionComponent extends Component
         $sampleReception->received_by = $this->received_by;
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
+        $sampleReception->is_paternity = $this->is_paternity??false;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->comment = $this->comment ?? null;
         $sampleReception->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
+        if($sampleReception->is_paternity==true){
+            return to_route('paternity-test-reception',$sampleReception->batch_no);
+        }
         $this->resetInputs();
     }
 
@@ -220,7 +226,7 @@ class SampleReceptionComponent extends Component
         $this->facility_id = $sampleReception->facility_id;
         $this->courier_id = $sampleReception->courier_id;
         $this->comment = $sampleReception->comment;
-
+        $this->is_paternity = $sampleReception->is_paternity??false;
         $this->couriers = Courier::where('facility_id', $sampleReception->facility_id)->latest()->get();
 
         $this->toggleForm = true;
@@ -277,6 +283,7 @@ class SampleReceptionComponent extends Component
         $sampleReception->samples_accepted = $this->samples_accepted;
         $sampleReception->samples_rejected = $this->samples_rejected;
         $sampleReception->received_by = $this->received_by;
+        $sampleReception->is_paternity = $this->is_paternity??false;
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
@@ -349,7 +356,7 @@ class SampleReceptionComponent extends Component
         $courier->save();
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
-        $this->reset(['couriername', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
+        $this->reset(['couriername','is_paternity', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
 
         $this->dispatchBrowserEvent('close-modal');
     }
