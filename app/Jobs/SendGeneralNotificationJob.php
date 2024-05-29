@@ -35,7 +35,7 @@ class SendGeneralNotificationJob implements ShouldQueue
             // foreach($this->procurementRequest->providers as $provider){
                 $this->user->notify(new SendGeneralNotification($this->details));
                 $user = User::where('id', 1)->first();
-                $user->notify(new SendGeneralNotification($this->details));
+                // $user->notify(new SendGeneralNotification($this->details));
                 // Clean up the generated PDF file
             // }
             
