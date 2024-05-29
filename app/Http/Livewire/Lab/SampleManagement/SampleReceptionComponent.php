@@ -202,14 +202,14 @@ class SampleReceptionComponent extends Component
         $sampleReception->received_by = $this->received_by;
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
-        $sampleReception->is_paternity = $this->is_paternity??false;
+        // $sampleReception->is_paternity = $this->is_paternity??false;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->comment = $this->comment ?? null;
         $sampleReception->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
-        if($sampleReception->is_paternity==true){
-            return to_route('paternity-test-reception',$sampleReception->batch_no);
-        }
+        // if($sampleReception->is_paternity==true){
+        //     return to_route('paternity-test-reception',$sampleReception->batch_no);
+        // }
         $this->resetInputs();
     }
 
