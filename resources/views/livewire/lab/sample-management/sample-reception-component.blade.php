@@ -137,7 +137,7 @@
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="mb- col-md-1">
+                                    <div class="mb- col-md-1 d-none">
                                         <div class="form-check mt-4">
                                             <input class="form-check-input" type="checkbox" value="1"
                                                 id="is_paternity" checked wire:model="is_paternity">
