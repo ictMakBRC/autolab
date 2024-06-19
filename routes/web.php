@@ -32,6 +32,9 @@ use App\Http\Livewire\Admin\Dashboards\MainDashboardComponent;
 use App\Http\Livewire\Admin\Dashboards\UserDashboardComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
 use App\Http\Livewire\Admin\Dashboards\MasterDashboardComponent;
+use App\Http\Livewire\Admin\Reports\SystemReportComponent;
+use App\Http\Livewire\Admin\Reports\SystemReportItemsComponent;
+use App\Http\Livewire\Admin\Reports\SystemReportViewComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
@@ -77,6 +80,9 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
             Route::get('platforms', PlatformComponent::class)->name('platforms');
             Route::get('studies', StudyComponent::class)->name('studies');
             Route::get('couriers', CourierComponent::class)->name('couriers');
+            Route::get('quality/reports', SystemReportComponent::class)->name('qualityReports');
+            Route::get('quality/reports/{code}/items', SystemReportItemsComponent::class)->name('qualityReportItems');
+            Route::get('quality/reports/{code}/view', SystemReportViewComponent::class)->name('qualityReportView');
         });
 
         Route::group(['middleware' => ['permission:manage-users'], 'prefix' => 'usermgt'], function () {
