@@ -257,7 +257,7 @@
                                             </td>
                                             <td class="action-ico">
                                                 @if (Auth::user()->hasPermission(['view-participant-info']))
-                                                    <a  href="{{ route('print-result-report', $testResult->id) }}"
+                                                    <a target="_blank"  href="{{ route('print-result-report', $testResult->id) }}"
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Result Report"
