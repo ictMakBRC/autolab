@@ -62,6 +62,7 @@ class SystemReportComponent extends Component
         ]);
 
         $SystemReport = new SystemReport();    
+        $SystemReport->facility_id= auth()->user()->laboratory_id;
         $SystemReport->report_date = $this->report_date;
         $SystemReport->ref_code = 'SQCR'.date('ym').'_'.time();
         $SystemReport->save();

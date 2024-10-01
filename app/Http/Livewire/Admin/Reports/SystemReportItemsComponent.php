@@ -25,6 +25,11 @@ class SystemReportItemsComponent extends Component
             'details' => 'nullable',
         ]);
 
+        $record = SystemReportItem::where(['system_report_id'=>$this->report->id, 'module' => $this->module])->firs();
+        if($record){
+            $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Record already exists!']);
+            return;
+        }
         $SystemReport = new SystemReportItem();    
         $SystemReport->system_report_id = $this->report->id;
         $SystemReport->score = $this->score;
@@ -35,6 +40,12 @@ class SystemReportItemsComponent extends Component
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Record created successfully!']);
   
+    }
+    public function saveReport()
+    {
+        $this->report->update(['status'=>'Submitted']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'SystemReport created successfully!']);
+        return redirect()->SignedRoute('qualityReportItems', $this->report->ref_code);
     }
 
 
