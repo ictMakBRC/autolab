@@ -274,6 +274,9 @@
                             <a href="{{ route('sampletypes') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Sample Types<x-count-badge>{{ $sampleTypeCount }}
                                 </x-count-badge></a>
+                            <a href="{{ route('qualityReports') }}" class="list-group-item"><i
+                                    class="bx bxs-vial"></i>Quality Reports<x-count-badge>{{ $sampleTypeCount }}
+                                </x-count-badge></a>
                         </div>
                     </div>
                 @endif

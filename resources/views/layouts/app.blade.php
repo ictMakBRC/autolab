@@ -78,7 +78,7 @@
     <!--app-->
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/sort.js') }}"></script>
-    {{-- <script src="{{ asset('autolab-assets/js/index.js') }}"></script> --}}
+    <script src="{{ asset('autolab-assets/js/ckeditor.js') }}"></script>
 
     <!-- Datatables JS -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

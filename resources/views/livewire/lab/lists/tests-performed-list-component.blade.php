@@ -256,8 +256,8 @@
                                                 <span class="badge bg-success">{{ $testResult->status }}</span>
                                             </td>
                                             <td class="action-ico">
-                                                @if ($testResult->status == 'Approved')
-                                                    <a  href="{{ route('print-result-report', $testResult->id) }}"
+                                                @if (Auth::user()->hasPermission(['view-participant-info']))
+                                                    <a target="_blank"  href="{{ route('print-result-report', $testResult->id) }}"
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Result Report"
