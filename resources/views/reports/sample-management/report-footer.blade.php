@@ -13,7 +13,7 @@
             </td>
             <td  style="font-size:10px; text-align:center">
                 <img width="186px" height="112px" src="{{asset('autolab-assets/images/stamp.png')}}" alt="">
-                <div style=" position: absolute; top: 35%; left: 77%;color: red">
+                <div style=" position: absolute; top: 34%; left: 77%;color: red">
                     <h2 style="text-transform: uppercase; font-family: 'Arial Black', serif; font-size: 16px;font-weight: bold;">{{date('d M Y')}}</h2></div>
             </td>
         </tr>
