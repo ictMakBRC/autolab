@@ -255,16 +255,16 @@ class SpecimenRequestComponent extends Component
         $facility = Facility::findOrFail($this->facility_id);
 
         $participant = Participant::where(['identity' => $this->identity, 'facility_id' => $this->facility_id])
-        ->whereIn('study_id', auth()->user()->laboratory->associated_studies)
-        ->orWhere(function ($query) {
-            $query->where(['identity' => $this->identity, 'facility_id' => $this->facility_id, 'creator_lab' => auth()->user()->laboratory_id]);
-        })
-        ->orWhere(function ($query)use($facility) {
-            $query->where(['identity' => $this->identity])->whereHas('study',function($query) use($facility){
-                $query->whereIn('id',$facility->associated_studies??[]);
-            });
-        })
-        ->first();
+            ->whereIn('study_id', auth()->user()->laboratory->associated_studies)
+            ->orWhere(function ($query) {
+                $query->where(['identity' => $this->identity, 'facility_id' => $this->facility_id, 'creator_lab' => auth()->user()->laboratory_id]);
+            })
+            ->orWhere(function ($query) use ($facility) {
+                $query->where(['identity' => $this->identity])->whereHas('study', function ($query) use ($facility) {
+                    $query->whereIn('id', $facility->associated_studies ?? []);
+                });
+            })
+            ->first();
 
         if ($participant) {
             $lastSampleEntry = Sample::where(['participant_id' => $participant->id, 'creator_lab' => auth()->user()->laboratory_id])->latest()->first();
@@ -282,10 +282,31 @@ class SpecimenRequestComponent extends Component
             $this->nok_address = $participant->nok_address;
             $this->clinical_notes = $participant->clinical_notes;
         } else {
-            $this->reset(['age', 'months' ,'gender', 'contact', 'address',
-                'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
-                'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
-                'occupation', 'civil_status', 'nok', 'nok_relationship', ]);
+            $this->reset([
+                'age',
+                'months',
+                'gender',
+                'contact',
+                'address',
+                'nok_contact',
+                'nok_address',
+                'clinical_notes',
+                'title',
+                'nin_number',
+                'surname',
+                'first_name',
+                'other_name',
+                'nationality',
+                'district',
+                'dob',
+                'email',
+                'birth_place',
+                'religious_affiliation',
+                'occupation',
+                'civil_status',
+                'nok',
+                'nok_relationship',
+            ]);
             $this->participantMatch = false;
         }
     }
@@ -340,11 +361,11 @@ class SpecimenRequestComponent extends Component
             $response = $client->request('GET', 'https://crs.co.ug/api/get-patient/', ['query' => [
                 'pat_no' => $patient_no,
                 'token' => 'ASHS773HD8883HDXHDHY',
-                ]]);
+            ]]);
 
-                $crsparticipant = json_decode($response->getBody(), true);
-                if($crsparticipant != null){
-                foreach  ($crsparticipant as $participant){
+            $crsparticipant = json_decode($response->getBody(), true);
+            if ($crsparticipant != null) {
+                foreach ($crsparticipant as $participant) {
                     $this->entry_type = 'CRS Patient';
                     $this->identity = $participant['pat_no'];
                     $this->age = $participant['age'];
@@ -365,31 +386,65 @@ class SpecimenRequestComponent extends Component
                     $this->birth_place = null;
 
                     $this->toggleForm = false;
-                    $this->patient_found= true;
+                    $this->patient_found = true;
                     $this->activeParticipantTab = true;
-                    }
-
-                }else{
-                    $this->patient_found= false;
-                    $this->reset(['age', 'gender', 'contact', 'address',
-                    'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
-                    'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
-                    'occupation', 'civil_status', 'nok', 'nok_relationship', 'patno']);
                 }
-
+            } else {
+                $this->patient_found = false;
+                $this->reset([
+                    'age',
+                    'gender',
+                    'contact',
+                    'address',
+                    'nok_contact',
+                    'nok_address',
+                    'clinical_notes',
+                    'title',
+                    'nin_number',
+                    'surname',
+                    'first_name',
+                    'other_name',
+                    'nationality',
+                    'district',
+                    'dob',
+                    'email',
+                    'birth_place',
+                    'religious_affiliation',
+                    'occupation',
+                    'civil_status',
+                    'nok',
+                    'nok_relationship',
+                    'patno'
+                ]);
+            }
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $this->patient_found= false;
-            $this->reset(['age', 'gender', 'contact', 'address',
-            'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
-            'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation',
-            'occupation', 'civil_status', 'nok', 'nok_relationship', 'patno']);
-
+            $this->patient_found = false;
+            $this->reset([
+                'age',
+                'gender',
+                'contact',
+                'address',
+                'nok_contact',
+                'nok_address',
+                'clinical_notes',
+                'title',
+                'nin_number',
+                'surname',
+                'first_name',
+                'other_name',
+                'nationality',
+                'district',
+                'dob',
+                'email',
+                'birth_place',
+                'religious_affiliation',
+                'occupation',
+                'civil_status',
+                'nok',
+                'nok_relationship',
+                'patno'
+            ]);
         }
-
-
-
-
-
     }
 
     public function storeParticipant()
@@ -418,11 +473,11 @@ class SpecimenRequestComponent extends Component
 
                 if ($this->entry_type == 'Participant') {
                     $this->validate([
-                        'identity' => 'required|string|unique:participants',
+                        'identity' => 'required|string',
                     ]);
                 }
             }
-                try{
+            try {
                 $participant = new Participant();
                 $patNo = Generate::participantNo();
                 $participant->participant_no = $patNo;
@@ -465,9 +520,9 @@ class SpecimenRequestComponent extends Component
                 $this->activeParticipantTab = false;
                 $this->resetParticipantInputs();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data Recorded successfully!']);
-                } catch(Exception $error) {
-                    $participant = Participant::where('identity',$this->identity)->first();
-                    if($participant){                        
+            } catch (Exception $error) {
+                $participant = Participant::where('identity', $this->identity)->first();
+                if ($participant) {
                     $participant->identity = $this->identity;
                     $participant->age = $this->age;
                     $participant->months = $this->months ?? null;
@@ -499,10 +554,10 @@ class SpecimenRequestComponent extends Component
                     $this->activeParticipantTab = false;
                     $this->resetParticipantInputs();
                     $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Participant Data updated successfully!']);
-                    }else{
-                        $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Participant Data not updateds!']);
-                    }
+                } else {
+                    $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Participant Data not updateds!']);
                 }
+            }
         }
     }
 
@@ -672,7 +727,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
+            'date_requested' => 'required|date|before_or_equal:' . date('Y-m-d', strtotime($this->date_delivered)),
             'sample_identity' => 'required|string|unique:samples',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
@@ -695,7 +750,7 @@ class SpecimenRequestComponent extends Component
             $this->validate([
                 'collected_by' => 'required|integer',
                 'sample_identity' => 'required|string|unique:samples',
-                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
+                'date_collected' => 'required|date|before_or_equal:' . date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
 
@@ -814,7 +869,7 @@ class SpecimenRequestComponent extends Component
     {
         $this->validate([
             'requested_by' => 'required|integer',
-            'date_requested' => 'required|date|before_or_equal:'.date('Y-m-d', strtotime($this->date_delivered)),
+            'date_requested' => 'required|date|before_or_equal:' . date('Y-m-d', strtotime($this->date_delivered)),
             'sample_identity' => 'required|string',
             'sample_is_for' => 'required|string',
             'priority' => 'required|string',
@@ -834,7 +889,7 @@ class SpecimenRequestComponent extends Component
         if (! $this->is_isolate) {
             $this->validate([
                 'collected_by' => 'required|integer',
-                'date_collected' => 'required|date|before_or_equal:'.date('Y-m-d H:i', strtotime($this->date_delivered)),
+                'date_collected' => 'required|date|before_or_equal:' . date('Y-m-d H:i', strtotime($this->date_delivered)),
             ]);
         }
         if ($this->entry_type != 'Client') {
@@ -878,16 +933,59 @@ class SpecimenRequestComponent extends Component
 
     public function resetParticipantInputs()
     {
-        $this->reset(['identity', 'age', 'months', 'gender', 'contact', 'address',
-            'nok_contact', 'nok_address', 'clinical_notes', 'title', 'nin_number', 'surname', 'first_name',
-            'other_name', 'nationality', 'district', 'dob', 'email', 'birth_place', 'religious_affiliation', 'participantMatch',
-            'occupation', 'civil_status', 'nok', 'nok_relationship', 'matched_participant_id', 'patno']);
+        $this->reset([
+            'identity',
+            'age',
+            'months',
+            'gender',
+            'contact',
+            'address',
+            'nok_contact',
+            'nok_address',
+            'clinical_notes',
+            'title',
+            'nin_number',
+            'surname',
+            'first_name',
+            'other_name',
+            'nationality',
+            'district',
+            'dob',
+            'email',
+            'birth_place',
+            'religious_affiliation',
+            'participantMatch',
+            'occupation',
+            'civil_status',
+            'nok',
+            'nok_relationship',
+            'matched_participant_id',
+            'patno'
+        ]);
     }
 
     public function resetSampleInformationInputs()
     {
-        $this->reset(['sample_id', 'participant_id', 'visit', 'volume', 'sample_type_id', 'sample_identity', 'requested_by', 'is_isolate',
-            'date_requested', 'collected_by', 'date_collected', 'study_id', 'sample_is_for', 'priority', 'tests_requested', 'aliquots_requested', 'matched_participant_id', 'participantMatch', ]);
+        $this->reset([
+            'sample_id',
+            'participant_id',
+            'visit',
+            'volume',
+            'sample_type_id',
+            'sample_identity',
+            'requested_by',
+            'is_isolate',
+            'date_requested',
+            'collected_by',
+            'date_collected',
+            'study_id',
+            'sample_is_for',
+            'priority',
+            'tests_requested',
+            'aliquots_requested',
+            'matched_participant_id',
+            'participantMatch',
+        ]);
     }
 
     public function deleteConfirmation($id)
@@ -902,19 +1000,17 @@ class SpecimenRequestComponent extends Component
         $sampleReception = SampleReception::where('id', $sample->sample_reception_id)->first();
 
         try {
-            if($sample->status=='Accessioned'){
+            if ($sample->status == 'Accessioned') {
 
                 $sampleReception->decrement('samples_handled');
                 $sample->delete();
                 $this->delete_id = null;
                 $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Information deleted successfully!']);
-
-            }else{
+            } else {
                 $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
             }
-
-        } catch(Exception $error) {
+        } catch (Exception $error) {
             $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Sample Information can not be deleted!']);
         }
     }
@@ -940,8 +1036,8 @@ class SpecimenRequestComponent extends Component
 
     public function render()
     {
-        $collectors = Collector::where(['facility_id' => $this->facility_id,'is_active'=>true])->orderBy('name', 'asc')->get();
-        $requesters = Requester::where(['facility_id' => $this->facility_id,'is_active'=>true])->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
+        $collectors = Collector::where(['facility_id' => $this->facility_id, 'is_active' => true])->orderBy('name', 'asc')->get();
+        $requesters = Requester::where(['facility_id' => $this->facility_id, 'is_active' => true])->whereIn('study_id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
         $studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->with('requester:id,name')->orderBy('name', 'asc')->get();
         $sampleTypes = SampleType::orderBy('type', 'asc')->get();
         $samples = Sample::where(['creator_lab' => auth()->user()->laboratory_id, 'sample_reception_id' => $this->sample_reception_id])->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name'])->latest()->get();
