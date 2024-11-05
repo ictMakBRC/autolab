@@ -2,7 +2,7 @@
 
     <table width="100%" style="margin-top:0.1px; margin-bottom:-8px; padding:1px">
         <tr>
-            <td colspan="3" style="font-size:10px; text-align:center">
+            <td colspan="2" style="font-size:10px; text-align:center">
 
                 <img width="160px" style="margin-right:1px; " src="{{ asset('autolab-assets/images/sanas.png') }}"
                     alt="SANAS#M0857">
@@ -11,14 +11,14 @@
                 </p>
 
             </td>
-            {{-- <td style="font-size:10px; text-align:center">
+            <td style="font-size:10px; text-align:center">
                 <img width="180px" height="100px" src="{{ asset('autolab-assets/images/stamp.png') }}" alt="">
-                <div style=" position: absolute; top: 34%; left: 77%;color: red">
+                <div style=" position: absolute; top: 34%; left: 79%;color: red">
                     <h2
                         style="text-transform: uppercase; font-family: 'Arial Black', serif; font-size: 16px;font-weight: bold;">
                         {{ date('d M Y') }}</h2>
                 </div>
-            </td> --}}
+            </td>
         </tr>
         <tr>
             <td colspan="3"style="text-align:center;  font-size:10px; color:#070707">
