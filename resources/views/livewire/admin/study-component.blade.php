@@ -56,8 +56,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $study->name }}</td>
-                                        <td>{{ $study->description ? $study->description : 'N/A' }}</td>
-                                        <td>{{ $study->facility ? $study->facility->name : 'N/A' }}</td>
+                                        <td>{{ $study->description ? $study?->description : 'N/A' }}</td>
+                                        <td>{{ $study->facility ? $study?->facility?->name : 'N/A' }}</td>
                                         @if ($study->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
@@ -65,7 +65,7 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($study->created_at)) }}</td>
                                         <td class="table-action">
-                                            @if ($study->facility->is_active == 0)
+                                            @if ($study?->facility?->is_active == 0)
                                                 <a href="javascript: void(0);"
                                                     class="action-ico btn btn-outline-warning mx-1"
                                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
