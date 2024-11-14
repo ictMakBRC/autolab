@@ -288,12 +288,12 @@
                             @forelse ($studies as $study)
                                 <div class="col-md-4">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="{{ $study->id }}"
+                                        <input class="form-check-input" type="checkbox" value="{{ $study?->id }}"
                                             id="associated_studies{{ $study->id }}" checked
                                             wire:model="associated_studies">
                                         <label class="form-check-label"
                                             for="associated_studies{{ $study->id }}"><strong
-                                                class="text-info">{{ $study->name }}</strong>{{ ' (' . $study->facility->name . ')' }}</label>
+                                                class="text-info">{{ $study?->name }}</strong>{{ ' (' . $study?->facility?->name . ')' }}</label>
                                     </div>
                                 </div>
                             @empty
