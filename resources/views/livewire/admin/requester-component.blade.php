@@ -157,7 +157,6 @@
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-
                             <div class="mb-3 col-md-5">
                                 <label for="study_id" class="form-label">Study/project</label>
                                 <select class="form-select" id="study_id" wire:model="study_id">
