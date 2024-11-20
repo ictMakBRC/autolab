@@ -59,7 +59,7 @@
                                         <td>{{ $requester->name }}</td>
                                         <td>{{ $requester->contact ? $requester->contact : 'N/A' }}</td>
                                         <td>{{ $requester->email ? $requester->email : 'N/A' }}</td>
-                                        <td>{{ $requester->facility ? $requester->facility->name : 'N/A' }}</td>
+                                        <td>{{ $requester->facility ? $requester->facility?->name : 'N/A' }}</td>
                                         <td>{{ $requester->study ? $requester->study->name : 'N/A' }}</td>
                                         @if ($requester->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
@@ -68,7 +68,7 @@
                                         @endif
                                         <td>{{ date('d-m-Y', strtotime($requester->created_at)) }}</td>
                                         <td class="table-action">
-                                            @if ($requester->facility->is_active == 0 || $requester->study->is_active == 0)
+                                            @if ($requester?->facility?->is_active == 0 || $requester->study->is_active == 0)
                                                 <a href="javascript: void(0);"
                                                     class="action-ico btn btn-outline-warning mx-1"
                                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
