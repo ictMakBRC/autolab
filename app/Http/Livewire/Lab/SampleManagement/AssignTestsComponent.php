@@ -82,16 +82,16 @@ class AssignTestsComponent extends Component
         $this->reset(['tests_requested']);
         $this->sample = null;
         $this->sample = $sample;
-        
+
         $this->assignedTests = TestAssignment::where('sample_id', $sample->id)->get()->pluck('test_id')->toArray();
         $tests = Test::whereIn('id', array_diff($sample->tests_requested, $this->assignedTests ?? []))->get();
         $this->tests_requested = $tests;
         $this->test_id = $tests[0]->id;
         $this->sample_id = $sample->id;
         // dd($this->sample->lab_no);
-        $this->labNo=$this->sample->lab_no;
-        $this->sampleId=$this->sample->sample_identity;
-        $this->request_acknowledged_by=$sample->request_acknowledged_by;
+        $this->labNo = $this->sample->lab_no;
+        $this->sampleId = $this->sample->sample_identity;
+        $this->request_acknowledged_by = $sample->request_acknowledged_by;
 
         // $this->dispatchBrowserEvent('view-tests');
     }
@@ -103,7 +103,7 @@ class AssignTestsComponent extends Component
         $aliquots = SampleType::whereIn('id', (array) $sample->tests_requested)->orderBy('type', 'asc')->get();
         $this->aliquots_requested = $aliquots;
         $this->sample_id = $sample->id;
-        $this->request_acknowledged_by=$sample->request_acknowledged_by;
+        $this->request_acknowledged_by = $sample->request_acknowledged_by;
 
         // $this->dispatchBrowserEvent('view-aliquots');
     }
@@ -115,9 +115,9 @@ class AssignTestsComponent extends Component
         ]);
 
         $isExist = TestAssignment::select('*')
-        ->where('sample_id', $this->sample_id)
-        ->where('test_id', $this->test_id)
-        ->exists();
+            ->where('sample_id', $this->sample_id)
+            ->where('test_id', $this->test_id)
+            ->exists();
 
         if ($isExist) {
             $this->dispatchBrowserEvent('close-modal');
@@ -126,37 +126,37 @@ class AssignTestsComponent extends Component
             $test_assignment = new TestAssignment();
             $test_assignment->sample_id = $this->sample_id;
             $test_assignment->test_id = $this->test_id;
-            $test_assignment->assignee = $this->assignee; 
+            $test_assignment->assignee = $this->assignee;
             $test_assignment->save();
 
-            array_push($this->assignedTests,$this->test_id);
+            array_push($this->assignedTests, $this->test_id);
             if (array_diff($this->sample->tests_requested, $this->assignedTests) == []) {
                 $this->sample->update(['status' => 'Assigned']);
                 $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
             } else {
-                $this->tests_requested = $this->tests_requested->where('id','!=',$this->test_id)->values();
+                $this->tests_requested = $this->tests_requested->where('id', '!=', $this->test_id)->values();
                 $this->test_id = $this->tests_requested[0]->id;
                 $this->reset(['assignee', 'backlog']);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
             }
 
             $details = [
-            'subject' => 'Auto-Lab Test',
-            'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have been assigned a new test Lab No#'.$test_assignment->sample->lab_no.', Please log in and take the necessary actions.',
-            'actiontext' => 'Click Here for more details',
-            'actionurl' => URL::signedRoute('test-request'),
-            'user_id' => $this->assignee,
-        ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+                'subject' => 'Auto-Lab Test',
+                'greeting' => 'Hello, I hope this email finds you well',
+                'body' => 'You have been assigned a new test Lab No#' . $test_assignment->sample->lab_no . ', Please log in and take the necessary actions.',
+                'actiontext' => 'Click Here for more details',
+                'actionurl' => URL::signedRoute('test-request'),
+                'user_id' => $this->assignee,
+            ];
+            // try {
+            //     $email = SendGeneralNotificationJob::dispatch($details);
+            // } catch (\Throwable $th) {
+            // }
         }
     }
 
-  
+
     public function assignAllTests()
     {
         $this->validate([
@@ -164,38 +164,37 @@ class AssignTestsComponent extends Component
         ]);
         $assigned = [];
         foreach ($this->tests_requested  as $test) {
-           $myTest = TestAssignment::updateOrCreate(
-                ['sample_id'=>$this->sample_id,'test_id'=>$test->id],
-                ['assignee'=>$this->assignee]
+            $myTest = TestAssignment::updateOrCreate(
+                ['sample_id' => $this->sample_id, 'test_id' => $test->id],
+                ['assignee' => $this->assignee]
             );
-            array_push($this->assignedTests,$test->id);
+            array_push($this->assignedTests, $test->id);
             $assigned = ['Lab No' => $myTest->sample->lab_no,];
         }
         $labNos = json_encode($assigned);
         $details = [
             'subject' => 'Auto-Lab Test',
             'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have been assigned a multiple tests #'.$labNos.', Please log in and take the necessary actions.',
+            'body' => 'You have been assigned a multiple tests #' . $labNos . ', Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->assignee,
         ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+        // try {
+        //     $email = SendGeneralNotificationJob::dispatch($details);
+        // } catch (\Throwable $th) {
+        // }
         if (array_diff($this->sample->tests_requested, $this->assignedTests) == []) {
             $this->sample->update(['status' => 'Assigned']);
             $this->reset(['assignee', 'backlog']);
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assignment completed successfully!']);
         } else {
-            $this->tests_requested = $this->tests_requested->where('id','!=',$this->test_id)->values();
+            $this->tests_requested = $this->tests_requested->where('id', '!=', $this->test_id)->values();
             $this->test_id = $this->tests_requested[0]->id;
             $this->reset(['assignee', 'backlog']);
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Assigned successfully!']);
         }
-
     }
 
     public function assignAliquotingTasks()
@@ -204,8 +203,8 @@ class AssignTestsComponent extends Component
             'assignee' => 'required|integer',
         ]);
         $isExist = AliquotingAssignment::select('*')
-        ->where('sample_id', $this->sample_id)
-        ->exists();
+            ->where('sample_id', $this->sample_id)
+            ->exists();
 
         if ($isExist) {
             $this->dispatchBrowserEvent('close-modal');
@@ -231,17 +230,18 @@ class AssignTestsComponent extends Component
         // $this->sample->date_acknowledged = now();
         // $this->sample->status = 'Processing';
         $this->sample->update([
-        'request_acknowledged_by'=>Auth::id(),
-        'date_acknowledged'=>now(),
-        'status'=>'Processing']);
-        $this->request_acknowledged_by=$this->sample->request_acknowledged_by;
+            'request_acknowledged_by' => Auth::id(),
+            'date_acknowledged' => now(),
+            'status' => 'Processing'
+        ]);
+        $this->request_acknowledged_by = $this->sample->request_acknowledged_by;
 
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Updated successfully!']);
     }
 
     public function close()
     {
-        $this->reset(['sample_id','assignee', 'test_id','sampleId','labNo']);
+        $this->reset(['sample_id', 'assignee', 'test_id', 'sampleId', 'labNo']);
         $this->tests_requested = collect([]);
         $this->aliquots_requested = collect([]);
     }
@@ -249,24 +249,24 @@ class AssignTestsComponent extends Component
     public function getSamples()
     {
         $samples = Sample::search($this->search, ['Accessioned', 'Processing'])
-        ->whereIn('status', ['Accessioned', 'Processing'])
-        ->when($this->sample_is_for != 'Storage', function ($query) {
-            $query->where('test_count', '>', 0)
-            ->whereNotNull('tests_requested');
-        }, function ($query) {
-            return $query;
-        })
-        ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
-        ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+            ->whereIn('status', ['Accessioned', 'Processing'])
+            ->when($this->sample_is_for != 'Storage', function ($query) {
+                $query->where('test_count', '>', 0)
+                    ->whereNotNull('tests_requested');
+            }, function ($query) {
+                return $query;
+            })
+            ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
+            ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         return $samples;
     }
 
     public function getSampleTasks()
     {
-        $sampleTasks= Sample::where(['creator_lab' => auth()->user()->laboratory_id])
-        ->whereIn('status', ['Accessioned', 'Processing'])->get();
+        $sampleTasks = Sample::where(['creator_lab' => auth()->user()->laboratory_id])
+            ->whereIn('status', ['Accessioned', 'Processing'])->get();
 
         $counts['forTestingCount'] = $sampleTasks->filter(function ($sample) {
             return $sample->sample_is_for === 'Testing';
@@ -287,7 +287,7 @@ class AssignTestsComponent extends Component
     public function render()
     {
 
-        $samples=$this->getSamples();
+        $samples = $this->getSamples();
         $users = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $tests = $this->tests_requested;
         $aliquots = $this->aliquots_requested;
@@ -295,6 +295,6 @@ class AssignTestsComponent extends Component
         $forAliquotingCount = $this->getSampleTasks()['forAliquotingCount'];
         $forStorageCount = $this->getSampleTasks()['forStorageCount'];
 
-        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots','forTestingCount','forAliquotingCount','forStorageCount'));
+        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots', 'forTestingCount', 'forAliquotingCount', 'forStorageCount'));
     }
 }
