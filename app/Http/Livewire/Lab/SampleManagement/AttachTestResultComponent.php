@@ -220,10 +220,10 @@ class AttachTestResultComponent extends Component
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $this->sample->laboratory->test_reviewer??1,
         ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+        // try {
+        //     $email = SendGeneralNotificationJob::dispatch($details);
+        // } catch (\Throwable $th) {
+        // }
         $this->resetResultInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
     }

@@ -52,10 +52,10 @@ class TestApprovalComponent extends Component
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' =>  $testResult->created_by,
         ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+        // try {
+        //     $email = SendGeneralNotificationJob::dispatch($details);
+        // } catch (\Throwable $th) {
+        // }
         $this->emit('updateNav', 'testsPendindApprovalCount');
 
         $this->reset('approver_comment');

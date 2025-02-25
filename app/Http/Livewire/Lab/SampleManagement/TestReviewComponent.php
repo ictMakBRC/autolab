@@ -58,10 +58,10 @@ class TestReviewComponent extends Component
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' => $testResult->laboratory->test_approver??1,
         ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+        // try {
+        //     $email = SendGeneralNotificationJob::dispatch($details);
+        // } catch (\Throwable $th) {
+        // }
     }
 
     public function markAsDeclined(TestResult $testResult)
@@ -88,10 +88,10 @@ class TestReviewComponent extends Component
             'actionurl' => URL::signedRoute('test-request'),
             'user_id' =>  $testResult->created_by,
         ];
-        try {
-            $email = SendGeneralNotificationJob::dispatch($details);
-        } catch (\Throwable $th) {
-        }
+        // try {
+        //     $email = SendGeneralNotificationJob::dispatch($details);
+        // } catch (\Throwable $th) {
+        // }
     }
 
     public function viewPreliminaryReport(TestResult $testResult)
