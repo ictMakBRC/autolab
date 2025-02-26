@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lab\SampleManagement\TestResultAmendment;
-use PDF;
-use GuzzleHttp\Client;
 use App\Models\TestResult;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Response;
+use PDF;
 
 class ResultReportController extends Controller
 {
@@ -18,39 +18,39 @@ class ResultReportController extends Controller
      */
     public function show($id)
     {
-        $testResult = TestResult::with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
-       // return View('reports.sample-management.downloadReport', compact('testResult'));
+        $testResult = TestResult::with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
+        // return View('reports.sample-management.downloadReport', compact('testResult'));
         $pdf = PDF::loadView('reports.sample-management.downloadReport', compact('testResult'));
-        $pdf->setPaper('a4', 'portrait');   //horizontal
+        $pdf->setPaper('a4', 'portrait'); //horizontal
         $pdf->getDOMPdf()->set_option('isPhpEnabled', true);
 
-        return  $pdf->stream($testResult->sample->sample_identity.'.pdf');
-
+        return $pdf->stream($testResult->sample->sample_identity . '.pdf');
 
         // return $pdf->download($testResult->sample->participant->identity.rand().'.pdf');
     }
 
     public function print($id)
     {
-        $testResult = TestResult::with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
+        $testResult = TestResult::with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->where('id', $id)->first();
         //return View('reports.sample-management.downloadReport', compact('testResult'));
         return View('reports.sample-management.print-report', compact('testResult'));
-       
+
     }
 
     public function viewOriginallyAmendedResult($id)
     {
-        $testResult = json_decode(TestResultAmendment::where('id', $id)->first()->original_results);
-        // dd($testResult);
+        // dd($id);
+        $testResult = json_decode(TestResultAmendment::where('test_result_id', $id)->first()->original_results ?? null);
+        // $testResult?->original_results ?? [];
         //return View('reports.sample-management.downloadReport', compact('testResult'));
         return View('reports.sample-management.print-original-report', compact('testResult'));
-       
+
     }
 
     public function download($id)
     {
         $result = TestResult::findOrFail($id);
-        $file = storage_path('app/').$result->attachment;
+        $file = storage_path('app/') . $result->attachment;
 
         if (file_exists($file)) {
             return Response::download($file);
@@ -67,16 +67,15 @@ class ResultReportController extends Controller
         $token = "ABC";
 
         $response = $client->request('GET', $endpoint, ['query' => [
-        'pat_no' => $patient_no,
-        // 'key2' => $value,
+            'pat_no' => $patient_no,
+            // 'key2' => $value,
         ]]);
- 
-       
+
         $participant = json_decode($response->getBody(), true);
 
-        foreach  ($participant as $value){
+        foreach ($participant as $value) {
             return $value['given_name'];
         }
-        
+
     }
 }

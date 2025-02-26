@@ -14,17 +14,17 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class TestResult extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory, LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['*'])
-        ->logFillable()
-        ->useLogName('test_results')
-        ->dontLogIfAttributesChangedOnly(['updated_at'])
-        ->logOnlyDirty()
-        ->dontSubmitEmptyLogs();
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('test_results')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
@@ -69,7 +69,6 @@ class TestResult extends Model
         return $this->hasMany(TestResultAmendment::class, 'test_result_id', 'id');
     }
 
-    
     public function test()
     {
         return $this->belongsTo(Test::class, 'test_id', 'id');
@@ -99,8 +98,11 @@ class TestResult extends Model
     {
         return $this->belongsTo(User::class, 'approved_by', 'id');
     }
+    public function amendedBy()
+    {
+        return $this->belongsTo(User::class, 'amended_by', 'id');
+    }
 
-    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
@@ -109,14 +111,14 @@ class TestResult extends Model
     protected function createdAt(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => Carbon::parse($value)->format('d-m-Y H:i'),
+            get: fn($value) => Carbon::parse($value)->format('d-m-Y H:i'),
             // set: fn ($value) =>  Carbon::parse($value)->format('Y-m-d'),
         );
     }
 
     protected $casts = [
         'parameters' => 'array',
-        'results'=>'array',
+        'results' => 'array',
     ];
 
     public static function boot()
@@ -126,7 +128,7 @@ class TestResult extends Model
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
-                $model->tracker = '#'.time().rand(10, 99);
+                $model->tracker = '#' . time() . rand(10, 99);
             });
 
             self::updating(function ($model) {
@@ -143,86 +145,86 @@ class TestResult extends Model
             ->where(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample.participant', function ($query) use ($search) {
-                        $query->where('identity', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample.participant', function ($query) use ($search) {
+                            $query->where('identity', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->where(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample', function ($query) use ($search) {
-                        $query->where('sample_identity', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample', function ($query) use ($search) {
+                            $query->where('sample_identity', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->where(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample', function ($query) use ($search) {
-                        $query->where('sample_no', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample', function ($query) use ($search) {
+                            $query->where('sample_no', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->where(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample', function ($query) use ($search) {
-                        $query->where('lab_no', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample', function ($query) use ($search) {
+                            $query->where('lab_no', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereDate('created_at', date('Y-m-d', strtotime($search)));
+                        ->whereDate('created_at', date('Y-m-d', strtotime($search)));
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->where('tracker', 'like', '%'.$search.'%');
+                        ->where('tracker', 'like', '%' . $search . '%');
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample.study', function ($query) use ($search) {
-                        $query->where('name', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample.study', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample.sampleReception', function ($query) use ($search) {
-                        $query->where('batch_no', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample.sampleReception', function ($query) use ($search) {
+                            $query->where('batch_no', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query
-                    ->where('status', $status)
-                    ->whereHas('sample', function ($query) use ($search) {
-                        $query->where('lab_no',$search);
-                    });
+                        ->where('status', $status)
+                        ->whereHas('sample', function ($query) use ($search) {
+                            $query->where('lab_no', $search);
+                        });
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('sample.requester', function ($query) use ($search) {
-                        $query->where('name', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('sample.requester', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
+                        });
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
                     $query->where('status', $status)
-                    ->whereHas('test', function ($query) use ($search) {
-                        $query->where('name', 'like', '%'.$search.'%');
-                    });
+                        ->whereHas('test', function ($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
+                        });
                 }
             );
     }
@@ -230,10 +232,10 @@ class TestResult extends Model
     public static function targetSearch($search)
     {
         return empty(trim($search)) ? static::query()
-            : static::query()
-                ->where(['creator_lab' => auth()->user()->laboratory_id,
-                    'status' => 'Approved',
-                    'tracker' => trim($search),
-                ]);
+        : static::query()
+            ->where(['creator_lab' => auth()->user()->laboratory_id,
+                'status' => 'Approved',
+                'tracker' => trim($search),
+            ]);
     }
 }

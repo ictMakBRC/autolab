@@ -2,20 +2,13 @@
 
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use Exception;
 use App\Models\Kit;
-use App\Models\User;
-use App\Models\Study;
-use App\Models\Courier;
-use Livewire\Component;
-use App\Models\Facility;
-use App\Helpers\Generate;
-use App\Models\TestResult;
-use Livewire\WithPagination;
-use App\Models\SampleReception;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Lab\SampleManagement\TestResultAmendment;
+use App\Models\Study;
+use App\Models\TestResult;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class ResultAmendmentComponent extends Component
 {
@@ -23,8 +16,7 @@ class ResultAmendmentComponent extends Component
     public $participant;
     public $sample;
     public $studies;
-    public $toggleEditForms=false;
-
+    public $toggleEditForms = false;
 
     public $testResults;
     public $originalResults;
@@ -56,7 +48,6 @@ class ResultAmendmentComponent extends Component
     public $requested_by;
     public $study_id;
     public $sample_identity;
- 
 
     //RESULTS
     public $result;
@@ -68,10 +59,14 @@ class ResultAmendmentComponent extends Component
     public $amendment_type;
     public $amendment_comment;
 
-     public function mount()
-     {
-        $this->studies=collect([]);
-     }
+    public function mount($tracker)
+    {
+        $this->studies = collect([]);
+        $this->result_tracker = '#' . $tracker;
+        if ($tracker) {
+            $this->getResultDetails();
+        }
+    }
 
     public function showEditForms()
     {
@@ -79,78 +74,78 @@ class ResultAmendmentComponent extends Component
             'amendment_type' => 'required|string',
             'amendment_comment' => 'required|string',
         ]);
-        $this->toggleEditForms=true;
+        $this->toggleEditForms = true;
     }
 
     public function getResultDetails()
     {
         if ($this->result_tracker) {
 
-            $testResult = TestResult::where(['tracker'=>$this->result_tracker,'status'=>'approved','creator_lab'=>auth()->user()->laboratory_id])
-            ->when(!auth()->user()->hasPermission(['review-results']), function ($query) {
-                $query->where('performed_by',auth()->user()->id);
-            })
-            ->with(['test', 'sample', 'kit','sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])
-            ->first();
-            
+            $testResult = TestResult::where(['tracker' => $this->result_tracker, 'status' => 'approved', 'creator_lab' => auth()->user()->laboratory_id])
+                ->when(!auth()->user()->hasPermission(['review-results']), function ($query) {
+                    $query->where('performed_by', auth()->user()->id);
+                })
+                ->with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])
+                ->first();
+
             if ($testResult) {
 
-                $this->testResults=$testResult;
-                $this->originalResults=$testResult;
+                $this->testResults = $testResult;
+                $this->originalResults = $testResult;
                 $this->testResult = $testResult;
                 $this->testResultId = $testResult->id;
                 $this->result = $testResult->result;
                 $this->comment = $testResult->comment;
                 $this->test = $testResult->test;
-                $this->testParameters=$testResult->parameters??[];
-                $this->kit_id=$testResult->kit_id;
-                $this->verified_lot=$testResult->verified_lot;
-                $this->kit_expiry_date=$testResult->kit_expiry_date;
+                $this->testParameters = $testResult->parameters ?? [];
+                $this->kit_id = $testResult->kit_id;
+                $this->verified_lot = $testResult->verified_lot;
+                $this->kit_expiry_date = $testResult->kit_expiry_date;
 
                 $this->participant = $testResult->sample->participant;
                 $this->identity = $this->participant->identity;
-                $this->age =  $this->participant->age;
+                $this->age = $this->participant->age;
                 $this->months = $this->participant->months;
                 $this->gender = $this->participant->gender;
                 $this->address = $this->participant->address;
                 $this->facility_id = $this->participant->facility_id;
 
-                $this->sample=$testResult->sample;
-                $this->date_collected=$this->sample->date_collected;
-                $this->study_id=$this->sample->study_id;
-                $this->sample_identity=$this->sample->sample_identity;
+                $this->sample = $testResult->sample;
+                $this->date_collected = $this->sample->date_collected;
+                $this->study_id = $this->sample->study_id;
+                $this->sample_identity = $this->sample->sample_identity;
 
                 $this->studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
 
-                $this->toggleEditForms=false;
+                $this->toggleEditForms = false;
             } else {
                 $this->reset();
-                $this->toggleEditForms=false;
-                $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'No result found with the tracker submitted / Result is not amendable!']);
+                $this->toggleEditForms = false;
+                $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'No result found with the tracker submitted / Result is not amendable!']);
             }
         } else {
             $this->reset();
-            $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please enter the tracker for the result you want to amend!']);
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Please enter the tracker for the result you want to amend!']);
         }
-        
+
     }
 
     public function amendResults()
-    {   
+    {
         DB::transaction(function () {
             $this->updateParticipant();
             $this->updateSampleInformation();
             $this->updateResult();
             $this->reset();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Results amended successfully!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Results amended successfully!']);
         });
 
     }
 
     public function copyAmended()
-    {   
-        $testResults = TestResult::where(['amended_state'=>1, 'copied'=>0])->get();
-        foreach($testResults as $testResult){
+    {
+        $testResults = TestResult::where(['amended_state' => 1, 'copied' => 0])->get();
+        foreach ($testResults as $testResult) {
             $testAmendment = new TestResultAmendment();
             $testAmendment->test_result_id = $testResult->id;
             $testAmendment->amendment_type = $testResult->amendment_type;
@@ -158,12 +153,11 @@ class ResultAmendmentComponent extends Component
             $testAmendment->original_results = $testResult->original_results;
             $testAmendment->amended_by = $testResult->amended_by;
             // $testAmendment->save();
-            $testResult->copied =1;
+            $testResult->copied = 1;
             // $testResult->update();
         }
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Results amended successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Results amended successfully!']);
     }
-
 
     public function updateParticipant()
     {
@@ -200,7 +194,7 @@ class ResultAmendmentComponent extends Component
 
     public function updateResult()
     {
-       
+
         // dd('Doenen');
         // $this->performed_by = auth()->user()->id;
         // $this->validate([
@@ -217,11 +211,11 @@ class ResultAmendmentComponent extends Component
             $this->validate([
                 'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
             ]);
-            $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
+            $attachmentName = date('YmdHis') . '.' . $this->attachment->extension();
             $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
 
-            if (file_exists(storage_path('app/').$this->testResults->attachment)) {
-                @unlink(storage_path('app/').$this->testResult->attachment);
+            if (file_exists(storage_path('app/') . $this->testResults->attachment)) {
+                @unlink(storage_path('app/') . $this->testResult->attachment);
             }
         } else {
             if ($this->test->result_type == 'File') {
@@ -240,7 +234,7 @@ class ResultAmendmentComponent extends Component
                 if ($this->testResult->result == $this->result) {
                     $this->testResult->result = $this->result;
                 } else {
-                    $this->testResult->result = $this->result.''.$this->measurable_result_uom;
+                    $this->testResult->result = $this->result . '' . $this->measurable_result_uom;
                 }
             } else {
                 $this->testResult->result = $this->result;
@@ -286,20 +280,20 @@ class ResultAmendmentComponent extends Component
             return $value != null;
         });
 
-        if ($this->test->parameters!=null) {
-                if (count($currentParameters) == count($this->test->parameters)) {
-                    $this->testResult->update();
-                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
-                    
-                } else {
-                    $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
-                    $this->validate([
-                        'testParameters' => ['required'],
-                    ]);
-                }
-        }else{
+        if ($this->test->parameters != null) {
+            if (count($currentParameters) == count($this->test->parameters)) {
+                $this->testResult->update();
+                $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test Result Updated successfully!']);
+
+            } else {
+                $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Please include parameter values for this result!']);
+                $this->validate([
+                    'testParameters' => ['required'],
+                ]);
+            }
+        } else {
             $this->testResult->update();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Result Updated successfully!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test Result Updated successfully!']);
         }
     }
 
@@ -311,6 +305,6 @@ class ResultAmendmentComponent extends Component
     public function render()
     {
         $kits = Kit::where('is_active', 1)->get();
-        return view('livewire.lab.sample-management.result-amendment-component',compact('kits'))->layout('layouts.app');
+        return view('livewire.lab.sample-management.result-amendment-component', compact('kits'))->layout('layouts.app');
     }
 }

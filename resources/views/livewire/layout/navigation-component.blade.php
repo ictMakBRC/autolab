@@ -134,7 +134,7 @@
 
                         @if (Auth::user()->hasPermission(['approve-results']))
                             <a href="{{ route('test-approval') }}"
-                                class="list-group-item 
+                                class="list-group-item
                             {{ request()->segment(2) == 'resultApproval' || $link == 'approve' ? 'active' : '' }}
                             "><i
                                     class="bi bi-check2-square"></i>Result
@@ -142,16 +142,18 @@
                         @endif
 
                         @if (Auth::user()->hasPermission(['review-results']))
-                       
-                        <a href="{{ route('tests-rejected') }}" class="list-group-item"><i
-                                class="bi bi-exclamation-triangle-fill text-warning"></i>All Rejected Results
-                            <span class="badge bg-warning pill float-end">{{ $testsRejectedCount }}</span>
-                        </a>
-                    @endif
+                            <a href="{{ route('tests-rejected') }}" class="list-group-item"><i
+                                    class="bi bi-exclamation-triangle-fill text-warning"></i>All Rejected Results
+                                <span class="badge bg-warning pill float-end">{{ $testsRejectedCount }}</span>
+                            </a>
+                        @endif
 
-                        @if (Auth::user()->hasPermission(['enter-results']))
-                            <a href="{{ route('result-amendment') }}" class="list-group-item"><i
-                                    class="bi bi-pencil"></i>Result Amendment</a>
+                        @if (Auth::user()->hasPermission(['review-results']))
+                            <a href="{{ route('amended-results', 'all') }}" class="list-group-item"><i
+                                    class="bi bi-pencil"></i>Amended Results</a>
+                        @elseif (Auth::user()->hasPermission(['enter-results']))
+                            <a href="{{ route('amended-results', 'my') }}" class="list-group-item"><i
+                                    class="bi bi-pencil"></i>Amended Results</a>
                         @endif
 
                         @if (Auth::user()->hasPermission(['view-result-reports']))
@@ -164,7 +166,7 @@
                             <a href="{{ route('samples-list') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a>
-                                {{-- <a href="{{ route('samples-count') }}" class="list-group-item"><i
+                            {{-- <a href="{{ route('samples-count') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Sample Reports<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a> --}}
                             <a href="{{ route('tests-performed-list') }}" class="list-group-item"><i

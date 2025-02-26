@@ -1,55 +1,56 @@
 <?php
 
 use App\Helpers\LoginActivity;
-use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\Admin\KitComponent;
-use App\Http\Livewire\Admin\TestComponent;
-use App\Http\Livewire\Admin\UserComponent;
-use App\Http\Livewire\Admin\StudyComponent;
-use App\Http\Livewire\Admin\CourierComponent;
-use App\Http\Livewire\Admin\FacilityComponent;
-use App\Http\Livewire\Admin\PlatformComponent;
-use App\Http\Livewire\Admin\CollectorComponent;
-use App\Http\Livewire\Admin\RequesterComponent;
-use App\Http\Controllers\ResultReportController;
-use App\Http\Livewire\Admin\LaboratoryComponent;
-use App\Http\Livewire\Admin\SampleTypeComponent;
-use App\Http\Controllers\SearchResultsController;
-use App\Http\Livewire\Admin\DesignationComponent;
-use App\Http\Livewire\Admin\UserProfileComponent;
-use App\Http\Controllers\Auth\UserRolesController;
-use App\Http\Livewire\Admin\TestCategoryComponent;
-use App\Http\Livewire\Admin\UserActivityComponent;
-use App\Http\Livewire\Lab\Lists\SamplesListComponent;
-use App\Http\Controllers\FacilityInformationController;
-use App\Http\Controllers\Auth\UserPermissionsController;
-use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
-use App\Http\Livewire\Lab\SampleStorage\FreezersComponent;
-use App\Http\Controllers\Auth\UserRolesAssignmentController;
-use App\Http\Livewire\Lab\Lists\TestsPerformedListComponent;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\UserPermissionsController;
+use App\Http\Controllers\Auth\UserRolesAssignmentController;
+use App\Http\Controllers\Auth\UserRolesController;
+use App\Http\Controllers\FacilityInformationController;
+use App\Http\Controllers\ResultReportController;
+use App\Http\Controllers\SearchResultsController;
+use App\Http\Livewire\Admin\CollectorComponent;
+use App\Http\Livewire\Admin\CourierComponent;
 use App\Http\Livewire\Admin\Dashboards\MainDashboardComponent;
-use App\Http\Livewire\Admin\Dashboards\UserDashboardComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
 use App\Http\Livewire\Admin\Dashboards\MasterDashboardComponent;
+use App\Http\Livewire\Admin\Dashboards\UserDashboardComponent;
+use App\Http\Livewire\Admin\DesignationComponent;
+use App\Http\Livewire\Admin\FacilityComponent;
+use App\Http\Livewire\Admin\KitComponent;
+use App\Http\Livewire\Admin\LaboratoryComponent;
+use App\Http\Livewire\Admin\PlatformComponent;
 use App\Http\Livewire\Admin\Reports\SystemReportComponent;
 use App\Http\Livewire\Admin\Reports\SystemReportItemsComponent;
 use App\Http\Livewire\Admin\Reports\SystemReportViewComponent;
+use App\Http\Livewire\Admin\RequesterComponent;
+use App\Http\Livewire\Admin\SampleTypeComponent;
+use App\Http\Livewire\Admin\StudyComponent;
+use App\Http\Livewire\Admin\TestCategoryComponent;
+use App\Http\Livewire\Admin\TestComponent;
+use App\Http\Livewire\Admin\UserActivityComponent;
+use App\Http\Livewire\Admin\UserComponent;
+use App\Http\Livewire\Admin\UserProfileComponent;
+use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
+use App\Http\Livewire\Lab\Lists\SamplesListComponent;
+use App\Http\Livewire\Lab\Lists\TestsAmendedListComponent;
+use App\Http\Livewire\Lab\Lists\TestsPerformedListComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
-use App\Http\Livewire\Lab\SampleManagement\StoreSamplesComponent;
-use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
-use App\Http\Livewire\Lab\SampleStorage\FreezerLocationComponent;
-use App\Http\Livewire\Lab\SampleManagement\SampleAliquotsComponent;
-use App\Http\Livewire\Lab\SampleManagement\RejectedResultsComponent;
-use App\Http\Livewire\Lab\SampleManagement\ResultAmendmentComponent;
-use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
-use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\PaternitySpecimenRequest;
+use App\Http\Livewire\Lab\SampleManagement\RejectedResultsComponent;
+use App\Http\Livewire\Lab\SampleManagement\ResultAmendmentComponent;
+use App\Http\Livewire\Lab\SampleManagement\SampleAliquotsComponent;
+use App\Http\Livewire\Lab\SampleManagement\SampleReceptionComponent;
+use App\Http\Livewire\Lab\SampleManagement\SpecimenRequestComponent;
+use App\Http\Livewire\Lab\SampleManagement\StoreSamplesComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestApprovalComponent;
 use App\Http\Livewire\Lab\SampleManagement\TestRejectedComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestReportsComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestRequestComponent;
+use App\Http\Livewire\Lab\SampleManagement\TestReviewComponent;
+use App\Http\Livewire\Lab\SampleStorage\FreezerLocationComponent;
+use App\Http\Livewire\Lab\SampleStorage\FreezersComponent;
 use App\Http\Livewire\Reports\GeneralReportComponent;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,7 +61,7 @@ use App\Http\Livewire\Reports\GeneralReportComponent;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', [AuthenticatedSessionController::class, 'home'])->middleware('guest')->name('home');
 // Route::get('generatelabno', [AuthenticatedSessionController::class, 'generate']);
@@ -115,7 +116,8 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
         Route::get('resultRejected', TestRejectedComponent::class)->middleware('permission:review-results')->name('tests-rejected');
         Route::get('resultApproval', TestApprovalComponent::class)->middleware('permission:approve-results')->name('test-approval');
 
-        Route::get('resultAmendment', ResultAmendmentComponent::class)->name('result-amendment');
+        Route::get('resultAmendment/{tracker}', ResultAmendmentComponent::class)->name('result-amendment');
+        Route::get('amendedResults/{type}', TestsAmendedListComponent::class)->name('amended-results');
         Route::get('result/{id}/original-report', [ResultReportController::class, 'viewOriginallyAmendedResult'])->name('print-original-report');
 
         Route::get('resultReports', TestReportsComponent::class)->middleware('permission:view-result-reports')->name('test-reports');
@@ -154,4 +156,4 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
