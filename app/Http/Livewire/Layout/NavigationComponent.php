@@ -81,6 +81,7 @@ class NavigationComponent extends Component
     public $rejectedResultsCount;
 
     public $testsRejectedCount;
+    public $testsPerformedCount;
 
     protected $listeners = ['updateNav'];
 
@@ -89,10 +90,10 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['accession-samples'])) {
             $this->batchesCount = SampleReception::where('creator_lab', auth()->user()->laboratory_id)->where(function (Builder $query) {
                 $query->whereRaw('samples_accepted != samples_handled')
-                ->orWhereHas('sample', function (Builder $query) {
-                    $query->whereNull('tests_requested')
-                    ->orWhere('test_count', 0);
-                });
+                    ->orWhereHas('sample', function (Builder $query) {
+                        $query->whereNull('tests_requested')
+                            ->orWhere('test_count', 0);
+                    });
             })->count();
         }
 
@@ -110,13 +111,13 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['assign-test-requests'])) {
             $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])->whereIn('status', ['Accessioned', 'Processing'])->where(function ($query) {
                 $query->whereNotNull('tests_requested')
-                ->where('test_count', '>', 0)
-                ->orWhere(function ($query) {
-                    $query->where('sample_is_for', 'Storage')
-                    ->whereNull('tests_requested');
-                });
+                    ->where('test_count', '>', 0)
+                    ->orWhere(function ($query) {
+                        $query->where('sample_is_for', 'Storage')
+                            ->whereNull('tests_requested');
+                    });
             })
-            ->count();
+                ->count();
         }
 
         if (Auth::user()->hasPermission(['review-results'])) {
@@ -131,6 +132,9 @@ class NavigationComponent extends Component
         if (Auth::user()->hasPermission(['view-result-reports'])) {
             $this->testReportsCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->where('status', 'Approved')->count();
             $this->testsPerformedCount = TestResult::where('creator_lab', auth()->user()->laboratory_id)->count();
+        } else {
+            $this->testReportsCount = 0;
+            $this->testsPerformedCount = 0;
         }
 
         if (Auth::user()->hasPermission(['manage-users'])) {
