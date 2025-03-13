@@ -1,14 +1,12 @@
 <?php
-
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Sample;
-use Livewire\Component;
-use App\Models\TestResult;
-use Livewire\WithPagination;
-use App\Exports\ReportExport;
-use Illuminate\Support\Facades\URL;
 use App\Models\Lab\SampleManagement\TestResultAmendment;
+use App\Models\Sample;
+use App\Models\TestResult;
+use Illuminate\Support\Facades\URL;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class TestReportsComponent extends Component
 {
@@ -24,14 +22,16 @@ class TestReportsComponent extends Component
 
     public $combinedSamplesList = [];
 
-    public $status = 'Approved';
+    public $status     = 'Approved';
+    public $downloaded = false;
     public $amendedResults;
     protected $paginationTheme = 'bootstrap';
 
-    function mount()  {
+    public function mount()
+    {
         $this->amendedResults = collect([]);
     }
-  
+
     public function combinedTestReport()
     {
         $sampleIds = '';
@@ -44,17 +44,19 @@ class TestReportsComponent extends Component
                 $this->dispatchBrowserEvent('loadCombinedSampleTestReport', ['url' => URL::signedRoute('combined-sample-test-report', ['sampleIds' => $sampleIds])]);
                 $this->combinedSamplesList = [];
             } else {
-                $this->dispatchBrowserEvent('mismatch', ['type' => 'error',  'message' => 'Combined Test Report is only possible for samples of the same study!']);
+                $this->dispatchBrowserEvent('mismatch', ['type' => 'error', 'message' => 'Combined Test Report is only possible for samples of the same study!']);
             }
         }
     }
-    
-    public function viewAmended($id){
-        $this->amendedResults = TestResultAmendment::where('test_result_id', $id)->with('amendedBy','testResult')->get();
-        
+
+    public function viewAmended($id)
+    {
+        $this->amendedResults = TestResultAmendment::where('test_result_id', $id)->with('amendedBy', 'testResult')->get();
+
     }
-    
-    public function close()  {
+
+    public function close()
+    {
         $this->amendedResults = collect([]);
     }
 
@@ -83,11 +85,20 @@ class TestReportsComponent extends Component
     public function render()
     {
         $testResults = TestResult::resultSearch($this->search, $this->status)
+            ->when(! $this->downloaded, function ($query) {
+                $query->where('download_count', '<', 1);
+            })
+            ->when($this->downloaded <= 3, function ($query) {
+                $query->where('download_count', $this->downloaded);
+            })
+            ->when($this->downloaded > 3, function ($query) {
+                $query->where('download_count', '>', 3);
+            })
             ->where('status', $this->status)
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'desc' : 'asc')
-            ->paginate($this->perPage); 
+            ->paginate($this->perPage);
 
         return view('livewire.lab.sample-management.test-reports-component', compact('testResults'));
     }

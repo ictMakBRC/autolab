@@ -9,7 +9,6 @@ use App\Models\SampleReception;
 use App\Models\Study;
 use App\Models\User;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -206,10 +205,11 @@ class SampleReceptionComponent extends Component
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->comment = $this->comment ?? null;
         $sampleReception->save();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Sample Reception Data created successfully!']);
         // if($sampleReception->is_paternity==true){
         //     return to_route('paternity-test-reception',$sampleReception->batch_no);
         // }
+        return to_route('specimen-request', $sampleReception->batch_no);
         $this->resetInputs();
     }
 
@@ -226,7 +226,7 @@ class SampleReceptionComponent extends Component
         $this->facility_id = $sampleReception->facility_id;
         $this->courier_id = $sampleReception->courier_id;
         $this->comment = $sampleReception->comment;
-        $this->is_paternity = $sampleReception->is_paternity??false;
+        $this->is_paternity = $sampleReception->is_paternity ?? false;
         $this->couriers = Courier::where('facility_id', $sampleReception->facility_id)->latest()->get();
 
         $this->toggleForm = true;
@@ -283,13 +283,13 @@ class SampleReceptionComponent extends Component
         $sampleReception->samples_accepted = $this->samples_accepted;
         $sampleReception->samples_rejected = $this->samples_rejected;
         $sampleReception->received_by = $this->received_by;
-        $sampleReception->is_paternity = $this->is_paternity??false;
+        $sampleReception->is_paternity = $this->is_paternity ?? false;
         $sampleReception->courier_signed = $this->courier_signed;
         $sampleReception->facility_id = $this->facility_id;
         $sampleReception->courier_id = $this->courier_id == '' ? '' : $this->courier_id;
         $sampleReception->comment = $this->comment ?? null;
         $sampleReception->update();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Sample Reception Data updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Sample Reception Data updated successfully!']);
 
         $this->resetInputs();
         $this->toggleForm = false;
@@ -309,8 +309,8 @@ class SampleReceptionComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'SampleReception deleted successfully.');
-        } catch(Exception $error) {
-            $this->dispatchBrowserEvent('alert', ['error' => 'success',  'message' => 'SampleReception can not be deleted!']);
+        } catch (Exception $error) {
+            $this->dispatchBrowserEvent('alert', ['error' => 'success', 'message' => 'SampleReception can not be deleted!']);
         }
     }
 
@@ -328,7 +328,7 @@ class SampleReceptionComponent extends Component
         $facility->parent_id = $this->facility_parent_id;
         $facility->is_active = $this->facility_status;
         $facility->save();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Facility created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Facility created successfully!']);
         $this->reset(['facilityname', 'facility_type', 'facility_parent_id']);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -355,8 +355,8 @@ class SampleReceptionComponent extends Component
 
         $courier->save();
 
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
-        $this->reset(['couriername','is_paternity', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Courier created successfully!']);
+        $this->reset(['couriername', 'is_paternity', 'couriercontact', 'courieremail', 'courierfacility', 'courierstudy', 'courierstatus']);
 
         $this->dispatchBrowserEvent('close-modal');
     }
@@ -380,8 +380,9 @@ class SampleReceptionComponent extends Component
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->latest()->get();
 
         $sampleReceptions = SampleReception::search($this->search)
-        ->when(!auth()->user()->hasPermission(['view-all']), function ($query) {
-        $query->where(['creator_lab'=>auth()->user()->laboratory_id,'created_by'=> auth()->user()->id]);})
+            ->when(!auth()->user()->hasPermission(['view-all']), function ($query) {
+                $query->where(['creator_lab' => auth()->user()->laboratory_id, 'created_by' => auth()->user()->id]);
+            })
         // ->where(function (Builder $query) {
         //     $query->whereRaw('samples_accepted != samples_handled');
         //     ->orWhereHas('sample', function (Builder $query) {
@@ -389,8 +390,8 @@ class SampleReceptionComponent extends Component
         //         ->orWhere('test_count', 0);
         //     });
         // })
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->simplePaginate($this->perPage);
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->simplePaginate($this->perPage);
 
         return view('livewire.lab.sample-management.sample-reception-component', compact('sampleReceptions', 'users', 'facilities'))->layout('layouts.app');
     }

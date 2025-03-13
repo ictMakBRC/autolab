@@ -82,9 +82,14 @@ class NavigationComponent extends Component
 
     public $testsRejectedCount;
     public $testsPerformedCount;
+    public $AliquotingAssignedCount;
 
     protected $listeners = ['updateNav'];
 
+    public function sampleData()
+    {
+        return Sample::where('creator_lab', auth()->user()->laboratory_id);
+    }
     public function mount()
     {
         if (Auth::user()->hasPermission(['accession-samples'])) {
@@ -98,8 +103,8 @@ class NavigationComponent extends Component
         }
 
         if (Auth::user()->hasPermission(['view-participant-info'])) {
-            $this->participantCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->distinct()->count('participant_id');
-            $this->samplesCount = Sample::where('creator_lab', auth()->user()->laboratory_id)->count();
+            $this->participantCount = $this->sampleData()->distinct()->count('participant_id');
+            $this->samplesCount = $this->sampleData()->count();
         }
 
         if (Auth::user()->hasPermission(['enter-results'])) {
@@ -109,7 +114,7 @@ class NavigationComponent extends Component
         }
 
         if (Auth::user()->hasPermission(['assign-test-requests'])) {
-            $this->testRequestsCount = Sample::where(['creator_lab' => auth()->user()->laboratory_id])->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])->whereIn('status', ['Accessioned', 'Processing'])->where(function ($query) {
+            $this->testRequestsCount = $this->sampleData()->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])->whereIn('status', ['Accessioned', 'Processing'])->where(function ($query) {
                 $query->whereNotNull('tests_requested')
                     ->where('test_count', '>', 0)
                     ->orWhere(function ($query) {

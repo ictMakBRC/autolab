@@ -49,6 +49,16 @@
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
+                        <div class="d-flex align-items-center ml-4 me-2">
+                            <label for="orderBy" class="text-nowrap mr-2 mb-0">Downloaded</label>
+                            <select wire:model="downloaded" class="form-select">
+                                <option value="0">Never</option>
+                                <option value="1">1 Times</option>
+                                <option value="2">2 Times</option>
+                                <option value="3">3 Times</option>
+                                <option value="4">More than 3 Times</option>
+                            </select>
+                        </div>
                     </x-table-utilities>
 
                     <div class="tab-content">
@@ -78,8 +88,9 @@
                                     @forelse ($testResults as $key => $testResult)
                                         <tr
                                             class="
-                                        @if ($testResult->test->tat != 0 &&
-                                            $testResult->sample->created_at->diffInHours($testResult->created_at) > $testResult->test->tat) bg-light-danger @endif
+                                        @if (
+                                            $testResult->test->tat != 0 &&
+                                                $testResult->sample->created_at->diffInHours($testResult->created_at) > $testResult->test->tat) bg-light-danger @endif
                                         ">
                                             <td>{{ $key + 1 }}</td>
 
@@ -91,12 +102,12 @@
                                             </td>
                                             <td>
                                                 @if ($testResult->amended_state)
-                                                <a href="javascript:void(0)"
-                                                    wire:click='viewAmended({{ $testResult->id }})'
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#amendedResults"><strong class="text-warning"
-                                                        title="SHOW AMENDED">{{ $testResult->tracker }}</strong>
-                                                </a>
+                                                    <a href="javascript:void(0)"
+                                                        wire:click='viewAmended({{ $testResult->id }})'
+                                                        data-bs-toggle="modal" data-bs-target="#amendedResults"><strong
+                                                            class="text-warning"
+                                                            title="SHOW AMENDED">{{ $testResult->tracker }}</strong>
+                                                    </a>
                                                 @else
                                                     <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
                                                         target="_blank"><strong
@@ -131,7 +142,9 @@
                                                 {{ $testResult->test->name }}
                                             </td>
                                             <td>
-                                                <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
+                                                <span
+                                                    class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span>
+                                                ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at) . 'min' }})
                                             </td>
 
                                             <td>
@@ -151,19 +164,22 @@
                                             </td>
                                             <td class="action-ico">
                                                 @if ($status == 'Approved')
-                                                <a target="_blank" href="{{ route('result-report', $testResult->id) }}" type="button"
-                                                    class=" d-none action-ico btn btn-outline-info me-2"
-                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                        class="bi bi-arrow-down-square"></i></a>
+                                                    <a target="_blank"
+                                                        href="{{ route('result-report', $testResult->id) }}"
+                                                        type="button"
+                                                        class=" d-none action-ico btn btn-outline-info me-2"
+                                                        wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                            class="bi bi-arrow-down-square"></i></a>
 
-                                                <a target="_blank" href="{{ route('print-result-report', $testResult->id) }}" type="button"
-                                                    class="action-ico btn btn-outline-success btn-sm"
-                                                    wire:click='incrementDownloadCount({{ $testResult->id }})'><i
-                                                        class="bi bi-printer"></i>
-                                                        <small class="badge bg-info">{{ $testResult->download_count }}</small>
-                                                </a>
+                                                    <a target="_blank"
+                                                        href="{{ route('print-result-report', $testResult->id) }}"
+                                                        type="button" class="action-ico btn btn-outline-success btn-sm"
+                                                        wire:click='incrementDownloadCount({{ $testResult->id }})'><i
+                                                            class="bi bi-printer"></i>
+                                                        <small
+                                                            class="badge bg-info">{{ $testResult->download_count }}</small>
+                                                    </a>
                                                 @else
-                                                    
                                                 @endif
                                             </td>
                                         </tr>
@@ -184,9 +200,9 @@
             </div> <!-- end card -->
         </div><!-- end col-->
 
-         {{-- VIEW amendement details modal --}}
-            @include('livewire.lab.lists.show-amended-results')
-         <!-- end modal dialog-->
+        {{-- VIEW amendement details modal --}}
+        @include('livewire.lab.lists.show-amended-results')
+        <!-- end modal dialog-->
     </div>
 
     @push('scripts')
