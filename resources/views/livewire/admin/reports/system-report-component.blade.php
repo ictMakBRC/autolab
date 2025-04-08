@@ -83,7 +83,7 @@
                                         <td>{{ $item->report_date }}</td>
                                         <td>{{ count($item->possible_aliquots ?? []) }}</td>
                                         <td>
-                                            <span class="badge bg-info">{{ $item->staus }}</span>
+                                            <span class="badge bg-info">{{ $item->status }}</span>
                                         </td>
                                         <td>
                                             <a href="javascript:;" class="action-ico btn btn-outline-info mx-1"
