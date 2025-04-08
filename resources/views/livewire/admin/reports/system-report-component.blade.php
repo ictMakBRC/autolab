@@ -14,7 +14,7 @@
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
 
-                                        
+
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-info">More...</button>
                                         <button type="button"
@@ -39,13 +39,14 @@
                         <div class="row">
                             <div class="col-md-8 form-group mb-3">
                                 <label for="name" class="form-label">Report Date</label>
-                                <input type="date" max="{{ date('d-m-Y') }}" id="report_date" wire:model.lazy="report_date" class="form-control">
+                                <input type="date" max="{{ date('d-m-Y') }}" id="report_date"
+                                    wire:model.lazy="report_date" class="form-control">
                                 @error('report_date')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4 form-group mb-3">                                
-                            <x-button class="mt-3">{{ __('Create Report') }}</x-button>
+                            <div class="col-md-4 form-group mb-3">
+                                <x-button class="mt-3">{{ __('Create Report') }}</x-button>
                             </div>
                         </div>
                     </form>
@@ -67,9 +68,9 @@
                             <thead>
                                 <tr>
                                     <td>No.</td>
-                                    <td>Sample</td>
-                                    <td>Possible Tests</td>
-                                    <td>Possible Aliquots</td>
+                                    <td>Reference</td>
+                                    <td>Report Date</td>
+                                    <td>Created By</td>
                                     <td>Status</td>
                                     <td>Action</td>
                                 </tr>
@@ -78,21 +79,18 @@
                                 @foreach ($systemReports as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item->type }}</td>
-                                        <td>{{ count($item->possible_tests ?? []) }}</td>
+                                        <td>{{ $item->ref_code }}</td>
+                                        <td>{{ $item->report_date }}</td>
                                         <td>{{ count($item->possible_aliquots ?? []) }}</td>
                                         <td>
-                                            @if ($item->status == 1)
-                                                <span class="badge bg-success">Active</span>
-                                            @else
-                                                <span class="badge bg-danger">Suspended</span>
-                                            @endif
+                                            <span class="badge bg-info">{{ $item->staus }}</span>
                                         </td>
                                         <td>
                                             <a href="javascript:;" class="action-ico btn btn-outline-info mx-1"
                                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                wire:click="editdata({{ $item->id }})" data-target="#edit_modal"
-                                                title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                                wire:click="editdata('{{ $item->ref_code }}'')"
+                                                data-target="#edit_modal" title="Edit"><i
+                                                    class="bi bi-pencil-square"></i></a>
                                             @if (Auth::user()->hasPermission(['master-access']))
                                                 <a href="javascript:;" class="action-ico btn btn-outline-danger mx-1"
                                                     data-bs-toggle="tooltip"

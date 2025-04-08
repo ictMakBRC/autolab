@@ -68,6 +68,11 @@ class SystemReportComponent extends Component
         return redirect()->SignedRoute('qualityReportItems', $SystemReport->ref_code);
     }
 
+    public function editdata($code)
+    {
+        return redirect()->SignedRoute('qualityReportItems', $code);
+    }
+
     public function resetInputs()
     {
         $this->reset(['report_date']);
