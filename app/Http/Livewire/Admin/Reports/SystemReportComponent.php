@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Http\Livewire\Admin\Reports;
 
+use App\Models\Admin\SystemReport;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Admin\SystemReport;
-use Illuminate\Support\Facades\Auth;
 
 class SystemReportComponent extends Component
 {
@@ -16,7 +15,7 @@ class SystemReportComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'name';
+    public $orderBy = 'id';
 
     public $orderAsc = true;
 
@@ -25,7 +24,6 @@ class SystemReportComponent extends Component
     public $delete_id;
 
     public $report_date;
-
 
     public $toggleForm = false;
 
@@ -49,10 +47,9 @@ class SystemReportComponent extends Component
         ]);
     }
 
-
     public function mount()
     {
-       
+
     }
 
     public function storeData()
@@ -61,16 +58,15 @@ class SystemReportComponent extends Component
             'report_date' => 'required',
         ]);
 
-        $SystemReport = new SystemReport();    
-        $SystemReport->facility_id= auth()->user()->laboratory_id;
+        $SystemReport              = new SystemReport();
+        $SystemReport->facility_id = auth()->user()->laboratory_id;
         $SystemReport->report_date = $this->report_date;
-        $SystemReport->ref_code = 'SQCR'.date('ym').'_'.time();
+        $SystemReport->ref_code    = 'SQCR' . date('ym') . '_' . time();
         $SystemReport->save();
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'SystemReport created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'SystemReport created successfully!']);
         return redirect()->SignedRoute('qualityReportItems', $SystemReport->ref_code);
     }
-
 
     public function resetInputs()
     {
@@ -82,12 +78,12 @@ class SystemReportComponent extends Component
         $this->validate([
             'report_date' => 'required',
         ]);
-        $SystemReport = SystemReport::find($this->edit_id);
+        $SystemReport              = SystemReport::find($this->edit_id);
         $SystemReport->report_date = $this->report_date;
-        
+
         $SystemReport->update();
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'SystemReport updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'SystemReport updated successfully!']);
     }
 
     public function refresh()
@@ -101,7 +97,7 @@ class SystemReportComponent extends Component
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
         } else {
-            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning', 'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
     }
 
@@ -112,9 +108,9 @@ class SystemReportComponent extends Component
             $SystemReport->delete();
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'SystemReport deleted successfully!']);
-        } catch(Exception $error) {
-            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'SystemReport can not be deleted!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'SystemReport deleted successfully!']);
+        } catch (Exception $error) {
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'SystemReport can not be deleted!']);
         }
     }
 
@@ -131,13 +127,13 @@ class SystemReportComponent extends Component
     public function render()
     {
         $data['systemReports'] = SystemReport::search($this->search)
-        ->when($this->from_date != '' && $this->to_date != '', function ($query) {
-            $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-        })
-        ->where('facility_id', auth()->user()->laboratory_id)
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            })
+            ->where('facility_id', auth()->user()->laboratory_id)
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
 
-        return view('livewire.admin.reports.system-report-component',$data);
+        return view('livewire.admin.reports.system-report-component', $data);
     }
 }
