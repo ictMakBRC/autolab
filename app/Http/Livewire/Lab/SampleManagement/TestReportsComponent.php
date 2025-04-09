@@ -1,9 +1,14 @@
 <?php
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Models\Admin\Test;
+use App\Models\Facility;
 use App\Models\Lab\SampleManagement\TestResultAmendment;
 use App\Models\Sample;
+use App\Models\SampleType;
+use App\Models\Study;
 use App\Models\TestResult;
+use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -11,6 +16,23 @@ use Livewire\WithPagination;
 class TestReportsComponent extends Component
 {
     use WithPagination;
+    public $facility_id = 0;
+
+    public $study_id = 0;
+
+    public $sampleType;
+
+    public $test_id;
+
+    public $performed_by = 0;
+
+    public $reviewed_by = 0;
+
+    public $approved_by = 0;
+
+    public $from_date = '';
+
+    public $to_date = '';
 
     public $perPage = 50;
 
@@ -26,10 +48,13 @@ class TestReportsComponent extends Component
     public $downloaded = false;
     public $amendedResults;
     protected $paginationTheme = 'bootstrap';
+    public $studies;
+    public $resultIds = [];
 
     public function mount()
     {
         $this->amendedResults = collect([]);
+        $this->studies        = collect([]);
     }
 
     public function combinedTestReport()
@@ -46,6 +71,12 @@ class TestReportsComponent extends Component
             } else {
                 $this->dispatchBrowserEvent('mismatch', ['type' => 'error', 'message' => 'Combined Test Report is only possible for samples of the same study!']);
             }
+        }
+    }
+    public function updatedFacilityId()
+    {
+        if ($this->facility_id != 0) {
+            $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
         }
     }
 
@@ -81,10 +112,9 @@ class TestReportsComponent extends Component
     {
         return redirect(request()->header('Referer'));
     }
-
-    public function render()
+    public function filterTests()
     {
-        $testResults = TestResult::resultSearch($this->search, $this->status)
+        $results = TestResult::resultSearch($this->search, $this->status)
             ->when(! $this->downloaded, function ($query) {
                 $query->where('download_count', '<', 1);
             })
@@ -95,11 +125,53 @@ class TestReportsComponent extends Component
                 $query->where('download_count', '>', 3);
             })
             ->where('status', $this->status)
+            ->when($this->facility_id != 0, function ($query) {
+                $query->whereHas('sample.sampleReception', function ($query) {
+                    $query->where('facility_id', $this->facility_id);
+                });
+            })
+            ->when($this->study_id != 0, function ($query) {
+                $query->whereHas('sample', function ($query) {
+                    $query->where('study_id', $this->study_id);
+                });
+            })
+            ->when($this->sampleType != 0, function ($query) {
+                $query->whereHas('sample.sampleType', function ($query) {
+                    $query->where('id', $this->sampleType);
+                });
+            })
+            ->when($this->test_id != 0, function ($query) {
+                $query->where('test_id', $this->test_id);
+            })
+            ->when($this->performed_by != 0, function ($query) {
+                $query->where('performed_by', $this->performed_by);
+            })
+            ->when($this->reviewed_by != 0, function ($query) {
+                $query->where('reviewed_by', $this->reviewed_by);
+            })
+            ->when($this->approved_by != 0, function ($query) {
+                $query->where('approved_by', $this->approved_by);
+            })
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            });
+
+        $this->resultIds = $results->pluck('id')->toArray();
+
+        return $results;
+    }
+    public function render()
+    {
+        $data['users']       = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
+        $data['facilities']  = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
+        $data['sampleTypes'] = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $data['tests']       = Test::where('creator_lab', auth()->user()->laboratory_id)->orderBy('name', 'asc')->get();
+        $data['testResults'] = $this->filterTests()
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'desc' : 'asc')
             ->paginate($this->perPage);
 
-        return view('livewire.lab.sample-management.test-reports-component', compact('testResults'));
+        return view('livewire.lab.sample-management.test-reports-component', $data);
     }
 }
