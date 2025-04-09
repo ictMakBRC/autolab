@@ -413,12 +413,12 @@
                                                                             <div class="mb-2">
                                                                                 <label class="form-label">Reason why
                                                                                     the result is outside the
-                                                                                    TAT <small class="text-warning">The
+                                                                                    TAT <small class="text-danger">The
                                                                                         test was requested on
                                                                                         {{ $sample?->date_requested }}
                                                                                         and the TAT for this test is
                                                                                         {{ $test?->tat }} and the
-                                                                                        difference is
+                                                                                        result TAT is
                                                                                         {{ $tat }}</small></label>
                                                                                 <textarea wire:model.lazy="tat_comment" id="tat_comment" required class="form-control"></textarea>
                                                                                 @error('tat_comment')
