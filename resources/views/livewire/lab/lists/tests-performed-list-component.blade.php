@@ -145,7 +145,10 @@
                                     <div class="mb-3 col-md-1">
                                         <label for="orderBy" class="form-label">OrderBy</label>
                                         <select wire:model="orderBy" class="form-select">
-                                            <option value="approved_at">Latest</option>
+                                            <option value="id">Latest</option>
+                                            <option value="approved_at">Date Approved</option>
+                                            <option value="reviewed_at">Date Reviewed</option>
+                                            <option value="created_at">Result Date</option>
                                         </select>
                                     </div>
 
@@ -257,15 +260,16 @@
                                             </td>
                                             <td class="action-ico">
                                                 @if (Auth::user()->hasPermission(['view-participant-info']))
-                                                    <a target="_blank"  href="{{ route('print-result-report', $testResult->id) }}"
+                                                    <a target="_blank"
+                                                        href="{{ route('print-result-report', $testResult->id) }}"
                                                         type="button" data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom" title=""
                                                         data-bs-original-title="Result Report"
                                                         class="action-ico btn btn-outline-info btn-sm"
                                                         wire:click='incrementDownloadCount({{ $testResult->id }})'><i
                                                             class="bi bi-printer"></i>
-                                                    <small
-                                                        class="badge bg-info">{{ $testResult->download_count }}</small>
+                                                        <small
+                                                            class="badge bg-info">{{ $testResult->download_count }}</small>
                                                     </a>
                                                 @else
                                                     NA
@@ -290,8 +294,8 @@
 
 
             {{-- VIEW amendement details modal --}}
-                @include('livewire.lab.lists.show-amended-results')
-           <!-- end modal dialog-->
+            @include('livewire.lab.lists.show-amended-results')
+            <!-- end modal dialog-->
         </div> <!-- end modal-->
 
 
