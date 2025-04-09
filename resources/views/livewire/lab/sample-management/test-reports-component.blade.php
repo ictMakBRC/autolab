@@ -37,7 +37,10 @@
                             <div class="d-flex align-items-center ml-4 me-2">
                                 <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
                                 <select wire:model="orderBy" class="form-select">
-                                    <option value="approved_at">Latest</option>
+                                    <option value="id">Latest</option>
+                                    <option value="approved_at">Date Approved</option>
+                                    <option value="reviewed_at">Date Reviewed</option>
+                                    <option value="created_at">Result Date</option>
                                 </select>
                             </div>
                         </div>
