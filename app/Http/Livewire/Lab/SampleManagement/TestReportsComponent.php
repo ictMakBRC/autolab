@@ -46,7 +46,7 @@ class TestReportsComponent extends Component
     public $combinedSamplesList = [];
 
     public $status     = 'Approved';
-    public $downloaded = false;
+    public $downloaded = 1;
     public $amendedResults;
     protected $paginationTheme = 'bootstrap';
     public $studies;
@@ -120,10 +120,10 @@ class TestReportsComponent extends Component
     public function filterTests()
     {
         $results = TestResult::resultSearch($this->search, $this->status)
-            ->when(! $this->downloaded, function ($query) {
+            ->when($this->downloaded == 1, function ($query) {
                 $query->where('download_count', '<', 1);
             })
-            ->when($this->downloaded <= 3, function ($query) {
+            ->when($this->downloaded > 1 && $this->downloaded <= 3, function ($query) {
                 $query->where('download_count', $this->downloaded);
             })
             ->when($this->downloaded > 3, function ($query) {

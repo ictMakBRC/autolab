@@ -121,8 +121,8 @@
                         <div class="mb-3 col-md-2">
                             <label for="orderBy" class="text-nowrap mr-2 mb-0">Downloaded</label>
                             <select wire:model="downloaded" class="form-select">
-                                <option value="0">Never</option>
-                                <option value="1">1 Times</option>
+                                <option value="">All</option>
+                                <option value="1">Never</option>
                                 <option value="2">2 Times</option>
                                 <option value="3">3 Times</option>
                                 <option value="4">More than 3 Times</option>
