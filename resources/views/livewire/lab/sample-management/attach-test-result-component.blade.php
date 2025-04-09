@@ -398,6 +398,9 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                @php                                                                
+                                                                    $tat = $testResult->sample->created_at->diffInHours($today);
+                                                                @endphp
                                                                 <div class="modal-footer">
                                                                     <x-button
                                                                         class="me-0">{{ __('Save') }}</x-button>
