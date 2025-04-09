@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Exports\TestPerformedExport;
 use App\Models\Admin\Test;
 use App\Models\Facility;
 use App\Models\Lab\SampleManagement\TestResultAmendment;
@@ -91,10 +92,14 @@ class TestReportsComponent extends Component
         $this->amendedResults = collect([]);
     }
 
-    // public function export($id)
-    // {
-    //     return (new ReportExport($id))->download('report_' . date('Y-m-d') . '_' . now()->toTimeString() . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-    // }
+    public function export()
+    {
+        if (count($this->resultIds) > 0) {
+            return (new TestPerformedExport($this->resultIds))->download('Tests_Performed_' . date('Y-m-d') . '_' . now()->toTimeString() . '.xlsx');
+        } else {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Oops! No performed Tests selected for export!']);
+        }
+    }
 
     public function updatingSearch()
     {

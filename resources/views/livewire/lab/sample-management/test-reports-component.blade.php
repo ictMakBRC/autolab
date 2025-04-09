@@ -118,8 +118,18 @@
                             <label for="to_date" class="form-label">End Date</label>
                             <input id="to_date" type="date" class="form-control" wire:model="to_date">
                         </div>
+                        <div class="mb-3 col-md-2">
+                            <label for="orderBy" class="text-nowrap mr-2 mb-0">Downloaded</label>
+                            <select wire:model="downloaded" class="form-select">
+                                <option value="0">Never</option>
+                                <option value="1">1 Times</option>
+                                <option value="2">2 Times</option>
+                                <option value="3">3 Times</option>
+                                <option value="4">More than 3 Times</option>
+                            </select>
+                        </div>
                     </div>
-                    <x-table-utilities display='d-none'>
+                    <x-table-utilities>
                         <div>
                             <div class="d-flex align-items-center ml-4 me-2">
                                 <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
@@ -139,16 +149,7 @@
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
-                        <div class="d-flex align-items-center ml-4 me-2">
-                            <label for="orderBy" class="text-nowrap mr-2 mb-0">Downloaded</label>
-                            <select wire:model="downloaded" class="form-select">
-                                <option value="0">Never</option>
-                                <option value="1">1 Times</option>
-                                <option value="2">2 Times</option>
-                                <option value="3">3 Times</option>
-                                <option value="4">More than 3 Times</option>
-                            </select>
-                        </div>
+
                     </x-table-utilities>
 
                     <div class="tab-content">
