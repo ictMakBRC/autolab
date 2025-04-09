@@ -132,12 +132,17 @@
                                                                             <div class="row">
                                                                                 <hr>
                                                                                 <h6>Tests</h6>
-                                                                                @foreach ($test->sub_tests as $key=> $sub_test)
+                                                                                @foreach ($test->sub_tests as $key => $sub_test)
                                                                                     <div class="col-md-4">
                                                                                         <div class="mb-2">
                                                                                             {{-- <label class="form-label">{{ $sub_test }}</label> --}}
-                                                                                                <input class="form-label" type="text" style="border: none; outline: none;  background-color: transparent;" readonly wire:model="testResults.{{ $key }}.test" 
-                                                                                                required value="{{ $sub_test }}">
+                                                                                            <input class="form-label"
+                                                                                                type="text"
+                                                                                                style="border: none; outline: none;  background-color: transparent;"
+                                                                                                readonly
+                                                                                                wire:model="testResults.{{ $key }}.test"
+                                                                                                required
+                                                                                                value="{{ $sub_test }}">
                                                                                             <input type="text"
                                                                                                 required
                                                                                                 class="form-control"
@@ -148,7 +153,8 @@
                                                                                     </div>
                                                                                     <div class="col-md-2">
                                                                                         <div class="mb-2">
-                                                                                            <label class="form-label">Ct Value</label>
+                                                                                            <label class="form-label">Ct
+                                                                                                Value</label>
                                                                                             <input type="text"
                                                                                                 required
                                                                                                 class="form-control"
@@ -159,12 +165,10 @@
                                                                                     <div class="col-md-6">
                                                                                         <div class="mb-2">
                                                                                             <label
-                                                                                                class="form-label">{{ $sub_test }} Comment</label>
-                                                                                            <textarea type="text" required class="form-control" 
-                                                                                            {{-- wire:model.lazy="subTestResultComment.{{ $sub_test }}" --}}
-                                                                                            wire:model="testResults.{{ $key }}.comment"
-
-                                                                                                placeholder="Enter {{ $sub_test }} comments"></textarea>
+                                                                                                class="form-label">{{ $sub_test }}
+                                                                                                Comment</label>
+                                                                                            <textarea type="text" required class="form-control" {{-- wire:model.lazy="subTestResultComment.{{ $sub_test }}" --}}
+                                                                                                wire:model="testResults.{{ $key }}.comment" placeholder="Enter {{ $sub_test }} comments"></textarea>
                                                                                         </div>
                                                                                     </div>
                                                                                     @error('subTestResults')
@@ -230,7 +234,8 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     @error('result')
-                                                                                        <div class="text-danger text-small">
+                                                                                        <div
+                                                                                            class="text-danger text-small">
                                                                                             {{ $message }}</div>
                                                                                     @enderror
                                                                                 </div>
@@ -397,10 +402,36 @@
                                                                             @enderror
                                                                         </div>
                                                                     </div>
+                                                                    @php
+                                                                        $dateRequested = \Carbon\Carbon::parse(
+                                                                            $sample->date_requested,
+                                                                        );
+                                                                        $tat = $dateRequested->diffInHours($today);
+                                                                    @endphp
+                                                                    @if ($test->tat > 0 && $tat > $test->tat)
+                                                                        <div class="col-md-12">
+                                                                            <div class="mb-2">
+                                                                                <label class="form-label">Reason why
+                                                                                    the result is outside the
+                                                                                    TAT <small class="text-warning">The
+                                                                                        test was requested on
+                                                                                        {{ $sample?->date_requested }}
+                                                                                        and the TAT for this test is
+                                                                                        {{ $test?->tat }} and the
+                                                                                        difference is
+                                                                                        {{ $tat }}</small></label>
+                                                                                <textarea wire:model.lazy="tat_comment" id="tat_comment" required class="form-control"></textarea>
+                                                                                @error('tat_comment')
+                                                                                    <div class="text-danger text-small">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
                                                                 </div>
-                                                                @php                                                                
-                                                                    $tat = $testResult->sample->created_at->diffInHours($today);
-                                                                @endphp
+
+
+
                                                                 <div class="modal-footer">
                                                                     <x-button
                                                                         class="me-0">{{ __('Save') }}</x-button>

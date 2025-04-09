@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Models\Admin\Test;
@@ -51,7 +50,7 @@ class TestResult extends Model
         'platform_id',
         'verified_lot',
         'kit_expiry_date',
-
+        'tat_comment',
         'amended_state',
         'amendment_type',
         'original_results',
@@ -118,7 +117,7 @@ class TestResult extends Model
 
     protected $casts = [
         'parameters' => 'array',
-        'results' => 'array',
+        'results'    => 'array',
     ];
 
     public static function boot()
@@ -126,9 +125,9 @@ class TestResult extends Model
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
-                $model->created_by = auth()->id();
+                $model->created_by  = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
-                $model->tracker = '#' . time() . rand(10, 99);
+                $model->tracker     = '#' . time() . rand(10, 99);
             });
 
             self::updating(function ($model) {
@@ -234,8 +233,8 @@ class TestResult extends Model
         return empty(trim($search)) ? static::query()
         : static::query()
             ->where(['creator_lab' => auth()->user()->laboratory_id,
-                'status' => 'Approved',
-                'tracker' => trim($search),
+                'status'               => 'Approved',
+                'tracker'              => trim($search),
             ]);
     }
 }

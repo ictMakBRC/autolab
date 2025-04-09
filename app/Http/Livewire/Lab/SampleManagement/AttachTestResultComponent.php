@@ -1,19 +1,18 @@
 <?php
-
 namespace App\Http\Livewire\Lab\SampleManagement;
 
-use App\Models\Kit;
-use App\Models\User;
-use App\Models\Sample;
-use Livewire\Component;
 use App\Models\Admin\Test;
-use App\Models\TestResult;
-use Livewire\WithFileUploads;
+use App\Models\Kit;
+use App\Models\Sample;
 use App\Models\TestAssignment;
+use App\Models\TestResult;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use App\Jobs\SendGeneralNotificationJob;
-use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AttachTestResultComponent extends Component
 {
@@ -56,31 +55,34 @@ class AttachTestResultComponent extends Component
     public $kit_id;
 
     public $activeTest;
+    public $today;
+    public $tat_comment;
 
     public function mount($id)
     {
-        $sample = Sample::with('participant')->findOrFail($id);
-        $this->sample = $sample;
-        $this->sample_id = $sample->id;
+        $today                 = Carbon::now();
+        $sample                = Sample::with('participant')->findOrFail($id);
+        $this->sample          = $sample;
+        $this->sample_id       = $sample->id;
         $this->sample_identity = $sample->sample_identity;
-        $this->lab_no = $sample->lab_no;
-        $testsPendingResults = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
+        $this->lab_no          = $sample->lab_no;
+        $testsPendingResults   = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
         if (count($testsPendingResults) > 0) {
             $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)
-            ->whereHas('testAssignment', function (Builder $query) {
-                $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
-            })
-            ->orderBy('name', 'asc')->get();
+                ->whereHas('testAssignment', function (Builder $query) {
+                    $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
+                })
+                ->orderBy('name', 'asc')->get();
 
             //Set the first test in the collection as active and load its parameters if present
-            $this->test_id = $this->requestedTests[0]->id ?? null;
+            $this->test_id    = $this->requestedTests[0]->id ?? null;
             $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
-            if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests){
+            if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests) {
                 foreach ($this->activeTest->sub_tests as $testName) {
                     $this->testResults[] = [
-                        'test' => $testName,
-                        'result' => '', // Initially empty
+                        'test'    => $testName,
+                        'result'  => '', // Initially empty
                         'comment' => '', // Initially empty
                     ];
                 }
@@ -99,7 +101,7 @@ class AttachTestResultComponent extends Component
         }
 
         $this->tests_performed = (array) $sample->tests_performed;
-        $this->performed_by = auth()->user()->id;
+        $this->performed_by    = auth()->user()->id;
     }
 
     public $testResults = [];
@@ -109,15 +111,15 @@ class AttachTestResultComponent extends Component
             'performed_by' => 'required|integer',
         ]);
 
-        if ($this->result==null && $this->link==null && $this->attachment==null && $this->testResults==null) {
-            $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please enter/Attach results!']);
+        if ($this->result == null && $this->link == null && $this->attachment == null && $this->testResults == null) {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Please enter/Attach results!']);
         } else {
 
             if ($this->attachment != null) {
-                        $this->validate([
+                $this->validate([
                     'attachment' => 'mimes:pdf,xls,xlsx,csv,doc,docx|max:5000',
                 ]);
-                $attachmentName = date('YmdHis').'.'.$this->attachment->extension();
+                $attachmentName       = date('YmdHis') . '.' . $this->attachment->extension();
                 $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
             } else {
                 if ($this->activeTest->result_type == 'File') {
@@ -133,56 +135,55 @@ class AttachTestResultComponent extends Component
                 return $value != '';
             });
 
-            if ($this->activeTest->parameters!=null) {
-                    if (count($this->testParameters) == count($this->activeTest->parameters)) {
-                        // dd('no parameters');
-                        $this->saveResults();
-                        
-                    } else {
-                        $this->dispatchBrowserEvent('not-found', ['type' => 'error',  'message' => 'Please include parameter values for this result!']);
-                        $this->validate([
-                            'testParameters' => ['required'],
-                        ]);
-                    }
-            }else{
+            if ($this->activeTest->parameters != null) {
+                if (count($this->testParameters) == count($this->activeTest->parameters)) {
+                    // dd('no parameters');
+                    $this->saveResults();
+
+                } else {
+                    $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Please include parameter values for this result!']);
+                    $this->validate([
+                        'testParameters' => ['required'],
+                    ]);
+                }
+            } else {
                 $this->saveResults();
             }
         }
-    } 
+    }
     public $myTest;
     public function saveResults()
     {
         DB::transaction(function () {
 
-            
             $testResult = new TestResult();
-           
+
             $testResult->sample_id = $this->sample_id;
-            $testResult->test_id = $this->test_id;
+            $testResult->test_id   = $this->test_id;
             if ($this->link != null) {
                 $testResult->result = $this->link;
-            }
-             else {
+            } else {
                 $test = Test::findOrfail($this->test_id);
                 if ($test->result_type == 'Measurable') {
-                    $testResult->result = $this->result.''.$test->measurable_result_uom;
+                    $testResult->result = $this->result . '' . $test->measurable_result_uom;
                 }
-                if ($test->result_type == 'Multiple'){
-                    $testResult->result =  json_encode($this->testResults);
+                if ($test->result_type == 'Multiple') {
+                    $testResult->result = json_encode($this->testResults);
 
                 } else {
                     $testResult->result = $this->result;
                 }
-            }           
+            }
 
-            $testResult->attachment = $this->attachmentPath;
-            $testResult->performed_by = $this->performed_by;
-            $testResult->comment = $this->comment;
-            $testResult->parameters = count($this->testParameters) ? $this->testParameters : null;
-            $testResult->kit_id = $this->kit_id;
-            $testResult->verified_lot = $this->verified_lot;
+            $testResult->attachment      = $this->attachmentPath;
+            $testResult->performed_by    = $this->performed_by;
+            $testResult->comment         = $this->comment;
+            $testResult->parameters      = count($this->testParameters) ? $this->testParameters : null;
+            $testResult->kit_id          = $this->kit_id;
+            $testResult->verified_lot    = $this->verified_lot;
+            $testResult->tat_comment     = $this->tat_comment;
             $testResult->kit_expiry_date = $this->kit_expiry_date;
-            $testResult->status = 'Pending Review';
+            $testResult->status          = 'Pending Review';
             $testResult->save();
             array_push($this->tests_performed, "{$testResult->test_id}");
             $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
@@ -197,11 +198,11 @@ class AttachTestResultComponent extends Component
             if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
                 redirect()->route('test-request');
             }
-            
+
         });
 
         $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
-        $this->test_id = $this->requestedTests[0]->id ?? null;
+        $this->test_id        = $this->requestedTests[0]->id ?? null;
         $this->testParameters = [];
 
         //Set the first test in the collection as active and load its parameters if present
@@ -213,33 +214,32 @@ class AttachTestResultComponent extends Component
         }
 
         $details = [
-            'subject' => 'Auto-Lab Test',
-            'greeting' => 'Hello, I hope this email finds you well',
-            'body' => 'You have a pending test Lab No#'.$this->sample?->lab_no.' to review, Please log in and take the necessary actions.',
+            'subject'    => 'Auto-Lab Test',
+            'greeting'   => 'Hello, I hope this email finds you well',
+            'body'       => 'You have a pending test Lab No#' . $this->sample?->lab_no . ' to review, Please log in and take the necessary actions.',
             'actiontext' => 'Click Here for more details',
-            'actionurl' => URL::signedRoute('test-request'),
-            'user_id' => $this->sample->laboratory->test_reviewer??1,
+            'actionurl'  => URL::signedRoute('test-request'),
+            'user_id'    => $this->sample->laboratory->test_reviewer ?? 1,
         ];
         // try {
         //     $email = SendGeneralNotificationJob::dispatch($details);
         // } catch (\Throwable $th) {
         // }
         $this->resetResultInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test Results Recorded successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test Results Recorded successfully!']);
     }
-
 
     public function activateResultInput($id)
     {
         $this->resetResultInputs();
         $this->activeTest = $this->requestedTests->where('id', $id)->first();
-        $this->test_id = $id;
-        if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests){
+        $this->test_id    = $id;
+        if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests) {
             foreach ($this->activeTest->sub_tests as $testName) {
                 $this->testResults[] = [
-                    'test' => $testName,
-                    'result' => '', // Initially empty
-                    'result' => '', // Initially empty
+                    'test'    => $testName,
+                    'result'  => '', // Initially empty
+                    'result'  => '', // Initially empty
                     'CtValue' => '', // Initially empty
                     'comment' => '', // Initially empty
                 ];
@@ -250,7 +250,7 @@ class AttachTestResultComponent extends Component
 
     public function resetResultInputs()
     {
-        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath','kit_id','verified_lot','kit_expiry_date']);
+        $this->reset(['result', 'link', 'attachment', 'comment', 'attachmentPath', 'kit_id', 'verified_lot', 'kit_expiry_date']);
     }
 
     public function close()
@@ -260,9 +260,9 @@ class AttachTestResultComponent extends Component
 
     public function render()
     {
-        $data['users'] = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
+        $data['users']          = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
         $data['testsRequested'] = $this->requestedTests ?? collect();
-        $data['kits'] = Kit::where('is_active', 1)->get();
+        $data['kits']           = Kit::where('is_active', 1)->get();
 
         return view('livewire.lab.sample-management.attach-test-result-component', $data);
     }

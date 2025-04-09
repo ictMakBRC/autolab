@@ -19,6 +19,10 @@ return new class extends Migration
             $table->dateTime('commented_at')->nullable()->after('status');
             $table->text('rejection_reason')->nullable()->after('status');
         });
+
+        Schema::table('test_results', function (Blueprint $table) {
+            $table->text('tat_comment')->nullable()->after('amended_at');
+        });
     }
 
     /**
