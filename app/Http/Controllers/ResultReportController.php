@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Lab\SampleManagement\TestResultAmendment;
@@ -37,6 +36,39 @@ class ResultReportController extends Controller
 
     }
 
+    public function printMultiplen($ids)
+    {
+        $testResults = TestResult::with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->whereIn('id', $ids)->first();
+        //return View('reports.sample-management.downloadReport', compact('testResult'));
+        return View('reports.sample-management.print-multiple-report', compact('testResults'));
+
+    }
+
+    public function printMultiple($ids)
+    {
+        // Convert the comma-separated string of IDs into an array
+        $idsArray = explode(',', $ids);
+        // Retrieve the IDs from the session
+        $combinedResultsList = session('combinedResultsList');
+        // Query the TestResults based on the IDs
+        $testResults = TestResult::with([
+            'test',
+            'sample',
+            'kit',
+            'sample.participant',
+            'sample.sampleReception',
+            'sample.sampleType:id,type',
+            'sample.study:id,name',
+            'sample.requester',
+            'sample.collector:id,name',
+        ])
+            ->whereIn('id', $combinedResultsList) // Use the exploded array of IDs
+            ->get();                              // You should use `get()` instead of `first()` since you're fetching multiple results
+
+        // Return the view with the test results
+        return view('reports.sample-management.print-multiple-report', compact('testResults'));
+    }
+
     public function viewOriginallyAmendedResult($id)
     {
         // dd($id);
@@ -50,7 +82,7 @@ class ResultReportController extends Controller
     public function download($id)
     {
         $result = TestResult::findOrFail($id);
-        $file = storage_path('app/') . $result->attachment;
+        $file   = storage_path('app/') . $result->attachment;
 
         if (file_exists($file)) {
             return Response::download($file);
@@ -61,10 +93,10 @@ class ResultReportController extends Controller
 
     public function getCrsPatient()
     {
-        $endpoint = "http://crs.brc.online/api/get-patient/";
-        $client = new Client();
+        $endpoint   = "http://crs.brc.online/api/get-patient/";
+        $client     = new Client();
         $patient_no = 'BRC-10118P';
-        $token = "ABC";
+        $token      = "ABC";
 
         $response = $client->request('GET', $endpoint, ['query' => [
             'pat_no' => $patient_no,

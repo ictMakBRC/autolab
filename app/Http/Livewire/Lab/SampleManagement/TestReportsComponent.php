@@ -48,7 +48,8 @@ class TestReportsComponent extends Component
     public $status     = 'Approved';
     public $downloaded = 1;
     public $amendedResults;
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme  = 'bootstrap';
+    public $combinedResultsList = [];
     public $studies;
     public $resultIds = [];
 
@@ -164,6 +165,14 @@ class TestReportsComponent extends Component
         $this->resultIds = $results->pluck('id')->toArray();
 
         return $results;
+    }
+    public function printMultiple()
+    {
+        if (count($this->combinedResultsList) >= 2) {
+            // Store the IDs in the session
+            session(['combinedResultsList' => $this->combinedResultsList]);
+            return to_route('print-result-multi', ['session_id' => session()->getId()]);
+        }
     }
     public function render()
     {

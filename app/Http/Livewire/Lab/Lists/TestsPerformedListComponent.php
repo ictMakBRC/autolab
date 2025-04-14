@@ -118,6 +118,15 @@ class TestsPerformedListComponent extends Component
         }
     }
 
+    public function printMultiple()
+    {
+        if (count($this->combinedResultsList) >= 2) {
+            // Store the IDs in the session
+            session(['combinedResultsList' => $this->combinedResultsList]);
+            return to_route('print-result-multi', ['session_id' => session()->getId()]);
+        }
+    }
+
     public function filterTests()
     {
         $results = TestResult::select('*')->where(['creator_lab' => auth()->user()->laboratory_id])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])

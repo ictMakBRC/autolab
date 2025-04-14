@@ -12,9 +12,13 @@
                                     </h5>
                                     <div class="ms-auto">
                                         @if (count($combinedResultsList) >= 2)
-                                            <a href="javascript:;" class="btn btn-sm btn-info me-2"
+                                            <a href="javascript:void()" class="btn btn-sm btn-info me-2"
                                                 wire:click='combinedTestResultsReport'><i class="bi bi-list"></i>
                                                 Combined Test Report
+                                            </a>
+                                            <a class="btn btn-sm btn-info me-2" target="_blank" href="javascript:void()"
+                                                wire:click ="printMultiple" {{-- href="{{ route('print-result-multi', ['session_id' => session()->getId()]) }}" --}}>
+                                                <i class="bi bi-printer"></i> Multiple Test Report
                                             </a>
                                         @endif
                                         <a href="javascript:;" wire:click='export' class="btn btn-secondary me-2"><i

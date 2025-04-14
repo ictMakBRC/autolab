@@ -238,10 +238,10 @@
                             @endphp
                             @foreach ($test_results as $result)
                                 <tr style="text-align: left">
-                                    <td style="text-align: left">{{ $result['test']??'N/A' }}</td>
-                                    <td style="text-align: left">{{ $result['result']??'N/A' }}</td>
-                                    <td style="text-align: left">{{ $result['CtValue']??'N/A' }}</td>
-                                    <td style="text-align: left">{{ $result['comment']??'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['test'] ?? 'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['result'] ?? 'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['CtValue'] ?? 'N/A' }}</td>
+                                    <td style="text-align: left">{{ $result['comment'] ?? 'N/A' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -263,7 +263,8 @@
                                     <thead>
                                         @if ($testResult->test->parameter_uom)
                                             <tr>
-                                                <th colspan="{{ count(get_object_vars((object)$testResult->parameters)) + 1 }}">
+                                                <th
+                                                    colspan="{{ count(get_object_vars((object) $testResult->parameters)) + 1 }}">
                                                     {{ $testResult->test->parameter_uom }}
                                                 </th>
 
@@ -271,7 +272,7 @@
                                         @endif
 
                                         <tr>
-                                            @foreach (array_keys(get_object_vars((object)$testResult->parameters)) as $key)
+                                            @foreach (array_keys(get_object_vars((object) $testResult->parameters)) as $key)
                                                 <th>
                                                     {{ $key }}
                                                 </th>
@@ -281,7 +282,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            @foreach (array_values(get_object_vars((object)$testResult->parameters)) as $parameter)
+                                            @foreach (array_values(get_object_vars((object) $testResult->parameters)) as $parameter)
                                                 <td>
                                                     {{ $parameter }}
                                                 </td>
@@ -343,7 +344,15 @@
                                 <div style="float: right;">
                                     @php
                                         try {
-                                            echo QrCode::size(84)->generate($testResult->tracker . '|' . ($testResult->sample->participant ? $testResult->sample->participant->identity : '') . '|' . ($testResult->sample ? $testResult->sample->sample_identity : ''));
+                                            echo QrCode::size(84)->generate(
+                                                $testResult->tracker .
+                                                    '|' .
+                                                    ($testResult->sample->participant
+                                                        ? $testResult->sample->participant->identity
+                                                        : '') .
+                                                    '|' .
+                                                    ($testResult->sample ? $testResult->sample->sample_identity : ''),
+                                            );
                                         } catch (\Throwable $e) {
                                             echo QrCode::size(84)->generate($testResult->tracker);
                                         }
@@ -371,7 +380,7 @@
                         <td class="btop">
                             @if ($testResult->performer->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->performer?->signature ?? '') }}"
-                                    alt=""  width="60px"><br>
+                                    alt="" width="60px"><br>
                             @endif
                             _____________________
                             <br>
@@ -383,7 +392,7 @@
                         <td class="btop">
                             @if ($testResult->reviewer->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->reviewer?->signature ?? '') }}"
-                                    alt=""  width="60px"><br>
+                                    alt="" width="60px"><br>
                             @endif
                             _____________________
                             <br>
@@ -394,7 +403,7 @@
                         <td class="btop">
                             @if ($testResult->approver->signature ?? null)
                                 <img src="{{ asset('storage/' . $testResult->approver?->signature ?? '') }}"
-                                    alt=""  width="60px"><br>
+                                    alt="" width="60px"><br>
                             @endif
                             _____________________
                             <br>
@@ -415,3 +424,6 @@
             $pdf->page_text(60, $pdf->get_height() - 50, "{PAGE_NUM} of {PAGE_COUNT}", null, 12, array(0,0,0));
         }
     </script>
+</body>
+
+</html>

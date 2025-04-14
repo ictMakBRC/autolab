@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
         Route::get('rejectedResults', RejectedResultsComponent::class)->middleware('permission:enter-results')->name('rejected-results');
         Route::get('result/{id}/report', [ResultReportController::class, 'show'])->name('result-report');
         Route::get('result/{id}/print-report', [ResultReportController::class, 'print'])->name('print-result-report');
+        Route::get('result/{session_id}/print-multi-report', [ResultReportController::class, 'printMultiple'])->name('print-result-multi');
         Route::get('result/{id}/attachment', [ResultReportController::class, 'download'])->name('attachment.download');
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 

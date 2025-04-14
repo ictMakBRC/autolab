@@ -16,6 +16,12 @@
                                             Combined Test Report
                                         </a>
                                     @endif
+                                    @if (count($combinedResultsList) >= 2)
+                                        <a class="btn btn-sm btn-info me-2" target="_blank" href="javascript:void()"
+                                            wire:click ="printMultiple" {{-- href="{{ route('print-result-multi', ['session_id' => session()->getId()]) }}" --}}>
+                                            <i class="bi bi-printer"></i> Multiple Test Report
+                                        </a>
+                                    @endif
 
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
@@ -231,6 +237,8 @@
 
                                             <td>
                                                 {{ $testResult->test->name }}
+                                                <input type="checkbox" value="{{ $testResult->id }}"
+                                                    class="me-2 float-end" wire:model="combinedResultsList">
                                             </td>
                                             <td>
                                                 <span
