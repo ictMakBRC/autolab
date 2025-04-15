@@ -172,6 +172,9 @@ class TestReportsComponent extends Component
             // Store the IDs in the session
             session(['combinedResultsList' => $this->combinedResultsList]);
             return to_route('print-result-multi', ['session_id' => session()->getId()]);
+        } elseif (count($this->resultIds) > 0) {
+            session(['combinedResultsList' => $this->resultIds]);
+            return to_route('print-result-multi', ['session_id' => session()->getId()]);
         }
     }
     public function render()
