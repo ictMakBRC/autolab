@@ -46,7 +46,7 @@ class TestReportsComponent extends Component
     public $combinedSamplesList = [];
 
     public $status     = 'Approved';
-    public $downloaded = 1;
+    public $downloaded = null;
     public $amendedResults;
     protected $paginationTheme  = 'bootstrap';
     public $combinedResultsList = [];
