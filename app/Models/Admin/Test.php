@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\Admin;
 
 use App\Models\TestAssignment;
@@ -31,9 +30,10 @@ class Test extends Model
         'status',
         'created_by',
         'creator_lab',
+        'accreditation',
     ];
 
-    protected $casts = ['absolute_results' => 'array', 'comments' => 'array', 'parameters' => 'array','sub_tests' => 'array'];
+    protected $casts = ['absolute_results' => 'array', 'comments' => 'array', 'parameters' => 'array', 'sub_tests' => 'array'];
 
     public function category()
     {
@@ -52,7 +52,7 @@ class Test extends Model
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
-                $model->created_by = auth()->id();
+                $model->created_by  = auth()->id();
                 $model->creator_lab = auth()->user()->laboratory_id;
             });
         }
@@ -63,12 +63,12 @@ class Test extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('creator_lab', auth()->user()->laboratory_id)
-            ->where('name', 'like', '%'.$search.'%')
-            ->orWhere('short_code', 'like', '%'.$search.'%')
-            ->orWhere('price', 'like', '%'.$search.'%')
-            ->orWhere('result_type', 'like', '%'.$search.'%')
+            ->where('name', 'like', '%' . $search . '%')
+            ->orWhere('short_code', 'like', '%' . $search . '%')
+            ->orWhere('price', 'like', '%' . $search . '%')
+            ->orWhere('result_type', 'like', '%' . $search . '%')
             ->orWhereHas('category', function ($query) use ($search) {
-                $query->where('category_name', 'like', '%'.$search.'%');
+                $query->where('category_name', 'like', '%' . $search . '%');
             });
     }
 }

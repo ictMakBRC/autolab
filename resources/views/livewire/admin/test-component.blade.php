@@ -126,7 +126,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-10">
+                                <div class="col-md-8">
                                     <label for="precautions" class="form-label">{{ __('Precautions') }}</label>
                                     <textarea name="precautions" id="precautions" rows="1" wire:model.lazy='precautions' class="form-control"
                                         placeholder="{{ __('Precautions') }}"></textarea>
@@ -134,7 +134,17 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+                                <div class="mb-3 col-md-2">
+                                    <label for="accreditation" class="form-label">Accreditation</label>
+                                    <select class="form-select" id="accreditation" wire:model="accreditation">
+                                        <option selected value="">Select</option>
+                                        <option value='1'>Active</option>
+                                        <option value='0'>Inactive</option>
+                                    </select>
+                                    @error('accreditation')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="mb-3 col-md-2">
                                     <label for="isActive" class="form-label">Status</label>
                                     <select class="form-select" id="isActive" wire:model="status">
@@ -157,7 +167,7 @@
                                     <div class="row">
 
                                         <div
-                                            class=" 
+                                            class="
                                         @if ($result_type === 'Measurable' || $result_type === 'Absolute') col-md-4
                                         @else
                                         col-md-12 @endif
@@ -196,7 +206,8 @@
                                         @if ($result_type === 'Multiple')
 
                                             <div id="testoption" class="col-md-8 mb-2">
-                                                <label for="results" class="form-label">{{ __('Sub Tests') }}</label>
+                                                <label for="results"
+                                                    class="form-label">{{ __('Sub Tests') }}</label>
                                                 <button class="btn btn-outline-success mb-1" type="button"
                                                     id="button-addon2" wire:click.prevent="addTest">+</button>
                                                 @foreach ($dynamicTests as $index => $test)
@@ -282,7 +293,7 @@
                                                 @endforeach
                                             </div>
 
-                                           <div id="parameters_uom" class="col-md-4 mb-2">
+                                            <div id="parameters_uom" class="col-md-4 mb-2">
                                                 <label for="parameter_uom"
                                                     class="form-label">{{ __('Parameter Unit of Measure') }}</label>
                                                 <div class="input-group form-group">
@@ -291,8 +302,7 @@
                                                             {{ __('Unit') }}
                                                         </span>
                                                     </div>
-                                                    <input type="text" class="form-control"
-                                                        id="parameter_uom"
+                                                    <input type="text" class="form-control" id="parameter_uom"
                                                         wire:model.lazy="parameter_uom">
                                                 </div>
                                             </div>
@@ -352,7 +362,7 @@
                     </x-table-utilities>
                     <div class="tab-content">
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+                            <table id="datableButton" class="table table-striped table=sm mb-0 w-100 sortable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -377,7 +387,7 @@
                                             @endif
                                             <td class="table-action">
                                                 <a href="javascript: void(0);"
-                                                    class="action-ico btn btn-outline-info mx-1"
+                                                    class="action-ico btn btn-sm btn-outline-info mx-1"
                                                     wire:click="editTest({{ $test->id }})"
                                                     data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                     title="" data-bs-original-title="Edit Test"
@@ -385,9 +395,24 @@
                                                         class="bi bi-pencil-square"></i></a>
                                                 @if (Auth::user()->hasPermission(['master-access']))
                                                     <a href="javascript:;"
-                                                        class="action-ico btn btn-outline-danger mx-1"
+                                                        class="action-ico btn btn-sm btn-outline-danger mx-1"
                                                         wire:click="deleteConfirmation({{ $test->id }})"><i
                                                             class="bi bi-trash-fill"></i></a>
+                                                @endif
+                                                @if ($test->is_sanas_accredited == 1)
+                                                    <a href="javascript: void(0);"
+                                                        class="action-ico btn btn-sm btn-outline-success mx-1"
+                                                        wire:click="accreditation({{ $test->id }},0)"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Un accredited Test"><i
+                                                            class="bi bi-check-circle"></i></a>
+                                                @else
+                                                    <a href="javascript: void(0);"
+                                                        class="action-ico btn btn-sm btn-outline-danger mx-1"
+                                                        wire:click="accreditation({{ $test->id }},1)"
+                                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                        title="" data-bs-original-title="Accredited Test"><i
+                                                            class="bi bi-x-circle"></i></a>
                                                 @endif
                                             </td>
                                         </tr>

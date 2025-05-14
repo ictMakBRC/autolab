@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Livewire\Admin;
 
 use App\Exports\TestsExport;
@@ -44,7 +43,7 @@ class TestComponent extends Component
     public $result_type;
 
     public $dynamicResults = [];
-    public $dynamicTests = [];
+    public $dynamicTests   = [];
 
     public $absolute_results = [];
 
@@ -63,6 +62,8 @@ class TestComponent extends Component
 
     public $edit_id;
 
+    public $is_sanas_accredited;
+
     protected $paginationTheme = 'bootstrap';
 
     public function export()
@@ -79,10 +80,10 @@ class TestComponent extends Component
     {
         $this->validateOnly($fields, [
             'category_id' => 'required|integer',
-            'name' => 'required|string',
-            'price' => 'required|numeric',
+            'name'        => 'required|string',
+            'price'       => 'required|numeric',
             'result_type' => 'required|string',
-            'status' => 'required|integer',
+            'status'      => 'required|integer',
         ]);
     }
 
@@ -108,7 +109,7 @@ class TestComponent extends Component
     public function updatedResultType()
     {
         if ($this->result_type === 'Text' || $this->result_type === 'File') {
-            $this->reset(['dynamicResults', 'measurable_result_uom', 'absolute_results', 'dynamicParameters', 'result_presentation']);
+            $this->reset(['dynamicResults', 'measurable_result_uom', 'accreditation', 'absolute_results', 'dynamicParameters', 'result_presentation']);
         }
     }
 
@@ -207,57 +208,60 @@ class TestComponent extends Component
     public function storeTest()
     {
         $this->validate([
-            'category_id' => 'required|integer',
-            'status' => 'required',
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            // 'sub_tests' => 'nullable|array',
-            'result_type' => 'required|string',
+            'category_id'   => 'required|integer',
+            'status'        => 'required',
+            'name'          => 'required|string',
+            'price'         => 'required|numeric',
+            'accreditation' => 'required|integer',
+            'result_type'   => 'required|string',
         ]);
-        $test = new Test();
-        $test->category_id = $this->category_id;
-        $test->name = $this->name;
-        $test->short_code = $this->short_code;
-        $test->price = $this->price;
-        $test->tat = $this->tat;
-        $test->reference_range_min = $this->reference_range_min;
-        $test->reference_range_max = $this->reference_range_max;
-        $test->status = $this->status;
-        $test->precautions = $this->precautions;
-        $test->result_type = $this->result_type;
-        $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
+        $test                        = new Test();
+        $test->category_id           = $this->category_id;
+        $test->name                  = $this->name;
+        $test->short_code            = $this->short_code;
+        $test->price                 = $this->price;
+        $test->tat                   = $this->tat;
+        $test->reference_range_min   = $this->reference_range_min;
+        $test->reference_range_max   = $this->reference_range_max;
+        $test->status                = $this->status;
+        $test->is_sanas_accredited   = $this->is_sanas_accredited;
+        $test->precautions           = $this->precautions;
+        $test->result_type           = $this->result_type;
+        $test->absolute_results      = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
-        $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
-        if($this->result_type=='Multiple'){
-        $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;}
-        $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
-        $test->parameter_uom = $this->parameter_uom ?? null;
+        $test->comments              = count($this->pushComments()) ? $this->pushComments() : null;
+        if ($this->result_type == 'Multiple') {
+            $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;
+        }
+        $test->parameters          = count($this->pushParameters()) ? $this->pushParameters() : null;
+        $test->parameter_uom       = $this->parameter_uom ?? null;
         $test->result_presentation = $this->result_presentation ?? null;
         $test->save();
 
         $this->resetTestInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test created successfully!']);
     }
 
     public function editTest(Test $test)
     {
-        $this->edit_id = $test->id;
-        $this->category_id = $test->category_id;
-        $this->name = $test->name;
-        $this->short_code = $test->short_code;
-        $this->price = $test->price;
-        $this->tat = $test->tat;
-        $this->reference_range_min = $test->reference_range_min;
-        $this->reference_range_max = $test->reference_range_max;
-        $this->status = $test->status;
-        $this->precautions = $test->precautions;
-        $this->result_type = $test->result_type;
+        $this->edit_id               = $test->id;
+        $this->category_id           = $test->category_id;
+        $this->name                  = $test->name;
+        $this->short_code            = $test->short_code;
+        $this->price                 = $test->price;
+        $this->tat                   = $test->tat;
+        $this->reference_range_min   = $test->reference_range_min;
+        $this->reference_range_max   = $test->reference_range_max;
+        $this->status                = $test->status;
+        $this->is_sanas_accredited   = $test->is_sanas_accredited;
+        $this->precautions           = $test->precautions;
+        $this->result_type           = $test->result_type;
         $this->measurable_result_uom = $test->measurable_result_uom;
-        $this->result_presentation = $test->result_presentation;
-        $this->parameter_uom=$test->parameter_uom;
+        $this->result_presentation   = $test->result_presentation;
+        $this->parameter_uom         = $test->parameter_uom;
 
-        $this->dynamicResults = [];
-        $this->dynamicComments = [];
+        $this->dynamicResults    = [];
+        $this->dynamicComments   = [];
         $this->dynamicParameters = [];
         if ($test->absolute_results != null) {
             foreach ($test->absolute_results as $key => $result) {
@@ -297,51 +301,61 @@ class TestComponent extends Component
     {
         $this->validate([
             'category_id' => 'required|integer',
-            'name' => 'required|string',
-            'price' => 'required|numeric',
+            'name'        => 'required|string',
+            'price'       => 'required|numeric',
             'result_type' => 'required|string',
-            'status' => 'required|integer',
+            'status'      => 'required|integer',
         ]);
 
-        $test = Test::find($this->edit_id);
-        $test->category_id = $this->category_id;
-        $test->name = $this->name;
-        $test->short_code = $this->short_code;
-        $test->price = $this->price;
-        $test->tat = $this->tat;
-        $test->reference_range_min = $this->reference_range_min;
-        $test->reference_range_max = $this->reference_range_max;
-        $test->status = $this->status;
-        $test->precautions = $this->precautions;
-        $test->result_type = $this->result_type;
-        $test->absolute_results = count($this->pushResults()) ? $this->pushResults() : null;
+        $test                        = Test::find($this->edit_id);
+        $test->category_id           = $this->category_id;
+        $test->name                  = $this->name;
+        $test->short_code            = $this->short_code;
+        $test->price                 = $this->price;
+        $test->tat                   = $this->tat;
+        $test->reference_range_min   = $this->reference_range_min;
+        $test->reference_range_max   = $this->reference_range_max;
+        $test->is_sanas_accredited   = $this->is_sanas_accredited;
+        $test->status                = $this->status;
+        $test->precautions           = $this->precautions;
+        $test->result_type           = $this->result_type;
+        $test->absolute_results      = count($this->pushResults()) ? $this->pushResults() : null;
         $test->measurable_result_uom = $this->measurable_result_uom;
-        if($this->result_type=='Multiple'){
-        $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;
+        if ($this->result_type == 'Multiple') {
+            $test->sub_tests = count($this->pushTests()) ? $this->pushTests() : null;
         }
-        $test->comments = count($this->pushComments()) ? $this->pushComments() : null;
-        $test->parameters = count($this->pushParameters()) ? $this->pushParameters() : null;
+        $test->comments            = count($this->pushComments()) ? $this->pushComments() : null;
+        $test->parameters          = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->result_presentation = $this->result_presentation ?? null;
-        $test->parameter_uom = $this->parameter_uom ?? null;
+        $test->parameter_uom       = $this->parameter_uom ?? null;
         $test->update();
 
         $this->toggleForm = false;
         $this->resetTestInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test updated successfully!']);
     }
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'dynamicTests','result_presentation','parameter_uom']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'dynamicTests', 'result_presentation', 'parameter_uom']);
     }
-
+    public function accreditation($id, $state)
+    {
+        // dd($id, $state);
+        $test = Test::where('id', $id)->update(['is_sanas_accredited' => $state]);
+        if ($test) {
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test accreditation status updated successfully!']);
+        } else {
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Test accreditation status could not be updated!']);
+        }
+    }
     public function deleteConfirmation($id)
     {
         if (Auth::user()->hasPermission(['manage-users'])) {
             $this->delete_id = $id;
             $this->dispatchBrowserEvent('delete-modal');
         } else {
-            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning',  'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
+            $this->dispatchBrowserEvent('cant-delete', ['type' => 'warning', 'message' => 'Oops! You do not have the necessary permissions to delete this resource!']);
         }
     }
 
@@ -353,9 +367,9 @@ class TestComponent extends Component
             $this->delete_id = '';
             $this->dispatchBrowserEvent('close-modal');
             session()->flash('success', 'Test deleted successfully.');
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Test deleted successfully!']);
-        } catch(\Exception $error) {
-            $this->dispatchBrowserEvent('alert', ['type' => 'error',  'message' => 'Test can not be deleted!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test deleted successfully!']);
+        } catch (\Exception $error) {
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Test can not be deleted!']);
         }
     }
 
@@ -378,9 +392,9 @@ class TestComponent extends Component
     public function render()
     {
         $tests = Test::search($this->search)
-        ->where('creator_lab', auth()->user()->laboratory_id)
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+            ->where('creator_lab', auth()->user()->laboratory_id)
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         $testCategories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
 
         return view('livewire.admin.test-component', compact('tests', 'testCategories'));

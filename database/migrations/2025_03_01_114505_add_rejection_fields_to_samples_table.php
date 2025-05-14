@@ -23,6 +23,9 @@ return new class extends Migration
         Schema::table('test_results', function (Blueprint $table) {
             $table->text('tat_comment')->nullable()->after('amended_at');
         });
+        Schema::table('tests', function (Blueprint $table) {
+            $table->boolean('accreditation')->default(false)->after('status');
+        });
     }
 
     /**

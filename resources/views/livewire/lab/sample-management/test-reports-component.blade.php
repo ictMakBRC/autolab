@@ -22,7 +22,7 @@
                                             <i class="bi bi-printer"></i>Selected Multiple Test Report
                                             ({{ count($combinedResultsList) }})
                                         </a>
-                                    @elseif(count($resultIds) > 0 && count($resultIds) < 200)
+                                    @elseif(count($resultIds) > 0 && count($resultIds) < 201)
                                         <a class="btn btn-sm btn-info me-2" target="_blank" href="javascript:void()"
                                             wire:click ="printMultiple" {{-- href="{{ route('print-result-multi', ['session_id' => session()->getId()]) }}" --}}>
                                             <i class="bi bi-printer"></i>All Multiple Test Report
@@ -30,7 +30,7 @@
                                         </a>
                                     @elseif(count($resultIds) > 201)
                                         <small class="text-danger">
-                                            The selected number of results ({{ count($resultIds) }}) is greater the 250,
+                                            The selected number of results ({{ count($resultIds) }}) is greater the 200,
                                             please apply some filters like Date, Sample Type, Test, Facility, Study to
                                             reduce on the number
                                         </small>

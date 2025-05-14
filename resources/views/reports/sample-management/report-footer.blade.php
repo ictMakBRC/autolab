@@ -6,9 +6,15 @@
 
                 <img width="160px" style="margin-right:1px; " src="{{ asset('autolab-assets/images/sanas.png') }}"
                     alt="SANAS#M0857">
-                <p style="color:green;  ">
-                    This laboratory is accredited by the South African National Accreditation System (SANAS)
-                </p>
+                {{-- <p style="color:green;  ">
+                    This laboratory is accredited by the South African National Accreditation System (SANAS) <br>
+                </p> --}}
+                @if ($testResult->test->is_sanas_accredited == 0)
+                    <em>
+                        <p>These Results are not part of the SANAS Scope of Accreditation for this GMI Labs
+                        </p>
+                    </em>
+                @endif
 
             </td>
             <td style="font-size:10px; text-align:center">
@@ -26,14 +32,14 @@
                     <span style="text-align:left; font-size:10px; color:#4CAF50">Printed By: <font>
                             {{ Auth::user()->name }} </font>
                     </span>
-                        <span style="text-align:center; font-size:10px; color:#4CAF50"> Print Date:
-                            {{ date('l d-M-Y H:i:s') }}
-                        </span>
-                        <span style="text-align:right; font-size:10px; color:#4CAF50"> Printed
-                            {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
-                                [{{ $testResult->tracker }}]
-                            @endif
-                        </span>
+                    <span style="text-align:center; font-size:10px; color:#4CAF50"> Print Date:
+                        {{ date('l d-M-Y H:i:s') }}
+                    </span>
+                    <span style="text-align:right; font-size:10px; color:#4CAF50"> Printed
+                        {{ $testResult->download_count }} time(s) @if ($testResult->tracker != '')
+                            [{{ $testResult->tracker }}]
+                        @endif
+                    </span>
                 </p>
                 <p style="font-style: italic;">
 

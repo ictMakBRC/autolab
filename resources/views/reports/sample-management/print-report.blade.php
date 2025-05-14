@@ -129,8 +129,6 @@
                     <h2 style="color:rgb(8, 219, 131)"> Genomics, Molecular and Immunology Laboratories </h2>
                 </em>
             </div>
-
-
             <hr style="height:0.6px; width:100%; color:#6C757D;">
             <h3 style="text-align:center; font-size:20px"><b>
                     @if ($testResult->status != 'Approved')
