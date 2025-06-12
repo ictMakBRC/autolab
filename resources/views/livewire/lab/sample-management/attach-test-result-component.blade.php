@@ -404,7 +404,8 @@
                                                                     </div>
                                                                     @php
                                                                         $dateRequested = \Carbon\Carbon::parse(
-                                                                            $sample->date_requested,
+                                                                            $sample->sampleReception->date_delivered ??
+                                                                                $sample->date_requested,
                                                                         );
                                                                         $tat = $dateRequested->diffInHours($today);
                                                                     @endphp
@@ -415,7 +416,7 @@
                                                                                     the result is outside the
                                                                                     TAT <small class="text-danger">The
                                                                                         test was requested on
-                                                                                        {{ $sample?->date_requested }}
+                                                                                        {{ $sample->sampleReception->date_delivered ?? $sample->date_requested }}
                                                                                         and the TAT for this test is
                                                                                         {{ $test?->tat }} and the
                                                                                         result TAT is

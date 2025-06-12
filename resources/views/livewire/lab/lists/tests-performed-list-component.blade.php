@@ -250,8 +250,8 @@
                                             </td>
                                             <td>
                                                 <span
-                                                    class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span>
-                                                ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at) . 'min' }})
+                                                    class="text-danger fw-bold">{{ $testResult->sample->sampleReception->date_delivered->diffInHours($testResult->created_at) }}</span>
+                                                ({{ $testResult->sample->sampleReception->date_delivered->diffInMinutes($testResult->created_at) . 'min' }})
                                             </td>
                                             <td>
                                                 {{ $testResult->sample->requester->name }}
