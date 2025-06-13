@@ -33,6 +33,10 @@ use App\Http\Livewire\Lab\Lists\ParticipantListComponent;
 use App\Http\Livewire\Lab\Lists\SamplesListComponent;
 use App\Http\Livewire\Lab\Lists\TestsAmendedListComponent;
 use App\Http\Livewire\Lab\Lists\TestsPerformedListComponent;
+use App\Http\Livewire\Lab\Reports\MultipleReportComponent;
+use App\Http\Livewire\Lab\Reports\PendingSamplesReportComponent;
+use App\Http\Livewire\Lab\Reports\TestCountReportComponent;
+use App\Http\Livewire\Lab\Reports\TestStudyCountReportComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
 use App\Http\Livewire\Lab\SampleManagement\PaternitySpecimenRequest;
@@ -129,8 +133,12 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
         Route::get('participants', ParticipantListComponent::class)->middleware('permission:view-participant-info')->name('participants');
 
         Route::get('samplesList', SamplesListComponent::class)->middleware('permission:view-participant-info')->name('samples-list');
+        Route::get('samplesPendingList', PendingSamplesReportComponent::class)->middleware('permission:view-participant-info')->name('samples-pending-list');
+        Route::get('samplesResultsMultiple', MultipleReportComponent::class)->middleware('permission:view-participant-info')->name('multiple-result-list');
         Route::get('samplesCount', GeneralReportComponent::class)->middleware('permission:view-participant-info')->name('samples-count');
         Route::get('testsPerformedList', TestsPerformedListComponent::class)->middleware('permission:view-participant-info')->name('tests-performed-list');
+        Route::get('testCountReport', TestCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-count-report');
+        Route::get('testStudyCountReport', TestStudyCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-study-count-report');
 
         Route::get('crs/patient/load', [ResultReportController::class, 'getCrsPatient'])->name('loadcrsPatient');
 

@@ -14,14 +14,13 @@
                                             class="bi bi-file-earmark-fill"></i> Export</a>
                                     <a type="button" class="btn btn-outline-info" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                        data-bs-original-title="Refresh Table"><i
-                                            class="bi bi-arrow-clockwise"></i></a>
+                                        data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <hr>
-                    @if ($filter)                            
+                    @if ($filter)
                         <div class="row mb-0">
                             <form>
                                 <div class="row">
@@ -56,7 +55,8 @@
                                         <select class="form-select" id="entryType" wire:model="entryType">
                                             <option selected value="">All</option>
                                             @forelse ($entryTypes as $entryType)
-                                                <option value='{{ $entryType->entry_type }}'>{{ $entryType->entry_type }}
+                                                <option value='{{ $entryType->entry_type }}'>
+                                                    {{ $entryType->entry_type }}
                                                 </option>
                                             @empty
                                             @endforelse
@@ -114,7 +114,8 @@
                                     </div>
                                     <div class=" col ms-auto position-relative">
                                         <label for="search" class="form-label">Search</label>
-                                        <input wire:model.debounce.300ms="search" class="form-control " type="text" placeholder="search">
+                                        <input wire:model.debounce.300ms="search" class="form-control "
+                                            type="text" placeholder="search">
                                     </div>
                                 </div>
                                 <!-- end row-->
@@ -137,45 +138,41 @@
                                     @enderror
                                 </div>
                                 @if ($entry_type == 'Participant' || $entry_type == 'Client')
-
                                     <div class="mb-3 col-md-2">
                                         <label for="identity" class="form-label">Participant ID<span
                                                 class="text-danger">*</span>
 
                                         </label>
-                                        <input type="text" id="identity"
-                                            class="form-control" size="14"
+                                        <input type="text" id="identity" class="form-control" size="14"
                                             wire:model.lazy="identity"
                                             @if ($entry_type == 'Client') disabled @endif>
                                         @error('identity')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    @endif
-                                    @if($entry_type == 'CRS Patient')
-                                        <div class="col">
-                                            <label for="patno" class="form-label">CRS Pat No.<span
+                                @endif
+                                @if ($entry_type == 'CRS Patient')
+                                    <div class="col">
+                                        <label for="patno" class="form-label">CRS Pat No.<span
                                                 class="text-danger">*</span>
-                                            </label>
-                                            <input type="text" id="pat_no"
-                                                class="form-control" size="14"
-                                                wire:model.lazy="patno">
-                                            @error('patno')
-                                                <div class="text-danger text-small">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-2 col-md-2">
-                                            <label for="identity" class="form-label">Participant ID<span
-                                                    class="text-danger">*</span>
-                                            </label>
-                                            <input type="text" id="identity"
-                                                class="form-control" size="14"
-                                                wire:model.lazy="identity">
-                                            @error('identity')
-                                                <div class="text-danger text-small">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    @endif
+                                        </label>
+                                        <input type="text" id="pat_no" class="form-control" size="14"
+                                            wire:model.lazy="patno">
+                                        @error('patno')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-2 col-md-2">
+                                        <label for="identity" class="form-label">Participant ID<span
+                                                class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" id="identity" class="form-control" size="14"
+                                            wire:model.lazy="identity">
+                                        @error('identity')
+                                            <div class="text-danger text-small">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                @endif
                                 @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'CRS Patient')
                                     <div class="mb-3 col-md-1">
                                         <label for="age" class="form-label">Age<span
@@ -197,8 +194,7 @@
                                     <div class="mb-3 col-md-2">
                                         <label for="gender" class="form-label">Gender<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select select2" id="gender"
-                                            wire:model="gender">
+                                        <select class="form-select select2" id="gender" wire:model="gender">
                                             <option selected value="">Select</option>
                                             <option value='Male'>Male</option>
                                             <option value='Female'>Female</option>
@@ -211,8 +207,7 @@
                                     <div class="mb-3 col">
                                         <label for="address" class="form-label">Address<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" id="address"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="address" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="address">
                                         @error('address')
@@ -222,8 +217,7 @@
                                     <div class="mb-2 col-md-2">
                                         <label for="contact" class="form-label">Contact<span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" id="contact"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="contact" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="contact">
                                         @error('contact')
@@ -233,8 +227,7 @@
                                     <div class="mb-3 col-md-3">
                                         <label for="nok_contact" class="form-label">Next of Kin
                                             Contact<span class="text-danger">*</span></label>
-                                        <input type="text" id="nok_contact"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="nok_contact" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="nok_contact">
                                         @error('nok_contact')
@@ -244,8 +237,7 @@
                                     <div class="mb-3 col-md-3">
                                         <label for="nok_address" class="form-label">Next of Kin
                                             Address</label>
-                                        <input type="text" id="nok_address"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="nok_address" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="nok_address">
                                         @error('nok_address')
@@ -271,8 +263,7 @@
                                     <hr>
                                     <div class="mb-3 col-md-1">
                                         <label for="title" class="form-label">Title</label>
-                                        <select class="form-select select2" id="title"
-                                            wire:model="title">
+                                        <select class="form-select select2" id="title" wire:model="title">
                                             <option selected value="">Select</option>
                                             <option value="Mr.">Mr.</option>
                                             <option value="Ms.">Ms.</option>
@@ -287,10 +278,9 @@
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="nin_number" class="form-label">NIN Number</label>
-                                        <input type="text" id="nin_number"
-                                            class="form-control text-uppercase"
-                                            onkeyup="this.value = this.value.toUpperCase();"
-                                            size="14" wire:model.lazy="nin_number">
+                                        <input type="text" id="nin_number" class="form-control text-uppercase"
+                                            onkeyup="this.value = this.value.toUpperCase();" size="14"
+                                            wire:model.lazy="nin_number">
                                         @error('nin_number')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -298,8 +288,7 @@
 
                                     <div class="mb-3 col-md-3">
                                         <label for="surname" class="form-label">Surname</label>
-                                        <input type="text" id="surname"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="surname" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="surname">
                                         @error('surname')
@@ -308,8 +297,7 @@
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="first_name" class="form-label">First Name</label>
-                                        <input type="text" id="last_name"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="last_name" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="first_name">
                                         @error('first_name')
@@ -318,8 +306,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="other_name" class="form-label">Other Name</label>
-                                        <input type="text" id="other_name"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="other_name" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="other_name">
                                         @error('other_name')
@@ -350,8 +337,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="district" class="form-label">District</label>
-                                        <select class="form-select select2" id="district"
-                                            wire:model="district">
+                                        <select class="form-select select2" id="district" wire:model="district">
                                             <option value="" selected>Select</option>
                                             @include('layouts.districts')
                                         </select>
@@ -371,8 +357,7 @@
 
                                     <div class="mb-3 col-md-2">
                                         <label for="birth_place" class="form-label">Birth Place</label>
-                                        <input type="text" id="birth_place"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="birth_place" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="birth_place">
                                         @error('birth_place')
@@ -393,8 +378,7 @@
 
                                     <div class="mb-3 col-md-3">
                                         <label for="occupation" class="form-label">Occupation</label>
-                                        <input type="text" id="occupation"
-                                            class="form-control text-uppercase"
+                                        <input type="text" id="occupation" class="form-control text-uppercase"
                                             onkeyup="this.value = this.value.toUpperCase();"
                                             wire:model.lazy="occupation">
                                         @error('occupation')
@@ -421,10 +405,8 @@
 
                                     <div class="mb-3 col-md-3">
                                         <label for="nok" class="form-label">Next of Kin</label>
-                                        <input type="text" id="nok"
-                                            class="form-control text-uppercase"
-                                            onkeyup="this.value = this.value.toUpperCase();"
-                                            wire:model.lazy="nok">
+                                        <input type="text" id="nok" class="form-control text-uppercase"
+                                            onkeyup="this.value = this.value.toUpperCase();" wire:model.lazy="nok">
                                         @error('nok')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -446,15 +428,15 @@
                             @endif
                             <div class="modal-footer">
 
-                                     <button wire:click="close()" type="reset" class="btn btn-outline-danger r-15">Close</button>
-                                    <x-button class="btn-success">{{ __('Update') }}</x-button>
-                             
+                                <button wire:click="close()" type="reset"
+                                    class="btn btn-outline-danger r-15">Close</button>
+                                <x-button class="btn-success">{{ __('Update') }}</x-button>
+
                             </div>
                             <!-- end row-->
                         </form>
                     @endif
                 </div>
-
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="table-responsive">
@@ -481,51 +463,53 @@
                                     @forelse ($participants as $key => $participant)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                           
+
                                             <td>
                                                 <a href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"
                                                     class="text-secondary"
                                                     target="_blank">{{ $participant->identity }}
                                                 </a>
-                                                
+
                                             </td>
                                             <td>
                                                 {{ $participant->entry_type }}
                                             </td>
                                             <td>
-                                                @if ($participant->age != null) {{ $participant->age}} yrs
+                                                @if ($participant->age != null)
+                                                    {{ $participant->age }} yrs
                                                 @elseif ($participant->months != null)
-                                                 &nbsp; {{ $participant->months}} Months
-                                                 @else N/A
+                                                    &nbsp; {{ $participant->months }} Months
+                                                @else
+                                                    N/A
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ $participant->gender??'N/A' }}
+                                                {{ $participant->gender ?? 'N/A' }}
                                             </td>
-                                           
+
                                             <td>
-                                                {{ $participant->contact??'N/A' }}
+                                                {{ $participant->contact ?? 'N/A' }}
                                             </td>
-                                            
+
                                             <td>
-                                                {{ $participant->address??'N/A' }}
+                                                {{ $participant->address ?? 'N/A' }}
                                             </td>
                                             <td>
-                                         
-                                                {{ $participant->nok_contact??'N/A' }}
+
+                                                {{ $participant->nok_contact ?? 'N/A' }}
                                             </td>
-                                             
-                                           
+
+
                                             <td>
-                                                {{ $participant->nok_address??'N/A' }}
-                                                
+                                                {{ $participant->nok_address ?? 'N/A' }}
+
                                             </td>
-                                        
+
                                             <td>
                                                 {{ $participant->facility->name }}
                                             </td>
                                             <td>
-                                                {{ $participant->study->name??'N/A' }}
+                                                {{ $participant->study->name ?? 'N/A' }}
                                             </td>
                                             {{-- <td>
                                                 {{ $participant->sample->name }}
@@ -538,9 +522,15 @@
                                             </td> --}}
                                             <td>
                                                 @if ($participant->created_by == auth()->user()->id || Auth::user()->hasPermission(['review-results']))
-                                                <button class="btn btn-sm btn-outline-success"
-                                                wire:click="editParticipant({{ $participant->id }})"><i
-                                                    class="bi bi-pencil"></i></button>
+                                                    <button class="action-btn"
+                                                        wire:click="editParticipant({{ $participant->id }})"><i
+                                                            class="bi bi-pencil"></i></button>
+                                                    <a class="action-btn" target="_blank"
+                                                        href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"><i
+                                                            class="bi bi-eye"></i></a>
+                                                    <a class="action-btn" target="_blank"
+                                                        href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"><i
+                                                            class="bi bi-file"></i></a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -563,4 +553,3 @@
 
     </div>
 </div>
-

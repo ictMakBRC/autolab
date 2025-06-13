@@ -94,4 +94,9 @@ class SampleReception extends Model
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->where('batch_no', trim($search));
     }
+    protected $casts = [
+        'date_delivered' => 'datetime',
+        'created_at'     => 'datetime',
+        'date_reviewed'  => 'datetime',
+    ];
 }

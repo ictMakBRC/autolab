@@ -163,12 +163,53 @@
                         @endif
 
                         @if (Auth::user()->hasPermission(['view-participant-info']))
-                            <a href="{{ route('samples-list') }}" class="list-group-item"><i
+                            {{-- <a href="{{ route('samples-list') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Samples<x-count-badge>{{ $samplesCount }}
-                                </x-count-badge></a>
+                                </x-count-badge></a> --}}
+                            <div class="list-group-item">
+                                <a class="d-flex justify-content-between text-light" data-bs-toggle="collapse"
+                                    href="#sampleReportsDropdown" role="button" aria-expanded="false"
+                                    aria-controls="sampleReportsDropdown">
+                                    <span><i class="bx bxs-vial"></i> Samples</span>
+                                    <i class="bi bi-chevron-down small"></i>
+                                </a>
+                                <div class="collapse mt-2" id="sampleReportsDropdown">
+                                    <ul class="nav flex-column ms-3 text-light">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('samples-list') }}"></i>All
+                                                Samples<x-count-badge>{{ $samplesCount }}
+                                                </x-count-badge></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                                href="{{ route('samples-pending-list') }}"></i>Pending
+                                                Samples<x-count-badge>{{ $samplesCount }}
+                                                </x-count-badge></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                                href="{{ route('multiple-result-list') }}"></i>Multiple
+                                                Results</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('tests-count-report') }}"></i>Test Q
+                                                Request
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link"
+                                                href="{{ route('tests-study-count-report') }}"></i>Test Q Study
+                                                Request
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
                             {{-- <a href="{{ route('samples-count') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Sample Reports<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a> --}}
+
                             <a href="{{ route('participants') }}" class="list-group-item"><i
                                     class="bi bi-people"></i>Participants <x-count-badge>{{ $participantCount }}
                                 </x-count-badge></a>
@@ -177,6 +218,46 @@
                             <a href="{{ route('tests-performed-list') }}" class="list-group-item"><i
                                     class="bx bxs-flask"></i>Tests Performed <x-count-badge>{{ $testsPerformedCount }}
                                 </x-count-badge></a>
+                            {{-- <li
+                                class="nav-item list-group-item {{ request()->segment(3) == 'lists' ? 'menuitem-active' : '' }}">
+                                <a class="list-group-item" href="#listing" data-bs-toggle="collapse" role="button"
+                                    aria-expanded="false" aria-controls="listing">
+                                    <i class="bx bxs-file"></i> Unit Lists
+                                </a>
+                                <div class="collapse " id="listing">
+                                    <ul class="nav flex-column">
+                                        <!--end nav-item-->
+                                        <li>
+                                            <a href="" class="nav-link ">Departments</a>
+                                        </li>
+                                        <li>
+                                            <a href="" class="nav-link ">Projects</a>
+                                        </li>
+                                    </ul>
+                                    <!--end nav-->
+                                </div>
+                                <!--end sidebarAnalytics-->
+                            </li> --}}
+                            {{-- <div class="list-group-item">
+                                <a class="d-flex align-items-center justify-content-between text-light"
+                                    data-bs-toggle="collapse" href="#sampleReportsDropdown" role="button"
+                                    aria-expanded="false" aria-controls="sampleReportsDropdown">
+                                    <span><i class="bi bi-clipboard-data"></i> Sample Reports</span>
+                                    <i class="bi bi-chevron-down small"></i>
+                                </a>
+                                <div class="collapse mt-2" id="sampleReportsDropdown">
+                                    <ul class="nav flex-column ms-3">
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">Daily
+                                                Report</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">Monthly
+                                                Report</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> --}}
                         @endif
                     </div>
                 </div>
@@ -302,5 +383,4 @@
         </div>
     </aside>
     <!--end start sidebar -->
-
 </div>

@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{auth()->user()->color_scheme??'minimal-theme'}}">
- 
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="{{ auth()->user()->color_scheme ?? 'minimal-theme' }}">
+
 
 <head>
     <!-- Required meta tags -->
@@ -45,8 +46,8 @@
 
     <!--start wrapper-->
     <div class="wrapper">
-        <livewire:layout.header-component/>
-        <livewire:layout.navigation-component/>
+        <livewire:layout.header-component />
+        <livewire:layout.navigation-component wire:init="loadCounts" />
         {{-- @include('layouts.header')
         @include('layouts.navigation') --}}
         <!--start content-->
@@ -66,7 +67,6 @@
         {{-- @include('layouts.theme-customization') --}}
     </div>
     <!--end wrapper-->
-
     <!-- Bootstrap bundle JS -->
     <script src="{{ asset('autolab-assets/js/bootstrap.bundle.min.js') }}"></script>
     <!--plugins-->
@@ -93,7 +93,7 @@
 
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
 
     <script src="{{ asset('js/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert/sweetalert.min.js') }}"></script>
@@ -117,7 +117,7 @@
                 "responsive": true,
             });
 
-            // document.body.style.zoom = "90%" 
+            // document.body.style.zoom = "90%"
         });
     </script>
 
@@ -159,7 +159,7 @@
             }
         });
 
-        
+
         window.addEventListener('wrong-data', event => {
             if (event.detail.type == 'warning') {
                 swal('Warning', `${event.detail.message}`, 'warning');
@@ -177,13 +177,13 @@
                 swal('Error', `${event.detail.message}`, 'error');
             }
         });
-        
+
         window.addEventListener('not-found', event => {
             if (event.detail.type == 'error') {
                 swal('Not Found', `${event.detail.message}`, 'error');
             }
         });
-        
+
         window.addEventListener('current-password-mismatch', event => {
             if (event.detail.type == 'error') {
                 swal('Error', `${event.detail.message}`, 'error');
@@ -195,7 +195,7 @@
         });
     </script>
     @stack('scripts')
-    
+
     @livewireScripts
 
 </body>

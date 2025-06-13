@@ -36,6 +36,21 @@ class ResultReportController extends Controller
 
     }
 
+    public function printResults()
+    {
+        $type  = request('search_type'); // E.g., 'study'
+        $input = request('identifiers'); // Could be "5" or "ABC-123, XYZ-456"
+
+        // Normalize input to array
+        $identifiers = is_array($input)
+        ? $input
+        : array_map('trim', explode(',', $input));
+
+        $results = TestResult::getResultsForPrinting($type, $identifiers);
+
+        return view('reports.sample-management.print-multiple-report', compact('results'));
+    }
+
     public function printMultiplen($ids)
     {
         $testResults = TestResult::with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name'])->whereIn('id', $ids)->first();

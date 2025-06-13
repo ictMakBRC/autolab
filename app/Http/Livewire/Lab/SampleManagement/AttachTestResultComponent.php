@@ -57,6 +57,7 @@ class AttachTestResultComponent extends Component
     public $activeTest;
     public $today;
     public $tat_comment;
+    public $enterOnlyAssigned;
 
     public function mount($id)
     {
@@ -68,17 +69,26 @@ class AttachTestResultComponent extends Component
         $this->lab_no          = $sample->lab_no;
         $testsPendingResults   = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
+        if (auth()->user()->hasPermission('enter-unassigned-results')) {
+            $this->enterOnlyAssigned = false;
+        } else {
+            $this->enterOnlyAssigned = true;
+        }
         if (count($testsPendingResults) > 0) {
             $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)
-                ->whereHas('testAssignment', function (Builder $query) {
-                    $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
+                ->when($this->enterOnlyAssigned, function ($query) {
+                    $query->whereHas('testAssignment', function (Builder $query) {
+                        $query->where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'status' => 'Assigned']);
+                    });
                 })
                 ->orderBy('name', 'asc')->get();
-
             //Set the first test in the collection as active and load its parameters if present
             $this->test_id    = $this->requestedTests[0]->id ?? null;
             $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
-            if ($this->activeTest->result_type == 'Multiple' && $this->activeTest->sub_tests) {
+            if (! $this->activeTest) {
+                return redirect()->route('test-request')->with('error', 'No tests available for this sample or you do not have permission to enter results for unassigned tests.');
+            }
+            if ($this->activeTest->result_type == 'Multiple' && $this->activeTest?->sub_tests) {
                 foreach ($this->activeTest->sub_tests as $testName) {
                     $this->testResults[] = [
                         'test'    => $testName,
@@ -154,79 +164,87 @@ class AttachTestResultComponent extends Component
     public $myTest;
     public function saveResults()
     {
-        DB::transaction(function () {
+        try {
+            DB::transaction(function () {
 
-            $testResult = new TestResult();
+                $testResult = new TestResult();
 
-            $testResult->sample_id = $this->sample_id;
-            $testResult->test_id   = $this->test_id;
-            if ($this->link != null) {
-                $testResult->result = $this->link;
-            } else {
-                $test = Test::findOrfail($this->test_id);
-                if ($test->result_type == 'Measurable') {
-                    $testResult->result = $this->result . '' . $test->measurable_result_uom;
-                }
-                if ($test->result_type == 'Multiple') {
-                    $testResult->result = json_encode($this->testResults);
-
+                $testResult->sample_id = $this->sample_id;
+                $testResult->test_id   = $this->test_id;
+                if ($this->link != null) {
+                    $testResult->result = $this->link;
                 } else {
-                    $testResult->result = $this->result;
+                    $test = Test::findOrfail($this->test_id);
+                    if ($test->result_type == 'Measurable') {
+                        $testResult->result = $this->result . '' . $test->measurable_result_uom;
+                    }
+                    if ($test->result_type == 'Multiple') {
+                        $testResult->result = json_encode($this->testResults);
+
+                    } else {
+                        $testResult->result = $this->result;
+                    }
+                }
+
+                $testResult->attachment      = $this->attachmentPath;
+                $testResult->performed_by    = $this->performed_by;
+                $testResult->comment         = $this->comment;
+                $testResult->parameters      = count($this->testParameters) ? $this->testParameters : null;
+                $testResult->kit_id          = $this->kit_id;
+                $testResult->verified_lot    = $this->verified_lot;
+                $testResult->tat_comment     = $this->tat_comment;
+                $testResult->kit_expiry_date = $this->kit_expiry_date;
+                $testResult->status          = 'Pending Review';
+                $testResult->save();
+                array_push($this->tests_performed, "{$testResult->test_id}");
+                $testAssignment = TestAssignment::where(['sample_id' => $this->sample_id, 'test_id' => $this->test_id])
+                    ->when($this->enterOnlyAssigned, function ($query) {
+                        $query->where('assignee', auth()->user()->id);
+                    })->first();
+                $this->sample->update(['tests_performed' => $this->tests_performed]);
+                $testAssignment->update(['status' => 'Test Done']);
+
+                if (count(array_diff($this->sample->tests_requested, $this->sample->tests_performed)) == 0) {
+                    $this->sample->update(['status' => 'Tests Done']);
+                    redirect()->route('test-request');
+                }
+
+                if ($this->enterOnlyAssigned && TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
+                    redirect()->route('test-request');
+                }
+
+            });
+
+            $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
+            $this->test_id        = $this->requestedTests[0]->id ?? null;
+            $this->testParameters = [];
+
+            //Set the first test in the collection as active and load its parameters if present
+            $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+            if ($this->activeTest && $this->activeTest->parameters != null) {
+                foreach ($this->activeTest->parameters as $key => $parameter) {
+                    $this->testParameters[$parameter] = '';
                 }
             }
 
-            $testResult->attachment      = $this->attachmentPath;
-            $testResult->performed_by    = $this->performed_by;
-            $testResult->comment         = $this->comment;
-            $testResult->parameters      = count($this->testParameters) ? $this->testParameters : null;
-            $testResult->kit_id          = $this->kit_id;
-            $testResult->verified_lot    = $this->verified_lot;
-            $testResult->tat_comment     = $this->tat_comment;
-            $testResult->kit_expiry_date = $this->kit_expiry_date;
-            $testResult->status          = 'Pending Review';
-            $testResult->save();
-            array_push($this->tests_performed, "{$testResult->test_id}");
-            $testAssignment = TestAssignment::where(['assignee' => auth()->user()->id, 'sample_id' => $this->sample_id, 'test_id' => $this->test_id])->first();
-            $this->sample->update(['tests_performed' => $this->tests_performed]);
-            $testAssignment->update(['status' => 'Test Done']);
+            $details = [
+                'subject'    => 'Auto-Lab Test',
+                'greeting'   => 'Hello, I hope this email finds you well',
+                'body'       => 'You have a pending test Lab No#' . $this->sample?->lab_no . ' to review, Please log in and take the necessary actions.',
+                'actiontext' => 'Click Here for more details',
+                'actionurl'  => URL::signedRoute('test-request'),
+                'user_id'    => $this->sample->laboratory->test_reviewer ?? 1,
+            ];
+            // try {
+            //     $email = SendGeneralNotificationJob::dispatch($details);
+            // } catch (\Throwable $th) {
+            // }
+            $this->resetResultInputs();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test Results Recorded successfully!']);
 
-            if (count(array_diff($this->sample->tests_requested, $this->sample->tests_performed)) == 0) {
-                $this->sample->update(['status' => 'Tests Done']);
-                redirect()->route('test-request');
-            }
-
-            if (TestAssignment::where(['sample_id' => $this->sample_id, 'assignee' => auth()->user()->id, 'status' => 'Assigned'])->count() == 0) {
-                redirect()->route('test-request');
-            }
-
-        });
-
-        $this->requestedTests = $this->requestedTests->where('id', '!=', $this->test_id)->values();
-        $this->test_id        = $this->requestedTests[0]->id ?? null;
-        $this->testParameters = [];
-
-        //Set the first test in the collection as active and load its parameters if present
-        $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
-        if ($this->activeTest && $this->activeTest->parameters != null) {
-            foreach ($this->activeTest->parameters as $key => $parameter) {
-                $this->testParameters[$parameter] = '';
-            }
+        } catch (\Exception $e) {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'An error occurred while saving the test results: ' . $e->getMessage()]);
         }
-
-        $details = [
-            'subject'    => 'Auto-Lab Test',
-            'greeting'   => 'Hello, I hope this email finds you well',
-            'body'       => 'You have a pending test Lab No#' . $this->sample?->lab_no . ' to review, Please log in and take the necessary actions.',
-            'actiontext' => 'Click Here for more details',
-            'actionurl'  => URL::signedRoute('test-request'),
-            'user_id'    => $this->sample->laboratory->test_reviewer ?? 1,
-        ];
-        // try {
-        //     $email = SendGeneralNotificationJob::dispatch($details);
-        // } catch (\Throwable $th) {
-        // }
-        $this->resetResultInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Test Results Recorded successfully!']);
     }
 
     public function activateResultInput($id)
