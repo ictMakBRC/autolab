@@ -30,8 +30,21 @@ class Sample extends Model
     protected $casts = [
         'tests_requested' => 'array',
         'tests_performed' => 'array',
+        'referred_tests'  => 'array',
     ];
+    public function getReferredTestsAttribute($value)
+    {
+        return json_decode($value ?? '[]', true);
+    }
 
+    public function setReferredTestsAttribute($value)
+    {
+        $this->attributes['referred_tests'] = json_encode($value);
+    }
+    public function getTestsReferredCountAttribute()
+    {
+        return is_array($this->referred_tests) ? count($this->referred_tests) : 0;
+    }
     public function getTestsRequestedCountAttribute()
     {
         return is_array($this->tests_requested) ? count($this->tests_requested) : 0;

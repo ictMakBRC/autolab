@@ -12,7 +12,8 @@
                 </li>
 
                 <li class="nav-item {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
-                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management"
+                    wire:click.prevent="setActiveTab('samples')">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
                             class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
                 </li>
@@ -79,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
+                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }} {{ $activeTab === 'samples' ? 'show active' : '' }}"
                     id="pills-samples">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
@@ -183,7 +184,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link"
                                                 href="{{ route('samples-pending-list') }}"></i>Pending
-                                                Samples<x-count-badge>{{ $samplesCount }}
+                                                Samples<x-count-badge>
                                                 </x-count-badge></a>
                                         </li>
                                         <li class="nav-item">

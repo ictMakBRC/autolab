@@ -37,64 +37,10 @@
 
         </div>
     </div>
-    <button class="btn btn-success" wire:click = "printResults">Print Results</button>
+    <button class="btn btn-success m-1 btn-sm" wire:click = "printResults">Generate Results</button>
 
     @if ($results && count($results) > 0)
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <h4>Results</h4>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Lab No</th>
-                            <th>Participant</th>
-                            <th>Sample</th>
-                            <th>Test Name</th>
-                            <th>Result</th>
-                            <th>Result Date</th>
-                            <th>Performed By</th>
-                            <th>Reviewed By</th>
-                            <th>Approved By</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($results as $testResult)
-                            <tr>
-                                <td>{{ $testResult->sample->lab_no }}</td>
-                                <td>{{ $testResult->sample->participant->identity ?? 'N/A' }}</td>
-                                <td>{{ $testResult->sample->sampleType->type ?? 'N/A' }}</td>
-                                <td>{{ $testResult->test->name }}</td>
-                                <td>
-                                    @if ($testResult->result)
-                                        {{ $testResult->result }}<br>
-                                        @if ($testResult->comment)
-                                            <strong class="text-inverse">Comments:</strong>
-                                            <p>{{ $testResult->comment }}</p>
-                                        @endif
-                                    @else
-                                        <a href="{{ route('attachment.download', $testResult->id) }}">See
-                                            Attachment</a>
-                                    @endif
-                                </td>
-                                <td>
-                                    </strong>{{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
-                                </td>
-                                <td>
-                                    {{ $testResult->performer ? $testResult->performer->fullName ?? '' : 'N/A' }}
-                                </td>
-                                <td>
-                                    {{ $testResult->performer ? $testResult->reviewer->fullName ?? '' : 'N/A' }}
-                                </td>
-                                <td>
-                                    {{ $testResult->performer ? $testResult->approver->fullName ?? '' : 'N/A' }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{-- @include('reports.sample-management.report-footer') --}}
-        </div>
+        @include('livewire.lab.reports.inc.multiple-results')
     @else
         <div class="alert alert-info mt-3">
             No results found for the provided identifiers.

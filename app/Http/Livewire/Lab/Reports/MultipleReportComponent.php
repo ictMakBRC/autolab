@@ -85,6 +85,7 @@ class MultipleReportComponent extends Component
 
         return $query->get();
     }
+    public $testResult;
     public function printResults()
     {
 
@@ -104,11 +105,10 @@ class MultipleReportComponent extends Component
         ? $input
         : array_map('trim', explode(',', $input));
 
-        $this->results = $this->getResultsForPrinting($this->study_id, $this->search_type, $identifiers);
+        $this->results = $results = $this->getResultsForPrinting($this->study_id, $this->search_type, $identifiers);
         // dd($this->results); // Debugging line, remove in production
-        if (! $this->results) {
-            session()->flash('error', 'No results found for the given identifiers.');
-            return;
+        if ($this->results) {
+            $this->testResult = $results->first();
         }
 
     }

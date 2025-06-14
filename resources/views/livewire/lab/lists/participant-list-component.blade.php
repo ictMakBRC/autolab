@@ -522,15 +522,12 @@
                                             </td> --}}
                                             <td>
                                                 @if ($participant->created_by == auth()->user()->id || Auth::user()->hasPermission(['review-results']))
-                                                    <button class="action-btn"
+                                                    <button class="action-btn action-btn--info"
                                                         wire:click="editParticipant({{ $participant->id }})"><i
                                                             class="bi bi-pencil"></i></button>
-                                                    <a class="action-btn" target="_blank"
+                                                    <a class="action-btn action-btn--primary" target="_blank"
                                                         href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"><i
                                                             class="bi bi-eye"></i></a>
-                                                    <a class="action-btn" target="_blank"
-                                                        href="{{ URL::signedRoute('participant-search-results', ['participant' => $participant->id]) }}"><i
-                                                            class="bi bi-file"></i></a>
                                                 @endif
                                             </td>
                                         </tr>

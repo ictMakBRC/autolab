@@ -3,6 +3,7 @@ namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Admin\Test;
 use App\Models\Kit;
+use App\Models\Lab\SampleManagent\SampleReferral;
 use App\Models\Sample;
 use App\Models\TestAssignment;
 use App\Models\TestResult;
@@ -58,16 +59,19 @@ class AttachTestResultComponent extends Component
     public $today;
     public $tat_comment;
     public $enterOnlyAssigned;
-
+    public $referred_tests;
+    public $active_referral;
     public function mount($id)
     {
         $today                 = Carbon::now();
         $sample                = Sample::with('participant')->findOrFail($id);
+        $this->referred_tests  = SampleReferral::with('referralable')->where('sample_id', $id)->whereIn('test_id', $sample->referred_tests)->get();
         $this->sample          = $sample;
         $this->sample_id       = $sample->id;
         $this->sample_identity = $sample->sample_identity;
         $this->lab_no          = $sample->lab_no;
         $testsPendingResults   = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
+        // $testsPendingResults   = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
 
         if (auth()->user()->hasPermission('enter-unassigned-results')) {
             $this->enterOnlyAssigned = false;
@@ -87,6 +91,9 @@ class AttachTestResultComponent extends Component
             $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
             if (! $this->activeTest) {
                 return redirect()->route('test-request')->with('error', 'No tests available for this sample or you do not have permission to enter results for unassigned tests.');
+            } elseif ($this->activeTest && count($this->referred_tests) > 0) {
+                $this->active_referral = $this->referred_tests->where('sample_id', $this->sample_id)->where('test_id', $this->test_id)->first();
+                // dd($this->active_referral);
             }
             if ($this->activeTest->result_type == 'Multiple' && $this->activeTest?->sub_tests) {
                 foreach ($this->activeTest->sub_tests as $testName) {

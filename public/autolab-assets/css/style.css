@@ -41,28 +41,26 @@ body {
     width: auto;
 	position: relative
 }
-     .action-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.8rem;
-        /* Small square shape */
-        height: 1.8rem;
-        border: none;
-        border-radius: 0.215rem;
-        /* Rounded corners */
-        background-color: #6fa5f8;
-        color: #333;
-        text-decoration: none;
-        font-size: 0.8rem;
-        transition: background-color 0.2s, color 0.2s;
-        cursor: pointer;
-        padding: 0;
-    }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 0.200rem;
+    border: 2px solid transparent; /* default border transparent */
+    background-color: transparent; /* no fill */
+    color: #7f7f7f;
+    text-decoration: none;
+    font-size: 0.7rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    cursor: pointer;
+    padding: 0;
+}
 
 .action-btn:hover {
     background-color: #e0e0e0;
-    color: #000;
+    color: #f1f1f1;
 }
 
 .action-btn:focus {
@@ -70,13 +68,56 @@ body {
     outline-offset: 2px;
 }
 
+/* Primary variant */
+.action-btn--success {
+    border-color: #107C41;
+    color: #107C41;
+}
+.action-btn--success:hover {
+    background-color: #107C41;
+    color: #fff;
+}
+
+/* Primary variant */
 .action-btn--primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+.action-btn--primary:hover {
     background-color: #007bff;
     color: #fff;
 }
-.action-btn--primary:hover {
-    background-color: #0056b3;
+
+/* Info variant */
+.action-btn--info {
+    border-color: #17a2b8;
+    color: #17a2b8;
 }
+.action-btn--info:hover {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+/* Warning variant */
+.action-btn--warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+.action-btn--warning:hover {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+/* Danger variant */
+.action-btn--danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+.action-btn--danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
 
 a {
     text-decoration: none;

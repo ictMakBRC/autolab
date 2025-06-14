@@ -16,7 +16,8 @@
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bx bxs-flask"></i>Testing (<strong class="text-danger">{{$testAssignmentCount}}</strong>)
+                                        <i class="bx bxs-flask"></i>Testing (<strong
+                                            class="text-danger">{{ $testAssignmentCount }}</strong>)
                                     </a>
                                     <a type="button" class="btn btn-outline-info me-2 fw-bold mb-1"
                                         wire:click="$set('sample_is_for','Aliquoting')">
@@ -24,7 +25,8 @@
                                             <span class="spinner-grow spinner-grow-sm" role="status"
                                                 aria-hidden="true"></span>
                                         @endif
-                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong class="text-danger">{{$aliquotingAssignmentCount}}</strong>)
+                                        <i class="bi bi-hourglass-split"></i>Aliquoting (<strong
+                                            class="text-danger">{{ $aliquotingAssignmentCount }}</strong>)
                                     </a>
 
                                     <a type="button" class="btn btn-outline-warning me-2 fw-bold mb-1"
@@ -34,7 +36,8 @@
                                                 aria-hidden="true"></span>
                                         @endif
 
-                                        <i class="bx bx-archive"></i> Storage (<strong class="text-danger">{{$storageAssignmentCount}}</strong>)
+                                        <i class="bx bx-archive"></i> Storage (<strong
+                                            class="text-danger">{{ $storageAssignmentCount }}</strong>)
                                     </a>
                                     <a type="button" class="btn btn-outline-info me-2" wire:click="refresh()"
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
@@ -74,6 +77,7 @@
                                         <th>Collector</th>
                                         @if ($sample_is_for == 'Testing')
                                             <th> TestCount</th>
+                                            <th>Tests Referred</th>
                                         @elseif($sample_is_for == 'Aliquoting')
                                             <th> Aliquot Count</th>
                                         @endif
@@ -93,7 +97,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $sample->participant->identity??"N/A" }}
+                                                {{ $sample->participant->identity ?? 'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->sampleType->type }}
@@ -127,6 +131,12 @@
                                             @if ($sample_is_for == 'Testing' || $sample_is_for == 'Aliquoting')
                                                 <td>
                                                     {{ $sample->test_count }}
+                                                </td>
+                                            @endif
+                                            @if ($sample_is_for == 'Testing')
+                                                <td>
+                                                    <span class="badge bg-primary">{{ $sample->tests_referred_count }}
+                                                        Referred</span>
                                                 </td>
                                             @endif
                                             @if ($sample->priority == 'Normal')

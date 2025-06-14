@@ -143,22 +143,23 @@
                                                 @if ($sample->sample_is_for == 'Testing')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewTests({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-info" 
-                                                        data-bs-toggle="modal" title="Assign"
-                                                        data-bs-target="#view-tests"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-info" data-bs-toggle="modal"
+                                                        title="Assign" data-bs-target="#view-tests"><i
+                                                            class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Aliquoting')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-success"   
-                                                        data-bs-toggle="modal" title="Assign"
-                                                        data-bs-target="#view-aliquots"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-success" data-bs-toggle="modal"
+                                                        title="Assign" data-bs-target="#view-aliquots"><i
+                                                            class="bi bi-list"></i>
                                                     </a>
                                                 @elseif($sample->sample_is_for == 'Storage')
                                                     <a href="javascript: void(0);"
                                                         wire:click="viewAliquots({{ $sample->id }})" type="button"
-                                                        class="btn btn-outline-success" data-bs-toggle="modal" title="Assign"
-                                                        data-bs-target="#view-aliquots"><i class="bi bi-list"></i>
+                                                        class="btn btn-outline-success" data-bs-toggle="modal"
+                                                        title="Assign" data-bs-target="#view-aliquots"><i
+                                                            class="bi bi-list"></i>
                                                     </a>
                                                 @endif
                                             </td>
@@ -180,7 +181,7 @@
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
-        
+
         @if ($sample && $sample?->sample_is_for == 'Testing')
             <div wire:ignore.self class="modal fade" id="view-tests" data-bs-backdrop="static" data-bs-keyboard="false"
                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -188,8 +189,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel">Tests for sample (<span
-                                    class="text-info">{{ $sampleId??'...' }}</span>) with Lab_No <span
-                                    class="text-info">{{ $labNo??'...' }}</span></h6>
+                                    class="text-info">{{ $sampleId ?? '...' }}</span>) with Lab_No <span
+                                    class="text-info">{{ $labNo ?? '...' }}</span></h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
                                 wire:click="close()"></button>
                         </div> <!-- end modal header -->
@@ -246,7 +247,21 @@
                                                                                 @enderror
                                                                             </div>
                                                                         </div>
-
+                                                                        <div class="col-md-2 mb-2">
+                                                                            <label class="form-label">Is
+                                                                                Referral?</label>
+                                                                            <select class="form-select"
+                                                                                wire:model="refer_samples">
+                                                                                <option value="">Select</option>
+                                                                                <option value="1">Refer Sample
+                                                                                </option>
+                                                                                <option value="0">Test Sample
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                        @if ($refer_samples)
+                                                                            @include('livewire.lab.sample-management.inc.refer-samples-form')
+                                                                        @endif
                                                                         <div class="col-md-2 mt-4 text-start">
                                                                             <x-button>{{ __('Assign') }}</x-button>
                                                                         </div>
@@ -282,8 +297,8 @@
 
                         <div class="modal-footer">
                             @if ($assignee && $request_acknowledged_by)
-                            <a href="javascript: void(0);" wire:click="assignAllTests"
-                            class="action-ico btn btn-info radius-30 px-3">Assign All</a>
+                                <a href="javascript: void(0);" wire:click="assignAllTests"
+                                    class="action-ico btn btn-info radius-30 px-3">Assign All</a>
                             @endif
                             @if (!$request_acknowledged_by && $sampleId)
                                 <a href="javascript: void(0);" wire:click="acknowledgeRequest"
@@ -291,7 +306,7 @@
                                     <i class="bi bi-hand-thumbs-up"></i>Acknowledge</a>
                             @endif
                             @if (!$sampleId)
-                                    <h6 class="text-success">Loading data please wait......</h6> 
+                                <h6 class="text-success">Loading data please wait......</h6>
                             @endif
                             <button class="btn  btn-danger radius-30 px-3" wire:click="close()"
                                 data-bs-dismiss="modal" aria-label="Close">Close</button>

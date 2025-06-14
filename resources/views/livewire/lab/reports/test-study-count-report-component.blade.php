@@ -79,19 +79,28 @@
                     </div>
 
                     <div class="col-md-12">
-                        <label class="form-label">Tests</label>
-                        <div class="row">
-                            @foreach ($tests as $test)
-                                <div class="col-md-3 mb-2">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" value="{{ $test->id }}"
-                                            wire:model="selectedTests" id="test-{{ $test->id }}">
-                                        <label class="form-check-label" for="test-{{ $test->id }}">
-                                            {{ $test->name }}
-                                        </label>
-                                    </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <label class="form-label">Tests</label>
+                                {{-- <input wire:model.debounce.300ms="search" class="form-control ps-5" type="text"
+                                placeholder="search"> --}}
+                            </div>
+                            <div class="card-body" style="max-height: 234px; overflow-y: auto;">
+                                <div class="row">
+                                    @foreach ($tests as $test)
+                                        <div class="col-md-3 mb-2">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input"
+                                                    value="{{ $test->id }}" wire:model="selectedTests"
+                                                    id="test-{{ $test->id }}">
+                                                <label class="form-check-label" for="test-{{ $test->id }}">
+                                                    {{ $test->name }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                     </div>
 
@@ -112,14 +121,23 @@
                         </h6>
                     </div>
                     <div class="card-body">
-                        @if ($chartModel)
-                            <livewire:livewire-column-chart key="{{ $columnChartModel->reactiveKey() }}"
-                                :column-chart-model="$chartModel" />
+                        @if ($columnChartModel)
+                            @if ($chartType === 'pie')
+                                <livewire:livewire-pie-chart key="{{ $columnChartModel->reactiveKey() }}"
+                                    :pie-chart-model="$columnChartModel" />
+                            @elseif($chartType === 'line')
+                                <livewire:livewire-line-chart key="{{ $columnChartModel->reactiveKey() }}"
+                                    :line-chart-model="$columnChartModel" />
+                            @else
+                                <livewire:livewire-column-chart key="{{ $columnChartModel->reactiveKey() }}"
+                                    :column-chart-model="$columnChartModel" />
+                            @endif
                         @else
                             <div class="alert alert-warning">
                                 No chart data available
                             </div>
                         @endif
+
                     </div>
                 </div>
 
@@ -161,11 +179,13 @@
                                     <tr>
                                         <th class="text-end">Quarter Totals:</th>
                                         @foreach ($quarterColumns as $quarter)
-                                            <th class="text-center">{{ $quarterTotals[$quarter] }}</th>
+                                            <th class="text-center">{{ $displayTotals[$quarter] }}</th>
                                         @endforeach
-                                        <th class="text-center">{{ array_sum($quarterTotals) }}</th>
+                                        <th class="text-center">{{ array_sum($displayTotals) }}
+                                        </th>
                                     </tr>
                                 </tfoot>
+
                             </table>
                         </div>
                     </div>

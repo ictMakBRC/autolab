@@ -151,6 +151,7 @@
                             <b>Participant ID: </b>{{ $testResult->sample->participant->identity }}<br> <b>Sample
                                 ID:</b>
                             {{ $testResult->sample->sample_identity }}<br>
+                            <b>Visit:</b> {{ $testResult->sample->visit ?? 'N/A' }}<br>
                             <b>Name:</b> {{ $testResult->sample->participant->surname ?? 'N/A' }}<br>
                             <b>Age:</b>
                             @if ($testResult->sample->participant->age != null)

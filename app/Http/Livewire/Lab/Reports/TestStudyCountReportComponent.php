@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Lab\Reports;
 use App\Models\Admin\Test;
 use App\Models\Sample;
 use App\Models\Study;
+use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -19,18 +20,22 @@ class TestStudyCountReportComponent extends Component
     public $reportData     = [];
     public $quarterColumns = [];
     public $quarterTotals  = [];
-    public $reportType     = 'test_count'; // 'test_count' or 'study_count'
+    public $reportType     = 'study_count';
     public $chartType      = 'bar';
     public $chartTitle     = 'Tests Requested Per Quarter';
 
+    // Properties for the chart
+    protected $listeners = [
+        'onColumnClick' => 'handleOnColumnClick',
+    ];
+
     public function mount()
     {
-        $this->tests   = Test::orderBy('name')->get();
-        $this->studies = Study::orderBy('name')->get();
-
-        // Set default date range to current year
+        $this->tests     = Test::orderBy('name')->get();
+        $this->studies   = Study::orderBy('name')->get();
         $this->startDate = now()->startOfYear()->format('Y-m-d');
         $this->endDate   = now()->endOfYear()->format('Y-m-d');
+        $this->generateReport();
     }
 
     public function generateReport()
@@ -47,71 +52,64 @@ class TestStudyCountReportComponent extends Component
             ->whereDate('date_collected', '<=', $this->endDate)
             ->whereNotNull('tests_requested');
 
-        // Apply study filter
         if ($this->selectedStudy) {
             $query->where('study_id', $this->selectedStudy);
         }
 
         $samples = $query->get();
 
-        // Initialize report structure
+        // Initialize structures
         $this->quarterColumns = $this->getQuarterColumns();
-        $this->quarterTotals  = array_fill_keys($this->quarterColumns, 0);
+        $this->quarterTotals  = array_fill_keys($this->quarterColumns, ['test_count' => 0, 'study_count' => []]);
         $report               = [];
         $testTotals           = [];
 
-        // Initialize all tests with zero counts for all quarters
+        // Initialize tests
         foreach ($this->tests as $test) {
             $report[$test->id] = [
-                'name'        => $test->name,
-                'quarters'    => array_fill_keys($this->quarterColumns, 0),
-                'study_count' => array_fill_keys($this->quarterColumns, [])
+                'name'         => $test->name,
+                'quarters'     => array_fill_keys($this->quarterColumns, 0),
+                'study_counts' => array_fill_keys($this->quarterColumns, [])
             ];
         }
 
         // Process samples
         foreach ($samples as $sample) {
-            $testIds        = $sample->tests_requested;
-            $collectionDate = Carbon::parse($sample->date_collected);
-            $quarter        = 'Q' . $collectionDate->quarter . ' ' . $collectionDate->year;
-            $studyId        = $sample->study_id;
+            $testIds = $sample->tests_requested;
+            $quarter = 'Q' . Carbon::parse($sample->date_collected)->quarter . ' ' . Carbon::parse($sample->date_collected)->year;
+            $studyId = $sample->study_id;
 
-            // Skip if quarter not in our columns
             if (! in_array($quarter, $this->quarterColumns)) {
                 continue;
             }
 
             foreach ($testIds as $testId) {
-                // Apply test filter
-                if (! empty($this->selectedTests)) {
-                    if (! in_array($testId, $this->selectedTests)) {
-                        continue;
-                    }
+                if (! empty($this->selectedTests) && ! in_array($testId, $this->selectedTests)) {
+                    continue;
                 }
 
                 if (isset($report[$testId])) {
-                    // For test count report
+                    // Update test counts
                     $report[$testId]['quarters'][$quarter]++;
-                    $this->quarterTotals[$quarter]++;
+                    $this->quarterTotals[$quarter]['test_count']++;
 
-                    // For study count report
-                    if (! in_array($studyId, $report[$testId]['study_count'][$quarter])) {
-                        $report[$testId]['study_count'][$quarter][] = $studyId;
+                    // Update study counts
+                    if ($studyId !== null) {
+                        if (! in_array($studyId, $report[$testId]['study_counts'][$quarter])) {
+                            $report[$testId]['study_counts'][$quarter][] = $studyId;
+                        }
+                        if (! in_array($studyId, $this->quarterTotals[$quarter]['study_count'])) {
+                            $this->quarterTotals[$quarter]['study_count'][] = $studyId;
+                        }
                     }
 
-                    // Initialize test total if not set
+                    // Update test totals
                     if (! isset($testTotals[$testId])) {
-                        $testTotals[$testId] = [
-                            'test_count'  => 0,
-                            'study_count' => [],
-                        ];
+                        $testTotals[$testId] = ['test_count' => 0, 'studies' => []];
                     }
-
                     $testTotals[$testId]['test_count']++;
-
-                    // Track unique studies for this test
-                    if (! in_array($studyId, $testTotals[$testId]['study_count'])) {
-                        $testTotals[$testId]['study_count'][] = $studyId;
+                    if ($studyId !== null && ! in_array($studyId, $testTotals[$testId]['studies'])) {
+                        $testTotals[$testId]['studies'][] = $studyId;
                     }
                 }
             }
@@ -120,36 +118,26 @@ class TestStudyCountReportComponent extends Component
         // Prepare final report data
         $this->reportData = [];
         foreach ($report as $testId => $testData) {
-            // For test count report
             $testCount  = $testTotals[$testId]['test_count'] ?? 0;
-            $studyCount = count($testTotals[$testId]['study_count'] ?? []);
+            $studyCount = isset($testTotals[$testId]['studies']) ? count($testTotals[$testId]['studies']) : 0;
 
-            // Skip tests with zero counts if not showing them
             if (! $this->showZeroCounts && $testCount === 0 && $studyCount === 0) {
                 continue;
             }
 
-            $row = [
+            $this->reportData[] = [
                 'test_id'           => $testId,
                 'test_name'         => $testData['name'],
                 'quarters'          => $testData['quarters'],
-                'study_counts'      => [],
+                'study_counts'      => array_map(function ($studies) {
+                    return count($studies);
+                }, $testData['study_counts']),
                 'test_count_total'  => $testCount,
                 'study_count_total' => $studyCount,
             ];
-
-            // Prepare study count data
-            foreach ($this->quarterColumns as $quarter) {
-                $row['study_counts'][$quarter] = count($testData['study_count'][$quarter]);
-            }
-
-            $this->reportData[] = $row;
         }
 
-        // Sort by test name
-        usort($this->reportData, function ($a, $b) {
-            return $a['test_name'] <=> $b['test_name'];
-        });
+        usort($this->reportData, fn($a, $b) => $a['test_name'] <=> $b['test_name']);
     }
 
     protected function getQuarterColumns()
@@ -169,52 +157,58 @@ class TestStudyCountReportComponent extends Component
         return array_unique($quarters);
     }
 
-    public function renderChart()
+    public function handleOnColumnClick($column)
     {
-        if (count($this->reportData) === 0) {
-            return null;
-        }
-
-        $chartModel = (new ColumnChartModel())
-            ->setTitle($this->chartTitle)
-            ->setAnimated(true)
-            ->withOnPointClickEvent('onColumnClick')
-            ->setLegendVisibility(true)
-            ->setDataLabelsEnabled(true)
-            ->setColumnWidth(30)
-            ->setHorizontal(false);
-
-        // Add all quarters to chart
-        foreach ($this->quarterColumns as $quarter) {
-            $chartModel->addColumn($quarter, 0, '#4c51bf');
-        }
-
-        // Add data for each test
-        foreach ($this->reportData as $test) {
-            $color    = $this->generateRandomColor();
-            $testName = $test['test_name'];
-
-            foreach ($this->quarterColumns as $quarter) {
-                $value = $this->reportType === 'test_count'
-                ? $test['quarters'][$quarter]
-                : $test['study_counts'][$quarter];
-
-                $chartModel->addSeriesColumn($testName, $quarter, $value, $color);
-            }
-        }
-
-        return $chartModel;
-    }
-
-    protected function generateRandomColor()
-    {
-        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+        // Optional: Handle chart column clicks
     }
 
     public function render()
     {
-        $data['chartModel'] = $this->renderChart();
+        // Initialize an empty chart model
+        $columnChartModel = null;
 
-        return view('livewire.lab.reports.test-study-count-report-component', $data);
+        if (count($this->reportData) > 0) {
+            // Create the appropriate chart model
+            if ($this->chartType === 'pie') {
+                $chartModel = LivewireCharts::pieChartModel();
+            } else {
+                $chartModel = LivewireCharts::multiColumnChartModel();
+            }
+
+            // Configure chart basics
+            $chartModel->setTitle($this->chartTitle)
+                ->setAnimated(true)
+                ->withOnColumnClickEventName('onColumnClick')
+                ->setDataLabelsEnabled(true)
+                ->setLegendVisibility(true)
+                ->setColumnWidth(30);
+
+            // Add series data
+            foreach ($this->reportData as $row) {
+                $color = '#' . substr(md5($row['test_name']), 0, 6);
+
+                foreach ($this->quarterColumns as $quarter) {
+                    $value = $this->reportType === 'test_count'
+                    ? $row['quarters'][$quarter]
+                    : $row['study_counts'][$quarter];
+
+                    $chartModel->addSeriesColumn($row['test_name'], $quarter, $value, $color);
+                }
+            }
+
+            $columnChartModel = $chartModel;
+        }
+
+        $displayTotals = array_map(function ($quarterData) {
+            return $this->reportType === 'test_count'
+            ? $quarterData['test_count']
+            : count($quarterData['study_count']);
+        }, $this->quarterTotals);
+
+        return view('livewire.lab.reports.test-study-count-report-component', [
+            'columnChartModel' => $columnChartModel,
+            'displayTotals'    => $displayTotals,
+        ]);
     }
+
 }

@@ -41,6 +41,9 @@
                                             <th>SOURCE FACILITY</th>
                                             <th>SAMPLE DATA</th>
                                             <th>PARTICIPANT</th>
+                                            @if ($active_referral)
+                                                <th>REFERRED TO</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -91,6 +94,14 @@
                                                 <strong class="text-inverse">Kin Contact:
                                                 </strong>{{ $sample->participant->nok_contact ?? 'N/A' }}
                                             </td>
+
+                                            @if ($active_referral)
+                                                <td>
+                                                    <strong class="text-inverse">Name: </strong>
+                                                    {{ $active_referral->referralable->name ?? ($active_referral->referralable->laboratory_name ?? 'N/A') }}<br>
+
+                                                </td>
+                                            @endif
                                         </tr>
                                         @if ($sample->participant->clinical_notes)
                                             <tr>
@@ -427,6 +438,57 @@
                                                                                         {{ $message }}</div>
                                                                                 @enderror
                                                                             </div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if ($active_referral)
+                                                                        <div class="row">
+                                                                            @if (!$test->result_type == 'File')
+                                                                                <div class="col-md-4">
+                                                                                    <div class="mb-2">
+                                                                                        <label
+                                                                                            class="form-label">Result
+                                                                                            File</label>
+                                                                                        <input type="file"
+                                                                                            wire:model.lazy="ref_result_file"
+                                                                                            class="form-control"
+                                                                                            required>
+
+                                                                                        @error('ref_result_file')
+                                                                                            <div
+                                                                                                class="text-danger text-small">
+                                                                                                {{ $message }}</div>
+                                                                                        @enderror
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endif
+                                                                            <div class="col-md-4">
+                                                                                <div class="mb-2">
+                                                                                    <label class="form-label">Received
+                                                                                        On</label>
+                                                                                    <input type="date"
+                                                                                        wire:model.lazy="received_date"
+                                                                                        class="form-control">
+
+                                                                                    @error('received_date')
+                                                                                        <div
+                                                                                            class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md">
+                                                                                <div class="mb-2">
+                                                                                    <label class="form-label">Referral
+                                                                                        Comments</label>
+                                                                                    <textarea wire:model="ref_comments" id="ref_comments" class="form-control"></textarea>
+                                                                                    @error('ref_comments')
+                                                                                        <div
+                                                                                            class="text-danger text-small">
+                                                                                            {{ $message }}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+
                                                                         </div>
                                                                     @endif
                                                                 </div>

@@ -39,7 +39,7 @@
     <link href="{{ asset('autolab-assets/css/semi-dark.css') }}" rel="stylesheet" />
     <link href="{{ asset('autolab-assets/css/header-colors.css') }}" rel="stylesheet" />
     @livewireStyles
-
+    @livewireChartsScripts
 </head>
 
 <body>
@@ -47,7 +47,8 @@
     <!--start wrapper-->
     <div class="wrapper">
         <livewire:layout.header-component />
-        <livewire:layout.navigation-component wire:init="loadCounts" />
+        <livewire:layout.navigation-component />
+        {{-- <livewire:layout.navigation-component wire:init="loadCounts" /> --}}
         {{-- @include('layouts.header')
         @include('layouts.navigation') --}}
         <!--start content-->
