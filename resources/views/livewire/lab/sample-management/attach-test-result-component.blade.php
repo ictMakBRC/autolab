@@ -195,7 +195,7 @@
                                                                                 <div class="mb-2">
                                                                                     <label
                                                                                         class="form-label">Result</label>
-                                                                                    <select class="form-select"
+                                                                                    <select class="form-select select2"
                                                                                         id="result"
                                                                                         wire:model.lazy="result">
                                                                                         <option selected value="">
@@ -288,7 +288,7 @@
                                                                                 <label
                                                                                     class="form-label">Comment</label>
                                                                                 @if ($test->comments != null)
-                                                                                    <select class="form-select"
+                                                                                    <select class="form-select select2"
                                                                                         id="comment"
                                                                                         wire:model="comment">
                                                                                         <option selected
@@ -315,7 +315,7 @@
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Performed
                                                                                 By</label>
-                                                                            <select class="form-select"
+                                                                            <select class="form-select select2"
                                                                                 wire:model="performed_by">
                                                                                 <option selected value="">Select
                                                                                 </option>
@@ -366,7 +366,7 @@
                                                                     <div class="col-md-4">
                                                                         <div class="mb-2">
                                                                             <label class="form-label">Kit</label>
-                                                                            <select class="form-select"
+                                                                            <select class="form-select select2"
                                                                                 wire:model="kit_id">
                                                                                 <option selected value="">Select
                                                                                 </option>

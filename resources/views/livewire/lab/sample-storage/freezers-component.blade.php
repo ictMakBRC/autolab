@@ -43,10 +43,12 @@
                             <div class="row">
                                 <div class="mb-2 col-md-2">
                                     <label for="freezer_location_id" class="form-label">{{ __('Location') }}</label>
-                                    <select wire:model='freezer_location_id' class="form-select" id="freezer_location_id">
+                                    <select wire:model='freezer_location_id' class="form-select"
+                                        id="freezer_location_id">
                                         <option selected value="">Select</option>
                                         @foreach ($freezerLocations as $freezerLocation)
-                                            <option value="{{ $freezerLocation->id }}">{{ $freezerLocation->name }}</option>
+                                            <option value="{{ $freezerLocation->id }}">{{ $freezerLocation->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('freezer_location_id')
@@ -62,7 +64,7 @@
                                 </div>
                                 <div class="mb-3 col-md-2">
                                     <label for="type" class="form-label">Type</label>
-                                    <select class="form-select" id="type" wire:model="type">
+                                    <select class="form-select select2" id="type" wire:model="type">
                                         <option selected value="">Select</option>
                                         <option value='Fridge'>Freezer</option>
                                         <option value='Fridge'>Fridge</option>
@@ -88,10 +90,10 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                               
+
                                 <div class="mb-3 col-md-2">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" wire:model="is_active">
+                                    <select class="form-select select2" id="isActive" wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -108,7 +110,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
                                         <x-button>{{ __('Save') }}</x-button>
@@ -159,9 +161,9 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $freezer->name }}</td>
                                             <td>{{ $freezer->location->name }}</td>
-                                            <td>{{ $freezer->type}}</td>
-                                            <td>{{ $freezer->temp}}</td>
-                                            <td>{{ $freezer->description??'N/A'}}</td>
+                                            <td>{{ $freezer->type }}</td>
+                                            <td>{{ $freezer->temp }}</td>
+                                            <td>{{ $freezer->description ?? 'N/A' }}</td>
                                             @if ($freezer->is_active == 1)
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @else
@@ -178,8 +180,8 @@
                                                 @if (Auth::user()->hasPermission(['master-access']))
                                                     <a href="javascript:;"
                                                         class="action-ico btn btn-outline-danger mx-1"
-                                                        wire:click="deleteConfirmation({{ $freezer->id }})"
-                                                        ><i class="bi bi-trash-fill"></i></a>
+                                                        wire:click="deleteConfirmation({{ $freezer->id }})"><i
+                                                            class="bi bi-trash-fill"></i></a>
                                                 @endif
                                             </td>
                                         </tr>

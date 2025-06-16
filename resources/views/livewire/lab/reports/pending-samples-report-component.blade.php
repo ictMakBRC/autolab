@@ -27,7 +27,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-3">
                                         <label for="facility_id" class="form-label">Facility</label>
-                                        <select class="form-select" id="facility_id" wire:model="facility_id">
+                                        <select class="form-select select2" id="facility_id" wire:model="facility_id">
                                             <option selected value="0">All</option>
                                             @forelse ($facilities as $facility)
                                                 <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="study" class="form-label">Study</label>
-                                        <select class="form-select" id="study" wire:model="study_id">
+                                        <select class="form-select select2" id="study" wire:model="study_id">
                                             <option selected value="0">All</option>
                                             @forelse ($studies as $study)
                                                 <option value='{{ $study->id }}'>{{ $study->name }}</option>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="job" class="form-label">Sample State</label>
-                                        <select class="form-select" id="job" wire:model="job">
+                                        <select class="form-select select2" id="job" wire:model="job">
                                             <option selected value="">All</option>
                                             @forelse ($jobs as $job)
                                                 <option value='{{ $job->sample_is_for }}'>{{ $job->sample_is_for }}
@@ -59,7 +59,7 @@
 
                                     <div class="mb-3 col-md-2">
                                         <label for="sampleType" class="form-label">Sample Type</label>
-                                        <select class="form-select" id="sampleType" wire:model='sampleType'>
+                                        <select class="form-select select2" id="sampleType" wire:model='sampleType'>
                                             <option selected value="0">All</option>
                                             @foreach ($sampleTypes as $sampleType)
                                                 <option value='{{ $sampleType->id }}'>
@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="created_by" class="form-label">Accessioned By</label>
-                                        <select class="form-select" id="created_by" wire:model='created_by'>
+                                        <select class="form-select select2" id="created_by" wire:model='created_by'>
                                             @if (Auth::user()->hasPermission('manager-access|master-access'))
                                                 <option selected value="0">All</option>
                                                 @foreach ($users as $user)
@@ -277,7 +277,8 @@
                         </div>
                         <div class="form-group mb-1 col-md-6">
                             <label for="sample_study" class="form-label">Study</label>
-                            <select class="form-select" id="sample_study" required wire:model="sample_study_id">
+                            <select class="form-select select2" id="sample_study" required
+                                wire:model="sample_study_id">
                                 <option value=" ">All</option>
                                 @forelse ($studies as $study)
                                     <option value='{{ $study->id }}'>{{ $study->name }}</option>

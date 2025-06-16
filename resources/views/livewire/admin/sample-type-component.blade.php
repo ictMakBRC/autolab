@@ -19,7 +19,7 @@
                                         data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                         data-bs-original-title="Refresh Table"><i class="bi bi-arrow-clockwise"></i></a>
 
-                                        
+
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-outline-info">More...</button>
                                         <button type="button"
@@ -54,7 +54,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="status" class="form-label">Status</label>
-                                <select class="form-select" id="status" wire:model="status">
+                                <select class="form-select select2" id="status" wire:model="status">
                                     <option value="">select</option>
                                     <option value="1" style="color: green" selected>Active</option>
                                     <option value="0" style="color: red">Suspended</option>

@@ -26,7 +26,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-3">
                                         <label for="facility_id" class="form-label">Facility</label>
-                                        <select class="form-select" id="facility_id" wire:model="facility_id">
+                                        <select class="form-select select2" id="facility_id" wire:model="facility_id">
                                             <option selected value="0">All</option>
                                             @forelse ($facilities as $facility)
                                                 <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="mb-3 col-md-3">
                                         <label for="study" class="form-label">Study</label>
-                                        <select class="form-select" id="study" wire:model="study_id">
+                                        <select class="form-select select2" id="study" wire:model="study_id">
                                             <option selected value="0">All</option>
                                             @forelse ($studies as $study)
                                                 <option value='{{ $study->id }}'>{{ $study->name }}</option>
@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="entryType" class="form-label">Entry Type</label>
-                                        <select class="form-select" id="entryType" wire:model="entryType">
+                                        <select class="form-select select2" id="entryType" wire:model="entryType">
                                             <option selected value="">All</option>
                                             @forelse ($entryTypes as $entryType)
                                                 <option value='{{ $entryType->entry_type }}'>
@@ -127,7 +127,8 @@
                             <div class="row mx-auto">
                                 <div class="mb-3 col-md-2">
                                     <label for="entry_type" class="form-label">Entry Type</label>
-                                    <select class="form-select" readonly id="entry_type" wire:model="entry_type">
+                                    <select class="form-select select2" readonly id="entry_type"
+                                        wire:model="entry_type">
                                         <option selected value="Participant">Participant/Isolate</option>
                                         <option selected value="CRS Patient">CRS Patient</option>
                                         <option value="Client">Client</option>

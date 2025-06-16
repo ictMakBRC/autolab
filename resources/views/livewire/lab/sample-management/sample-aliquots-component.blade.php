@@ -41,7 +41,7 @@
                                     <div class="mb-3 col-md-3">
                                         <label for="sample_is_for" class="form-label">Sample is For?<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" id="sample_is_for"
+                                        <select class="form-select select2"  id="sample_is_for"
                                             wire:model="sample_is_for">
                                             <option selected value="">Select</option>
                                             <option value='Testing'>Testing</option>
@@ -57,7 +57,7 @@
                                     <div class="mb-3 col-md-3">
                                         <label for="priority" class="form-label">Priority<span
                                                 class="text-danger">*</span></label>
-                                        <select class="form-select" id="priority" wire:model="priority">
+                                        <select class="form-select select2"  id="priority" wire:model="priority">
                                             <option selected value="">Select</option>
                                             <option value='Normal'>Normal</option>
                                             <option value='Urgent'>Urgent</option>
@@ -120,8 +120,7 @@
                                                                             class="form-label">Aliquot ID</label>
                                                                         <input id="sample_identity" type="text"
                                                                             class="form-control"
-                                                                            wire:model.lazy="sample_identity"
-                                                                            readonly>
+                                                                            wire:model.lazy="sample_identity" readonly>
                                                                         @error('sample_identity')
                                                                             <div class="text-danger text-small">
                                                                                 {{ $message }}</div>
@@ -151,7 +150,8 @@
                                                                         <label for="sample_is_for"
                                                                             class="form-label">Aliquot is For?<span
                                                                                 class="text-danger">*</span></label>
-                                                                        <select class="form-select" id="sample_is_for"
+                                                                        <select class="form-select select2"
+                                                                            id="sample_is_for"
                                                                             wire:model="sample_is_for">
                                                                             <option selected value="">Select
                                                                             </option>
@@ -172,8 +172,8 @@
                                                                         <label for="priority"
                                                                             class="form-label">Priority<span
                                                                                 class="text-danger">*</span></label>
-                                                                        <select class="form-select" id="priority"
-                                                                            wire:model="priority">
+                                                                        <select class="form-select select2"
+                                                                            id="priority" wire:model="priority">
                                                                             <option selected value="">Select
                                                                             </option>
                                                                             <option value='Normal'>Normal</option>
@@ -214,20 +214,20 @@
                                                                             <hr>
                                                                             <div class="row col-md-12  mx-auto">
                                                                                 @foreach ($tests as $test)
-                                                                                <div class="col-md-3">
-                                                                                    <div
-                                                                                    class="form-check form-check-inline mb-1">
-                                                                                    <label class="form-check-label"
-                                                                                        for="test{{ $test->id }}">{{ $test->name }}</label>
-                                                                                    <input class="form-check-input"
-                                                                                        type="checkbox"
-                                                                                        id="test{{ $test->id }}"
-                                                                                        value="{{ $test->id }}"
-                                                                                        wire:model='tests_requested'>
-                                                                                </div>
-                                                                                </div>
-
-                                                                                    
+                                                                                    <div class="col-md-3">
+                                                                                        <div
+                                                                                            class="form-check form-check-inline mb-1">
+                                                                                            <label
+                                                                                                class="form-check-label"
+                                                                                                for="test{{ $test->id }}">{{ $test->name }}</label>
+                                                                                            <input
+                                                                                                class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                id="test{{ $test->id }}"
+                                                                                                value="{{ $test->id }}"
+                                                                                                wire:model='tests_requested'>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 @endforeach
                                                                                 @error('tests_requested')
                                                                                     <div class="text-danger text-small">

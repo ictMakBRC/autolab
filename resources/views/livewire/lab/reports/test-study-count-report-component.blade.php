@@ -19,7 +19,7 @@
 
                     <div class="col-md-3">
                         <label class="form-label">Study</label>
-                        <select class="form-select" wire:model="selectedStudy">
+                        <select class="form-select select2" wire:model="selectedStudy">
                             <option value="">All Studies</option>
                             @foreach ($studies as $study)
                                 <option value="{{ $study->id }}">{{ $study->name }}</option>

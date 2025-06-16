@@ -25,10 +25,10 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" /> --}}
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" /> --}}
     <link href="{{ asset('js/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
-
+    <link href="{{ asset('autolab-assets/select2/css/select2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('autolab-assets/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
     <!-- Datatables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css" />
+    <link href="{{ asset('autolab-assets/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
 
     <!-- loader-->
     <link href="{{ asset('autolab-assets/css/pace.min.css') }}" rel="stylesheet" />
@@ -80,10 +80,11 @@
     <script src="{{ asset('autolab-assets/js/app.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/sort.js') }}"></script>
     <script src="{{ asset('autolab-assets/js/ckeditor.js') }}"></script>
-
+    <script src="{{ asset('autolab-assets/select2/js/select2.min.js') }}"></script>
     <!-- Datatables JS -->
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('autolab-assets/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('autolab-assets/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    {{-- <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
 
@@ -94,7 +95,7 @@
 
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> --}}
 
     <script src="{{ asset('js/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert/sweetalert.min.js') }}"></script>
@@ -195,6 +196,7 @@
             $("html").attr("class", `${event.detail.theme}`)
         });
     </script>
+
     @stack('scripts')
 
     @livewireScripts

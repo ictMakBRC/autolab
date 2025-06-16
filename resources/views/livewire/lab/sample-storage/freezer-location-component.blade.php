@@ -52,7 +52,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $freezerLocation->name }}</td>
-                                        <td>{{ $freezerLocation->description ? $freezerLocation->description : 'N/A' }}</td>
+                                        <td>{{ $freezerLocation->description ? $freezerLocation->description : 'N/A' }}
+                                        </td>
                                         @if ($freezerLocation->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
@@ -113,7 +114,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" name="is_active" wire:model="is_active">
+                                    <select class="form-select select2" id="isActive" name="is_active"
+                                        wire:model="is_active">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -169,8 +171,8 @@
     </div>
 
     <!-- EDIT freezerLocation Modal -->
-    <div wire:ignore.self class="modal fade" id="editfreezerLocation" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="editfreezerLocation" data-bs-backdrop="static"
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -182,7 +184,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="freezerLocation_name2" class="form-label">Freezer- Location Name</label>
+                                    <label for="freezerLocation_name2" class="form-label">Freezer- Location
+                                        Name</label>
                                     <input type="text" id="freezerLocation_name2" class="form-control"
                                         wire:model.lazy="name">
                                     @error('name')
@@ -191,7 +194,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="is_active2" class="form-label">Status</label>
-                                    <select class="form-select" id="is_active2" wire:model="is_active">
+                                    <select class="form-select select2" id="is_active2" wire:model="is_active">
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
                                     </select>

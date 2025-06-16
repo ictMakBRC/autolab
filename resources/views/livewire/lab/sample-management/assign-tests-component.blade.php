@@ -229,7 +229,7 @@
                                                                                             class="text-danger">{{ $backlog }}</strong>)
                                                                                     @endif
                                                                                 </label>
-                                                                                <select class="form-select"
+                                                                                <select class="form-select select2"
                                                                                     wire:model="assignee">
                                                                                     <option selected value="">
                                                                                         Select
@@ -250,7 +250,7 @@
                                                                         <div class="col-md-2 mb-2">
                                                                             <label class="form-label">Is
                                                                                 Referral?</label>
-                                                                            <select class="form-select"
+                                                                            <select class="form-select select2"
                                                                                 wire:model="refer_samples">
                                                                                 <option value="">Select</option>
                                                                                 <option value="1">Refer Sample
@@ -358,7 +358,7 @@
                                                     <div class="col-md-8">
                                                         <div class="mb-2">
                                                             <label class="form-label fw-bold">Assignee</label>
-                                                            <select class="form-select" wire:model="assignee">
+                                                            <select class="form-select select2" wire:model="assignee">
                                                                 <option selected value="">Select
                                                                 </option>
                                                                 @foreach ($users as $user)

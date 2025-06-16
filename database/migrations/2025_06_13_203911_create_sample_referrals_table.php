@@ -38,7 +38,7 @@ return new class extends Migration
 
         // Migration for test results
         Schema::table('test_results', function (Blueprint $table) {
-            $table->foreignId('referral_id')->constrained('sample_referrals')->nullable();
+            $table->foreignId('referral_id')->nullable();
             $table->string('ref_result_file')->nullable();
             $table->text('ref_comments')->nullable();
             $table->date('received_date')->nullable();

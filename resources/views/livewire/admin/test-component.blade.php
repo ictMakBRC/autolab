@@ -136,7 +136,8 @@
                                 </div>
                                 <div class="mb-3 col-md-2">
                                     <label for="accreditation" class="form-label">Accreditation</label>
-                                    <select class="form-select" id="accreditation" wire:model="accreditation">
+                                    <select class="form-select select2" id="accreditation"
+                                        wire:model="accreditation">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
@@ -147,7 +148,7 @@
                                 </div>
                                 <div class="mb-3 col-md-2">
                                     <label for="isActive" class="form-label">Status</label>
-                                    <select class="form-select" id="isActive" wire:model="status">
+                                    <select class="form-select select2" id="isActive" wire:model="status">
                                         <option selected value="">Select</option>
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>

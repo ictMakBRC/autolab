@@ -62,18 +62,17 @@
     <div class="card-body">
         @if ($testResults->amended_state)
             <div class="alert border-0 bg-warning-info show">
-                <div
-                    class="d-flex align-items-center text-danger">
+                <div class="d-flex align-items-center text-danger">
                     <div class="fs-3"><i class="bi bi-exclamation-triangle-fill"></i>
                     </div>
                     <div class="ms-3">
                         <div>Please note that this is an amended result with comment--></div>
                     </div>
                     <div class="ms-3 text-info">
-                        <div>{{$testResults->amendment_comment}}</div>
+                        <div>{{ $testResults->amendment_comment }}</div>
                     </div>
-                    <a target="_blank" href="{{ route('print-original-report', $testResults->id) }}" class="action-ico btn btn-outline-success"><i
-                            class="bi bi-eye"></i>Original results</a>
+                    <a target="_blank" href="{{ route('print-original-report', $testResults->id) }}"
+                        class="action-ico btn btn-outline-success"><i class="bi bi-eye"></i>Original results</a>
                 </div>
             </div>
         @endif
@@ -102,7 +101,7 @@
                         </td>
                         <td>
                             <strong class="text-inverse">Result Date:
-                            </strong>    
+                            </strong>
                             @if ($testResult->amended_state)
                                 {{ date('d-m-Y H:i', strtotime($testResult->amended_at)) }}
                             @else
@@ -122,94 +121,94 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   @php
+                                    @php
                                         $test_results = json_decode($testResults->result, true);
-                                   @endphp
-                                        @foreach ($test_results as $result)
-                                            <tr>
-                                                <td>{{ $result['test']??'N/A' }}</td>
-                                                <td>{{ $result['result']??'N/A' }}</td>
-                                                <td>{{ $result['CtValue']??'N/A' }}</td>
-                                                <td>{{ $result['comment']??'N/A' }}</td>
-                                            </tr>
-                                        @endforeach 
+                                    @endphp
+                                    @foreach ($test_results as $result)
+                                        <tr>
+                                            <td>{{ $result['test'] ?? 'N/A' }}</td>
+                                            <td>{{ $result['result'] ?? 'N/A' }}</td>
+                                            <td>{{ $result['CtValue'] ?? 'N/A' }}</td>
+                                            <td>{{ $result['comment'] ?? 'N/A' }}</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </tr>
                     @else
-                    <tr>
-                        @if ($testResults->parameters != null && $testResults->test->result_presentation == 'Tabular')
-                            <table class="table nowrap w-100 table-bordered">
-                                <thead>
-                                    @if ($testResults->test->parameter_uom)
-                                        <tr>
-                                            <th colspan="{{ count($testResults->parameters) + 1 }}">
-                                                {{ $testResults->test->parameter_uom }}
-                                            </th>
+                        <tr>
+                            @if ($testResults->parameters != null && $testResults->test->result_presentation == 'Tabular')
+                                <table class="table nowrap w-100 table-bordered">
+                                    <thead>
+                                        @if ($testResults->test->parameter_uom)
+                                            <tr>
+                                                <th colspan="{{ count($testResults->parameters) + 1 }}">
+                                                    {{ $testResults->test->parameter_uom }}
+                                                </th>
 
-                                        </tr>
-                                    @endif
-                                    <tr>
-                                        @foreach (array_keys($testResults->parameters) as $key)
+                                            </tr>
+                                        @endif
+                                        <tr>
+                                            @foreach (array_keys($testResults->parameters) as $key)
+                                                <th>
+                                                    {{ $key }}
+                                                </th>
+                                            @endforeach
                                             <th>
-                                                {{ $key }}
+                                                Result
                                             </th>
-                                        @endforeach
-                                        <th>
-                                            Result
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        @foreach (array_values($testResults->parameters) as $parameter)
+                                        </tr>
+                                        <tr>
+                                            @foreach (array_values($testResults->parameters) as $parameter)
+                                                <td>
+                                                    {{ $parameter }}
+                                                </td>
+                                            @endforeach
                                             <td>
-                                                {{ $parameter }}
+                                                {{ $testResults->result }}
                                             </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            @elseif($testResults->parameters != null && $testResults->test->result_presentation == 'Non-Tabular')
+                                <td class="btop" style="width:60%; color:#1A2232">
+                                    <div><b style="font-size: 18px">Results:</b>
+                                        @if ($testResults->result)
+                                            <span>{{ $testResults->result }}</span>
+                                        @else
+                                            <a href="{{ route('attachment.download', $testResults->id) }}">See
+                                                Attachment</a>
+                                        @endif
+                                        <br>
+                                        @foreach ($testResults->parameters as $key => $parameter)
+                                            <i>{{ $key }}</i> :{{ $parameter }}<br>
                                         @endforeach
-                                        <td>
-                                            {{ $testResults->result }}
-                                        </td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        @elseif($testResults->parameters != null && $testResults->test->result_presentation == 'Non-Tabular')
-                            <td class="btop" style="width:60%; color:#1A2232">
-                                <div><b style="font-size: 18px">Results:</b>
+                                    </div>
+                                </td>
+                            @else
+                                <td colspan="3">
+                                    <strong class="text-inverse">Result:
+                                    </strong>
                                     @if ($testResults->result)
-                                        <span>{{ $testResults->result }}</span>
+                                        {{ $testResults->result }}
                                     @else
                                         <a href="{{ route('attachment.download', $testResults->id) }}">See
                                             Attachment</a>
                                     @endif
-                                    <br>
-                                    @foreach ($testResults->parameters as $key => $parameter)
-                                        <i>{{ $key }}</i> :{{ $parameter }}<br>
-                                    @endforeach
-                                </div>
-                            </td>
-                        @else
-                            <td colspan="3">
-                                <strong class="text-inverse">Result:
-                                </strong>
-                                @if ($testResults->result)
-                                    {{ $testResults->result }}
-                                @else
-                                    <a href="{{ route('attachment.download', $testResults->id) }}">See
-                                        Attachment</a>
-                                @endif
-                            </td>
-                        @endif
-                    </tr>
-                        
+                                </td>
+                            @endif
+                        </tr>
+
                     @endif
                 </tbody>
             </table>
         </div>
         @if ($testResults->test->result_type != 'Multiple')
-        <div class="row bg-light align-items-center m-0">
-            <strong class="text-inverse">Comments:</strong>
-            <p>{{ $testResults->comment }}</p>
-        </div>
-        <!--end row-->
+            <div class="row bg-light align-items-center m-0">
+                <strong class="text-inverse">Comments:</strong>
+                <p>{{ $testResults->comment }}</p>
+            </div>
+            <!--end row-->
         @endif
         <hr>
         <div class="row row-cols-1 row-cols-lg-3">
@@ -377,8 +376,8 @@
                                                                 @if ($test->result_type == 'Absolute')
                                                                     <div class="mb-2">
                                                                         <label class="form-label">Result</label>
-                                                                        <select class="form-select" id="result"
-                                                                            wire:model.lazy="result">
+                                                                        <select class="form-select select2"
+                                                                            id="result" wire:model.lazy="result">
                                                                             <option selected value="">
                                                                                 Select</option>
                                                                             @foreach ($test->absolute_results as $result)
@@ -454,8 +453,8 @@
                                                                 <div class="mb-2">
                                                                     <label class="form-label">Comment</label>
                                                                     @if ($test->comments != null)
-                                                                        <select class="form-select" id="comment"
-                                                                            wire:model="comment">
+                                                                        <select class="form-select select2"
+                                                                            id="comment" wire:model="comment">
                                                                             <option selected value="">
                                                                                 Select</option>
                                                                             @foreach ($test->comments as $comment)
@@ -504,7 +503,8 @@
                                                             <div class="col">
                                                                 <div class="mb-2">
                                                                     <label class="form-label">Kit Used</label>
-                                                                    <select class="form-select" wire:model="kit_id">
+                                                                    <select class="form-select select2"
+                                                                        wire:model="kit_id">
                                                                         <option selected value="">Select
                                                                         </option>
                                                                         @foreach ($kits as $kit)

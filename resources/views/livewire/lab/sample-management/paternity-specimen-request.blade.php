@@ -82,7 +82,8 @@
                                         <div class="row mx-auto">
                                             <div class="mb-3 col-md-2">
                                                 <label for="entry_type" class="form-label">Entry Type</label>
-                                                <select class="form-select" id="entry_type" wire:model="entry_type">
+                                                <select class="form-select select2" id="entry_type"
+                                                    wire:model="entry_type">
                                                     <option selected value="Participant">Participant/Isolate</option>
                                                     <option selected value="CRS Patient">CRS Patient</option>
                                                     <option value="Client">Client</option>
@@ -102,42 +103,39 @@
                                                         @endif
 
                                                     </label>
-                                                    <input type="text" id="identity"
-                                                        class="form-control" size="14"
-                                                        wire:model.lazy="identity"
+                                                    <input type="text" id="identity" class="form-control"
+                                                        size="14" wire:model.lazy="identity"
                                                         @if ($entry_type == 'Client') disabled @endif>
                                                     @error('identity')
                                                         <div class="text-danger text-small">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-                                                @endif
-                                                @if($entry_type == 'CRS Patient')
-                                                    <div class="col">
-                                                        <label for="patno" class="form-label">CRS Pat No.<span
+                                            @endif
+                                            @if ($entry_type == 'CRS Patient')
+                                                <div class="col">
+                                                    <label for="patno" class="form-label">CRS Pat No.<span
                                                             class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="text" id="pat_no"
-                                                            class="form-control" size="14"
-                                                            wire:model.lazy="patno">
-                                                        @if ($patient_found)
-                                                            <span class="text-success">Found</span>
-                                                        @endif
-                                                        @error('patno')
-                                                            <div class="text-danger text-small">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="mb-2 col-md-2">
-                                                        <label for="identity" class="form-label">Participant ID<span
-                                                                class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="text" id="identity"
-                                                            class="form-control" size="14"
-                                                            wire:model.lazy="identity">
-                                                        @error('identity')
-                                                            <div class="text-danger text-small">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                @endif
+                                                    </label>
+                                                    <input type="text" id="pat_no" class="form-control"
+                                                        size="14" wire:model.lazy="patno">
+                                                    @if ($patient_found)
+                                                        <span class="text-success">Found</span>
+                                                    @endif
+                                                    @error('patno')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-2 col-md-2">
+                                                    <label for="identity" class="form-label">Participant ID<span
+                                                            class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" id="identity" class="form-control"
+                                                        size="14" wire:model.lazy="identity">
+                                                    @error('identity')
+                                                        <div class="text-danger text-small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endif
                                             @if ($entry_type == 'Participant' || $entry_type == 'Client' || $entry_type == 'CRS Patient')
                                                 <div class="mb-3 col-md-1">
                                                     <label for="age" class="form-label">Age<span
@@ -433,7 +431,7 @@
                                         <div class="row mx-auto">
                                             <div class="mb-3 col-md-3">
                                                 <label for="requested_by" class="form-label">Requested By</label>
-                                                <select class="form-select" id="requested_by"
+                                                <select class="form-select select2" id="requested_by"
                                                     wire:model="requested_by">
                                                     <option selected value="">Select</option>
                                                     @forelse ($requesters as $requester)
@@ -472,7 +470,7 @@
 
                                             <div class="mb-3 col-md-3">
                                                 <label for="collected_by" class="form-label">Collected By</label>
-                                                <select class="form-select" id="collected_by"
+                                                <select class="form-select select2" id="collected_by"
                                                     wire:model="collected_by"
                                                     @if ($is_isolate) disabled @endif>
                                                     <option selected value="">Select</option>
@@ -503,7 +501,8 @@
 
                                                 <div class="mb-3 col-md-3">
                                                     <label for="study_id" class="form-label">Study</label>
-                                                    <select class="form-select" id="study_id" wire:model="study_id">
+                                                    <select class="form-select select2" id="study_id"
+                                                        wire:model="study_id">
                                                         <option selected value="">Select</option>
                                                         @forelse ($studies as $study)
                                                             <option value='{{ $study->id }}'>{{ $study->name }}
@@ -530,7 +529,7 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="sample_is_for" class="form-label">Sample is For?<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select" id="sample_is_for"
+                                                <select class="form-select select2" id="sample_is_for"
                                                     wire:model="sample_is_for">
                                                     <option selected value="">Select</option>
                                                     <option value='Testing'>Testing</option>
@@ -546,7 +545,8 @@
                                             <div class="mb-3 col-md-3">
                                                 <label for="priority" class="form-label">Priority<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select" id="priority" wire:model="priority">
+                                                <select class="form-select select2" id="priority"
+                                                    wire:model="priority">
                                                     <option selected value="">Select</option>
                                                     <option value='Normal'>Normal</option>
                                                     <option value='Urgent'>Urgent</option>
@@ -580,7 +580,7 @@
                                             <div class="mb-3 col-md-8">
                                                 <label for="sampleType" class="form-label">Sample<span
                                                         class="text-danger">*</span></label>
-                                                <select class="form-select" id="sampleType"
+                                                <select class="form-select select2" id="sampleType"
                                                     wire:model='sample_type_id'>
                                                     <option selected value="">Select</option>
                                                     @foreach ($sampleTypes as $sampleType)

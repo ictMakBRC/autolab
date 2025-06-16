@@ -7,7 +7,7 @@
             <div class="row mx-auto">
                 <div class="mb-3 col-md-4">
                     <label for="amendment_type" class="form-label">Amendment type</label>
-                    <select class="form-select" id="amendment_type" wire:model="amendment_type">
+                    <select class="form-select select2" id="amendment_type" wire:model="amendment_type">
                         <option selected value="">Select</option>
                         <option value="Post-result-issuance">Post result issuance</option>
                         <option value="Pre-result-issuance">Pre result issuance</option>
@@ -19,7 +19,8 @@
 
                 <div class="mb-3 col-md-8">
                     <label for="amendment_comment" class="form-label">Comment/Reason for amendment</label>
-                    <textarea id="amendment_comment" type="text" class="form-control" wire:model.lazy="amendment_comment" placeholder="Comment"></textarea>
+                    <textarea id="amendment_comment" type="text" class="form-control" wire:model.lazy="amendment_comment"
+                        placeholder="Comment"></textarea>
                     @error('amendment_comment')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror

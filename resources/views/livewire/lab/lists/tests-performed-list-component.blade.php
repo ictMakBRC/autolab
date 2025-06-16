@@ -37,7 +37,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-2">
                                         <label for="facility_id" class="form-label">Facility</label>
-                                        <select class="form-select" id="facility_id" wire:model="facility_id">
+                                        <select class="form-select select2" id="facility_id" wire:model="facility_id">
                                             <option selected value="0">All</option>
                                             @forelse ($facilities as $facility)
                                                 <option value='{{ $facility->id }}'>{{ $facility->name }}</option>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="study" class="form-label">Study</label>
-                                        <select class="form-select" id="study" wire:model="study_id">
+                                        <select class="form-select select2" id="study" wire:model="study_id">
                                             <option selected value="0">All</option>
                                             @forelse ($studies as $study)
                                                 <option value='{{ $study->id }}'>{{ $study->name }}</option>
@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="sampleType" class="form-label">Sample Type</label>
-                                        <select class="form-select" id="sampleType" wire:model='sampleType'>
+                                        <select class="form-select select2" id="sampleType" wire:model='sampleType'>
                                             <option selected value="0">All</option>
                                             @foreach ($sampleTypes as $sampleType)
                                                 <option value='{{ $sampleType->id }}'>
@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="test_id" class="form-label">Test</label>
-                                        <select class="form-select" id="test_id" wire:model='test_id'>
+                                        <select class="form-select select2" id="test_id" wire:model='test_id'>
                                             <option selected value="0">All</option>
                                             @foreach ($tests as $test)
                                                 <option value='{{ $test->id }}'>
@@ -78,7 +78,7 @@
 
                                     <div class="mb-3 col-md-2">
                                         <label for="performed_by" class="form-label">Performed By</label>
-                                        <select class="form-select" id="performed_by" wire:model='performed_by'>
+                                        <select class="form-select select2" id="performed_by" wire:model='performed_by'>
                                             @if (Auth::user()->hasPermission('manager-access|master-access'))
                                                 <option selected value="0">All</option>
                                                 @foreach ($users as $user)
@@ -93,7 +93,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="reviewed_by" class="form-label">Reviewed By</label>
-                                        <select class="form-select" id="reviewed_by" wire:model='reviewed_by'>
+                                        <select class="form-select select2" id="reviewed_by" wire:model='reviewed_by'>
                                             <option selected value="0">All</option>
                                             @foreach ($users as $user)
                                                 <option value='{{ $user->id }}'>
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="approved_by" class="form-label">Approved By</label>
-                                        <select class="form-select" id="approved_by" wire:model='approved_by'>
+                                        <select class="form-select select2" id="approved_by" wire:model='approved_by'>
                                             <option selected value="0">All</option>
                                             @foreach ($users as $user)
                                                 <option value='{{ $user->id }}'>
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <label for="status" class="form-label">Status</label>
-                                        <select class="form-select" id="status" wire:model='status'>
+                                        <select class="form-select select2" id="status" wire:model='status'>
                                             <option selected value="0">All</option>
                                             <option value="Approved">Approved</option>
                                             <option value="Reviewed">Reviewed</option>
