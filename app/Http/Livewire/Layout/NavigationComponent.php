@@ -64,9 +64,9 @@ class NavigationComponent extends Component
     {
         // $this->navItem = 'samplemgt';
         // $this->link = 'dashboard';
-        $this->loadCounts();
+        // $this->loadCounts();
     }
-    public function loadCountsOld()
+    public function loadCounts()
     {
         $user  = auth()->user();
         $labId = $user->laboratory_id;
@@ -180,132 +180,132 @@ class NavigationComponent extends Component
         // }
     }
 
-    public function loadCounts()
-    {
-        $user  = Auth::user();
-        $labId = $user->laboratory_id;
+    // public function loadCounts()
+    // {
+    //     $user  = Auth::user();
+    //     $labId = $user->laboratory_id;
 
-        // Permission: accession-samples
-        if ($user->hasPermission(['accession-samples'])) {
-            $this->batchesCount = Cache::remember("lab:{$labId}:batchesCount", now()->addMinutes(5), function () use ($labId) {
-                return SampleReception::where('creator_lab', $labId)
-                    ->where(function (Builder $query) {
-                        $query->whereRaw('samples_accepted != samples_handled')
-                            ->orWhereHas('sample', function (Builder $query) {
-                                $query->whereNull('tests_requested')
-                                    ->orWhere('test_count', 0);
-                            });
-                    })->count();
-            });
-        }
+    //     // Permission: accession-samples
+    //     if ($user->hasPermission(['accession-samples'])) {
+    //         $this->batchesCount = Cache::remember("lab:{$labId}:batchesCount", now()->addMinutes(5), function () use ($labId) {
+    //             return SampleReception::where('creator_lab', $labId)
+    //                 ->where(function (Builder $query) {
+    //                     $query->whereRaw('samples_accepted != samples_handled')
+    //                         ->orWhereHas('sample', function (Builder $query) {
+    //                             $query->whereNull('tests_requested')
+    //                                 ->orWhere('test_count', 0);
+    //                         });
+    //                 })->count();
+    //         });
+    //     }
 
-        // Permission: view-participant-info
-        if ($user->hasPermission(['view-participant-info'])) {
-            $this->participantCount = Cache::remember("lab:{$labId}:participantCount", now()->addMinutes(5), function () {
-                return $this->sampleData()->distinct()->count('participant_id');
-            });
+    //     // Permission: view-participant-info
+    //     if ($user->hasPermission(['view-participant-info'])) {
+    //         $this->participantCount = Cache::remember("lab:{$labId}:participantCount", now()->addMinutes(5), function () {
+    //             return $this->sampleData()->distinct()->count('participant_id');
+    //         });
 
-            $this->samplesCount = Cache::remember("lab:{$labId}:samplesCount", now()->addMinutes(5), function () {
-                return $this->sampleData()->count();
-            });
-        }
+    //         $this->samplesCount = Cache::remember("lab:{$labId}:samplesCount", now()->addMinutes(5), function () {
+    //             return $this->sampleData()->count();
+    //         });
+    //     }
 
-        // Permission: enter-results
-        if ($user->hasPermission(['enter-results'])) {
-            $userId = $user->id;
+    //     // Permission: enter-results
+    //     if ($user->hasPermission(['enter-results'])) {
+    //         $userId = $user->id;
 
-            $this->testAssignedCount = Cache::remember("user:{$userId}:testAssignedCount", now()->addMinutes(5), fn() =>
-                TestAssignment::where('assignee', $userId)->where('status', 'Assigned')->count()
-            );
+    //         $this->testAssignedCount = Cache::remember("user:{$userId}:testAssignedCount", now()->addMinutes(5), fn() =>
+    //             TestAssignment::where('assignee', $userId)->where('status', 'Assigned')->count()
+    //         );
 
-            $this->AliquotingAssignedCount = Cache::remember("user:{$userId}:AliquotingAssignedCount", now()->addMinutes(5), fn() =>
-                AliquotingAssignment::where('assignee', $userId)->where('status', 'Assigned')->count()
-            );
+    //         $this->AliquotingAssignedCount = Cache::remember("user:{$userId}:AliquotingAssignedCount", now()->addMinutes(5), fn() =>
+    //             AliquotingAssignment::where('assignee', $userId)->where('status', 'Assigned')->count()
+    //         );
 
-            $this->rejectedResultsCount = Cache::remember("user:{$userId}:rejectedResultsCount", now()->addMinutes(5), fn() =>
-                TestResult::where([
-                    'status'       => 'Rejected',
-                    'performed_by' => $userId,
-                    'creator_lab'  => $labId,
-                ])->count()
-            );
-        }
+    //         $this->rejectedResultsCount = Cache::remember("user:{$userId}:rejectedResultsCount", now()->addMinutes(5), fn() =>
+    //             TestResult::where([
+    //                 'status'       => 'Rejected',
+    //                 'performed_by' => $userId,
+    //                 'creator_lab'  => $labId,
+    //             ])->count()
+    //         );
+    //     }
 
-        // Permission: assign-test-requests
-        if ($user->hasPermission(['assign-test-requests'])) {
-            $this->testRequestsCount = Cache::remember("lab:{$labId}:testRequestsCount", now()->addMinutes(5), function () {
-                return $this->sampleData()
-                    ->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])
-                    ->whereIn('status', ['Accessioned', 'Processing'])
-                    ->where(function ($query) {
-                        $query->whereNotNull('tests_requested')->where('test_count', '>', 0)
-                            ->orWhere(function ($query) {
-                                $query->where('sample_is_for', 'Storage')->whereNull('tests_requested');
-                            });
-                    })->count();
-            });
-        }
+    //     // Permission: assign-test-requests
+    //     if ($user->hasPermission(['assign-test-requests'])) {
+    //         $this->testRequestsCount = Cache::remember("lab:{$labId}:testRequestsCount", now()->addMinutes(5), function () {
+    //             return $this->sampleData()
+    //                 ->whereIn('sample_is_for', ['Testing', 'Aliquoting', 'Storage'])
+    //                 ->whereIn('status', ['Accessioned', 'Processing'])
+    //                 ->where(function ($query) {
+    //                     $query->whereNotNull('tests_requested')->where('test_count', '>', 0)
+    //                         ->orWhere(function ($query) {
+    //                             $query->where('sample_is_for', 'Storage')->whereNull('tests_requested');
+    //                         });
+    //                 })->count();
+    //         });
+    //     }
 
-        // Permissions: result processing
-        if ($user->hasPermission(['enter-results', 'review-results', 'approve-results', 'view-result-reports'])) {
-            $resultSummary = Cache::remember("lab:{$labId}:resultSummary", now()->addMinutes(5), fn() =>
-                TestResult::selectRaw("
-                COUNT(*) as total,
-                SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) as rejected,
-                SUM(CASE WHEN status = 'Pending Review' THEN 1 ELSE 0 END) as pending_review,
-                SUM(CASE WHEN status = 'Reviewed' THEN 1 ELSE 0 END) as pending_approval,
-                SUM(CASE WHEN status = 'Approved' THEN 1 ELSE 0 END) as approved
-            ")->where('creator_lab', $labId)->first()
-            );
+    //     // Permissions: result processing
+    //     if ($user->hasPermission(['enter-results', 'review-results', 'approve-results', 'view-result-reports'])) {
+    //         $resultSummary = Cache::remember("lab:{$labId}:resultSummary", now()->addMinutes(5), fn() =>
+    //             TestResult::selectRaw("
+    //             COUNT(*) as total,
+    //             SUM(CASE WHEN status = 'Rejected' THEN 1 ELSE 0 END) as rejected,
+    //             SUM(CASE WHEN status = 'Pending Review' THEN 1 ELSE 0 END) as pending_review,
+    //             SUM(CASE WHEN status = 'Reviewed' THEN 1 ELSE 0 END) as pending_approval,
+    //             SUM(CASE WHEN status = 'Approved' THEN 1 ELSE 0 END) as approved
+    //         ")->where('creator_lab', $labId)->first()
+    //         );
 
-            $this->testsRejectedCount        = $resultSummary->rejected;
-            $this->testsPendindReviewCount   = $resultSummary->pending_review;
-            $this->testsPendindApprovalCount = $resultSummary->pending_approval;
-            $this->testReportsCount          = $resultSummary->approved;
-            $this->testsPerformedCount       = $resultSummary->total;
-        }
+    //         $this->testsRejectedCount        = $resultSummary->rejected;
+    //         $this->testsPendindReviewCount   = $resultSummary->pending_review;
+    //         $this->testsPendindApprovalCount = $resultSummary->pending_approval;
+    //         $this->testReportsCount          = $resultSummary->approved;
+    //         $this->testsPerformedCount       = $resultSummary->total;
+    //     }
 
-        // Permission: manage-users
-        if ($user->hasPermission(['manage-users'])) {
-            $this->usersCount = Cache::remember("usersCount", now()->addMinutes(10), fn() =>
-                User::where('is_active', 1)->count()
-            );
+    //     // Permission: manage-users
+    //     if ($user->hasPermission(['manage-users'])) {
+    //         $this->usersCount = Cache::remember("usersCount", now()->addMinutes(10), fn() =>
+    //             User::where('is_active', 1)->count()
+    //         );
 
-            $this->rolesCount = Cache::remember("rolesCount", now()->addMinutes(10), fn() =>
-                Role::count()
-            );
+    //         $this->rolesCount = Cache::remember("rolesCount", now()->addMinutes(10), fn() =>
+    //             Role::count()
+    //         );
 
-            $this->permissionsCount = Cache::remember("permissionsCount", now()->addMinutes(10), fn() =>
-                Permission::count()
-            );
+    //         $this->permissionsCount = Cache::remember("permissionsCount", now()->addMinutes(10), fn() =>
+    //             Permission::count()
+    //         );
 
-            $this->laboratoryCount = Cache::remember("labsCount", now()->addMinutes(10), fn() =>
-                Laboratory::where('is_active', 1)->count()
-            );
-        }
+    //         $this->laboratoryCount = Cache::remember("labsCount", now()->addMinutes(10), fn() =>
+    //             Laboratory::where('is_active', 1)->count()
+    //         );
+    //     }
 
-        // Optionally enable the below section if needed
-        // if ($user->hasPermission(['access-settings'])) {
-        //     $facilities = $user->laboratory->associated_facilities ?? [];
-        //     $studies    = $user->laboratory->associated_studies ?? [];
+    //     // Optionally enable the below section if needed
+    //     // if ($user->hasPermission(['access-settings'])) {
+    //     //     $facilities = $user->laboratory->associated_facilities ?? [];
+    //     //     $studies    = $user->laboratory->associated_studies ?? [];
 
-        //     $this->designationCount = Cache::remember("designationCount", now()->addMinutes(10), fn() =>
-        //         Designation::where('is_active', 1)->count()
-        //     );
+    //     //     $this->designationCount = Cache::remember("designationCount", now()->addMinutes(10), fn() =>
+    //     //         Designation::where('is_active', 1)->count()
+    //     //     );
 
-        //     $this->facilityCount = Facility::where('is_active', 1)->whereIn('id', $facilities)->count();
-        //     $this->studyCount    = Study::where('is_active', 1)->whereIn('id', $studies)->count();
-        //     $this->requesterCount = Requester::where('is_active', 1)->whereIn('study_id', $studies)->count();
-        //     $this->collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', $facilities)->count();
-        //     $this->courierCount   = Courier::where('is_active', 1)->whereIn('facility_id', $facilities)->count();
+    //     //     $this->facilityCount = Facility::where('is_active', 1)->whereIn('id', $facilities)->count();
+    //     //     $this->studyCount    = Study::where('is_active', 1)->whereIn('id', $studies)->count();
+    //     //     $this->requesterCount = Requester::where('is_active', 1)->whereIn('study_id', $studies)->count();
+    //     //     $this->collectorCount = Collector::where('is_active', 1)->whereIn('facility_id', $facilities)->count();
+    //     //     $this->courierCount   = Courier::where('is_active', 1)->whereIn('facility_id', $facilities)->count();
 
-        //     $this->platformCount     = Platform::where('creator_lab', $labId)->where('is_active', 1)->count();
-        //     $this->kitCount          = Kit::where('creator_lab', $labId)->where('is_active', 1)->count();
-        //     $this->sampleTypeCount   = SampleType::where('creator_lab', $labId)->where('status', 1)->count();
-        //     $this->testCategoryCount = TestCategory::where('creator_lab', $labId)->count();
-        //     $this->testCount         = Test::where('creator_lab', $labId)->where('status', 1)->count();
-        // }
-    }
+    //     //     $this->platformCount     = Platform::where('creator_lab', $labId)->where('is_active', 1)->count();
+    //     //     $this->kitCount          = Kit::where('creator_lab', $labId)->where('is_active', 1)->count();
+    //     //     $this->sampleTypeCount   = SampleType::where('creator_lab', $labId)->where('status', 1)->count();
+    //     //     $this->testCategoryCount = TestCategory::where('creator_lab', $labId)->count();
+    //     //     $this->testCount         = Test::where('creator_lab', $labId)->where('status', 1)->count();
+    //     // }
+    // }
 
     public function updateNav($target)
     {

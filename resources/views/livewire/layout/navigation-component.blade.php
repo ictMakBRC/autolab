@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }} {{ $activeTab === 'samples' ? 'show active' : '' }}"
+                <div class="tab-pane fade {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
                     id="pills-samples">
                     <div class="list-group list-group-flush">
                         <div class="list-group-item">
