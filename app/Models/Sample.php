@@ -32,6 +32,34 @@ class Sample extends Model
         'tests_performed' => 'array',
         'referred_tests'  => 'array',
     ];
+    // In Sample model
+    public function calculateTAT()
+    {
+        if (! $this->date_collected || ! $this->testResults->count()) {
+            return null;
+        }
+
+        $firstResultDate  = $this->testResults->min('created_at');
+        $lastApprovedDate = $this->testResults->where('status', 'Approved')->max('approved_at');
+
+        return [
+            'collection_to_reception' => $this->sampleReception?->created_at
+            ? $this->sampleReception->created_at->diffInDays($this->date_collected)
+            : null,
+
+            'reception_to_processing' => $firstResultDate
+            ? $firstResultDate->diffInDays($this->sampleReception->created_at)
+            : null,
+
+            'processing_to_approval'  => $lastApprovedDate && $firstResultDate
+            ? $lastApprovedDate->diffInDays($firstResultDate)
+            : null,
+
+            'total_tat'               => $lastApprovedDate
+            ? $lastApprovedDate->diffInDays($this->date_collected)
+            : null,
+        ];
+    }
     public function getReferredTestsAttribute($value)
     {
         return json_decode($value ?? '[]', true);

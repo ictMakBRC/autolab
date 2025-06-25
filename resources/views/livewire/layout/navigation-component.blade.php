@@ -12,8 +12,7 @@
                 </li>
 
                 <li class="nav-item {{ request()->segment(1) == 'samplemgt' || $navItem == 'samplemgt' ? 'active show' : '' }}"
-                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management"
-                    wire:click.prevent="setActiveTab('samples')">
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Management">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-samples" type="button"><i
                             class="bi bi-prescription"></i><i class='bx bxs-vial'></i></button>
                 </li>
@@ -21,6 +20,11 @@
                     data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Storage">
                     <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sample-storage" type="button"><i
                             class="bx bx-archive"></i></button>
+                </li>
+                <li class="nav-item {{ request()->segment(1) == 'report' || $navItem == 'report' ? 'active show' : '' }}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Sample Reports">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#sample-reports" type="button"><i
+                            class="bx bx-file"></i></button>
                 </li>
 
                 @if (Auth::user()->hasPermission(['manage-users']))
@@ -193,20 +197,42 @@
                                                 Results</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('tests-count-report') }}"></i>Test Q
-                                                Request
+                                            <a class="nav-link" href="{{ route('tests-count-report') }}"></i>Referred
+                                                Samples
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link"
-                                                href="{{ route('tests-study-count-report') }}"></i>Test Q Study
-                                                Request
+                                                href="{{ route('tests-study-count-report') }}"></i>Rejected Samples
                                             </a>
                                         </li>
 
                                     </ul>
                                 </div>
                             </div>
+
+                            {{-- <div class="list-group-item">
+                                <a class="d-flex justify-content-between text-light" data-bs-toggle="collapse"
+                                    href="#tatReportsDropdown" role="button" aria-expanded="false"
+                                    aria-controls="tatReportsDropdown">
+                                    <span><i class="bx bxs-vial"></i> Reports</span>
+                                    <i class="bi bi-chevron-down small"></i>
+                                </a>
+                                <div class="collapse mt-2" id="tatReportsDropdown">
+                                    <ul class="nav flex-column ms-3 text-light">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('tests-tat-report') }}"></i>TAT
+                                                Report</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('result-tat-report') }}"></i>Test TAT
+                                                Request
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div> --}}
                             {{-- <a href="{{ route('samples-count') }}" class="list-group-item"><i
                                     class="bx bxs-vial"></i>Sample Reports<x-count-badge>{{ $samplesCount }}
                                 </x-count-badge></a> --}}
@@ -275,6 +301,32 @@
                             <a href="{{ route('freezers') }}" class="list-group-item"><i
                                     class="bi bi-thermometer-snow"></i>Freezers</a>
                         @endif
+                    </div>
+                </div>
+
+
+                <div class="tab-pane fade {{ request()->segment(1) == 'report' ? 'active show' : '' }}"
+                    id="sample-reports">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-0">Reports</h5>
+                            </div>
+                        </div>
+                        <a class="list-group-item" href="{{ route('tests-tat-report') }}">
+                            <i class="bi bi-file"></i>TAT Group Report
+                        </a>
+                        <a class="list-group-item" href="{{ route('result-tat-report') }}"><i
+                                class="bi bi-file"></i>Test Result TAT</a>
+                        {{-- <a class="nav-link" href="{{ route('tests-count-report') }}"></i>Test Q
+                                Request
+                            </a> --}}
+                        <a class="list-group-item" href="{{ route('tests-study-count-report') }}"><i
+                                class="bi bi-file"></i>Test counts
+
+                        </a>
+
+
                     </div>
                 </div>
 

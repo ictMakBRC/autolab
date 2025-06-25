@@ -227,7 +227,7 @@
                                                 @if (
                                                     ($sample->created_by == auth()->user()->id && $sample->status != 'Tests Done') ||
                                                         Auth::user()->hasPermission(['review-results']))
-                                                    <button class="btn btn-sm btn-outline-primary"
+                                                    <button class="btn btn-sm btn-outline-info"
                                                         wire:click="editSample({{ $sample->id }})"
                                                         data-bs-toggle="modal" data-bs-target="#edit-sample-modal"><i
                                                             class="bi bi-pencil"></i></button>
@@ -377,7 +377,7 @@
                         <div class="row row-cols-1 row-cols-xl-2 row-cols-xxl-3">
                             <div class="col-md-7">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="icon-box bg-light-primary border-0">
+                                    <div class="icon-box bg-light-info border-0">
                                         <i class="bi bi-archive text-success"></i><i
                                             class='bx bxs-vial text-success'></i>
                                     </div>
@@ -408,7 +408,7 @@
                                 <div class="card border shadow-none radius-10">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="icon-box bg-light-primary border-0">
+                                            <div class="icon-box bg-light-info border-0">
                                                 <i class="bi bi-person text-success"></i>
                                             </div>
                                             <div class="info">

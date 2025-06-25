@@ -1,6 +1,6 @@
 <div>
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-info text-white">
             <h5 class="mb-0">Laboratory Test Reports</h5>
         </div>
 
@@ -43,12 +43,12 @@
                                 <label class="form-label">Report Type</label>
                                 <div class="btn-group w-100" role="group">
                                     <button type="button"
-                                        class="btn {{ $reportType === 'test_count' ? 'btn-primary' : 'btn-outline-primary' }}"
+                                        class="btn {{ $reportType === 'test_count' ? 'btn-info' : 'btn-outline-info' }}"
                                         wire:click="$set('reportType', 'test_count')">
                                         Test Count
                                     </button>
                                     <button type="button"
-                                        class="btn {{ $reportType === 'study_count' ? 'btn-primary' : 'btn-outline-primary' }}"
+                                        class="btn {{ $reportType === 'study_count' ? 'btn-info' : 'btn-outline-info' }}"
                                         wire:click="$set('reportType', 'study_count')">
                                         Study Count
                                     </button>
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-info">
                             <i class="fas fa-chart-bar me-2"></i> Generate Report
                         </button>
                     </div>

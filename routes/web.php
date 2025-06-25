@@ -35,6 +35,8 @@ use App\Http\Livewire\Lab\Lists\TestsAmendedListComponent;
 use App\Http\Livewire\Lab\Lists\TestsPerformedListComponent;
 use App\Http\Livewire\Lab\Reports\MultipleReportComponent;
 use App\Http\Livewire\Lab\Reports\PendingSamplesReportComponent;
+use App\Http\Livewire\Lab\Reports\ResultTatReportComponent;
+use App\Http\Livewire\Lab\Reports\TatReportComponent;
 use App\Http\Livewire\Lab\Reports\TestCountReportComponent;
 use App\Http\Livewire\Lab\Reports\TestStudyCountReportComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
@@ -137,8 +139,6 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
         Route::get('samplesResultsMultiple', MultipleReportComponent::class)->middleware('permission:view-participant-info')->name('multiple-result-list');
         Route::get('samplesCount', GeneralReportComponent::class)->middleware('permission:view-participant-info')->name('samples-count');
         Route::get('testsPerformedList', TestsPerformedListComponent::class)->middleware('permission:view-participant-info')->name('tests-performed-list');
-        Route::get('testCountReport', TestCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-count-report');
-        Route::get('testStudyCountReport', TestStudyCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-study-count-report');
 
         Route::get('crs/patient/load', [ResultReportController::class, 'getCrsPatient'])->name('loadcrsPatient');
 
@@ -151,6 +151,14 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
             Route::get('combinedTestResultsRpt/{resultIds?}', [SearchResultsController::class, 'combinedTestResultsReport'])->name('combined-test-results-report');
             Route::get('comboTestResultsRpt/{resultIds?}', [SearchResultsController::class, 'comboReport'])->name('combo-report');
         });
+    });
+
+    Route::group(['prefix' => 'report'], function () {
+        Route::get('testCountReport', TestCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-count-report');
+        Route::get('testStudyCountReport', TestStudyCountReportComponent::class)->middleware('permission:view-participant-info')->name('tests-study-count-report');
+
+        Route::get('tat', TatReportComponent::class)->name('tests-tat-report');
+        Route::get('test/tat', ResultTatReportComponent::class)->name('result-tat-report');
     });
 
     Route::group(['prefix' => 'samplestg'], function () {

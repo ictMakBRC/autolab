@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-info text-white">
         <h5 class="mb-0">Tests Requested Per Quarter Report</h5>
     </div>
 
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-info">
                         <i class="fas fa-chart-bar me-2"></i> Generate Report
                     </button>
                 </div>

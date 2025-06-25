@@ -136,6 +136,18 @@ class TestResult extends Model
         }
     }
 
+    public function calculateTAT()
+    {
+        if (! $this->approved_at || ! $this->sample->date_collected) {
+            return null;
+        }
+
+        $collectionDate = Carbon::parse($this->sample->date_collected);
+        $approvalDate   = Carbon::parse($this->approved_at);
+
+        return $approvalDate->diffInDays($collectionDate);
+    }
+
     public static function resultSearch($search, $status)
     {
         return empty($search) ? static::query()
