@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Exports\SamplesExport;
 use App\Models\Admin\SampleReferralReason;
 use App\Models\Admin\Test;
 use App\Models\AliquotingAssignment;
@@ -9,6 +10,7 @@ use App\Models\Laboratory;
 use App\Models\Lab\SampleManagent\SampleReferral;
 use App\Models\Sample;
 use App\Models\SampleType;
+use App\Models\Study;
 use App\Models\TestAssignment;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +52,17 @@ class AssignTestsComponent extends Component
     public $backlog;
     public $labNo;
     public $sampleId;
+    public $facility_id = 0;
+    public $job         = '';
+
+    public $sampleType;
+
+    public $created_by = 0;
+
+    public $from_date = '';
+
+    public $to_date  = '';
+    public $study_id = 0;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -73,11 +86,20 @@ class AssignTestsComponent extends Component
     public $refer_samples = false;
     public $referredTests = [];
 
+    public $sampleIds = [];
+
     public function updatingSearch()
     {
         $this->resetPage();
     }
-
+    public function export()
+    {
+        if (count($this->sampleIds) > 0) {
+            return (new SamplesExport($this->sampleIds))->download('Samples_' . date('Y-m-d') . '_' . now()->toTimeString() . '.xlsx');
+        } else {
+            $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Oops! No Samples selected for export!']);
+        }
+    }
     public function mount()
     {
         $this->tests_requested    = collect([]);
@@ -373,10 +395,43 @@ class AssignTestsComponent extends Component
             }, function ($query) {
                 return $query;
             })
+            ->when($this->facility_id != 0, function ($query) {
+                $query->whereHas('participant', function ($query) {
+                    $query->where('facility_id', $this->facility_id);
+                });
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->study_id != 0, function ($query) {
+                $query->where('study_id', $this->study_id);
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->created_by != 0, function ($query) {
+                $query->where('created_by', $this->created_by);
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->job != '', function ($query) {
+                $query->where('sample_is_for', $this->job);
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->sampleType != 0, function ($query) {
+                $query->where('sample_type_id', $this->sampleType);
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            })
             ->where(['creator_lab' => auth()->user()->laboratory_id, 'sample_is_for' => $this->sample_is_for])
             ->with(['participant', 'sampleType:id,type', 'study:id,name', 'requester:id,name', 'collector:id,name', 'sampleReception'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $this->sampleIds = $samples->pluck('id')->toArray();
         return $samples;
     }
 
@@ -403,14 +458,19 @@ class AssignTestsComponent extends Component
     public function render()
     {
 
-        $samples            = $this->getSamples();
-        $users              = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
-        $tests              = $this->tests_requested;
-        $aliquots           = $this->aliquots_requested;
-        $forTestingCount    = $this->getSampleTasks()['forTestingCount'];
-        $forAliquotingCount = $this->getSampleTasks()['forAliquotingCount'];
-        $forStorageCount    = $this->getSampleTasks()['forStorageCount'];
+        $data['samples']            = $this->getSamples();
+        $data['users']              = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->get();
+        $data['tests']              = $this->tests_requested;
+        $data['aliquots']           = $this->aliquots_requested;
+        $data['forTestingCount']    = $this->getSampleTasks()['forTestingCount'];
+        $data['forAliquotingCount'] = $this->getSampleTasks()['forAliquotingCount'];
+        $data['forStorageCount']    = $this->getSampleTasks()['forStorageCount'];
+        $data['users']              = User::where(['is_active' => 1, 'laboratory_id' => auth()->user()->laboratory_id])->latest()->get();
+        $data['facilities']         = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
+        $data['sampleTypes']        = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
+        $data['jobs']               = Sample::select('sample_is_for')->distinct()->get();
+        $data['studies']            = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->where('facility_id', $this->facility_id)->get();
 
-        return view('livewire.lab.sample-management.assign-tests-component', compact('samples', 'users', 'tests', 'aliquots', 'forTestingCount', 'forAliquotingCount', 'forStorageCount'));
+        return view('livewire.lab.sample-management.assign-tests-component', $data);
     }
 }

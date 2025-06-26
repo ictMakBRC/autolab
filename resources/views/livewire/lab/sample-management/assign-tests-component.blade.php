@@ -50,7 +50,9 @@
                 </div>
 
                 <div class="card-body">
-                    <x-table-utilities display='d-none'>
+                    @include('livewire.partials.sample-filter')
+
+                    <x-table-utilities display='d-blocl'>
                         <div>
                             <div class="d-flex align-items-center ml-4 me-2">
                                 <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>

@@ -22,7 +22,9 @@
                     </div>
 
                     <div class="card-body">
-                        <x-table-utilities display='d-none'>
+                        @include('livewire.partials.filter-tests')
+
+                        <x-table-utilities display='d-block'>
                             <div>
                                 <div class="d-flex align-items-center ml-4 me-2">
                                     <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
@@ -58,8 +60,9 @@
                                         @forelse ($testResults as $key => $testResult)
                                             <tr
                                                 class="
-                                            @if ($testResult->test->tat != 0 &&
-                                                $testResult->sample->created_at->diffInHours($testResult->created_at) > $testResult->test->tat) bg-light-danger @endif
+                                            @if (
+                                                $testResult->test->tat != 0 &&
+                                                    $testResult->sample->created_at->diffInHours($testResult->created_at) > $testResult->test->tat) bg-light-danger @endif
                                             ">
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
@@ -71,8 +74,8 @@
                                                 <td>
                                                     @if ($testResult->amended_state)
                                                         <a href="{{ route('print-original-report', $testResult->id) }}"
-                                                            target="_blank"><strong
-                                                                class="text-warning" title="AMENDED">{{ $testResult->tracker }}</strong>
+                                                            target="_blank"><strong class="text-warning"
+                                                                title="AMENDED">{{ $testResult->tracker }}</strong>
                                                         </a>
                                                     @else
                                                         <a href="{{ URL::signedRoute('report-search-results', ['testResult' => $testResult->id]) }}"
@@ -95,7 +98,7 @@
                                                     {{ $testResult->sample->sampleType->type }}
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->sample->lab_no??'' }}
+                                                    {{ $testResult->sample->lab_no ?? '' }}
                                                 </td>
 
                                                 <td>
@@ -106,7 +109,9 @@
                                                         class="text-info"><strong>{{ $testResult->test->name }}</strong></a>
                                                 </td>
                                                 <td>
-                                                    <span class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span> ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at).'min' }})
+                                                    <span
+                                                        class="text-danger fw-bold">{{ $testResult->sample->created_at->diffInHours($testResult->created_at) }}</span>
+                                                    ({{ $testResult->sample->created_at->diffInMinutes($testResult->created_at) . 'min' }})
                                                 </td>
 
                                                 <td>
