@@ -38,6 +38,7 @@ use App\Http\Livewire\Lab\Reports\PendingSamplesReportComponent;
 use App\Http\Livewire\Lab\Reports\ResultTatReportComponent;
 use App\Http\Livewire\Lab\Reports\TatReportComponent;
 use App\Http\Livewire\Lab\Reports\TestCountReportComponent;
+use App\Http\Livewire\Lab\Reports\TestsPerLabReportComponent;
 use App\Http\Livewire\Lab\Reports\TestStudyCountReportComponent;
 use App\Http\Livewire\Lab\SampleManagement\AssignTestsComponent;
 use App\Http\Livewire\Lab\SampleManagement\AttachTestResultComponent;
@@ -159,6 +160,7 @@ Route::group(['middleware' => ['auth', 'suspended_user']], function () {
 
         Route::get('tat', TatReportComponent::class)->name('tests-tat-report');
         Route::get('test/tat', ResultTatReportComponent::class)->name('result-tat-report');
+        Route::get('tests/done', TestsPerLabReportComponent::class)->name('result-tat-done-report');
     });
 
     Route::group(['prefix' => 'samplestg'], function () {

@@ -325,6 +325,10 @@
                                 class="bi bi-file"></i>Test counts
 
                         </a>
+                        <a class="list-group-item" href="{{ route('result-tat-done-report') }}"><i
+                                class="bi bi-file"></i>Lab Yearly Tests
+
+                        </a>
 
 
                     </div>
