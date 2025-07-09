@@ -1,10 +1,18 @@
 <div class="card">
     <div class="card-header bg-primary text-white">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Tests Per Laboratory Report</h5>
-            <button wire:click="exportCsv" class="btn btn-light btn-sm">
-                <i class="fas fa-file-csv"></i> Export CSV
-            </button>
+            <h5 class="mb-0">
+                @if ($reportType === 'tests')
+                    Tests Per Laboratory Report
+                @else
+                    Samples Per Laboratory Report
+                @endif
+            </h5>
+            <div>
+                <button wire:click="exportCsv" class="btn btn-light btn-sm">
+                    <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+            </div>
         </div>
     </div>
 
@@ -22,21 +30,29 @@
                         max="2100">
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label">Laboratories</label>
-                    <div class="row">
-                        @foreach ($allLabs as $lab)
-                            <div class="col-md-4 mb-2">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" value="{{ $lab->id }}"
-                                        wire:model="selectedLabs" id="lab-{{ $lab->id }}">
-                                    <label class="form-check-label" for="lab-{{ $lab->id }}">
-                                        {{ $lab->laboratory_name }}
-                                    </label>
-                                </div>
-                            </div>
-                        @endforeach
+                <div class="col-md-3">
+                    <label class="form-label">Report Type</label>
+                    <div class="btn-group w-100" role="group">
+                        <button type="button"
+                            class="btn {{ $reportType === 'tests' ? 'btn-primary' : 'btn-outline-primary' }}"
+                            wire:click="$set('reportType', 'tests')">
+                            Tests
+                        </button>
+                        <button type="button"
+                            class="btn {{ $reportType === 'samples' ? 'btn-primary' : 'btn-outline-primary' }}"
+                            wire:click="$set('reportType', 'samples')">
+                            Samples
+                        </button>
                     </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Laboratories</label>
+                    <select class="form-select" wire:model="selectedLabs" multiple>
+                        @foreach ($allLabs as $lab)
+                            <option value="{{ $lab->id }}">{{ $lab->laboratory_name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="col-12">
@@ -49,7 +65,8 @@
 
         @if (count($reportData) > 0)
             <div class="alert alert-info">
-                Total Tests Performed: <strong>{{ number_format($totalTests) }}</strong>
+                Total {{ $reportType === 'tests' ? 'Tests' : 'Samples' }}:
+                <strong>{{ number_format($totalCount) }}</strong>
             </div>
 
             <div class="table-responsive">
@@ -86,7 +103,7 @@
                                 @endphp
                                 <th class="text-center">{{ number_format($yearTotal) }}</th>
                             @endforeach
-                            <th class="text-center">{{ number_format($totalTests) }}</th>
+                            <th class="text-center">{{ number_format($totalCount) }}</th>
                         </tr>
                     </tfoot>
                 </table>

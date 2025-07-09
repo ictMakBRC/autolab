@@ -2,6 +2,7 @@
 namespace App\Http\Livewire\Lab\Reports;
 
 use App\Models\Laboratory;
+use App\Models\Sample;
 use App\Models\TestResult;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -11,10 +12,12 @@ class TestsPerLabReportComponent extends Component
     public $startYear;
     public $endYear;
     public $selectedLabs = [];
-    public $reportData   = [];
+    public $reportType   = 'tests'; // 'tests' or 'samples'
+    public $testData     = [];
+    public $sampleData   = [];
     public $years        = [];
     public $allLabs      = [];
-    public $totalTests   = 0;
+    public $totalCount   = 0;
 
     public function mount()
     {
@@ -38,15 +41,62 @@ class TestsPerLabReportComponent extends Component
         // Generate all years in range
         $this->years = range($this->startYear, $this->endYear);
 
-        // Get all approved test results grouped by lab and year
+        // Generate test data
+        $this->generateTestData();
+
+        // Generate sample data
+        $this->generateSampleData();
+    }
+
+    protected function generateTestData()
+    {
         $results = TestResult::query()
             ->select([
                 'creator_lab',
                 DB::raw('YEAR(approved_at) as year'),
-                DB::raw('COUNT(*) as test_count'),
+                DB::raw('COUNT(*) as count'),
             ])
-            ->whereIn('status', ['Approved', 'Reviewed', 'Pending Review'])
-        // ->whereNotNull('approved_at')
+            ->where('status', 'Approved')
+            ->whereNotNull('approved_at')
+            ->whereIn('creator_lab', $this->selectedLabs)
+            ->whereBetween(DB::raw('YEAR(approved_at)'), [$this->startYear, $this->endYear])
+            ->groupBy('creator_lab', DB::raw('YEAR(approved_at)'))
+            ->orderBy('creator_lab')
+            ->orderBy('year')
+            ->get();
+
+        $this->testData   = [];
+        $this->totalCount = 0;
+
+        foreach ($this->allLabs as $lab) {
+            if (! in_array($lab->id, $this->selectedLabs)) {
+                continue;
+            }
+
+            $this->testData[$lab->id] = [
+                'name'  => $lab->laboratory_name,
+                'years' => array_fill_keys($this->years, 0),
+                'total' => 0,
+            ];
+        }
+
+        foreach ($results as $result) {
+            if (isset($this->testData[$result->creator_lab]['years'][$result->year])) {
+                $this->testData[$result->creator_lab]['years'][$result->year] = $result->count;
+                $this->testData[$result->creator_lab]['total'] += $result->count;
+                $this->totalCount += $result->count;
+            }
+        }
+    }
+
+    protected function generateSampleData()
+    {
+        $results = Sample::query()
+            ->select([
+                'creator_lab',
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('COUNT(*) as count'),
+            ])
             ->whereIn('creator_lab', $this->selectedLabs)
             ->whereBetween(DB::raw('YEAR(created_at)'), [$this->startYear, $this->endYear])
             ->groupBy('creator_lab', DB::raw('YEAR(created_at)'))
@@ -54,42 +104,49 @@ class TestsPerLabReportComponent extends Component
             ->orderBy('year')
             ->get();
 
-        // Initialize report structure
-        $this->reportData = [];
-        $this->totalTests = 0;
+        $this->sampleData = [];
+        $this->totalCount = 0;
 
-        // Initialize all labs with all years
         foreach ($this->allLabs as $lab) {
             if (! in_array($lab->id, $this->selectedLabs)) {
                 continue;
             }
 
-            $this->reportData[$lab->id] = [
+            $this->sampleData[$lab->id] = [
                 'name'  => $lab->laboratory_name,
                 'years' => array_fill_keys($this->years, 0),
                 'total' => 0,
             ];
         }
 
-        // Populate with actual data
         foreach ($results as $result) {
-            if (isset($this->reportData[$result->creator_lab]['years'][$result->year])) {
-                $this->reportData[$result->creator_lab]['years'][$result->year] = $result->test_count;
-                $this->reportData[$result->creator_lab]['total'] += $result->test_count;
-                $this->totalTests += $result->test_count;
+            if (isset($this->sampleData[$result->creator_lab]['years'][$result->year])) {
+                $this->sampleData[$result->creator_lab]['years'][$result->year] = $result->count;
+                $this->sampleData[$result->creator_lab]['total'] += $result->count;
+                $this->totalCount += $result->count;
             }
         }
     }
 
+    public function render()
+    {
+        return view('livewire.lab.reports.tests-per-lab-report', [
+            'reportData' => $this->reportType === 'tests' ? $this->testData : $this->sampleData,
+        ]);
+    }
+
     public function exportCsv()
     {
-        $fileName = 'tests-per-lab-' . now()->format('Ymd-His') . '.csv';
+        $fileName = ($this->reportType === 'tests' ? 'tests' : 'samples') . '-per-lab-' . now()->format('Ymd-His') . '.csv';
         $headers  = [
             'Content-Type'        => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
         ];
 
-        $callback = function () {
+        $data       = $this->reportType === 'tests' ? $this->testData : $this->sampleData;
+        $totalCount = array_reduce($data, fn($carry, $item) => $carry + $item['total'], 0);
+
+        $callback = function () use ($data, $totalCount) {
             $file = fopen('php://output', 'w');
 
             // Header row
@@ -101,7 +158,7 @@ class TestsPerLabReportComponent extends Component
             fputcsv($file, $header);
 
             // Data rows
-            foreach ($this->reportData as $lab) {
+            foreach ($data as $lab) {
                 $row = [$lab['name']];
                 foreach ($this->years as $year) {
                     $row[] = $lab['years'][$year];
@@ -114,22 +171,17 @@ class TestsPerLabReportComponent extends Component
             $totalRow = ['Total'];
             foreach ($this->years as $year) {
                 $yearTotal = 0;
-                foreach ($this->reportData as $lab) {
+                foreach ($data as $lab) {
                     $yearTotal += $lab['years'][$year];
                 }
                 $totalRow[] = $yearTotal;
             }
-            $totalRow[] = $this->totalTests;
+            $totalRow[] = $totalCount;
             fputcsv($file, $totalRow);
 
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
-    }
-
-    public function render()
-    {
-        return view('livewire.lab.reports.tests-per-lab-report');
     }
 }
