@@ -66,6 +66,8 @@ class TestComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
 
+    public $accreditation = 0;
+
     public function export()
     {
         return (new TestsExport())->download('Tests.xlsx');
