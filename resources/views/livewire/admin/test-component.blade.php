@@ -142,7 +142,7 @@
                                         <option value='1'>Active</option>
                                         <option value='0'>Inactive</option>
                                     </select>
-                                    @error('accreditation')
+                                    @error('is_sanas_accredited')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
