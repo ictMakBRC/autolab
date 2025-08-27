@@ -111,7 +111,7 @@ class TestComponent extends Component
     public function updatedResultType()
     {
         if ($this->result_type === 'Text' || $this->result_type === 'File') {
-            $this->reset(['dynamicResults', 'measurable_result_uom', 'accreditation', 'absolute_results', 'dynamicParameters', 'result_presentation']);
+            $this->reset(['dynamicResults', 'measurable_result_uom', 'is_sanas_accredited', 'absolute_results', 'dynamicParameters', 'result_presentation']);
         }
     }
 
@@ -214,7 +214,7 @@ class TestComponent extends Component
             'status'        => 'required',
             'name'          => 'required|string',
             'price'         => 'required|numeric',
-            'accreditation' => 'required|integer',
+            'is_sanas_accredited' => 'required|integer',
             'result_type'   => 'required|string',
         ]);
         $test                        = new Test();
