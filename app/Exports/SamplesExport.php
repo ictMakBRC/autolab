@@ -57,13 +57,13 @@ class SamplesExport implements FromCollection, WithMapping, WithHeadings, WithSt
             $this->count,
             Carbon::parse($sample->sampleReception->date_delivered)->format('d-m-Y'),
             $sample->sampleReception->batch_no,
-            $sample->participant->identity,
-            $sample->sampleType->type,
-            $sample->sample_identity ?? 'N/A',
+            $sample?->participant?->identity,
+            $sample->sampleType?->type,
+            $sample?->sample_identity ?? 'N/A',
             $sample->lab_no ?? 'N/A',
-            $sample->participant->facility->name ?? 'N/A',
-            $sample->study->name ?? 'N/A',
-            $sample->sample_is_for ?? 'N/A',
+            $sample?->participant?->facility?->name ?? 'N/A',
+            $sample?->study?->name ?? 'N/A',
+            $sample?->sample_is_for ?? 'N/A',
         ];
     }
 
