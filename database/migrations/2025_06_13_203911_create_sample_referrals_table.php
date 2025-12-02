@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        return;
 
         Schema::create('sample_referrals', function (Blueprint $table) {
             $table->id();

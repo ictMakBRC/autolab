@@ -125,7 +125,7 @@
                                                 ({{ $testResult->sample->sampleReception->date_delivered->diffInMinutes($testResult->created_at) . 'min' }})
                                             </td>
                                             <td>
-                                                {{ $testResult->sample->requester->name }}
+                                                {{ $testResult->sample?->requester?->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $testResult->created_at }}

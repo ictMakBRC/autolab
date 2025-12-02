@@ -64,6 +64,9 @@ class TestComponent extends Component
 
     public $is_sanas_accredited;
 
+       // NEW: Preliminary tests property
+    public $preliminary_tests = [];
+
     protected $paginationTheme = 'bootstrap';
 
     // public $accreditation = 0;
@@ -238,6 +241,8 @@ class TestComponent extends Component
         $test->parameters          = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->parameter_uom       = $this->parameter_uom ?? null;
         $test->result_presentation = $this->result_presentation ?? null;
+        $test->preliminary_tests = !empty($this->preliminary_tests) ? $this->preliminary_tests : null;
+            
         $test->save();
 
         $this->resetTestInputs();
@@ -261,6 +266,7 @@ class TestComponent extends Component
         $this->measurable_result_uom = $test->measurable_result_uom;
         $this->result_presentation   = $test->result_presentation;
         $this->parameter_uom         = $test->parameter_uom;
+          $this->preliminary_tests = $test->preliminary_tests ?? [];
 
         $this->dynamicResults    = [];
         $this->dynamicComments   = [];
@@ -330,6 +336,8 @@ class TestComponent extends Component
         $test->parameters          = count($this->pushParameters()) ? $this->pushParameters() : null;
         $test->result_presentation = $this->result_presentation ?? null;
         $test->parameter_uom       = $this->parameter_uom ?? null;
+           $test->preliminary_tests = !empty($this->preliminary_tests) ? $this->preliminary_tests : null;
+            
         $test->update();
 
         $this->toggleForm = false;
@@ -339,7 +347,7 @@ class TestComponent extends Component
 
     public function resetTestInputs()
     {
-        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'dynamicTests', 'result_presentation', 'parameter_uom']);
+        $this->reset(['category_id', 'name', 'short_code', 'tat', 'price','preliminary_tests', 'reference_range_max', 'reference_range_min', 'status', 'precautions', 'result_type', 'measurable_result_uom', 'dynamicResults', 'absolute_results', 'dynamicComments', 'dynamicParameters', 'dynamicTests', 'result_presentation', 'parameter_uom']);
     }
     public function accreditation($id, $state)
     {
@@ -393,12 +401,14 @@ class TestComponent extends Component
 
     public function render()
     {
-        $tests = Test::search($this->search)
+        $myTests =Test::search($this->search)
             ->where('creator_lab', auth()->user()->laboratory_id)
-            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-            ->paginate($this->perPage);
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
+        $tests =  $myTests->paginate($this->perPage);
         $testCategories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
+        
+        $availableTests =  Test::where('id', '!=', $this->edit_id)->get();
 
-        return view('livewire.admin.test-component', compact('tests', 'testCategories'));
+        return view('livewire.admin.test-component', compact('tests', 'testCategories','availableTests'));
     }
 }

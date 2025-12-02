@@ -1054,7 +1054,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($sample && $sample->requester)
-                                                            {{ $sample->requester->name }}
+                                                            {{ $sample?->requester?->name??'N/A' }}
                                                         @else
                                                             {{ __('N/A') }}
                                                         @endif
@@ -1149,7 +1149,7 @@
                                                     </td>
                                                     <td>
                                                         @if ($sample && $sample->requester)
-                                                            {{ $sample->requester->name }}
+                                                            {{ $sample?->requester?->name??'N/A' }}
                                                         @else
                                                             {{ __('N/A') }}
                                                         @endif

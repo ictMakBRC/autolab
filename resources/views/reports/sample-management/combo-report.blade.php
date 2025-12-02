@@ -149,7 +149,7 @@
                     <td style="width:45%">
                         <div>
                             <b>Requester</b> <br>
-                            {{ $testResults[0]->sample->requester->name ?? 'N/A' }}<br>
+                            {{ $testResults[0]->sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
 
                             {{ $testResults[0]->sample->participant->facility->name ?? 'N/A' }}
                         </div>

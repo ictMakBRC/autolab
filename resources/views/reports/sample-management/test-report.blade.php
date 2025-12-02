@@ -189,7 +189,7 @@
                                     </td>
                                     <td>
                                         <strong class="text-inverse">Name:
-                                        </strong>{{ $testResult->sample->requester->name }}<br>
+                                        </strong>{{ $testResult->sample?->requester?->name??'N/A' }}<br>
                                         <strong class="text-inverse">Telephone:
                                         </strong>{{ $testResult->sample->requester->contact }}<br>
                                         <strong class="text-inverse">Email:

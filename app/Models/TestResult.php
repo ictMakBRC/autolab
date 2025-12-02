@@ -57,7 +57,124 @@ class TestResult extends Model
         'amendment_comment',
         'amended_by',
         'amended_at',
+        'preliminary_test_ids'
     ];
+
+     protected $casts = [
+        'parameters' => 'array',
+        'preliminary_test_ids' => 'array', // New cast
+        'kit_expiry_date' => 'date',
+        'reviewed_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'results'    => 'array',
+    ];
+
+ 
+    /**
+     * Get the test that owns the test result
+     */
+    public function test()
+    {
+        return $this->belongsTo(Test::class, 'test_id');
+    }
+
+    /**
+     * Get the parent test if this is a preliminary result
+     */
+    public function parentTest()
+    {
+        return $this->belongsTo(Test::class, 'parent_test_id');
+    }
+
+    /**
+     * Get all preliminary test results for this main test result
+     */
+    public function preliminaryResults()
+    {
+        return $this->hasMany(TestResult::class, 'parent_test_id', 'test_id')
+            ->where('sample_id', $this->sample_id)
+            ->where('status', 'Preliminary');
+    }
+
+    /**
+     * Get the kit used
+     */
+    public function kit()
+    {
+        return $this->belongsTo(Kit::class);
+    }
+
+
+    /**
+     * Get the user who reviewed the test
+     */
+
+
+    /**
+     * Scope for preliminary results
+     */
+    public function scopePreliminary($query)
+    {
+        return $query->where('status', 'Preliminary')
+            ->whereNotNull('parent_test_id');
+    }
+
+    /**
+     * Scope for main results (not preliminary)
+     */
+    public function scopeMainResults($query)
+    {
+        return $query->whereNull('parent_test_id')
+            ->orWhere('status', '!=', 'Preliminary');
+    }
+
+    /**
+     * Scope for pending review
+     */
+    public function scopePendingReview($query)
+    {
+        return $query->where('status', 'Pending Review');
+    }
+
+    /**
+     * Scope for approved results
+     */
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'Approved');
+    }
+
+    /**
+     * Check if this is a preliminary test result
+     */
+    public function isPreliminary(): bool
+    {
+        return $this->status === 'Preliminary' && $this->parent_test_id !== null;
+    }
+
+    /**
+     * Check if this result has preliminary tests
+     */
+    public function hasPreliminaryResults(): bool
+    {
+        return !empty($this->preliminary_test_ids);
+    }
+
+    /**
+     * Get preliminary test results
+     */
+    public function getPreliminaryTestResults()
+    {
+        if (!$this->hasPreliminaryResults()) {
+            return collect([]);
+        }
+
+        return TestResult::where('sample_id', $this->sample_id)
+            ->where('parent_test_id', $this->test_id)
+            ->where('status', 'Preliminary')
+            ->with('test', 'performer')
+            ->get();
+    }
     public function sample()
     {
         return $this->belongsTo(Sample::class, 'sample_id', 'id');
@@ -66,16 +183,6 @@ class TestResult extends Model
     public function testResultAmendment()
     {
         return $this->hasMany(TestResultAmendment::class, 'test_result_id', 'id');
-    }
-
-    public function test()
-    {
-        return $this->belongsTo(Test::class, 'test_id', 'id');
-    }
-
-    public function kit()
-    {
-        return $this->belongsTo(Kit::class, 'kit_id', 'id');
     }
 
     public function performer()
@@ -115,10 +222,6 @@ class TestResult extends Model
         );
     }
 
-    protected $casts = [
-        'parameters' => 'array',
-        'results'    => 'array',
-    ];
 
     public static function boot()
     {

@@ -244,7 +244,7 @@
                                                 <td>
 
                                                     <strong class="text-inverse">Requested By:
-                                                    </strong>{{ $sample->requester->name ?? 'N/A' }}<br>
+                                                    </strong>{{ $sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
                                                     <strong class="text-inverse">Date Requested:
                                                     </strong>{{ date('d-m-Y', strtotime($sample->date_requested)) }}<br>
                                                     <strong class="text-inverse">Courier Name:

@@ -82,7 +82,7 @@
                                                     {{ $testResult->test->name }}
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->sample->requester->name }}
+                                                    {{ $testResult->sample?->requester?->name??'N/A' }}
                                                 </td>
                                                 <td>
                                                     {{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}

@@ -123,7 +123,7 @@
                                                 {{ $sample->study->name ?? 'N/A' }}
                                             </td>
                                             <td>
-                                                {{ $sample->requester->name }}
+                                                {{ $sample?->requester?->name??'N/A' }}
                                             </td>
                                             <td>
                                                 {{ $sample->collector->name ?? 'N/A' }}

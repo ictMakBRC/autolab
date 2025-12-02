@@ -46,7 +46,7 @@
                 <div class="">
                     <strong>REQUESTER</strong>
                     <div class="">
-                        <strong class="text-inverse">Name: </strong>{{ $testResults->sample->requester->name }}<br>
+                        <strong class="text-inverse">Name: </strong>{{ $testResults->sample?->requester?->name??'N/A' }}<br>
                         <strong class="text-inverse">Telephone:
                         </strong>{{ $testResults->sample->requester->contact }}<br>
                         <strong class="text-inverse">Email: </strong>{{ $testResults->sample->requester->email }}<br>

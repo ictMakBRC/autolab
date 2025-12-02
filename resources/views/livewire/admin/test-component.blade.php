@@ -334,6 +334,85 @@
                                         </div>
                                     </div>
                                 @endif
+                                  {{-- PRELIMINARY TESTS SECTION --}}
+                            <div class="col-md-12">
+                                <hr>
+                                <h5 class="text-primary mb-3">
+                                    <i class="bi bi-clipboard-check"></i> Preliminary Tests Configuration
+                                </h5>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> Select tests that should be performed as preliminary steps before this main test. 
+                                    For example, for <strong>TB Culture</strong>, you might select: Sputum Quality Check, ZN Smear, and GeneXpert.
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Preliminary Tests (Optional)</label>
+                                    
+                                    {{-- Search Box --}}
+                                    <input type="text" 
+                                           class="form-control mb-3" 
+                                           placeholder="Search tests..." 
+                                           id="searchPrelimTests">
+                                    
+                                    <div class="card">
+                                        <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                                            <div class="row" id="preliminaryTestsList">
+                                                @forelse($availableTests as $availableTest)
+                                                    <div class="col-md-4 mb-2 test-item" 
+                                                         data-name="{{ strtolower($availableTest->name) }}" 
+                                                         data-category="{{ strtolower($availableTest->category->name ?? '') }}">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input preliminary-test-checkbox" 
+                                                                   type="checkbox" 
+                                                                   wire:model="preliminary_tests" 
+                                                                   value="{{ $availableTest->id }}"
+                                                                   id="prelim_test_{{ $availableTest->id }}">
+                                                            <label class="form-check-label" for="prelim_test_{{ $availableTest->id }}">
+                                                                {{ $availableTest->name }}
+                                                                @if($availableTest->category)
+                                                                    <small class="text-muted d-block">{{ $availableTest->category->name }}</small>
+                                                                @endif
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @empty
+                                                    <div class="col-12">
+                                                        <p class="text-muted text-center">No tests available. Please create some tests first.</p>
+                                                    </div>
+                                                @endforelse
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    @error('preliminary_tests')
+                                        <div class="text-danger small mt-2">{{ $message }}</div>
+                                    @enderror
+                                    
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="bi bi-check-circle"></i> Selected: 
+                                            <strong><span id="selectedCount">{{ count($preliminary_tests) }}</span></strong> test(s)
+                                        </small>
+                                    </div>
+                                    
+                                    {{-- Display Selected Tests --}}
+                                    @if(!empty($preliminary_tests))
+                                        <div class="mt-3">
+                                            <div class="alert alert-success">
+                                                <strong>Selected Preliminary Tests:</strong>
+                                                <ul class="mb-0 mt-2">
+                                                    @foreach($availableTests->whereIn('id', $preliminary_tests) as $selectedTest)
+                                                        <li>{{ $selectedTest->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
                                 <div class="modal-footer text-start mt-4">
                                     @if (!$toggleForm)
                                         <x-button>{{ __('Save') }}</x-button>
@@ -468,6 +547,47 @@
                     $('#delete_modal').modal('show');
                 });
             </script>
+             <script>
+        document.addEventListener('livewire:load', function () {
+            // Search functionality for preliminary tests
+            const searchInput = document.getElementById('searchPrelimTests');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const testItems = document.querySelectorAll('.test-item');
+                    
+                    testItems.forEach(item => {
+                        const testName = item.getAttribute('data-name');
+                        const testCategory = item.getAttribute('data-category');
+                        const shouldShow = testName.includes(searchTerm) || testCategory.includes(searchTerm);
+                        item.style.display = shouldShow ? 'block' : 'none';
+                    });
+                });
+            }
+
+            // Update selected count on checkbox change
+            function updateSelectedCount() {
+                const checkedBoxes = document.querySelectorAll('.preliminary-test-checkbox:checked').length;
+                const countDisplay = document.getElementById('selectedCount');
+                if (countDisplay) {
+                    countDisplay.textContent = checkedBoxes;
+                }
+            }
+
+            // Listen for checkbox changes
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('preliminary-test-checkbox')) {
+                    updateSelectedCount();
+                }
+            });
+
+            // Listen for Livewire updates
+            Livewire.hook('message.processed', (message, component) => {
+                updateSelectedCount();
+            });
+        });
+    </script>
         @endpush
     </div>
 </div>

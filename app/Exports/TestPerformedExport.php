@@ -69,7 +69,7 @@ class TestPerformedExport implements FromCollection, WithMapping, WithHeadings, 
             $result->sample->sampleReception->created_at ?? 'N/A',
             $result->created_at ?? 'N/A',
             $result->sample->created_at->diffInHours($result->created_at) . ' (' . $result->sample->created_at->diffInMinutes($result->created_at) . 'min)',
-            $result->sample->requester->name ?? 'N/A',
+            $result->sample?->requester?->name??'N/A' ?? 'N/A',
             date('d-m-Y H:i', strtotime($result->approved_at)) ?? 'N/A',
         ];
     }

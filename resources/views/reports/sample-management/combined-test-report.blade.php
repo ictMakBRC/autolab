@@ -183,7 +183,7 @@
                                                 </td>
                                                 <td>
                                                     <strong class="text-inverse">Requested By:
-                                                    </strong>{{ $sample->requester->name ?? 'N/A' }}<br>
+                                                    </strong>{{ $sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
                                                     <strong class="text-inverse">Collected By:
                                                     </strong>{{ $sample->collector->name ?? 'N/A' }}
                                                 </td>

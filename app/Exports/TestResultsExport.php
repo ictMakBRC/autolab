@@ -64,7 +64,7 @@ class TestResultsExport implements FromCollection, WithMapping, WithHeadings, Wi
             $result->sample->lab_no ?? 'N/A',
             $result->test->name ?? 'N/A',
             $result->sample?->sampleReception?->date_delivered->diffInHours($result->created_at) . ' (' . $result->sample?->sampleReception?->date_delivered->diffInMinutes($result->created_at) . 'min)',
-            $result->sample->requester->name ?? 'N/A',
+            $result->sample?->requester?->name??'N/A' ?? 'N/A',
             date('d-m-Y H:i', strtotime($result->approved_at)) ?? 'N/A',
         ];
     }

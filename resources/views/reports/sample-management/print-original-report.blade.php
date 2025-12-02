@@ -174,7 +174,7 @@
                     <td style="width:45%">
                         <div>
                             <b>Requester</b> <br>
-                            <b>Name:</b> {{ $testResult->sample->requester->name ?? 'N/A' }}<br>
+                            <b>Name:</b> {{ $testResult->sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
                             <b>Telephone:</b> {{ $testResult->sample->requester->contact ?? 'N/A' }} <br>
                             <b>Email:</b> {{ $testResult->sample->requester->email ?? 'N/A' }} <br>
                             <b>Date
