@@ -128,12 +128,12 @@
                                                 </td>
 
                                                 <td>
-                                                    <span class="badge bg-success">{{ $testResult->status }}</span>
+                                                    <span class="badge bg-success">{{ $testResult->status }}<small>({{ $testResult->result_type }})</small></span>
                                                 </td>
                                                 <td>
                                                     <a href="javascript: void(0);" type="button"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-info"><i
+                                                        class="action-ico"><i
                                                             class="bi bi-eye"></i></a>
                                                 </td>
                                             </tr>

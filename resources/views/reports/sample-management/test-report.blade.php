@@ -191,13 +191,13 @@
                                         <strong class="text-inverse">Name:
                                         </strong>{{ $testResult->sample?->requester?->name??'N/A' }}<br>
                                         <strong class="text-inverse">Telephone:
-                                        </strong>{{ $testResult->sample->requester->contact }}<br>
+                                        </strong>{{ $testResult->sample?->requester?->contact??'N/A' }}<br>
                                         <strong class="text-inverse">Email:
-                                        </strong>{{ $testResult->sample->requester->email }}<br>
+                                        </strong>{{ $testResult->sample?->requester?->email??'N/A' }}<br>
                                         <strong class="text-inverse">Date Requested:
                                         </strong>{{ date('d-m-Y', strtotime($testResult->sample->date_requested)) }}<br>
                                         <strong class="text-inverse">Organisation: </strong>
-                                        {{ $testResult->sample->requester->facility->name }}
+                                        {{ $testResult->sample?->requester?->facility?->name??'N/A' }}
                                     </td>
                                 </tr>
                             </tbody>

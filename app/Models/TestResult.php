@@ -69,7 +69,7 @@ class TestResult extends Model
         'results'    => 'array',
     ];
 
- 
+
     /**
      * Get the test that owns the test result
      */
@@ -171,7 +171,7 @@ class TestResult extends Model
 
         return TestResult::where('sample_id', $this->sample_id)
             ->where('parent_test_id', $this->test_id)
-            ->where('status', 'Preliminary')
+            ->where('result_type', 'Preliminary')
             ->with('test', 'performer')
             ->get();
     }
@@ -251,14 +251,14 @@ class TestResult extends Model
         return $approvalDate->diffInDays($collectionDate);
     }
 
-    public static function resultSearch($search, $status)
+    public static function resultSearch($search, $status=null)
     {
         return empty($search) ? static::query()
         : static::query()
             ->where('creator_lab', auth()->user()->laboratory_id)
             ->where(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample.participant', function ($query) use ($search) {
                             $query->where('identity', 'like', '%' . $search . '%');
                         });
@@ -266,7 +266,7 @@ class TestResult extends Model
             )
             ->where(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample', function ($query) use ($search) {
                             $query->where('sample_identity', 'like', '%' . $search . '%');
                         });
@@ -274,7 +274,7 @@ class TestResult extends Model
             )
             ->where(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample', function ($query) use ($search) {
                             $query->where('sample_no', 'like', '%' . $search . '%');
                         });
@@ -282,7 +282,7 @@ class TestResult extends Model
             )
             ->where(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample', function ($query) use ($search) {
                             $query->where('lab_no', 'like', '%' . $search . '%');
                         });
@@ -290,19 +290,19 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereDate('created_at', date('Y-m-d', strtotime($search)));
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->where('tracker', 'like', '%' . $search . '%');
                 }
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample.study', function ($query) use ($search) {
                             $query->where('name', 'like', '%' . $search . '%');
                         });
@@ -310,7 +310,7 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample.sampleReception', function ($query) use ($search) {
                             $query->where('batch_no', 'like', '%' . $search . '%');
                         });
@@ -318,8 +318,7 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query
-                        ->where('status', $status)
+                    $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample', function ($query) use ($search) {
                             $query->where('lab_no', $search);
                         });
@@ -327,7 +326,7 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                  $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('sample.requester', function ($query) use ($search) {
                             $query->where('name', 'like', '%' . $search . '%');
                         });
@@ -335,7 +334,7 @@ class TestResult extends Model
             )
             ->orWhere(
                 function ($query) use ($search, $status) {
-                    $query->where('status', $status)
+                   $query->when($status, function ($query) use ($status) {$query->where('status', $status); })
                         ->whereHas('test', function ($query) use ($search) {
                             $query->where('name', 'like', '%' . $search . '%');
                         });

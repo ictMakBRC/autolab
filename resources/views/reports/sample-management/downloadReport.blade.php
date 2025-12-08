@@ -139,12 +139,12 @@
                     <div>
                         <b>Requester</b> <br>
                         <b>Name:</b> {{ $testResult->sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
-                        <b>Telephone:</b> {{ $testResult->sample->requester->contact ?? 'N/A' }} <br>
-                        <b>Email:</b> {{ $testResult->sample->requester->email ?? 'N/A' }} <br>
+                        <b>Telephone:</b> {{ $testResult->sample?->requester?->contact??'N/A' ?? 'N/A' }} <br>
+                        <b>Email:</b> {{ $testResult->sample?->requester?->email??'N/A' ?? 'N/A' }} <br>
                         <b>Date
                             Requested:</b>{{ date('d-m-Y', strtotime($testResult->sample->date_requested ?? 'N/A')) }}<br>
                         <b>Organisation:</b>
-                        {{ $testResult->sample->requester->facility->name ?? 'N/A' }}
+                        {{ $testResult->sample?->requester?->facility?->name??'N/A' ?? 'N/A' }}
                     </div>
                 </td>
             </tr>

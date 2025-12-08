@@ -46,6 +46,16 @@
                     </div>
 
                     <div class="tab-content">
+                           <x-table-utilities display='d-block'>
+                            <div>
+                                <div class="d-flex align-items-center ml-4 me-2">
+                                    <label for="orderBy" class="text-nowrap mr-2 mb-0">OrderBy</label>
+                                    <select wire:model="orderBy" class="form-select">
+                                        <option value="reviewed_at">Latest</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </x-table-utilities>
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
                                 <thead>

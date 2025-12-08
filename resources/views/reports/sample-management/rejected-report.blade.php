@@ -48,12 +48,12 @@
                     <div class="">
                         <strong class="text-inverse">Name: </strong>{{ $testResults->sample?->requester?->name??'N/A' }}<br>
                         <strong class="text-inverse">Telephone:
-                        </strong>{{ $testResults->sample->requester->contact }}<br>
-                        <strong class="text-inverse">Email: </strong>{{ $testResults->sample->requester->email }}<br>
+                        </strong>{{ $testResults->sample?->requester?->contact??'N/A' }}<br>
+                        <strong class="text-inverse">Email: </strong>{{ $testResults->sample?->requester?->email??'N/A' }}<br>
                         <strong class="text-inverse">Date Requested:
                         </strong>{{ date('d-m-Y', strtotime($testResults->sample->date_requested)) }}<br>
                         <strong class="text-inverse">Organisation: </strong>
-                        {{ $testResults->sample->requester->facility->name }}
+                        {{ $testResults->sample?->requester?->facility?->name??'N/A' }}
                     </div>
                 </div>
             </div>

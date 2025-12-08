@@ -129,7 +129,7 @@ class TestsPerformedListComponent extends Component
 
     public function filterTests()
     {
-        $results = TestResult::select('*')->where(['creator_lab' => auth()->user()->laboratory_id])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
+        $results = TestResult::resultSearch($this->search)->select('*')->where(['creator_lab' => auth()->user()->laboratory_id])->with(['test', 'sample', 'sample.participant', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester:id,name', 'sample.collector:id,name', 'sample.sampleReception'])
             ->when($this->facility_id != 0, function ($query) {
                 $query->whereHas('sample.sampleReception', function ($query) {
                     $query->where('facility_id', $this->facility_id);

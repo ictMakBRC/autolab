@@ -61,7 +61,7 @@
                                                 $preliminaryResults = $testResult->getPreliminaryTestResults();
                                                 $hasPreliminary = $preliminaryResults->isNotEmpty();
                                             @endphp
-                                            
+
                                             <tr class="
                                                 @if (
                                                     $testResult->test->tat != 0 &&
@@ -71,8 +71,8 @@
                                                 <td>
                                                     {{ $key + 1 }}
                                                     @if($hasPreliminary)
-                                                        <button type="button" 
-                                                                class="btn btn-xs btn-link p-0 ms-1 toggle-preliminary" 
+                                                        <button type="button"
+                                                                class="btn btn-xs btn-link p-0 ms-1 toggle-preliminary"
                                                                 data-target="preliminary-{{ $testResult->id }}"
                                                                 title="Click to show/hide preliminary tests">
                                                             <i class="bi bi-chevron-down"></i>
@@ -117,12 +117,12 @@
                                                 <td>
                                                     <div class="d-flex flex-column">
                                                         <a href="{{ route('result-report', $testResult->id) }}"
-                                                            type="button" 
+                                                            type="button"
                                                             class="text-info fw-bold">{{ $testResult->test->name }}</a>
-                                                        
+
                                                         @if($hasPreliminary)
                                                             <small class="text-muted">
-                                                                <i class="bi bi-clipboard-check text-primary"></i> 
+                                                                <i class="bi bi-clipboard-check text-primary"></i>
                                                                 {{ $preliminaryResults->count() }} preliminary
                                                             </small>
                                                         @endif
@@ -143,21 +143,21 @@
                                                     {{ date('d-m-Y H:i', strtotime($testResult->sample->sampleReception->date_delivered)) }}
                                                 </td>
                                                 <td>
-                                                    {{ $testResult->created_at->format('d-m-Y H:i') }}
+                                                    {{ $testResult->created_at }}
                                                 </td>
 
                                                 <td>
-                                                    <span class="badge bg-success">{{ $testResult->status }}</span>
+                                                    <span class="badge bg-success">{{ $testResult->status }} <small>({{ $testResult->result_type }})</small></span>
                                                 </td>
                                                 <td>
                                                     <a href="javascript: void(0);" type="button"
                                                         wire:click="viewPreliminaryReport({{ $testResult->id }})"
-                                                        class="action-ico btn btn-outline-info">
+                                                        class="action-ico">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                            
+
                                             {{-- Collapsible preliminary results row --}}
                                             @if($hasPreliminary)
                                                 <tr class="preliminary-row" id="preliminary-{{ $testResult->id }}" style="display: none;">
@@ -179,7 +179,7 @@
                                                                                     <i class="bi bi-person"></i> {{ $prelim->performer->fullName ?? 'N/A' }}
                                                                                 </small>
                                                                                 <small class="text-muted d-block">
-                                                                                    <i class="bi bi-clock"></i> {{ $prelim->created_at->format('d-m-Y H:i') }}
+                                                                                    <i class="bi bi-clock"></i> {{ $prelim->created_at}}
                                                                                 </small>
                                                                                 @if($prelim->comment)
                                                                                     <small class="text-muted d-block mt-1">
@@ -234,7 +234,7 @@
                     const targetId = toggleBtn.dataset.target;
                     const prelimRow = document.getElementById(targetId);
                     const icon = toggleBtn.querySelector('i');
-                    
+
                     if (prelimRow) {
                         if (prelimRow.style.display === 'none') {
                             prelimRow.style.display = 'table-row';

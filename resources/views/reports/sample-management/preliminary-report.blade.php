@@ -48,12 +48,12 @@
                     <div class="">
                         <strong class="text-inverse">Name: </strong>{{ $testResults->sample?->requester?->name??'N/A' }}<br>
                         <strong class="text-inverse">Telephone:
-                        </strong>{{ $testResults->sample->requester->contact }}<br>
-                        <strong class="text-inverse">Email: </strong>{{ $testResults->sample->requester->email }}<br>
+                        </strong>{{ $testResults->sample?->requester?->contact??'N/A' }}<br>
+                        <strong class="text-inverse">Email: </strong>{{ $testResults->sample?->requester?->email??'N/A' }}<br>
                         <strong class="text-inverse">Date Requested:
                         </strong>{{ date('d-m-Y', strtotime($testResults->sample->date_requested)) }}<br>
                         <strong class="text-inverse">Organisation: </strong>
-                        {{ $testResults->sample->requester->facility->name }}
+                        {{ $testResults->sample?->requester?->facility?->name??'N/A' }}
                     </div>
                 </div>
             </div>
@@ -76,6 +76,51 @@
                 </div>
             </div>
         @endif
+
+        {{-- PRELIMINARY TEST RESULTS SECTION --}}
+        @php
+            $preliminaryResults = $testResults->getPreliminaryTestResults();
+            $hasPreliminary = $preliminaryResults->isNotEmpty();
+        @endphp
+
+        @if($hasPreliminary)
+            <div class="alert alert-info border-start border-primary border-4 mb-4">
+                <h6 class="text-primary mb-3">
+                    <i class="bi bi-clipboard-check"></i> Preliminary Tests Performed
+                </h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Test Name</th>
+                                <th>Result</th>
+                                <th>Comment</th>
+                                <th>Performed By</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($preliminaryResults as $prelim)
+                                <tr>
+                                    <td><strong>{{ $prelim->test->name }}</strong></td>
+                                    <td>
+                                        <span class="badge bg-info">{{ $prelim->result }}</span>
+                                    </td>
+                                    <td>{{ $prelim->comment ?? '-' }}</td>
+                                    <td>{{ $prelim->performer->fullName ?? 'N/A' }}</td>
+                                    <td>{{ $prelim->created_at}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
+        {{-- MAIN TEST RESULTS --}}
+        <h4 class="@if($testResults->result_type=='Main')text-info @else text-warning @endif mb-3">
+            <i class="bi bi-file-medical"></i> {{ $testResults->result_type??'Main' }} Test Result
+        </h4>
 
         <div class="table-responsive">
             <table class="table">
@@ -102,10 +147,10 @@
                         <td>
                             <strong class="text-inverse">Result Date:
                             </strong>
-                            @if ($testResult->amended_state)
-                                {{ date('d-m-Y H:i', strtotime($testResult->amended_at)) }}
+                            @if ($testResults->amended_state)
+                                {{ date('d-m-Y H:i', strtotime($testResults->amended_at)) }}
                             @else
-                                {{ date('d-m-Y H:i', strtotime($testResult->created_at)) }}
+                                {{ date('d-m-Y H:i', strtotime($testResults->created_at)) }}
                             @endif
                         </td>
                     </tr>
@@ -212,9 +257,9 @@
         @endif
         <hr>
         <div class="row row-cols-1 row-cols-lg-3">
-            <div class="col"><b>Kit Used:</b> {{ $testResult->kit->name ?? 'N/A' }}</div>
-            <div class="col"><b>Verified Kit Lot:</b> {{ $testResult->verified_lot ?? 'N/A' }}</div>
-            <div class="col"><b>Kit Expiry Date:</b> {{ $testResult->kit_expiry_date ?? 'N/A' }}</div>
+            <div class="col"><b>Kit Used:</b> {{ $testResults->kit->name ?? 'N/A' }}</div>
+            <div class="col"><b>Verified Kit Lot:</b> {{ $testResults->verified_lot ?? 'N/A' }}</div>
+            <div class="col"><b>Kit Expiry Date:</b> {{ $testResults->kit_expiry_date ?? 'N/A' }}</div>
         </div>
         <hr>
         <div class="my-3">
@@ -229,7 +274,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <strong>Rewiewer</strong>
+                    <strong>Reviewer</strong>
                     <div class="">
                         @if ($testResults->reviewer)
                             <p class="text-inverse">{{ $testResults->reviewer->fullName }}</p>

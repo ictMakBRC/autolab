@@ -94,6 +94,21 @@
         #parameters td {
             text-align: center;
         }
+
+      .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg); /* Apply diagonal rotation */
+            font-size: 5em;
+            color: rgba(244, 19, 19, 0.1);
+            font-weight: bold;
+            z-index: 9999;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.8;
+            white-space: nowrap; /* Prevents the text from breaking into multiple lines */
+        }
     </style>
     <script>
         window.print();
@@ -102,6 +117,9 @@
 
 <body style="line-height:1.2; font-family:times;">
     {{-- REPORT HEADER --}}
+    @if($testResult->result_type == 'Preliminary'||$testResult->status != 'Approved')
+        <div class="watermark">PRELIMINARY RESULTS</div>
+    @endif
     <div class="report-wrapper">
         <div class="row" style="margin-top: -3px">
             {{-- <img src="{{ asset('autolab-assets/images/headers/header-min.png') }}" alt="Makerere University Logo" width="100%"
@@ -172,12 +190,12 @@
                         <div>
                             <b>Requester</b> <br>
                             <b>Name:</b> {{ $testResult->sample?->requester?->name??'N/A' ?? 'N/A' }}<br>
-                            <b>Telephone:</b> {{ $testResult->sample->requester->contact ?? 'N/A' }} <br>
-                            <b>Email:</b> {{ $testResult->sample->requester->email ?? 'N/A' }} <br>
+                            <b>Telephone:</b> {{ $testResult->sample?->requester?->contact??'N/A' ?? 'N/A' }} <br>
+                            <b>Email:</b> {{ $testResult->sample?->requester?->email??'N/A' ?? 'N/A' }} <br>
                             <b>Date
                                 Requested:</b>{{ date('d-m-Y', strtotime($testResult->sample->date_requested ?? 'N/A')) }}<br>
                             <b>Organisation:</b>
-                            {{ $testResult->sample->requester->facility->name ?? 'N/A' }}
+                            {{ $testResult->sample?->requester?->facility?->name??'N/A' ?? 'N/A' }}
                         </div>
                     </td>
                 </tr>
