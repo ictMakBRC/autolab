@@ -363,9 +363,9 @@ class SpecimenRequestComponent extends Component
 
         // $crsparticipant = json_decode($response->getBody(), true);
 
-        $client = new Client(['base_uri' => 'https://crs.co.ug/api/get-patient/', 'verify' => false]);
+        $client = new Client(['base_uri' => 'http://crs.makbrc.org/api/get-patient/', 'verify' => false]);
         try {
-            $response = $client->request('GET', 'https://crs.co.ug/api/get-patient/', ['query' => [
+            $response = $client->request('GET', 'http://crs.makbrc.org/api/get-patient/', ['query' => [
                 'pat_no' => $patient_no,
                 'token'  => 'ASHS773HD8883HDXHDHY',
             ]]);
