@@ -279,7 +279,7 @@ class SamplesListComponent extends Component
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $jobs = Sample::select('sample_is_for')->distinct()->get();
-         $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->get();
+         $this->studies = Study::get();
         $samples = $this->filterSamples()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
