@@ -237,7 +237,7 @@ class SamplesListComponent extends Component
         ]);
         $RequestDate = Carbon::createFromFormat('Y-m-d', $this->date_requested)->addHours(3);
 
-        if($this->date_collected<=$RequestDate){        
+        if($this->date_collected<=$RequestDate){
             $sample= Sample::where(['id' => $this->edit_id, 'creator_lab' => auth()->user()->creator_lab])->first();
             if($sample){
             $sample->update([
@@ -260,7 +260,7 @@ class SamplesListComponent extends Component
         }else{
             $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Request date must be greater than collection date!']);
         }
-       
+
     }
 
     public function refresh()
@@ -279,6 +279,7 @@ class SamplesListComponent extends Component
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->get();
         $sampleTypes = SampleType::where('creator_lab', auth()->user()->laboratory_id)->orderBy('type', 'asc')->get();
         $jobs = Sample::select('sample_is_for')->distinct()->get();
+         $this->studies = Study::whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->get();
         $samples = $this->filterSamples()->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
