@@ -90,11 +90,11 @@ class SampleTypeComponent extends Component
     public function updateData()
     {
         $this->validate([
-            'type' => 'required|unique:sample_types,type,'.$this->edit_id.'',
+            // 'type' => 'required|unique:sample_types,type,'.$this->edit_id.'',
             'status' => 'required',
         ]);
         $sampleType = SampleType::find($this->edit_id);
-        $sampleType->type = $this->type;
+        // $sampleType->type = $this->type;
         $sampleType->status = $this->status;
         $sampleType->possible_tests = count($this->possible_tests) > 0 ? $this->possible_tests : null;
         // $sampleType->can_be_aliquot = $this->can_be_aliquot?? 0;
