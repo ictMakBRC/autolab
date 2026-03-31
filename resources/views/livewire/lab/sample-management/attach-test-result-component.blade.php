@@ -405,7 +405,7 @@
                                                                                         <option selected
                                                                                             value="">Select
                                                                                         </option>
-                                                                                        @foreach ($test->absolute_results as $result)
+                                                                                     @foreach ($test->absolute_results ?? [] as $result)
                                                                                             <option
                                                                                                 value='{{ $result }}'>
                                                                                                 {{ $result }}
