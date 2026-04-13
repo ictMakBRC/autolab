@@ -8,6 +8,7 @@ use App\Models\Laboratory;
 use App\Models\Requester;
 use App\Models\Sample;
 use App\Models\Study;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -36,6 +37,10 @@ class StudyComponent extends Component
     public $is_active;
 
     public $delete_id;
+
+    public $parent_study_id;
+
+    public $assigned_to;
 
     public $edit_id;
 
@@ -71,6 +76,8 @@ class StudyComponent extends Component
         $this->validate([
             'name' => 'required|unique:studies',
             'facility_id' => 'required',
+            'parent_study_id' => 'nullable|exists:studies,id',
+            'assigned_to' => 'nullable|exists:users,id',
             'is_active' => 'required',
         ]);
 
@@ -78,6 +85,8 @@ class StudyComponent extends Component
         $study->name = $this->name;
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
+        $study->parent_study_id =  $this->parent_study_id;
+        $study->assigned_to = $this->assigned_to;
         $study->save();
 
         array_push($this->associated_studies, $study->id);
@@ -98,6 +107,8 @@ class StudyComponent extends Component
         $this->description = $study->description;
         $this->facility_id = $study->facility_id;
         $this->is_active = $study->is_active;
+        $this->parent_study_id = $study->parent_study_id;
+        $this->assigned_to = $study->assigned_to;
         $this->dispatchBrowserEvent('edit-modal');
     }
 
@@ -110,11 +121,15 @@ class StudyComponent extends Component
     {
         $this->validate([
             'name' => 'required',
+            'parent_study_id' => 'nullable|exists:studies,id',
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
         $study = Study::find($this->edit_id);
         $study->name = $this->name;
         $study->description = $this->description;
         $study->facility_id = $this->facility_id;
+        $study->parent_study_id =  $this->parent_study_id;
+        $study->assigned_to = $this->assigned_to;
 
         if ($study->is_active == $this->is_active) {
             $study->update();
@@ -208,7 +223,8 @@ class StudyComponent extends Component
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $facilities = Facility::whereIn('id', auth()->user()->laboratory->associated_facilities ?? [])->where('is_active', 1)->latest()->get();
+        $users = User::where('laboratory_id', auth()->user()->laboratory_id ?? [])->where('is_active', 1)->latest()->get();
 
-        return view('livewire.admin.study-component', compact('studies', 'facilities'))->layout('layouts.app');
+        return view('livewire.admin.study-component', compact('studies', 'facilities', 'users'))->layout('layouts.app');
     }
 }

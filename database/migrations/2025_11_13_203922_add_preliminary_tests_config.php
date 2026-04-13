@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::table('studies', function (Blueprint $table) {
+            $table->foreignId('assigned_to')->constrained('users')->nullable()->after('facility_id');
+            $table->foreignId('parent_study_id')->nullable()->after('facility_id');
+        });
+        retutn;
         // Add preliminary_tests column to tests table
         Schema::table('tests', function (Blueprint $table) {
             $table->json('preliminary_tests')->nullable()->after('parameters')
@@ -67,16 +72,20 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tests', function (Blueprint $table) {
-            $table->dropColumn('preliminary_tests');
-        });
+        // Schema::table('tests', function (Blueprint $table) {
+        //     $table->dropColumn('preliminary_tests');
+        // });
 
-        Schema::table('test_results', function (Blueprint $table) {
-            $table->dropForeign(['parent_test_id']);
-            $table->dropColumn(['parent_test_id', 'preliminary_test_ids']);
-        });
+        // Schema::table('test_results', function (Blueprint $table) {
+        //     $table->dropForeign(['parent_test_id']);
+        //     $table->dropColumn(['parent_test_id', 'preliminary_test_ids']);
+        // });
 
-        Schema::table('sample_referrals', function (Blueprint $table) {
+        // Schema::table('sample_referrals', function (Blueprint $table) {
+        //     $table->dropColumn(['result_file', 'received_date', 'status']);
+        // });
+
+         Schema::table('studies', function (Blueprint $table) {
             $table->dropColumn(['result_file', 'received_date', 'status']);
         });
     }

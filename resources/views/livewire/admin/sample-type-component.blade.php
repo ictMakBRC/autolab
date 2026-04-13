@@ -64,7 +64,7 @@
                                 @enderror
                             </div>
                             <hr>
-                            <h6>Attach Possible Tests/Processes</h6>
+                            <h6>Attach Possible Tests</h6>
                             <hr>
                             <div class=" col-md-12 form-group mt-2">
                                 @foreach ($tests as $test)
