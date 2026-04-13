@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::table('studies', function (Blueprint $table) {
             $table->foreignId('assigned_to')->constrained('users')->nullable()->after('facility_id');
+            $table->foreignId('assigned_to')->constrained('users')->nullable()->after('facility_id');
             $table->foreignId('parent_study_id')->nullable()->after('facility_id');
         });
-        retutn;
+        return;
         // Add preliminary_tests column to tests table
         Schema::table('tests', function (Blueprint $table) {
             $table->json('preliminary_tests')->nullable()->after('parameters')
