@@ -106,6 +106,16 @@ class SampleReceptionComponent extends Component
 
     public $studies;
 
+    public $name;
+
+    public $is_active = true;
+
+    public $email;
+
+    public $study_id;
+
+    public $contact;
+
     public $is_paternity = false;
 
     protected $paginationTheme = 'bootstrap';
@@ -333,6 +343,27 @@ class SampleReceptionComponent extends Component
         $this->dispatchBrowserEvent('close-modal');
     }
 
+        public function storeCourierData()
+    {
+        $this->validate([
+            'name' => 'required',
+            'contact' => 'required',
+            'email' => 'required|unique:couriers|email:filter',
+            'facility_id' => 'required',
+            'is_active' => 'required',
+        ]);
+
+        $courier = new Courier();
+        $courier->name = $this->name;
+        $courier->contact = $this->contact;
+        $courier->email = $this->email;
+        $courier->facility_id = $this->facility_id;
+        $courier->study_id = $this->study_id == '' ? null : $this->study_id;
+        $courier->save();
+        $this->courier_id = $courier->id;
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
+    }
     public function storeCourier()
     {
         $this->validate([
@@ -367,7 +398,7 @@ class SampleReceptionComponent extends Component
 
     public function close()
     {
-        $this->resetInputs();
+        // $this->resetInputs();
         $this->toggleForm = false;
         $this->couriers   = collect();
     }

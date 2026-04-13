@@ -145,6 +145,33 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                     <div class="mb-3">
+                                    <label for="parent_study_id" class="form-label">Parent Study</label>
+                                    <select class="form-select select2" id="parent_study_id" wire:model="parent_study_id">
+                                            <option  value="">Select a parent study</option>
+                                            @forelse ($studies as $study)
+                                                <option value='{{ $study->id }}'>{{ $study->name }}</option>
+                                            @empty
+                                                <option selected value="">None</option>
+                                            @endforelse
+                                    </select>
+                                    @error('parent_study_id')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="assignedTo2" class="form-label">Assigned To</label>
+                                    <select class="form-select select2" id="assignedTo2" wire:model="assigned_to">
+                                        <option selected value="">Select User</option>
+                                        @forelse ($users as $user)
+                                            <option value='{{ $user->id }}'>{{ $user->name }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                    @error('assigned_to')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="mb-3">
                                     <label for="isActive" class="form-label">Status</label>
                                     <select class="form-select select2" id="isActive" name="is_active"

@@ -84,7 +84,8 @@
                                     </div>
 
                                     <div class="mb-3 col-md-3">
-                                        <label for="courier_id" class="form-label">Courier</label>
+                                        <label for="courier_id" class="form-label">Courier  <a type="button" class="text-info" data-bs-toggle="modal"
+                                    data-bs-target="#addCourier">Add Courier</a></label>
                                         <select class="form-select select2" id="courier_id" data-model="courier_id"
                                             wire:model="courier_id">
                                             <option selected value="">Select</option>
@@ -363,6 +364,8 @@
                 </div> <!-- end modal content-->
             </div> <!-- end modal dialog-->
         </div> <!-- end modal-->
+        @include('livewire.admin.add-courier')
+
 
         {{-- //DELETE CONFIRMATION MODAL --}}
         @if (Auth::user()->hasPermission(['create-reception-info']))
@@ -553,6 +556,7 @@
                 </div> <!-- end modal dialog-->
             </div> <!-- end modal--> --}}
         @endif
+
 
         @push('scripts')
             @include('livewire.layout.select-2')
