@@ -242,7 +242,7 @@ class TestComponent extends Component
         $test->parameter_uom       = $this->parameter_uom ?? null;
         $test->result_presentation = $this->result_presentation ?? null;
         $test->preliminary_tests = !empty($this->preliminary_tests) ? $this->preliminary_tests : null;
-            
+
         $test->save();
 
         $this->resetTestInputs();
@@ -266,7 +266,8 @@ class TestComponent extends Component
         $this->measurable_result_uom = $test->measurable_result_uom;
         $this->result_presentation   = $test->result_presentation;
         $this->parameter_uom         = $test->parameter_uom;
-          $this->preliminary_tests = $test->preliminary_tests ?? [];
+        $preliminary_tests = $test->preliminary_tests ?? [];
+        $this->preliminary_tests = $preliminary_tests->pluck('id');
 
         $this->dynamicResults    = [];
         $this->dynamicComments   = [];
@@ -301,7 +302,7 @@ class TestComponent extends Component
                 }
             }
         }
-
+    // dd( $test->preliminary_tests);
         $this->toggleForm = true;
     }
 
@@ -337,7 +338,7 @@ class TestComponent extends Component
         $test->result_presentation = $this->result_presentation ?? null;
         $test->parameter_uom       = $this->parameter_uom ?? null;
            $test->preliminary_tests = !empty($this->preliminary_tests) ? $this->preliminary_tests : null;
-            
+
         $test->update();
 
         $this->toggleForm = false;
@@ -406,7 +407,7 @@ class TestComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
         $tests =  $myTests->paginate($this->perPage);
         $testCategories = TestCategory::where('creator_lab', auth()->user()->laboratory_id)->latest()->get();
-        
+
         $availableTests =  Test::where('id', '!=', $this->edit_id)->get();
 
         return view('livewire.admin.test-component', compact('tests', 'testCategories','availableTests'));
