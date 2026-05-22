@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Livewire\Lab\SampleManagement;
 
 use App\Models\Kit;
@@ -61,7 +60,7 @@ class ResultAmendmentComponent extends Component
 
     public function mount($tracker)
     {
-        $this->studies = collect([]);
+        $this->studies        = collect([]);
         $this->result_tracker = '#' . $tracker;
         if ($tracker) {
             $this->getResultDetails();
@@ -71,7 +70,7 @@ class ResultAmendmentComponent extends Component
     public function showEditForms()
     {
         $this->validate([
-            'amendment_type' => 'required|string',
+            'amendment_type'    => 'required|string',
             'amendment_comment' => 'required|string',
         ]);
         $this->toggleEditForms = true;
@@ -81,8 +80,8 @@ class ResultAmendmentComponent extends Component
     {
         if ($this->result_tracker) {
 
-            $testResult = TestResult::where(['tracker' => $this->result_tracker, 'status' => 'approved', 'creator_lab' => auth()->user()->laboratory_id])
-                ->when(!auth()->user()->hasPermission(['review-results']), function ($query) {
+            $testResult = TestResult::where(['tracker' => $this->result_tracker, 'creator_lab' => auth()->user()->laboratory_id])->whereIn('status', ['approved', 'Rejected'])
+                ->when(! auth()->user()->hasPermission(['review-results']), function ($query) {
                     $query->where('performed_by', auth()->user()->id);
                 })
                 ->with(['test', 'sample', 'kit', 'sample.participant', 'sample.sampleReception', 'sample.sampleType:id,type', 'sample.study:id,name', 'sample.requester', 'sample.collector:id,name', 'performer', 'reviewer', 'approver'])
@@ -90,29 +89,29 @@ class ResultAmendmentComponent extends Component
 
             if ($testResult) {
 
-                $this->testResults = $testResult;
+                $this->testResults     = $testResult;
                 $this->originalResults = $testResult;
-                $this->testResult = $testResult;
-                $this->testResultId = $testResult->id;
-                $this->result = $testResult->result;
-                $this->comment = $testResult->comment;
-                $this->test = $testResult->test;
-                $this->testParameters = $testResult->parameters ?? [];
-                $this->kit_id = $testResult->kit_id;
-                $this->verified_lot = $testResult->verified_lot;
+                $this->testResult      = $testResult;
+                $this->testResultId    = $testResult->id;
+                $this->result          = $testResult->result;
+                $this->comment         = $testResult->comment;
+                $this->test            = $testResult->test;
+                $this->testParameters  = $testResult->parameters ?? [];
+                $this->kit_id          = $testResult->kit_id;
+                $this->verified_lot    = $testResult->verified_lot;
                 $this->kit_expiry_date = $testResult->kit_expiry_date;
 
                 $this->participant = $testResult->sample->participant;
-                $this->identity = $this->participant->identity;
-                $this->age = $this->participant->age;
-                $this->months = $this->participant->months;
-                $this->gender = $this->participant->gender;
-                $this->address = $this->participant->address;
+                $this->identity    = $this->participant->identity;
+                $this->age         = $this->participant->age;
+                $this->months      = $this->participant->months;
+                $this->gender      = $this->participant->gender;
+                $this->address     = $this->participant->address;
                 $this->facility_id = $this->participant->facility_id;
 
-                $this->sample = $testResult->sample;
-                $this->date_collected = $this->sample->date_collected;
-                $this->study_id = $this->sample->study_id;
+                $this->sample          = $testResult->sample;
+                $this->date_collected  = $this->sample->date_collected;
+                $this->study_id        = $this->sample->study_id;
                 $this->sample_identity = $this->sample->sample_identity;
 
                 $this->studies = Study::where(['facility_id' => $this->facility_id])->whereIn('id', auth()->user()->laboratory->associated_studies ?? [])->orderBy('name', 'asc')->get();
@@ -146,12 +145,12 @@ class ResultAmendmentComponent extends Component
     {
         $testResults = TestResult::where(['amended_state' => 1, 'copied' => 0])->get();
         foreach ($testResults as $testResult) {
-            $testAmendment = new TestResultAmendment();
-            $testAmendment->test_result_id = $testResult->id;
-            $testAmendment->amendment_type = $testResult->amendment_type;
+            $testAmendment                    = new TestResultAmendment();
+            $testAmendment->test_result_id    = $testResult->id;
+            $testAmendment->amendment_type    = $testResult->amendment_type;
             $testAmendment->amendment_comment = $testResult->amendment_comment;
-            $testAmendment->original_results = $testResult->original_results;
-            $testAmendment->amended_by = $testResult->amended_by;
+            $testAmendment->original_results  = $testResult->original_results;
+            $testAmendment->amended_by        = $testResult->amended_by;
             // $testAmendment->save();
             $testResult->copied = 1;
             // $testResult->update();
@@ -164,30 +163,30 @@ class ResultAmendmentComponent extends Component
 
         $this->validate([
             'identity' => 'required|string',
-            'age' => 'nullable|integer|min:1',
-            'months' => 'nullable|integer|min:0|max:11',
-            'address' => 'required|string|max:40',
-            'gender' => 'nullable|string|max:6',
+            'age'      => 'nullable|integer|min:1',
+            'months'   => 'nullable|integer|min:0|max:11',
+            'address'  => 'required|string|max:40',
+            'gender'   => 'nullable|string|max:6',
         ]);
 
         $this->participant->identity = str_replace(' ', '', trim($this->identity));
-        $this->participant->age = $this->age;
-        $this->participant->months = $this->months;
-        $this->participant->address = $this->address;
-        $this->participant->gender = $this->gender;
+        $this->participant->age      = $this->age;
+        $this->participant->months   = $this->months;
+        $this->participant->address  = $this->address;
+        $this->participant->gender   = $this->gender;
         $this->participant->update();
     }
 
     public function updateSampleInformation()
     {
         $this->validate([
-            'date_collected' => 'required|date',
+            'date_collected'  => 'required|date',
             'sample_identity' => 'required|string',
-            'study_id' => 'required|integer',
+            'study_id'        => 'required|integer',
         ]);
 
-        $this->sample->date_collected = $this->date_collected;
-        $this->sample->study_id = $this->study_id ?? null;
+        $this->sample->date_collected  = $this->date_collected;
+        $this->sample->study_id        = $this->study_id ?? null;
         $this->sample->sample_identity = str_replace(' ', '', trim($this->sample_identity));
         $this->sample->update();
     }
@@ -211,7 +210,7 @@ class ResultAmendmentComponent extends Component
             $this->validate([
                 'attachment' => ['mimes:pdf,xls,xlsx,csv,doc,docx', 'max:5000'],
             ]);
-            $attachmentName = date('YmdHis') . '.' . $this->attachment->extension();
+            $attachmentName       = date('YmdHis') . '.' . $this->attachment->extension();
             $this->attachmentPath = $this->attachment->storeAs('attachmentResults', $attachmentName);
 
             if (file_exists(storage_path('app/') . $this->testResults->attachment)) {
@@ -243,37 +242,37 @@ class ResultAmendmentComponent extends Component
 
         $this->testResults->attachment = $this->attachmentPath;
         // $this->testResults->performed_by = $this->performed_by;
-        $this->testResults->comment = $this->comment;
+        $this->testResults->comment    = $this->comment;
         $this->testResults->parameters = count($this->testParameters) ? $this->testParameters : null;
-        $this->testResults->kit_id = $this->kit_id;
+        $this->testResults->kit_id     = $this->kit_id;
 
-        $this->testResults->reviewed_by = null;
-        $this->testResults->reviewed_at = null;
-        $this->testResults->approved_by = null;
-        $this->testResults->approved_at = null;
+        $this->testResults->reviewed_by      = null;
+        $this->testResults->reviewed_at      = null;
+        $this->testResults->approved_by      = null;
+        $this->testResults->approved_at      = null;
         $this->testResults->reviewer_comment = null;
         $this->testResults->approver_comment = null;
 
         $this->testResults->kit_expiry_date = $this->kit_expiry_date;
-        $this->testResults->verified_lot = $this->verified_lot;
+        $this->testResults->verified_lot    = $this->verified_lot;
 
-        $this->testResults->amended_state = true;
-        $this->testResults->amendment_type = $this->amendment_type;
+        $this->testResults->amended_state     = true;
+        $this->testResults->amendment_type    = $this->amendment_type;
         $this->testResults->amendment_comment = $this->amendment_comment;
 
         $this->testResults->original_results = $this->originalResults->toJson();
-        $this->testResults->amended_by = auth()->user()->id;
-        $this->testResults->amended_at = now();
+        $this->testResults->amended_by       = auth()->user()->id;
+        $this->testResults->amended_at       = now();
 
         $this->testResults->status = 'Pending Review';
         $this->testResults->update();
 
-        $testAmendment = new TestResultAmendment();
-        $testAmendment->test_result_id = $this->testResults->id;
-        $testAmendment->amendment_type = $this->amendment_type;
+        $testAmendment                    = new TestResultAmendment();
+        $testAmendment->test_result_id    = $this->testResults->id;
+        $testAmendment->amendment_type    = $this->amendment_type;
         $testAmendment->amendment_comment = $this->amendment_comment;
-        $testAmendment->original_results = $this->originalResults->toJson();
-        $testAmendment->amended_by = auth()->user()->id;
+        $testAmendment->original_results  = $this->originalResults->toJson();
+        $testAmendment->amended_by        = auth()->user()->id;
         $testAmendment->save();
 
         $currentParameters = array_filter($this->testParameters, function ($value) {
