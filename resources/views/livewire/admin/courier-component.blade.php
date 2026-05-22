@@ -59,16 +59,16 @@
                                         <td>{{ $courier->name }}</td>
                                         <td>{{ $courier->contact ? $courier->contact : 'N/A' }}</td>
                                         <td>{{ $courier->email ? $courier->email : 'N/A' }}</td>
-                                        <td>{{ $courier->facility ? $courier->facility->name : 'N/A' }}</td>
-                                        <td>{{ $courier->study ? $courier->study->name : 'N/A' }}</td>
+                                        <td>{{ $courier->facility ? $courier?->facility?->name : 'N/A' }}</td>
+                                        <td>{{ $courier->study ? $courier?->study?->name : 'N/A' }}</td>
                                         @if ($courier->is_active == 0)
                                             <td><span class="badge bg-danger">Inactive</span></td>
                                         @else
                                             <td><span class="badge bg-success">Active</span></td>
                                         @endif
-                                        <td>{{ date('d-m-Y', strtotime($courier->created_at)) }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($courier?->created_at)) }}</td>
                                         <td class="table-action">
-                                            @if ($courier->facility->is_active == 0)
+                                            @if ($courier?->facility?->is_active == 0)
                                                 <a href="javascript: void(0);"
                                                     class="action-ico btn btn-outline-warning mx-1"
                                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title=""
@@ -108,7 +108,7 @@
 
     {{-- ADD COURIER --}}
     @include('livewire.admin.add-courier')
- <!-- end modal-->
+    <!-- end modal-->
 
     {{-- //DELETE CONFIRMATION MODAL --}}
     <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" data-backdrop="static"
