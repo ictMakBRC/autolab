@@ -78,7 +78,7 @@ class CourierComponent extends Component
         $this->studies = collect();
     }
 
-    public function storeData()
+    public function storeCourierData()
     {
         $this->validate([
             'name' => 'required',
