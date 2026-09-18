@@ -1,11 +1,16 @@
 <?php
 namespace App\Http\Livewire\Lab\SampleManagement;
 
+use App\Models\Admin\Test;
 use App\Models\Kit;
 use App\Models\Lab\SampleManagement\TestResultAmendment;
+use App\Models\Lab\SampleManagent\SampleReferral;
+use App\Models\Sample;
 use App\Models\Study;
 use App\Models\TestResult;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -127,6 +132,68 @@ class ResultAmendmentComponent extends Component
             $this->dispatchBrowserEvent('not-found', ['type' => 'error', 'message' => 'Please enter the tracker for the result you want to amend!']);
         }
 
+    }
+
+    public function loadTest()
+    {
+
+        $this->today          = Carbon::now();
+        $sample               = Sample::with('participant')->findOrFail($id);
+        $this->referred_tests = SampleReferral::with('referralable')
+            ->where('sample_id', $id)
+            ->whereIn('test_id', $sample->referred_tests)
+            ->get();
+
+        $this->sample          = $sample;
+        $this->sample_id       = $sample->id;
+        $this->sample_identity = $sample->sample_identity;
+        $this->lab_no          = $sample->lab_no;
+
+        $testsPendingResults = array_diff($sample->tests_requested, $sample->tests_performed ?? []);
+
+        if (auth()->user()->hasPermission('enter-unassigned-results')) {
+            $this->enterOnlyAssigned = false;
+        } else {
+            $this->enterOnlyAssigned = true;
+        }
+
+        if (count($testsPendingResults) > 0) {
+            $this->requestedTests = Test::whereIn('id', (array) $testsPendingResults)
+                ->when($this->enterOnlyAssigned, function ($query) {
+                    $query->whereHas('testAssignment', function (Builder $query) {
+                        $query->where([
+                            'assignee'  => auth()->user()->id,
+                            'sample_id' => $this->sample_id,
+                            'status'    => 'Assigned',
+                        ]);
+                    });
+                })
+                ->orderBy('name', 'asc')
+                ->get();
+
+            $this->test_id    = $this->requestedTests[0]->id ?? null;
+            $this->activeTest = $this->requestedTests->where('id', $this->test_id)->first();
+
+            if (! $this->activeTest) {
+                return redirect()->route('test-request')
+                    ->with('error', 'No tests available for this sample or you do not have permission to enter results for unassigned tests.');
+            }
+
+            if ($this->activeTest && count($this->referred_tests) > 0) {
+                $this->active_referral = $this->referred_tests
+                    ->where('sample_id', $this->sample_id)
+                    ->where('test_id', $this->test_id)
+                    ->first();
+            }
+
+            $this->initializeTestData();
+        } else {
+            $this->requestedTests = collect([]);
+            $this->reset('test_id');
+        }
+
+        $this->tests_performed = (array) $sample->tests_performed;
+        $this->performed_by    = auth()->user()->id;
     }
 
     public function amendResults()
